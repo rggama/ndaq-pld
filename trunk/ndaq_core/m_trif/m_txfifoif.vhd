@@ -70,7 +70,7 @@ architecture rtl of m_txfifoif is
 	attribute syn_encoding of state_type : type is "safe, one-hot";
 
 	-- Byte Counter
-	signal cntr	:	std_logic_vector(15 downto 0);
+	--signal cntr	:	std_logic_vector(15 downto 0);
 --
 
 begin		
@@ -80,14 +80,14 @@ begin
 	begin
 		if ((rst = '1') or (rstc = '1')) then	
 			state	<= idle;
-			cntr	<= x"0000";
+			--cntr	<= x"0000";
 			odata	<= "ZZZZ";
 			
 		elsif (rising_edge(clk) and (clk_en = '1')) then
 			case state is
 				when idle =>
 					--
-					if (sdwait = '0' and (cntr < bcount)) then
+					if (sdwait = '0') then --and (cntr < bcount)
 						state	<= txready;		-- ready to go
 					else
 						state	<= idle;		-- keep waiting
@@ -97,7 +97,7 @@ begin
 					--
 					if ((sdwait = '0') and (nwr = '0') and (enable = '1')) then 
 						-- counter
-						cntr	<= cntr + 1;	-- increment counter
+						--cntr	<= cntr + 1;	-- increment counter
 						-- state
 						state	<= tx_LO_setup;	-- tx ready, write strobe and counter ok
 						--
