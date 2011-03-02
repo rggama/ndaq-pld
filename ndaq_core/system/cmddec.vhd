@@ -35,7 +35,9 @@ entity cmddec is
 		signal rcontrol			: out	std_logic_vector(7 downto 0);
 		
 		signal bcount			: out	std_logic_vector(15 downto 0);
-		signal c8wmax			: out	std_logic_vector(9 downto 0)
+		signal c8wmax			: out	std_logic_vector(9 downto 0);
+		
+		signal tdcstart			: out	std_logic
 	);
 end cmddec;
 
@@ -105,6 +107,8 @@ begin
 			--
 			c8wmaxL		<= x"7E";
 			c8wmaxH		<= "11";
+			--
+			tdcstart	<= '0';
 			--
 			regs_state	<= regs_idle;
 			
@@ -177,6 +181,8 @@ begin
 						--
 						when x"B0"	=> c8wmaxL		<= idata;				-- WRITEFIFO  'WMAX''L	at 0xB0
 						when x"B1"	=> c8wmaxH		<= idata(1 downto 0);	-- WRITEFIFO  'WMAX''H	at 0xB1
+						--
+						when x"C0"	=> tdcstart		<= idata(0);			-- TDC Start register	at 0xC0
 						--
 						when others	=> AddrReg		<= AddrReg;				-- Something went wrong!
 					end case;

@@ -1,5 +1,5 @@
 -- $ CORE
--- v: 0.0.19
+-- v: https://ndaq-pld.googlecode.com/svn/trunk
 --
 -- ****************************************************************************
 --
@@ -34,6 +34,7 @@
 --
 -- 0.0.19	Changes in 'mtrif' and 'cmddec' component. Added 'BCOUNT' parameter.
 --
+-- x.x.xx	From this point, versions are controlled by SVN.
 --
 -- ****************************************************************************
 
@@ -73,22 +74,22 @@ entity ndaq_core is
 		-------------------
 		-- TDC interface --
 		-------------------
-		signal tdc_data		 : in	std_logic_vector(27 downto 0);
-		signal tdc_stop_dis	 : out	std_logic_vector(1 to 4);
-		signal tdc_start_dis : out	std_logic;
-		signal tdc_wrn		 : out	std_logic;
-		signal tdc_rdn		 : out	std_logic;
-		signal tdc_csn		 : out	std_logic;
-		signal tdc_alutr	 : out  std_logic;
-		signal tdc_puresn	 : out  std_logic;
-		signal tdc_oen		 : out  std_logic;
-		signal tdc_adr		 : out  std_logic_vector(3 downto 0);
-		signal tdc_errflag	 : in   std_logic;
-		signal tdc_irflag	 : in   std_logic;
-		signal tdc_lf2		 : in   std_logic;
-		signal tdc_lf1		 : in   std_logic;
-		signal tdc_ef2		 : in   std_logic;
-		signal tdc_ef1		 : in   std_logic;
+		signal tdc_data		 : inout	std_logic_vector(27 downto 0); --***WATCH OUT***
+		signal tdc_stop_dis	 : out		std_logic_vector(1 to 4);
+		signal tdc_start_dis : out		std_logic;
+		signal tdc_wrn		 : out		std_logic;
+		signal tdc_rdn		 : out		std_logic;
+		signal tdc_csn		 : out		std_logic;
+		signal tdc_alutr	 : out  	std_logic;
+		signal tdc_puresn	 : out  	std_logic;
+		signal tdc_oen		 : out  	std_logic;
+		signal tdc_adr		 : out  	std_logic_vector(3 downto 0);
+		signal tdc_errflag	 : in   	std_logic;
+		signal tdc_irflag	 : in   	std_logic;
+		signal tdc_lf2		 : in   	std_logic;
+		signal tdc_lf1		 : in   	std_logic;
+		signal tdc_ef2		 : in   	std_logic;
+		signal tdc_ef1		 : in   	std_logic;
 
 		----------------------
 		-- FIFO's interface --
@@ -166,8 +167,8 @@ entity ndaq_core is
 		-- Trigger inputs --
 		--------------------
 		signal trigger_a	: in		std_logic;	
-		signal trigger_b	: in		std_logic;
-		signal trigger_c	: in		std_logic
+		signal trigger_b	: out		std_logic;
+		signal trigger_c	: out		std_logic
 		
 		-----------------------
 		-- Temporary signals --
@@ -264,7 +265,9 @@ architecture rtl of ndaq_core is
 		signal rcontrol			: out	std_logic_vector(7 downto 0);
 		
 		signal bcount			: out	std_logic_vector(15 downto 0);
-		signal c8wmax			: out	std_logic_vector(9 downto 0)
+		signal c8wmax			: out	std_logic_vector(9 downto 0);
+		
+		signal tdcstart			: out	std_logic
 	);
 	end component;
 	
@@ -435,6 +438,65 @@ architecture rtl of ndaq_core is
 	);
 	end component;
 
+
+	component tdc
+	port
+	(	
+		signal rst				: in 		std_logic;
+		signal clk				: in 		std_logic;	-- 40MHz clock
+		
+		-------------------
+		-- TDC interface --
+		-------------------
+		signal iotdc_data		: inout	std_logic_vector(27 downto 0);
+		signal otdc_stopdis	 	: out	std_logic_vector(1 to 4);
+		signal tdc_start_dis 	: out	std_logic;
+		signal otdc_rdn		 	: out	std_logic;
+		signal otdc_wrn		 	: out  	std_logic;
+		signal otdc_csn	 	 	: out	std_logic;
+		signal otdc_alutr	 	: out  	std_logic;
+		signal otdc_puresn	 	: out  	std_logic;
+		signal tdc_oen		 	: out  	std_logic;
+		signal otdc_adr		 	: out  	std_logic_vector(3 downto 0);
+		signal itdc_irflag	 	: in   	std_logic;
+		signal itdc_ef2		 	: in   	std_logic;
+		signal itdc_ef1		 	: in   	std_logic;
+
+		-----------------
+		-- TDC control --
+		-----------------
+		signal conf_done		: out	std_logic;
+		signal rd_en		 	: in	std_logic_vector(3 downto 0);	-- Read enable to read TDC 8-bit bus data
+		signal en_read		 	: in	std_logic;	-- Read enable to read TDC
+		signal tdc_out_HB	 	: out	std_logic_vector(7 downto 0); 	-- TDC Data Bus (HIGHEST Byte)
+		signal tdc_out_MH	 	: out	std_logic_vector(7 downto 0); 	-- TDC Data Bus (MEDIUM HIGH Byte)
+		signal tdc_out_ML	 	: out	std_logic_vector(7 downto 0); 	-- TDC Data Bus (MEDIUM LOW Byte)
+		signal tdc_out_LB	 	: out	std_logic_vector(7 downto 0); 	-- TDC Data Bus (HIGHEST Byte)		
+		signal otdc_data		: out	std_logic_vector(27 downto 0);
+		signal data_valid		: out 	std_logic;
+		signal start_conf		: in	std_logic	-- Start the configuration machine (active high pulse with 2-periods width)
+	);
+	end component;
+
+	component readtdc 
+	port
+	(	
+		signal clk				: in 	std_logic; -- sync if
+		signal rst				: in 	std_logic; -- async if
+	
+		signal enable			: in	std_logic; -- arbiter if
+		signal isidle			: out	std_logic; -- arbiter if
+
+		signal data_valid		: in	std_logic;
+		
+		signal rd_en			: out 	std_logic ;				
+		signal rd_stb			: out 	std_logic_vector(3 downto 0);
+		
+		signal wro				: out	std_logic;
+		signal dwait 			: in	std_logic
+	);
+	end component;
+	
 ---------------------------
 --***********************--
 --******* SIGNALS *******--
@@ -500,6 +562,13 @@ architecture rtl of ndaq_core is
 	
 	signal c8wmax					: std_logic_vector(9 downto 0);
 	
+	signal tdc_rden 				: std_logic;
+	signal tdc_rdstb				: std_logic_vector(3 downto 0);
+	signal data_valid				: std_logic;
+	signal tdcstart					: std_logic;
+
+	signal tdc_csn_wire 			: std_logic;
+	
 ------------------------------------------
 ------------------------------------------
 
@@ -514,18 +583,18 @@ begin
 	adc56_pwdn <= adcpwdn(2);
 	adc78_pwdn <= adcpwdn(3);
 
-	-------------------
-	-- TDC interface --
-	-------------------
-	tdc_stop_dis	<= (others => 'Z');
-	tdc_start_dis	<= 'Z';
-	tdc_wrn		 	<= 'Z';
-	tdc_rdn			<= 'Z';
-	tdc_csn			<= 'Z';
-	tdc_alutr		<= 'Z';
-	tdc_puresn		<= 'Z';
-	tdc_oen			<= 'Z';
-	tdc_adr			<= (others => 'Z');
+--	-------------------
+--	-- TDC interface --
+--	-------------------
+--	tdc_stop_dis	<= (others => 'Z');
+--	tdc_start_dis	<= 'Z';
+--	tdc_wrn		 	<= 'Z';
+--	tdc_rdn			<= 'Z';
+--	tdc_csn			<= 'Z';
+--	tdc_alutr		<= 'Z';
+--	tdc_puresn		<= 'Z';
+--	tdc_oen			<= 'Z';
+--	tdc_adr			<= (others => 'Z');
 
 	----------------------
 	-- FIFO's interface --
@@ -610,7 +679,9 @@ begin
 		rcontrol		=> rcontrol,
 		
 		bcount			=> bcount,
-		c8wmax			=> c8wmax
+		c8wmax			=> c8wmax,
+		
+		tdcstart		=> tdcstart
 	);
 
 
@@ -623,12 +694,12 @@ begin
 		en0	 			=> en0,
 		en1	 			=> en1,
 		en2	 			=> en2,
-		en3	 			=> open,
+		en3	 			=> en3,
 
 		ii0				=> ii0,
 		ii1				=> ii1,
 		ii2				=> ii2,
-		ii3				=> '0',
+		ii3				=> ii3,
 		
 		control        	=> control
 	);
@@ -1321,6 +1392,70 @@ begin
 
 		rmin			=> "0001111111",
 		esize			=> "0001111111"
+	);
+
+
+-- ************************************ TDC ***********************************
+
+	tdc_top:
+	tdc	port map
+	(	
+		rst				=> rst,
+		clk				=> pclk,	-- clock
+		
+		-------------------
+		-- TDC interface --
+		-------------------
+		iotdc_data		=> tdc_data,
+		otdc_stopdis	=> tdc_stop_dis,
+		tdc_start_dis 	=> tdc_start_dis,
+		otdc_rdn		=> tdc_rdn,
+		otdc_wrn		=> tdc_wrn,
+		otdc_csn	 	=> tdc_csn_wire,
+		otdc_alutr	 	=> tdc_alutr,
+		otdc_puresn	 	=> tdc_puresn,
+		tdc_oen		 	=> tdc_oen,
+		otdc_adr		=> tdc_adr,
+		itdc_irflag	 	=> tdc_irflag,
+		itdc_ef2		=> tdc_ef2,
+		itdc_ef1		=> tdc_ef1,
+
+		-----------------
+		-- TDC control --
+		-----------------
+		conf_done		=> trigger_c,		-- sinal no painel do NDAQ
+		rd_en		 	=> tdc_rdstb,	-- barramento 4 bits -- Read enable to read TDC 8-bit bus data
+		en_read		 	=> tdc_rden,	-- começa -- Read enable to read TDC
+		tdc_out_HB	 	=> txbus, 		-- TDC Data Bus (HIGHEST Byte)
+		tdc_out_MH	 	=> txbus, 		-- TDC Data Bus (MEDIUM HIGH Byte)
+		tdc_out_ML	 	=> txbus, 		-- TDC Data Bus (MEDIUM LOW Byte)
+		tdc_out_LB	 	=> txbus, 		-- TDC Data Bus (HIGHEST Byte)		
+		otdc_data		=> open,
+		data_valid		=> data_valid,	-- Handshaking.
+		start_conf		=> tdcstart		-- Start the configuration machine (active high pulse with 2-periods width)
+	);
+	
+	
+	tdc_csn <= tdc_csn_wire;
+	trigger_b <= tdc_csn_wire; --tdc_ef1;
+	--trigger_c <= tdc_ef2;
+	
+	tdc_reader:
+	readtdc	port map
+	(	
+		clk				=> pclk,
+		rst				=> rst,
+	
+		enable			=> en3,
+		isidle			=> ii3,
+
+		data_valid		=> data_valid,
+		
+		rd_en			=> tdc_rden,
+		rd_stb			=> tdc_rdstb,
+		
+		wro				=> wr,
+		dwait 			=> dwait
 	);
 
 
