@@ -62,6 +62,8 @@ architecture one_tdcread of tdcread is
 	signal i_tdc_out_ML		: std_logic_vector(7 downto 0);	-- Internal TDC 8-bit data bus (MEDIUM LOW Byte)
 	signal i_tdc_out_LB		: std_logic_vector(7 downto 0);	-- Internal TDC 8-bit data bus (LOWEST Byte)
 	
+	signal selected_fifo	: std_logic;
+	
 begin
 
 	----------------------
@@ -86,6 +88,7 @@ begin
 					otdc_Data <= (others => 'Z');
 					data_valid <= '1';
 					otdc_alutr <= '0';
+					selected_fifo <= '0';
 					if enable_read = '0' then	
 						sm_TDCx <= sTestEFs;
 					else
@@ -119,8 +122,10 @@ begin
 					otdc_alutr <= '0';
 					if itdc_ef1 = '0' then
 						tdc_addr <= REG8;
+						selected_fifo <= '0';
 					elsif itdc_ef2 = '0' then
 						tdc_addr <= REG9;
+						selected_fifo <= '1';	
 					else
 						null;
 					end if;
@@ -190,7 +195,7 @@ begin
 			i_tdc_out_LB <= (others => '0');
 		elsif rising_edge(clk) then
 			if data_valid = '0' then
-				i_tdc_out_HB <= "0000" & iTDC_Data(27 downto 24);
+				i_tdc_out_HB <= "000" & selected_fifo & iTDC_Data(27 downto 24);
 				i_tdc_out_MH <= iTDC_Data(23 downto 16);
 				i_tdc_out_ML <= iTDC_Data(15 downto 8);
 				i_tdc_out_LB <= iTDC_Data(7 downto 0);
