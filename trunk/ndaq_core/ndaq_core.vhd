@@ -95,8 +95,7 @@ entity ndaq_core is
 		-- FIFO's interface --
 		----------------------
 		-- Data Bus
-		--signal fifo_data_bus : out  	signed(9 downto 0); -- 10 bits !?
-		signal fifo_data_bus : out signed(31 downto 0);
+		signal fifo_data_bus : out std_logic_vector(31 downto 0);
 		
 		-- Control signals
 		signal fifo1_wen	 : out   	std_logic;	-- Write Enable
@@ -376,31 +375,6 @@ architecture rtl of ndaq_core is
 	);
 	end component;
 
-	-- FIFO reader and output streamer (tx streamer)
-	component readfifo
-	port
-	(	
-		signal clk				: in 	std_logic; -- sync if
-		signal rst				: in 	std_logic; -- async if
-	
-		signal enable			: in	std_logic; -- arbiter if
-		signal isidle			: out	std_logic; -- arbiter if
-
-		signal rd				: out	std_logic;	
-		signal q				: in	std_logic_vector(9 downto 0);
-				
-		signal usedw			: in	std_logic_vector(9 downto 0);
-		
-		signal wro				: out	std_logic;
-		signal dwait 			: in	std_logic;
-		signal odata        	: out	std_logic_vector(7 downto 0);
-		
-		-- Parameters
-		
-		signal rmin				: in 	std_logic_vector(9 downto 0);
-		signal esize			: in	std_logic_vector(9 downto 0)		
-	);
-	end component;
 
 	-- FIFO Writer
 	component writefifo
@@ -439,6 +413,44 @@ architecture rtl of ndaq_core is
 	end component;
 
 
+	-- IDT FIFO controller
+	component idtfifo_top
+	port(	-- CONTROL/STATUS signals
+		rst						     : in std_logic;
+		clk						     : in std_logic;		 				-- Receives the inverted output (nclk) from 'core_clkman' component
+		start_transfer				 : in std_logic;		 				-- Control signal to start the readout (command register)
+		enable_adc				 	 : in std_logic_vector(1 to 4); 	-- Indicates if the ADC is enabled ('1') 
+		transfer_running			 : out std_logic;		 				-- Indicates transfer from FPGA to FIFOs is running ('1')
+		transfer_counter			 : out std_logic_vector(7 downto 0);
+		idt_full					 : in std_logic_vector(1 to 4);
+		idt_wren					 : buffer std_logic_vector(1 to 4);
+		idt_data						 : out std_logic_vector(31 downto 0);
+		fifo_empty					 : in std_logic_vector(1 to 8);
+		fifo_used_A					 : in std_logic_vector(9 downto 0);
+		fifo_used_B					 : in std_logic_vector(9 downto 0);
+		fifo_used_C					 : in std_logic_vector(9 downto 0);
+		fifo_used_D					 : in std_logic_vector(9 downto 0);
+		fifo_used_E					 : in std_logic_vector(9 downto 0);
+		fifo_used_F					 : in std_logic_vector(9 downto 0);
+		fifo_used_G					 : in std_logic_vector(9 downto 0);
+		fifo_used_H					 : in std_logic_vector(9 downto 0);
+		fifo_rden					 : out std_logic_vector(1 to 8);
+		fifo_qA						 : in std_logic_vector(9 downto 0);
+		fifo_qB						 : in std_logic_vector(9 downto 0);
+		fifo_qC						 : in std_logic_vector(9 downto 0);
+		fifo_qD						 : in std_logic_vector(9 downto 0);
+		fifo_qE						 : in std_logic_vector(9 downto 0);
+		fifo_qF						 : in std_logic_vector(9 downto 0);
+		fifo_qG						 : in std_logic_vector(9 downto 0);
+		fifo_qH						 : in std_logic_vector(9 downto 0);		
+		-- TEST signals
+		state_out_A					 : out std_logic_vector(3 downto 0);	-- Only for TESTS
+		state_out_B					 : out std_logic_vector(3 downto 0);	-- Only for TESTS
+		state_out_top			     : out std_logic_vector(7 downto 0)
+	);	-- Only for TESTS
+	end component;
+
+	-- TDC Controller
 	component tdc
 	port
 	(	
@@ -560,12 +572,17 @@ architecture rtl of ndaq_core is
 	signal ptrigger56, ntrigger56	: std_logic;
 	signal ptrigger78, ntrigger78	: std_logic;
 	
-	signal c8wmax					: std_logic_vector(9 downto 0);
+	signal c8wmax					: std_logic_vector(9 downto 0); -- Internal FIFO Flow Control Preliminary Implemenation.
 	
+	signal empty1, empty2		: std_logic;
+	signal empty3, empty4		: std_logic;
+	signal empty5, empty6		: std_logic;
+	signal empty7, empty8		: std_logic;
+
 	signal tdc_rden 				: std_logic;
 	signal tdc_rdstb				: std_logic_vector(3 downto 0);
 	signal data_valid				: std_logic;
-	signal tdcstart					: std_logic;
+	signal tdcstart				: std_logic;
 
 	signal tdc_csn_wire 			: std_logic;
 	
@@ -577,45 +594,23 @@ begin
 	--------------------
 	-- ADCs interface --
 	--------------------
-	
 	adc12_pwdn <= adcpwdn(0);
 	adc34_pwdn <= adcpwdn(1);
 	adc56_pwdn <= adcpwdn(2);
 	adc78_pwdn <= adcpwdn(3);
 
---	-------------------
---	-- TDC interface --
---	-------------------
---	tdc_stop_dis	<= (others => 'Z');
---	tdc_start_dis	<= 'Z';
---	tdc_wrn		 	<= 'Z';
---	tdc_rdn			<= 'Z';
---	tdc_csn			<= 'Z';
---	tdc_alutr		<= 'Z';
---	tdc_puresn		<= 'Z';
---	tdc_oen			<= 'Z';
---	tdc_adr			<= (others => 'Z');
 
 	----------------------
 	-- FIFO's interface --
 	----------------------
-	-- Data Bus
-	fifo_data_bus <= (others => 'Z');
+	fifo_wck	<= pclk; --'1';
 	
-	-- Control signals
-	fifo1_wen	<= '1';
-	fifo2_wen	<= '1';
-	fifo3_wen	<= '1';
-	fifo4_wen	<= '1';
-	fifo_wck	<= '1';
-	
-	fifo_mrs	<= '1';
+	fifo_mrs	<= not(rst); --'1';
 	fifo_prs	<= '1';
 	fifo_fs0	<= '1';
 	fifo_fs1	<= '1';
-	fifo_ld		<= '1';
-	fifo_rt		<= '1';
-	
+	fifo_ld	<= '1';
+	fifo_rt	<= '1';
 
 	
 	--------------------
@@ -691,14 +686,14 @@ begin
 		clk				=> pclk,
 		rst				=> rst,
 
-		en0	 			=> en0,
+		en0	 			=> en0,  
 		en1	 			=> en1,
-		en2	 			=> en2,
+		en2	 			=> open, -- en2, -- priarb8 was removed.
 		en3	 			=> en3,
 
 		ii0				=> ii0,
 		ii1				=> ii1,
-		ii2				=> ii2,
+		ii2				=> '0',	-- no component, never idle.
 		ii3				=> ii3,
 		
 		control        	=> control
@@ -737,35 +732,35 @@ begin
 	
 -- ********************************* ACQ - BASE *******************************
 
-	readout_arbiter:
-	priarb8 port map
-	(	
-		clk				=> pclk,
-		rst				=> rst,
-		
-		enable			=> en2,
-		isidle			=> ii2,
-		
-		en0	 			=> ren1,
-		en1	 			=> ren2,
-		en2	 			=> ren3,
-		en3	 			=> ren4,
-		en4	 			=> ren5,
-		en5	 			=> ren6,
-		en6	 			=> ren7,
-		en7	 			=> ren8,
-		
-		ii0				=> rii1,
-		ii1				=> rii2,
-		ii2				=> rii3,
-		ii3				=> rii4,
-		ii4				=> rii5,
-		ii5				=> rii6,
-		ii6				=> rii7,
-		ii7				=> rii8,
-		
-		control        	=> rcontrol
-	);
+--	readout_arbiter:
+--	priarb8 port map
+--	(	
+--		clk				=> pclk,
+--		rst				=> rst,
+--		
+--		enable			=> en2,
+--		isidle			=> ii2,
+--		
+--		en0	 			=> ren1,
+--		en1	 			=> ren2,
+--		en2	 			=> ren3,
+--		en3	 			=> ren4,
+--		en4	 			=> ren5,
+--		en5	 			=> ren6,
+--		en6	 			=> ren7,
+--		en7	 			=> ren8,
+--		
+--		ii0				=> rii1,
+--		ii1				=> rii2,
+--		ii2				=> rii3,
+--		ii3				=> rii4,
+--		ii4				=> rii5,
+--		ii5				=> rii6,
+--		ii6				=> rii7,
+--		ii7				=> rii8,
+--		
+--		control        	=> rcontrol
+--	);
 
 -- ******************************* ACQ - CHANNEL 1 ****************************
 
@@ -773,23 +768,23 @@ begin
 	c1_etrigger_cond:
 	tpulse port map
 	(	
-		rst				=> rst,
-		clk				=> adc12_dco,
-		trig_in			=> trigger_a,
+		rst			=> rst,
+		clk			=> adc12_dco,
+		trig_in		=> trigger_a,
 		trig_out		=> ptrigger12
 	);
 
 	c1_stream_IN:
 	writefifo port map
 	(	
-		clk				=> adc12_dco,
-		rst				=> rst,
+		clk			=> adc12_dco,
+		rst			=> rst,
 		rclk			=> pclk,
 		
 		acqin			=> open, --flag,
 		
-		trig0 			=> ptrigger12,
-		trig1 			=> '0',
+		trig0 		=> ptrigger12,
+		trig1 		=> '0',
 		trig2			=> '0',
 
 		wr				=> wr1,
@@ -804,7 +799,7 @@ begin
 	c1_fifo_module:
 	dcfifom port map
 	(	
-		clk				=> adc12_dco,
+		clk			=> adc12_dco,
 		rdclk			=> pclk,
 		rst				=> rst,
 		rclk			=> pclk,
@@ -816,32 +811,10 @@ begin
 		q				=> q1,
 		
 		f				=> open,
-		e				=> open,
+		e				=> empty1, --open,
 
 		rdusedw		=> rdusedw1,
 		wrusedw		=> wrusedw1
-	);
-
-	c1_stream_OUT:
-	readfifo port map
-	(	
-		clk				=> pclk,
-		rst				=> rst,
-	
-		enable			=> ren1,
-		isidle			=> rii1,
-
-		rd				=> rd1,
-		q				=> q1,
-				
-		usedw			=> rdusedw1,
-	
-		wro				=> wr,
-		dwait 			=> dwait,
-		odata        	=> txbus,	
-
-		rmin			=> "0001111111",
-		esize			=> "0001111111"
 	);
 
 
@@ -852,23 +825,23 @@ begin
 	c2_etrigger_cond:
 	tpulse port map
 	(	
-		rst				=> rst,
-		clk				=> nadc12_dco,
-		trig_in			=> trigger_a,
+		rst			=> rst,
+		clk			=> nadc12_dco,
+		trig_in		=> trigger_a,
 		trig_out		=> ntrigger12
 	);
 
 	c2_stream_IN:
 	writefifo port map
 	(	
-		clk				=> nadc12_dco,
-		rst				=> rst,
+		clk			=> nadc12_dco,
+		rst			=> rst,
 		rclk			=> pclk,
 		
 		acqin			=> open,
 		
-		trig0 			=> ntrigger12,
-		trig1 			=> '0',
+		trig0 		=> ntrigger12,
+		trig1 		=> '0',
 		trig2			=> '0',
 
 		wr				=> wr2,
@@ -883,7 +856,7 @@ begin
 	c2_fifo_module:
 	dcfifom port map
 	(	
-		clk				=> nadc12_dco,
+		clk			=> nadc12_dco,
 		rdclk			=> pclk,
 		rst				=> rst,
 		rclk			=> pclk,
@@ -895,32 +868,10 @@ begin
 		q				=> q2,
 		
 		f				=> open,
-		e				=> open,
+		e				=> empty2, --open,
 
 		rdusedw		=> rdusedw2,
 		wrusedw		=> wrusedw2
-	);
-
-	c2_stream_OUT:
-	readfifo port map
-	(	
-		clk				=> pclk,
-		rst				=> rst,
-	
-		enable			=> ren2,
-		isidle			=> rii2,
-
-		rd				=> rd2,
-		q				=> q2,
-				
-		usedw			=> rdusedw2,
-	
-		wro				=> wr,
-		dwait 			=> dwait,
-		odata        	=> txbus,	
-
-		rmin			=> "0001111111",
-		esize			=> "0001111111"
 	);
 
 
@@ -930,23 +881,23 @@ begin
 	c3_etrigger_cond:
 	tpulse port map
 	(	
-		rst				=> rst,
-		clk				=> adc34_dco,
-		trig_in			=> trigger_a,
+		rst			=> rst,
+		clk			=> adc34_dco,
+		trig_in		=> trigger_a,
 		trig_out		=> ptrigger34
 	);
 
 	c3_stream_IN:
 	writefifo port map
 	(	
-		clk				=> adc34_dco,
-		rst				=> rst,
+		clk			=> adc34_dco,
+		rst			=> rst,
 		rclk			=> pclk,
 		
 		acqin			=> open, --flag,
 		
-		trig0 			=> ptrigger34,
-		trig1 			=> '0',
+		trig0 		=> ptrigger34,
+		trig1 		=> '0',
 		trig2			=> '0',
 
 		wr				=> wr3,
@@ -961,7 +912,7 @@ begin
 	c3_fifo_module:
 	dcfifom port map
 	(	
-		clk				=> adc34_dco,
+		clk			=> adc34_dco,
 		rdclk			=> pclk,
 		rst				=> rst,
 		rclk			=> pclk,
@@ -973,32 +924,10 @@ begin
 		q				=> q3,
 		
 		f				=> open,
-		e				=> open,
+		e				=> empty3, --open,
 
 		rdusedw		=> rdusedw3,
 		wrusedw		=> wrusedw3
-	);
-
-	c3_stream_OUT:
-	readfifo port map
-	(	
-		clk				=> pclk,
-		rst				=> rst,
-	
-		enable			=> ren3,
-		isidle			=> rii3,
-
-		rd				=> rd3,
-		q				=> q3,
-				
-		usedw			=> rdusedw3,
-	
-		wro				=> wr,
-		dwait 			=> dwait,
-		odata        	=> txbus,	
-
-		rmin			=> "0001111111",
-		esize			=> "0001111111"
 	);
 
 
@@ -1009,23 +938,23 @@ begin
 	c4_etrigger_cond:
 	tpulse port map
 	(	
-		rst				=> rst,
-		clk				=> nadc34_dco,
-		trig_in			=> trigger_a,
+		rst			=> rst,
+		clk			=> nadc34_dco,
+		trig_in		=> trigger_a,
 		trig_out		=> ntrigger34
 	);
 
 	c4_stream_IN:
 	writefifo port map
 	(	
-		clk				=> nadc34_dco,
-		rst				=> rst,
+		clk			=> nadc34_dco,
+		rst			=> rst,
 		rclk			=> pclk,
 		
 		acqin			=> open,
 		
-		trig0 			=> ntrigger34,
-		trig1 			=> '0',
+		trig0 		=> ntrigger34,
+		trig1 		=> '0',
 		trig2			=> '0',
 
 		wr				=> wr4,
@@ -1040,9 +969,9 @@ begin
 	c4_fifo_module:
 	dcfifom port map
 	(	
-		clk				=> nadc34_dco,
+		clk			=> nadc34_dco,
 		rdclk			=> pclk,
-		rst				=> rst,
+		rst			=> rst,
 		rclk			=> pclk,
 		
 		wr				=> wr4,
@@ -1052,32 +981,10 @@ begin
 		q				=> q4,
 		
 		f				=> open,
-		e				=> open,
+		e				=> empty4, --open,
 
 		rdusedw		=> rdusedw4,
 		wrusedw		=> wrusedw4
-	);
-
-	c4_stream_OUT:
-	readfifo port map
-	(	
-		clk				=> pclk,
-		rst				=> rst,
-	
-		enable			=> ren4,
-		isidle			=> rii4,
-
-		rd				=> rd4,
-		q				=> q4,
-				
-		usedw			=> rdusedw4,
-	
-		wro				=> wr,
-		dwait 			=> dwait,
-		odata        	=> txbus,	
-
-		rmin			=> "0001111111",
-		esize			=> "0001111111"
 	);
 
 
@@ -1087,23 +994,23 @@ begin
 	c5_etrigger_cond:
 	tpulse port map
 	(	
-		rst				=> rst,
-		clk				=> adc56_dco,
-		trig_in			=> trigger_a,
+		rst			=> rst,
+		clk			=> adc56_dco,
+		trig_in		=> trigger_a,
 		trig_out		=> ptrigger56
 	);
 
 	c5_stream_IN:
 	writefifo port map
 	(	
-		clk				=> adc56_dco,
-		rst				=> rst,
+		clk			=> adc56_dco,
+		rst			=> rst,
 		rclk			=> pclk,
 		
 		acqin			=> open, --flag,
 		
-		trig0 			=> ptrigger56,
-		trig1 			=> '0',
+		trig0 		=> ptrigger56,
+		trig1 		=> '0',
 		trig2			=> '0',
 
 		wr				=> wr5,
@@ -1118,7 +1025,7 @@ begin
 	c5_fifo_module:
 	dcfifom port map
 	(	
-		clk				=> adc56_dco,
+		clk			=> adc56_dco,
 		rdclk			=> pclk,
 		rst				=> rst,
 		rclk			=> pclk,
@@ -1130,32 +1037,10 @@ begin
 		q				=> q5,
 		
 		f				=> open,
-		e				=> open,
+		e				=> empty5, --open,
 
 		rdusedw		=> rdusedw5,
 		wrusedw		=> wrusedw5
-	);
-
-	c5_stream_OUT:
-	readfifo port map
-	(	
-		clk				=> pclk,
-		rst				=> rst,
-	
-		enable			=> ren5,
-		isidle			=> rii5,
-
-		rd				=> rd5,
-		q				=> q5,
-				
-		usedw			=> rdusedw5,
-	
-		wro				=> wr,
-		dwait 			=> dwait,
-		odata        	=> txbus,	
-
-		rmin			=> "0001111111",
-		esize			=> "0001111111"
 	);
 
 
@@ -1166,23 +1051,23 @@ begin
 	c6_etrigger_cond:
 	tpulse port map
 	(	
-		rst				=> rst,
-		clk				=> nadc56_dco,
-		trig_in			=> trigger_a,
+		rst			=> rst,
+		clk			=> nadc56_dco,
+		trig_in		=> trigger_a,
 		trig_out		=> ntrigger56
 	);
 
 	c6_stream_IN:
 	writefifo port map
 	(	
-		clk				=> nadc56_dco,
-		rst				=> rst,
+		clk			=> nadc56_dco,
+		rst			=> rst,
 		rclk			=> pclk,
 		
 		acqin			=> open,
 		
-		trig0 			=> ntrigger56,
-		trig1 			=> '0',
+		trig0 		=> ntrigger56,
+		trig1 		=> '0',
 		trig2			=> '0',
 
 		wr				=> wr6,
@@ -1197,7 +1082,7 @@ begin
 	c6_fifo_module:
 	dcfifom port map
 	(	
-		clk				=> nadc56_dco,
+		clk			=> nadc56_dco,
 		rdclk			=> pclk,
 		rst				=> rst,
 		rclk			=> pclk,
@@ -1209,32 +1094,10 @@ begin
 		q				=> q6,
 		
 		f				=> open,
-		e				=> open,
+		e				=> empty6, --open,
 
 		rdusedw		=> rdusedw6,
 		wrusedw		=> wrusedw6
-	);
-
-	c6_stream_OUT:
-	readfifo port map
-	(	
-		clk				=> pclk,
-		rst				=> rst,
-	
-		enable			=> ren6,
-		isidle			=> rii6,
-
-		rd				=> rd6,
-		q				=> q6,
-				
-		usedw			=> rdusedw6,
-	
-		wro				=> wr,
-		dwait 			=> dwait,
-		odata        	=> txbus,	
-
-		rmin			=> "0001111111",
-		esize			=> "0001111111"
 	);
 
 
@@ -1244,23 +1107,23 @@ begin
 	c7_etrigger_cond:
 	tpulse port map
 	(	
-		rst				=> rst,
-		clk				=> adc78_dco,
-		trig_in			=> trigger_a,
+		rst			=> rst,
+		clk			=> adc78_dco,
+		trig_in		=> trigger_a,
 		trig_out		=> ptrigger78
 	);
 
 	c7_stream_IN:
 	writefifo port map
 	(	
-		clk				=> adc78_dco,
-		rst				=> rst,
+		clk			=> adc78_dco,
+		rst			=> rst,
 		rclk			=> pclk,
 		
 		acqin			=> open, --flag,
 		
-		trig0 			=> ptrigger78,
-		trig1 			=> '0',
+		trig0 		=> ptrigger78,
+		trig1 		=> '0',
 		trig2			=> '0',
 
 		wr				=> wr7,
@@ -1275,7 +1138,7 @@ begin
 	c7_fifo_module:
 	dcfifom port map
 	(	
-		clk				=> adc78_dco,
+		clk			=> adc78_dco,
 		rdclk			=> pclk,
 		rst				=> rst,
 		rclk			=> pclk,
@@ -1287,32 +1150,10 @@ begin
 		q				=> q7,
 		
 		f				=> open,
-		e				=> open,
+		e				=> empty7, --open,
 
 		rdusedw		=> rdusedw7,
 		wrusedw		=> wrusedw7
-	);
-
-	c7_stream_OUT:
-	readfifo port map
-	(	
-		clk				=> pclk,
-		rst				=> rst,
-	
-		enable			=> ren7,
-		isidle			=> rii7,
-
-		rd				=> rd7,
-		q				=> q7,
-				
-		usedw			=> rdusedw7,
-	
-		wro				=> wr,
-		dwait 			=> dwait,
-		odata        	=> txbus,	
-
-		rmin			=> "0001111111",
-		esize			=> "0001111111"
 	);
 
 
@@ -1323,23 +1164,23 @@ begin
 	c8_etrigger_cond:
 	tpulse port map
 	(	
-		rst				=> rst,
-		clk				=> nadc78_dco,
-		trig_in			=> trigger_a,
+		rst			=> rst,
+		clk			=> nadc78_dco,
+		trig_in		=> trigger_a,
 		trig_out		=> ntrigger78
 	);
 
 	c8_stream_IN:
 	writefifo port map
 	(	
-		clk				=> nadc78_dco,
-		rst				=> rst,
+		clk			=> nadc78_dco,
+		rst			=> rst,
 		rclk			=> pclk,
 		
 		acqin			=> open,
 		
-		trig0 			=> ntrigger78,
-		trig1 			=> '0',
+		trig0 		=> ntrigger78,
+		trig1 		=> '0',
 		trig2			=> '0',
 
 		wr				=> wr8,
@@ -1354,9 +1195,9 @@ begin
 	c8_fifo_module:
 	dcfifom port map
 	(	
-		clk				=> nadc78_dco,
+		clk			=> nadc78_dco,
 		rdclk			=> pclk,
-		rst				=> rst,
+		rst			=> rst,
 		rclk			=> pclk,
 		
 		wr				=> wr8,
@@ -1366,35 +1207,79 @@ begin
 		q				=> q8,
 		
 		f				=> open,
-		e				=> open,
+		e				=> empty8, --open,
 
 		rdusedw		=> rdusedw8,
 		wrusedw		=> wrusedw8
 	);
 
-	c8_stream_OUT:
-	readfifo port map
-	(	
-		clk				=> pclk,
-		rst				=> rst,
-	
-		enable			=> ren8,
-		isidle			=> rii8,
 
-		rd				=> rd8,
-		q				=> q8,
-				
-		usedw			=> rdusedw8,
-	
-		wro				=> wr,
-		dwait 			=> dwait,
-		odata        	=> txbus,	
+-- ************************************ IDT WRITER ********************************
 
-		rmin			=> "0001111111",
-		esize			=> "0001111111"
+	idt_writer:
+	idtfifo_top port map
+	(	-- CONTROL/STATUS signals
+		rst					=> rst,
+		clk					=> pclk,
+		start_transfer		=> '1',
+		enable_adc			=> "1111",
+		transfer_running	=> open,
+		transfer_counter	=> open,
+
+		idt_full(1)			=> fifo1_ff,
+		idt_full(2)			=> fifo2_ff,
+		idt_full(3)			=> fifo3_ff,
+		idt_full(4)			=> fifo4_ff,
+
+		idt_wren(1)			=> fifo1_wen,
+		idt_wren(2)			=> fifo2_wen,
+		idt_wren(3)			=> fifo3_wen,
+		idt_wren(4)			=> fifo4_wen,
+
+		idt_data				=> fifo_data_bus,
+		
+		fifo_empty(1)		=> empty1,
+		fifo_empty(2)		=> empty2,
+		fifo_empty(3)		=> empty3,
+		fifo_empty(4)		=> empty4,
+		fifo_empty(5)		=> empty5,
+		fifo_empty(6)		=> empty6,
+		fifo_empty(7)		=> empty7,
+		fifo_empty(8)		=> empty8,
+
+		fifo_used_A			=> rdusedw1,
+		fifo_used_B			=> rdusedw2,
+		fifo_used_C			=> rdusedw3,
+		fifo_used_D			=> rdusedw4,
+		fifo_used_E			=> rdusedw5,
+		fifo_used_F			=> rdusedw6,
+		fifo_used_G			=> rdusedw7,
+		fifo_used_H			=> rdusedw8,
+		fifo_rden(1)		=> rd1,
+		fifo_rden(2)		=> rd2,
+		fifo_rden(3)		=> rd3,
+		fifo_rden(4)		=> rd4,
+		fifo_rden(5)		=> rd5,
+		fifo_rden(6)		=> rd6,
+		fifo_rden(7)		=> rd7,
+		fifo_rden(8)		=> rd8,
+		
+		fifo_qA   			=> q1,
+		fifo_qB				=> q2,
+		fifo_qC				=> q3,
+		fifo_qD				=> q4,
+		fifo_qE				=> q5,
+		fifo_qF				=> q6,
+		fifo_qG				=> q7,
+		fifo_qH				=> q8,			
+	
+	-- TEST signals
+		state_out_A			=> open,
+		state_out_B			=> open,
+		state_out_top		=> open
 	);
 
-
+	
 -- ************************************ TDC ***********************************
 
 	tdc_top:
