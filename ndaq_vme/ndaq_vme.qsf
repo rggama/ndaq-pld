@@ -28,7 +28,7 @@ set_global_assignment -name DEVICE EP3C25F324C8
 set_global_assignment -name TOP_LEVEL_ENTITY ndaq_vme
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 8.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "15:07:41  NOVEMBER 26, 2008"
-set_global_assignment -name LAST_QUARTUS_VERSION "9.1 SP2"
+set_global_assignment -name LAST_QUARTUS_VERSION 10.0
 set_global_assignment -name USE_GENERATED_PHYSICAL_CONSTRAINTS OFF -section_id eda_blast_fpga
 set_global_assignment -name DEVICE_FILTER_PIN_COUNT 324
 set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 8
@@ -315,15 +315,6 @@ set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name STATE_MACHINE_PROCESSING "ONE-HOT"
 set_global_assignment -name SAFE_STATE_MACHINE ON
 set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/b_ndaq_vme_0.1/ndaq_vme.dpf"
-set_global_assignment -name VHDL_FILE s_trif/s_txfifoif.vhd
-set_global_assignment -name VHDL_FILE s_trif/s_rxfifoif.vhd
-set_global_assignment -name VHDL_FILE s_trif/s_trif.vhd
-set_global_assignment -name VHDL_FILE ndaq_vme.vhd
-set_global_assignment -name VHDL_FILE clkman.vhd
-set_global_assignment -name VHDL_FILE reset.vhd
-set_global_assignment -name QIP_FILE my_pll.qip
-set_global_assignment -name VECTOR_WAVEFORM_FILE sim0.vwf
-set_global_assignment -name SDC_FILE 1.sdc
 set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/bridge_ndaq_vme_0.0/ndaq_vme.dpf"
 set_location_assignment PIN_L1 -to bridge_wr
 set_location_assignment PIN_L2 -to bridge_rd
@@ -342,5 +333,19 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to bridge_data[2]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to bridge_data[3]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to bridge_da
 set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/ndaq_vme_0.0/ndaq_vme.dpf"
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/ndaq-pld/ndaq_vme/ndaq_vme.dpf"
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name VHDL_FILE system/my_pll.vhd
+set_global_assignment -name SOURCE_FILE system/my_pll.cmp
+set_global_assignment -name VHDL_FILE system/clkman.vhd
+set_global_assignment -name VHDL_FILE system/reset.vhd
+set_global_assignment -name VHDL_FILE usb/usb_idtfifo_read.vhd
+set_global_assignment -name VHDL_FILE vme_if/vmeif_pkg.vhd
+set_global_assignment -name VHDL_FILE vme_if/vmeif.vhd
+set_global_assignment -name VHDL_FILE vme_if/vmeif_usr.vhd
+set_global_assignment -name SDC_FILE ndaq_vme.sdc
+set_global_assignment -name VHDL_FILE s_trif/s_txfifoif.vhd
+set_global_assignment -name VHDL_FILE s_trif/s_rxfifoif.vhd
+set_global_assignment -name VHDL_FILE s_trif/s_trif.vhd
+set_global_assignment -name VHDL_FILE ndaq_vme.vhd
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
