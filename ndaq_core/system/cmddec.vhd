@@ -22,7 +22,6 @@ entity cmddec is
 	(	
 		signal clk				: in 	std_logic; -- sync if
 		signal rst				: in 	std_logic; -- async if
-		signal rstc				: in 	std_logic; -- async if
 
 		signal rd				: out	std_logic;
 		signal davail 			: in	std_logic;
@@ -30,7 +29,6 @@ entity cmddec is
 
 		signal reset			: out	std_logic_vector(7 downto 0);
 		signal adcpwdn			: out 	std_logic_vector(3 downto 0) := x"F";
-		signal resetc			: out	std_logic_vector(7 downto 0);
 		signal control			: out	std_logic_vector(7 downto 0);
 		signal rcontrol			: out	std_logic_vector(7 downto 0);
 		
@@ -91,14 +89,13 @@ begin
 --	end process;
 	
 	registers_machine:
-	process (rst, rstc, clk) begin
+	process (rst, clk) begin
 		if (rst = '1') then
 			--AddrReg		<= x"FF";
 
 			-- Register's Reset Values
 			reset		<= x"00";
 			adcpwdn		<= x"F";		--x"F"	All ADCs powered down.
-			resetc		<= x"00";
 			control		<= x"00";		--x"02"	Resets enabled for SIMULATION.
 			rcontrol	<= x"00";		--x"FF"	Will enable all readout channels.
 			--
@@ -112,9 +109,6 @@ begin
 			--
 			regs_state	<= regs_idle;
 			
-		------------------------------
-		elsif (rstc = '1') then
-			resetc		<= x"00";
 		------------------------------
 		
 		elsif (rising_edge(clk)) then
@@ -171,7 +165,6 @@ begin
 					
 					case AddrReg is
 						when x"AA"	=> reset	 	<= idata;				-- Master Reset			at 0xAA
-						when x"AB"	=> resetc	 	<= idata;				-- Reset 63488b Counter	at 0xAB
 						when x"80"	=> adcpwdn		<= idata(3 downto 0);	-- ADC Power Down Bits	at 0x80
 						when x"81"	=> control		<= idata;				-- Main Arbiter Control	at 0x81
 						when x"82"	=> rcontrol		<= idata;				-- Readout Control		at 0x82

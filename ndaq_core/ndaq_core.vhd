@@ -141,7 +141,7 @@ entity ndaq_core is
 		--------------------
 		-- SRAM interface --
 		--------------------
-		signal sram_add	 	 : out  	std_logic_vector(18 downto 0);
+		signal sram_add	 : out		std_logic_vector(18 downto 0);
 		signal sram_data	 : inout  	std_logic_vector(7 downto 0);
 		signal sram_we		 : out		std_logic;
 		signal sram_oe		 : out		std_logic;
@@ -153,14 +153,18 @@ entity ndaq_core is
 		------------------------------
 		signal lvdsin 		 :in  		std_logic_vector(15 downto 0);		
 		
+		---------------
+		-- Slave SPI --
+		---------------
+		signal mosi				: in		std_logic;
+		signal miso				: out		std_logic;
+		signal sclk				: in		std_logic;
+
 		----------------------------
 		-- VME FPGA communication --
 		----------------------------
-		signal bridge_data	 : inout	std_logic_vector(3 downto 0);
-		signal bridge_dw 	 : in		std_logic;
-		signal bridge_da 	 : in		std_logic;
-		signal bridge_wr	 : out		std_logic;
-		signal bridge_rd	 : out		std_logic;
+--		signal bridge_data	: inout	std_logic_vector(3 downto 0);
+--		signal bridge_rd		: out	std_logic;
 
 		--------------------
 		-- Trigger inputs --
@@ -200,34 +204,34 @@ architecture rtl of ndaq_core is
 	);
 	end component;
 
-	-- MASTER USB Transceiver Interface
-	component m_trif
-	port
-	(	
-		signal clk				: in 	std_logic; -- sync if
-		signal clk_en			: in 	std_logic; -- sync if
-		signal rst				: in 	std_logic; -- async if
-		signal rstc				: in	std_logic;
-		
-		-- params
-		signal bcount			: in	std_logic_vector(15 downto 0);
-
-		-- local
-		signal dwait			: out	std_logic;
-		signal davail			: out	std_logic;
-		signal nwr				: in	std_logic;
-		signal nrd				: in 	std_logic;
-		signal idata			: in	std_logic_vector(7 downto 0);
-		signal odata			: out 	std_logic_vector(7 downto 0);
-
-		-- ext
-		signal sdwait			: in	std_logic;
-		signal sdavail			: in 	std_logic;
-		signal snwr				: out	std_logic;
-		signal snrd				: out	std_logic;
-		signal iodata			: inout	std_logic_vector(3 downto 0)
-	);
-	end component;
+--	-- MASTER USB Transceiver Interface
+--	component m_trif
+--	port
+--	(	
+--		signal clk				: in 	std_logic; -- sync if
+--		signal clk_en			: in 	std_logic; -- sync if
+--		signal rst				: in 	std_logic; -- async if
+--		signal rstc				: in	std_logic;
+--		
+--		-- params
+--		signal bcount			: in	std_logic_vector(15 downto 0);
+--
+--		-- local
+--		signal dwait			: out	std_logic;
+--		signal davail			: out	std_logic;
+--		signal nwr				: in	std_logic;
+--		signal nrd				: in 	std_logic;
+--		signal idata			: in	std_logic_vector(7 downto 0);
+--		signal odata			: out 	std_logic_vector(7 downto 0);
+--
+--		-- ext
+--		signal sdwait			: in	std_logic;
+--		signal sdavail			: in 	std_logic;
+--		signal snwr				: out	std_logic;
+--		signal snrd				: out	std_logic;
+--		signal iodata			: inout	std_logic_vector(3 downto 0)
+--	);
+--	end component;
 		
 	-- Bench 0
 	component bench0
@@ -251,22 +255,20 @@ architecture rtl of ndaq_core is
 	(	
 		signal clk				: in 	std_logic; -- sync if
 		signal rst				: in 	std_logic; -- async if
-		signal rstc				: in 	std_logic; -- async if
 
 		signal rd				: out	std_logic;
 		signal davail 			: in	std_logic;
 		signal idata        	: in	std_logic_vector(7 downto 0);
 
 		signal reset			: out	std_logic_vector(7 downto 0);
-		signal adcpwdn			: out 	std_logic_vector(3 downto 0) := x"F";
-		signal resetc			: out	std_logic_vector(7 downto 0);
+		signal adcpwdn			: out std_logic_vector(3 downto 0) := x"F";
 		signal control			: out	std_logic_vector(7 downto 0);
-		signal rcontrol			: out	std_logic_vector(7 downto 0);
+		signal rcontrol		: out	std_logic_vector(7 downto 0);
 		
 		signal bcount			: out	std_logic_vector(15 downto 0);
 		signal c8wmax			: out	std_logic_vector(9 downto 0);
 		
-		signal tdcstart			: out	std_logic
+		signal tdcstart		: out	std_logic
 	);
 	end component;
 	
@@ -299,41 +301,41 @@ architecture rtl of ndaq_core is
 		signal ii2				: in	std_logic;
 		signal ii3				: in	std_logic;
 
-		signal control        	: in	std_logic_vector(7 downto 0)
+		signal control        : in	std_logic_vector(7 downto 0)
 	);
 	end component;
 
-	-- Readout Arbiter
-	component priarb8
-	port
-	(	
-		signal clk				: in 	std_logic; -- sync if
-		signal rst				: in 	std_logic; -- async if
-
-		signal enable			: in	std_logic; -- arbiter if
-		signal isidle			: out	std_logic; -- arbiter if
-
-		signal en0	 			: out	std_logic := '0';
-		signal en1	 			: out	std_logic := '0';
-		signal en2	 			: out	std_logic := '0';
-		signal en3	 			: out	std_logic := '0';
-		signal en4	 			: out	std_logic := '0';
-		signal en5	 			: out	std_logic := '0';
-		signal en6	 			: out	std_logic := '0';
-		signal en7	 			: out	std_logic := '0';
-
-		signal ii0				: in	std_logic;
-		signal ii1				: in	std_logic;
-		signal ii2				: in	std_logic;
-		signal ii3				: in	std_logic;
-		signal ii4				: in	std_logic;
-		signal ii5				: in	std_logic;
-		signal ii6				: in	std_logic;
-		signal ii7				: in	std_logic;
-
-		signal control        	: in	std_logic_vector(7 downto 0)
-	);
-	end component;
+--	-- Readout Arbiter
+--	component priarb8
+--	port
+--	(	
+--		signal clk				: in 	std_logic; -- sync if
+--		signal rst				: in 	std_logic; -- async if
+--
+--		signal enable			: in	std_logic; -- arbiter if
+--		signal isidle			: out	std_logic; -- arbiter if
+--
+--		signal en0	 			: out	std_logic := '0';
+--		signal en1	 			: out	std_logic := '0';
+--		signal en2	 			: out	std_logic := '0';
+--		signal en3	 			: out	std_logic := '0';
+--		signal en4	 			: out	std_logic := '0';
+--		signal en5	 			: out	std_logic := '0';
+--		signal en6	 			: out	std_logic := '0';
+--		signal en7	 			: out	std_logic := '0';
+--
+--		signal ii0				: in	std_logic;
+--		signal ii1				: in	std_logic;
+--		signal ii2				: in	std_logic;
+--		signal ii3				: in	std_logic;
+--		signal ii4				: in	std_logic;
+--		signal ii5				: in	std_logic;
+--		signal ii6				: in	std_logic;
+--		signal ii7				: in	std_logic;
+--
+--		signal control       : in	std_logic_vector(7 downto 0)
+--	);
+--	end component;
 	
 	-- Headers Writer
 	component headersw
@@ -362,13 +364,13 @@ architecture rtl of ndaq_core is
 		signal rclk				: in	std_logic;
 		
 		signal wr				: in 	std_logic;
-		signal d				: in	std_logic_vector(9 downto 0);
+		signal d					: in	std_logic_vector(9 downto 0);
 		
 		signal rd				: in	std_logic;	
-		signal q				: out	std_logic_vector(9 downto 0);
+		signal q					: out	std_logic_vector(9 downto 0);
 		
-		signal f				: out	std_logic;	
-		signal e				: out	std_logic;
+		signal f					: out	std_logic;	
+		signal e					: out	std_logic;
 
 		signal rdusedw			: out	std_logic_vector(9 downto 0);
 		signal wrusedw			: out	std_logic_vector(9 downto 0)
@@ -396,7 +398,7 @@ architecture rtl of ndaq_core is
 		
 		-- Parameters
 		
-		signal wmax				: in	std_logic_vector(9 downto 0); 	-- same size of 'usedw'
+		signal wmax				: in	std_logic_vector(9 downto 0); -- same size of 'usedw'
 		signal esize			: in	std_logic_vector(9 downto 0)	-- maximum value must be equal fifo word size (max 'usedw')
 	);
 	end component;
@@ -416,38 +418,32 @@ architecture rtl of ndaq_core is
 	-- IDT FIFO controller
 	component idtfifo_top
 	port(	-- CONTROL/STATUS signals
-		rst						     : in std_logic;
-		clk						     : in std_logic;		 				-- Receives the inverted output (nclk) from 'core_clkman' component
-		start_transfer				 : in std_logic;		 				-- Control signal to start the readout (command register)
-		enable_adc				 	 : in std_logic_vector(1 to 4); 	-- Indicates if the ADC is enabled ('1') 
-		transfer_running			 : out std_logic;		 				-- Indicates transfer from FPGA to FIFOs is running ('1')
-		transfer_counter			 : out std_logic_vector(7 downto 0);
-		idt_full					 : in std_logic_vector(1 to 4);
-		idt_wren					 : buffer std_logic_vector(1 to 4);
-		idt_data						 : out std_logic_vector(31 downto 0);
-		fifo_empty					 : in std_logic_vector(1 to 8);
-		fifo_used_A					 : in std_logic_vector(9 downto 0);
-		fifo_used_B					 : in std_logic_vector(9 downto 0);
-		fifo_used_C					 : in std_logic_vector(9 downto 0);
-		fifo_used_D					 : in std_logic_vector(9 downto 0);
-		fifo_used_E					 : in std_logic_vector(9 downto 0);
-		fifo_used_F					 : in std_logic_vector(9 downto 0);
-		fifo_used_G					 : in std_logic_vector(9 downto 0);
-		fifo_used_H					 : in std_logic_vector(9 downto 0);
-		fifo_rden					 : out std_logic_vector(1 to 8);
-		fifo_qA						 : in std_logic_vector(9 downto 0);
-		fifo_qB						 : in std_logic_vector(9 downto 0);
-		fifo_qC						 : in std_logic_vector(9 downto 0);
-		fifo_qD						 : in std_logic_vector(9 downto 0);
-		fifo_qE						 : in std_logic_vector(9 downto 0);
-		fifo_qF						 : in std_logic_vector(9 downto 0);
-		fifo_qG						 : in std_logic_vector(9 downto 0);
-		fifo_qH						 : in std_logic_vector(9 downto 0);		
-		-- TEST signals
-		state_out_A					 : out std_logic_vector(3 downto 0);	-- Only for TESTS
-		state_out_B					 : out std_logic_vector(3 downto 0);	-- Only for TESTS
-		state_out_top			     : out std_logic_vector(7 downto 0)
-	);	-- Only for TESTS
+			rst						    : in std_logic;
+			clk						    : in std_logic;						
+			start_transfer				 : in std_logic;						-- Control signal to start the readout (command register)
+			enable_fifo				 	 : in std_logic_vector(1 to 4);	-- Indicates if the FIFO transfer is enabled ('1') 
+			idt_full					 	 : in std_logic_vector(1 to 4);
+			idt_wren					 	 : out std_logic_vector(1 to 4);
+			idt_data						 : out std_logic_vector(31 downto 0);
+			fifo_empty					 : in std_logic_vector(1 to 8);
+			fifo_used_A					 : in std_logic_vector(9 downto 0);
+			fifo_used_B					 : in std_logic_vector(9 downto 0);
+			fifo_used_C					 : in std_logic_vector(9 downto 0);
+			fifo_used_D					 : in std_logic_vector(9 downto 0);
+			fifo_used_E					 : in std_logic_vector(9 downto 0);
+			fifo_used_F					 : in std_logic_vector(9 downto 0);
+			fifo_used_G					 : in std_logic_vector(9 downto 0);
+			fifo_used_H					 : in std_logic_vector(9 downto 0);
+			fifo_rden					 : out std_logic_vector(1 to 8);
+			fifo_qA						 : in std_logic_vector(9 downto 0);
+			fifo_qB						 : in std_logic_vector(9 downto 0);
+			fifo_qC						 : in std_logic_vector(9 downto 0);
+			fifo_qD						 : in std_logic_vector(9 downto 0);
+			fifo_qE						 : in std_logic_vector(9 downto 0);
+			fifo_qF						 : in std_logic_vector(9 downto 0);
+			fifo_qG						 : in std_logic_vector(9 downto 0);
+			fifo_qH						 : in std_logic_vector(9 downto 0)	
+	);
 	end component;
 
 	-- TDC Controller
@@ -490,6 +486,7 @@ architecture rtl of ndaq_core is
 	);
 	end component;
 
+	-- TDC Reader
 	component readtdc 
 	port
 	(	
@@ -509,6 +506,28 @@ architecture rtl of ndaq_core is
 	);
 	end component;
 	
+	-- Slave SPI
+	component s_spi
+	port
+	(	
+		signal clk				: in 	std_logic;						-- sytem clock (@20 MHz)
+		signal rst				: in 	std_logic;						-- asynchronous reset
+		
+		signal mosi				: in	std_logic;						-- master serial out	- slave serial in
+		signal miso				: out	std_logic;						-- master serial in	- slave serial out
+		signal sclk				: in	std_logic;						-- spi clock out
+		
+		signal wr				: in	std_logic;						-- write strobe
+		signal rd				: in  	std_logic;						-- read strobe
+		
+		signal busy				: out	std_logic;						-- busy flag
+		signal dataa			: out	std_logic;						-- data avaiable flag
+		
+		signal idata			: in	std_logic_vector(7 downto 0);	-- data input parallel bus
+		signal odata			: out	std_logic_vector(7 downto 0)	-- data output parallel bus	
+	);
+	end component;
+	
 ---------------------------
 --***********************--
 --******* SIGNALS *******--
@@ -516,9 +535,9 @@ architecture rtl of ndaq_core is
 ---------------------------
 
 	signal rst, mrst				: std_logic;
-	signal rstc						: std_logic;
+--	signal rstc						: std_logic;
 
-	signal adc12_rst				: std_logic;
+--	signal adc12_rst				: std_logic;
 	
 	signal adcpwdn					: std_logic_vector(3 downto 0);
 
@@ -529,15 +548,15 @@ architecture rtl of ndaq_core is
 
 	signal pclk, mclk				: std_logic;
 
-	signal bcount					: std_logic_vector(15 downto 0);
+--	signal bcount					: std_logic_vector(15 downto 0);
 	
-	signal wr, dwait				: std_logic;
-	signal txbus					: std_logic_vector(7 downto 0);
+--	signal wr, dwait				: std_logic;
+--	signal txbus					: std_logic_vector(7 downto 0);
 
 	signal rd, davail				: std_logic;
 	signal rxbus					: std_logic_vector(7 downto 0);
 	signal reset					: std_logic_vector(7 downto 0);
-	signal resetc					: std_logic_vector(7 downto 0);
+--	signal resetc					: std_logic_vector(7 downto 0);
 
 	signal en0, en1, en2, en3		: std_logic;
 	signal ii0, ii1, ii2, ii3		: std_logic;
@@ -547,7 +566,7 @@ architecture rtl of ndaq_core is
 	signal ren5, ren6, ren7, ren8	: std_logic;
 	signal rii1, rii2, rii3, rii4	: std_logic;
 	signal rii5, rii6, rii7, rii8	: std_logic;
-	signal rcontrol					: std_logic_vector(7 downto 0);
+--	signal rcontrol					: std_logic_vector(7 downto 0);
 
 	signal rd1, rd2, rd3, rd4		: std_logic;
 	signal rd5, rd6, rd7, rd8		: std_logic;
@@ -579,14 +598,36 @@ architecture rtl of ndaq_core is
 	signal empty5, empty6		: std_logic;
 	signal empty7, empty8		: std_logic;
 
-	signal tdc_rden 				: std_logic;
-	signal tdc_rdstb				: std_logic_vector(3 downto 0);
-	signal data_valid				: std_logic;
+	signal tdc_rden 			: std_logic;
+	signal tdc_rdstb			: std_logic_vector(3 downto 0);
+	signal data_valid			: std_logic;
 	signal tdcstart				: std_logic;
 
-	signal tdc_csn_wire 			: std_logic;
+	signal tdc_csn_wire 		: std_logic;
 	
-------------------------------------------
+	signal temp					: std_logic;
+	
+	-- SPI Test
+	
+	signal swr		: std_logic := '1';
+	signal srd		: std_logic := '1';
+	signal sidata	: std_logic_vector(7 downto 0) := x"00";
+	signal sodata	: std_logic_vector(7 downto 0) := x"00";
+
+	signal sbusy	: std_logic := '0';
+	signal sdataa	: std_logic := '0';
+	
+	-- Transfer finite state machine
+	type srdst_type	is (a, b, c); 
+
+	-- Register to hold the current state
+	signal srdst	: srdst_type := a;
+	
+	-- FSM attributes
+	attribute syn_encoding : string;
+	attribute syn_encoding of srdst_type : type is "safe, one-hot";
+
+	------------------------------------------
 ------------------------------------------
 
 begin
@@ -636,7 +677,7 @@ begin
 	(
 		iclk				=> clkcore, 
 		
-		pclk				=> pclk,
+		pclk				=> open, --pclk,
 		nclk				=> open,
 		mclk				=> mclk,
 		sclk				=> open,
@@ -644,7 +685,8 @@ begin
 		tclk				=> open
 	);
 	
-
+	pclk <= mclk;
+	
 	rst_gen:
 	rstgen port map
 	(	
@@ -661,19 +703,17 @@ begin
 	(	
 		clk				=> pclk,
 		rst				=> rst,
-		rstc			=> rstc,
 		
-		rd				=> rd,
-		davail 			=> davail,
-		idata        	=> rxbus,
+		rd				=> open,	--rd,
+		davail 			=> '0',	--davail,
+		idata        	=> x"00",
 
 		reset			=> reset,
 		adcpwdn			=> adcpwdn,
-		resetc			=> resetc,
 		control			=> control,
-		rcontrol		=> rcontrol,
+		rcontrol		=> open,
 		
-		bcount			=> bcount,
+		bcount			=> open,
 		c8wmax			=> c8wmax,
 		
 		tdcstart		=> tdcstart
@@ -709,9 +749,9 @@ begin
 		enable			=> en0,
 		isidle			=> ii0,
 
-		wro				=> wr,
-		dwait 			=> dwait,
-		odata        	=> txbus
+		wro				=> open,	--wr,
+		dwait 			=> '1',	--dwait,
+		odata        	=> open	--txbus
 	);
 
 
@@ -724,9 +764,9 @@ begin
 		enable			=> en1,
 		isidle			=> ii1,
 
-		wro				=> wr,
-		dwait 			=> dwait,
-		odata        	=> txbus
+		wro				=> open,	--wr,
+		dwait 			=> '1',	--dwait,
+		odata        	=> open	--txbus
 	);
 
 	
@@ -771,7 +811,7 @@ begin
 		rst			=> rst,
 		clk			=> adc12_dco,
 		trig_in		=> trigger_a,
-		trig_out		=> ptrigger12
+		trig_out	=> ptrigger12
 	);
 
 	c1_stream_IN:
@@ -779,20 +819,20 @@ begin
 	(	
 		clk			=> adc12_dco,
 		rst			=> rst,
-		rclk			=> pclk,
+		rclk		=> pclk,
 		
-		acqin			=> open, --flag,
+		acqin		=> open, --flag,
 		
 		trig0 		=> ptrigger12,
 		trig1 		=> '0',
 		trig2			=> '0',
 
-		wr				=> wr1,
+		wr			=> wr1,
 				
-		usedw			=> wrusedw1,
+		usedw		=> wrusedw1,
 		
-		wmax			=> "1101111110", --0x37E
-		esize			=> "0001111111"
+		wmax		=> "1101111110", --0x37E
+		esize		=> "0001111111"
 	);
 
 
@@ -828,7 +868,7 @@ begin
 		rst			=> rst,
 		clk			=> nadc12_dco,
 		trig_in		=> trigger_a,
-		trig_out		=> ntrigger12
+		trig_out	=> ntrigger12
 	);
 
 	c2_stream_IN:
@@ -836,20 +876,20 @@ begin
 	(	
 		clk			=> nadc12_dco,
 		rst			=> rst,
-		rclk			=> pclk,
+		rclk		=> pclk,
 		
-		acqin			=> open,
+		acqin		=> open,
 		
 		trig0 		=> ntrigger12,
 		trig1 		=> '0',
-		trig2			=> '0',
+		trig2		=> '0',
 
-		wr				=> wr2,
+		wr			=> wr2,
 				
-		usedw			=> wrusedw2,
+		usedw		=> wrusedw2,
 		
-		wmax			=> "1101111110", --0x37E
-		esize			=> "0001111111"
+		wmax		=> "1101111110", --0x37E
+		esize		=> "0001111111"
 	);
 
 
@@ -857,18 +897,18 @@ begin
 	dcfifom port map
 	(	
 		clk			=> nadc12_dco,
-		rdclk			=> pclk,
-		rst				=> rst,
-		rclk			=> pclk,
+		rdclk		=> pclk,
+		rst			=> rst,
+		rclk		=> pclk,
 		
-		wr				=> wr2,
-		d				=> CONV_STD_LOGIC_VECTOR(adc12_data, 10), --"1010101010", -- 
+		wr			=> wr2,
+		d			=> CONV_STD_LOGIC_VECTOR(adc12_data, 10), --"1010101010", -- 
 		
-		rd				=> rd2,
-		q				=> q2,
+		rd			=> rd2,
+		q			=> q2,
 		
-		f				=> open,
-		e				=> empty2, --open,
+		f			=> open,
+		e			=> empty2, --open,
 
 		rdusedw		=> rdusedw2,
 		wrusedw		=> wrusedw2
@@ -884,7 +924,7 @@ begin
 		rst			=> rst,
 		clk			=> adc34_dco,
 		trig_in		=> trigger_a,
-		trig_out		=> ptrigger34
+		trig_out	=> ptrigger34
 	);
 
 	c3_stream_IN:
@@ -892,20 +932,20 @@ begin
 	(	
 		clk			=> adc34_dco,
 		rst			=> rst,
-		rclk			=> pclk,
+		rclk		=> pclk,
 		
-		acqin			=> open, --flag,
+		acqin		=> open, --flag,
 		
 		trig0 		=> ptrigger34,
 		trig1 		=> '0',
-		trig2			=> '0',
+		trig2		=> '0',
 
-		wr				=> wr3,
+		wr			=> wr3,
 				
-		usedw			=> wrusedw3,
+		usedw		=> wrusedw3,
 		
-		wmax			=> "1101111110", --0x37E
-		esize			=> "0001111111"
+		wmax		=> "1101111110", --0x37E
+		esize		=> "0001111111"
 	);
 
 
@@ -913,18 +953,18 @@ begin
 	dcfifom port map
 	(	
 		clk			=> adc34_dco,
-		rdclk			=> pclk,
-		rst				=> rst,
-		rclk			=> pclk,
+		rdclk		=> pclk,
+		rst			=> rst,
+		rclk		=> pclk,
 		
-		wr				=> wr3,
-		d				=> CONV_STD_LOGIC_VECTOR(adc34_data, 10), --"0101010101", -- 
+		wr			=> wr3,
+		d			=> CONV_STD_LOGIC_VECTOR(adc34_data, 10), --"0101010101", -- 
 		
-		rd				=> rd3,
-		q				=> q3,
+		rd			=> rd3,
+		q			=> q3,
 		
-		f				=> open,
-		e				=> empty3, --open,
+		f			=> open,
+		e			=> empty3, --open,
 
 		rdusedw		=> rdusedw3,
 		wrusedw		=> wrusedw3
@@ -941,7 +981,7 @@ begin
 		rst			=> rst,
 		clk			=> nadc34_dco,
 		trig_in		=> trigger_a,
-		trig_out		=> ntrigger34
+		trig_out	=> ntrigger34
 	);
 
 	c4_stream_IN:
@@ -949,20 +989,20 @@ begin
 	(	
 		clk			=> nadc34_dco,
 		rst			=> rst,
-		rclk			=> pclk,
+		rclk		=> pclk,
 		
-		acqin			=> open,
+		acqin		=> open,
 		
 		trig0 		=> ntrigger34,
 		trig1 		=> '0',
-		trig2			=> '0',
+		trig2		=> '0',
 
-		wr				=> wr4,
+		wr			=> wr4,
 				
-		usedw			=> wrusedw4,
+		usedw		=> wrusedw4,
 		
-		wmax			=> "1101111110", --0x37E
-		esize			=> "0001111111"
+		wmax		=> "1101111110", --0x37E
+		esize		=> "0001111111"
 	);
 
 
@@ -970,18 +1010,18 @@ begin
 	dcfifom port map
 	(	
 		clk			=> nadc34_dco,
-		rdclk			=> pclk,
+		rdclk		=> pclk,
 		rst			=> rst,
-		rclk			=> pclk,
+		rclk		=> pclk,
 		
-		wr				=> wr4,
-		d				=> CONV_STD_LOGIC_VECTOR(adc34_data, 10), --"1010101010", -- 
+		wr			=> wr4,
+		d			=> CONV_STD_LOGIC_VECTOR(adc34_data, 10), --"1010101010", -- 
 		
-		rd				=> rd4,
-		q				=> q4,
+		rd			=> rd4,
+		q			=> q4,
 		
-		f				=> open,
-		e				=> empty4, --open,
+		f			=> open,
+		e			=> empty4, --open,
 
 		rdusedw		=> rdusedw4,
 		wrusedw		=> wrusedw4
@@ -997,7 +1037,7 @@ begin
 		rst			=> rst,
 		clk			=> adc56_dco,
 		trig_in		=> trigger_a,
-		trig_out		=> ptrigger56
+		trig_out	=> ptrigger56
 	);
 
 	c5_stream_IN:
@@ -1005,20 +1045,20 @@ begin
 	(	
 		clk			=> adc56_dco,
 		rst			=> rst,
-		rclk			=> pclk,
+		rclk		=> pclk,
 		
-		acqin			=> open, --flag,
+		acqin		=> open, --flag,
 		
 		trig0 		=> ptrigger56,
 		trig1 		=> '0',
-		trig2			=> '0',
+		trig2		=> '0',
 
-		wr				=> wr5,
+		wr			=> wr5,
 				
-		usedw			=> wrusedw5,
+		usedw		=> wrusedw5,
 		
-		wmax			=> "1101111110", --0x37E
-		esize			=> "0001111111"
+		wmax		=> "1101111110", --0x37E
+		esize		=> "0001111111"
 	);
 
 
@@ -1026,18 +1066,18 @@ begin
 	dcfifom port map
 	(	
 		clk			=> adc56_dco,
-		rdclk			=> pclk,
-		rst				=> rst,
-		rclk			=> pclk,
+		rdclk		=> pclk,
+		rst			=> rst,
+		rclk		=> pclk,
 		
-		wr				=> wr5,
-		d				=> CONV_STD_LOGIC_VECTOR(adc56_data, 10), --"0101010101", -- 
+		wr			=> wr5,
+		d			=> CONV_STD_LOGIC_VECTOR(adc56_data, 10), --"0101010101", -- 
 		
-		rd				=> rd5,
-		q				=> q5,
+		rd			=> rd5,
+		q			=> q5,
 		
-		f				=> open,
-		e				=> empty5, --open,
+		f			=> open,
+		e			=> empty5, --open,
 
 		rdusedw		=> rdusedw5,
 		wrusedw		=> wrusedw5
@@ -1054,7 +1094,7 @@ begin
 		rst			=> rst,
 		clk			=> nadc56_dco,
 		trig_in		=> trigger_a,
-		trig_out		=> ntrigger56
+		trig_out	=> ntrigger56
 	);
 
 	c6_stream_IN:
@@ -1062,20 +1102,20 @@ begin
 	(	
 		clk			=> nadc56_dco,
 		rst			=> rst,
-		rclk			=> pclk,
+		rclk		=> pclk,
 		
-		acqin			=> open,
+		acqin		=> open,
 		
 		trig0 		=> ntrigger56,
 		trig1 		=> '0',
-		trig2			=> '0',
+		trig2		=> '0',
 
-		wr				=> wr6,
+		wr			=> wr6,
 				
-		usedw			=> wrusedw6,
+		usedw		=> wrusedw6,
 		
-		wmax			=> "1101111110", --0x37E
-		esize			=> "0001111111"
+		wmax		=> "1101111110", --0x37E
+		esize		=> "0001111111"
 	);
 
 
@@ -1083,18 +1123,18 @@ begin
 	dcfifom port map
 	(	
 		clk			=> nadc56_dco,
-		rdclk			=> pclk,
-		rst				=> rst,
-		rclk			=> pclk,
+		rdclk		=> pclk,
+		rst			=> rst,
+		rclk		=> pclk,
 		
-		wr				=> wr6,
-		d				=> CONV_STD_LOGIC_VECTOR(adc56_data, 10), --"1010101010", -- 
+		wr			=> wr6,
+		d			=> CONV_STD_LOGIC_VECTOR(adc56_data, 10), --"1010101010", -- 
 		
-		rd				=> rd6,
-		q				=> q6,
+		rd			=> rd6,
+		q			=> q6,
 		
-		f				=> open,
-		e				=> empty6, --open,
+		f			=> open,
+		e			=> empty6, --open,
 
 		rdusedw		=> rdusedw6,
 		wrusedw		=> wrusedw6
@@ -1110,7 +1150,7 @@ begin
 		rst			=> rst,
 		clk			=> adc78_dco,
 		trig_in		=> trigger_a,
-		trig_out		=> ptrigger78
+		trig_out	=> ptrigger78
 	);
 
 	c7_stream_IN:
@@ -1118,20 +1158,20 @@ begin
 	(	
 		clk			=> adc78_dco,
 		rst			=> rst,
-		rclk			=> pclk,
+		rclk		=> pclk,
 		
-		acqin			=> open, --flag,
+		acqin		=> open, --flag,
 		
 		trig0 		=> ptrigger78,
 		trig1 		=> '0',
-		trig2			=> '0',
+		trig2		=> '0',
 
-		wr				=> wr7,
+		wr			=> wr7,
 				
-		usedw			=> wrusedw7,
+		usedw		=> wrusedw7,
 		
-		wmax			=> "1101111110", --0x37E
-		esize			=> "0001111111"
+		wmax		=> "1101111110", --0x37E
+		esize		=> "0001111111"
 	);
 
 
@@ -1139,18 +1179,18 @@ begin
 	dcfifom port map
 	(	
 		clk			=> adc78_dco,
-		rdclk			=> pclk,
-		rst				=> rst,
-		rclk			=> pclk,
+		rdclk		=> pclk,
+		rst			=> rst,
+		rclk		=> pclk,
 		
-		wr				=> wr7,
-		d				=> CONV_STD_LOGIC_VECTOR(adc78_data, 10), --"0101010101", -- 
+		wr			=> wr7,
+		d			=> CONV_STD_LOGIC_VECTOR(adc78_data, 10), --"0101010101", -- 
 		
-		rd				=> rd7,
-		q				=> q7,
+		rd			=> rd7,
+		q			=> q7,
 		
-		f				=> open,
-		e				=> empty7, --open,
+		f			=> open,
+		e			=> empty7, --open,
 
 		rdusedw		=> rdusedw7,
 		wrusedw		=> wrusedw7
@@ -1167,7 +1207,7 @@ begin
 		rst			=> rst,
 		clk			=> nadc78_dco,
 		trig_in		=> trigger_a,
-		trig_out		=> ntrigger78
+		trig_out	=> ntrigger78
 	);
 
 	c8_stream_IN:
@@ -1175,20 +1215,20 @@ begin
 	(	
 		clk			=> nadc78_dco,
 		rst			=> rst,
-		rclk			=> pclk,
+		rclk		=> pclk,
 		
 		acqin			=> open,
 		
 		trig0 		=> ntrigger78,
 		trig1 		=> '0',
-		trig2			=> '0',
+		trig2		=> '0',
 
-		wr				=> wr8,
+		wr			=> wr8,
 				
-		usedw			=> wrusedw8,
+		usedw		=> wrusedw8,
 		
-		wmax			=> c8wmax,	--"1101111110", --0x37E
-		esize			=> "0001111111"
+		wmax		=> c8wmax,	--"1101111110", --0x37E
+		esize		=> "0001111111"
 	);
 
 
@@ -1196,18 +1236,18 @@ begin
 	dcfifom port map
 	(	
 		clk			=> nadc78_dco,
-		rdclk			=> pclk,
+		rdclk		=> pclk,
 		rst			=> rst,
-		rclk			=> pclk,
+		rclk		=> pclk,
 		
-		wr				=> wr8,
-		d				=> CONV_STD_LOGIC_VECTOR(adc78_data, 10), --"1010101010", -- 
+		wr			=> wr8,
+		d			=> CONV_STD_LOGIC_VECTOR(adc78_data, 10), --"1010101010", -- 
 		
-		rd				=> rd8,
-		q				=> q8,
+		rd			=> rd8,
+		q			=> q8,
 		
-		f				=> open,
-		e				=> empty8, --open,
+		f			=> open,
+		e			=> empty8, --open,
 
 		rdusedw		=> rdusedw8,
 		wrusedw		=> wrusedw8
@@ -1222,16 +1262,14 @@ begin
 		rst					=> rst,
 		clk					=> pclk,
 		start_transfer		=> '1',
-		enable_adc			=> "1111",
-		transfer_running	=> open,
-		transfer_counter	=> open,
+		enable_fifo			=> "1111",
 
 		idt_full(1)			=> fifo1_ff,
 		idt_full(2)			=> fifo2_ff,
 		idt_full(3)			=> fifo3_ff,
 		idt_full(4)			=> fifo4_ff,
 
-		idt_wren(1)			=> fifo1_wen,
+		idt_wren(1)			=> temp, --fifo1_wen,
 		idt_wren(2)			=> fifo2_wen,
 		idt_wren(3)			=> fifo3_wen,
 		idt_wren(4)			=> fifo4_wen,
@@ -1271,14 +1309,13 @@ begin
 		fifo_qE				=> q5,
 		fifo_qF				=> q6,
 		fifo_qG				=> q7,
-		fifo_qH				=> q8,			
-	
-	-- TEST signals
-		state_out_A			=> open,
-		state_out_B			=> open,
-		state_out_top		=> open
+		fifo_qH				=> q8
+		
 	);
-
+	
+	fifo1_wen <= temp;
+	trigger_b <= temp;
+	trigger_c <= empty1; --pclk; --fifo1_ff;
 	
 -- ************************************ TDC ***********************************
 
@@ -1308,13 +1345,13 @@ begin
 		-----------------
 		-- TDC control --
 		-----------------
-		conf_done		=> trigger_c,		-- sinal no painel do NDAQ
+		conf_done		=> open,		-- sinal no painel do NDAQ
 		rd_en		 	=> tdc_rdstb,	-- barramento 4 bits -- Read enable to read TDC 8-bit bus data
 		en_read		 	=> tdc_rden,	-- começa -- Read enable to read TDC
-		tdc_out_HB	 	=> txbus, 		-- TDC Data Bus (HIGHEST Byte)
-		tdc_out_MH	 	=> txbus, 		-- TDC Data Bus (MEDIUM HIGH Byte)
-		tdc_out_ML	 	=> txbus, 		-- TDC Data Bus (MEDIUM LOW Byte)
-		tdc_out_LB	 	=> txbus, 		-- TDC Data Bus (HIGHEST Byte)		
+		tdc_out_HB	 	=> open,	--txbus, 		-- TDC Data Bus (HIGHEST Byte)
+		tdc_out_MH	 	=> open,	--txbus, 		-- TDC Data Bus (MEDIUM HIGH Byte)
+		tdc_out_ML	 	=> open,	--txbus, 		-- TDC Data Bus (MEDIUM LOW Byte)
+		tdc_out_LB	 	=> open,	--txbus, 		-- TDC Data Bus (HIGHEST Byte)		
 		otdc_data		=> open,
 		data_valid		=> data_valid,	-- Handshaking.
 		start_conf		=> tdcstart		-- Start the configuration machine (active high pulse with 2-periods width)
@@ -1322,8 +1359,6 @@ begin
 	
 	
 	tdc_csn <= tdc_csn_wire;
-	trigger_b <= tdc_csn_wire; --tdc_ef1;
-	--trigger_c <= tdc_ef2;
 	
 	tdc_reader:
 	readtdc	port map
@@ -1339,50 +1374,122 @@ begin
 		rd_en			=> tdc_rden,
 		rd_stb			=> tdc_rdstb,
 		
-		wro				=> wr,
-		dwait 			=> dwait
+		wro				=> open,	--wr,
+		dwait 			=> '1'	--dwait
 	);
 
 
 -- ************************************ BRIDGE ********************************
 
-	--63488b reset manager
-	rstc_gen:
-	rstgen port map
+-- Slave SPI Map
+	sidata <=	sodata;
+	
+Slave_SPI : s_spi
+	port map
 	(	
-		clk				=> mclk,
+		clk			=> pclk,	-- sytem clock
+		rst			=> rst,	-- asynchronous reset
 		
-		reset			=> resetc,
+		mosi		=> mosi,	-- master serial out	- slave serial in
+		miso		=> miso,	-- master serial in	- slave serial out
+		sclk		=> sclk,	-- spi clock out
 		
-		rst				=> rstc
+		wr			=> swr,		-- write strobe
+		rd			=> srd,		-- read strobe
+		
+		busy		=> sbusy,	-- busy flag
+		dataa		=> sdataa,	-- data avaiable flag
+		
+		idata		=> sidata,	-- data input parallel bus
+		odata		=> sodata	-- data output parallel bus	
 	);
 
-	master_usb_transceiver_if:
-	m_trif port map
-	(
-		clk				=> mclk,		
-		clk_en			=> '1', 
-		rst				=> rst,
-		rstc    		=> rstc,
-		
-		-- params
-		bcount			=> bcount,
-		
-		-- local
-		dwait			=> dwait,
-		davail			=> davail,
-		nwr				=> wr,
-		nrd				=> rd,
-		idata			=> txbus,
-		odata			=> rxbus,
+-- Slave Loopback Process;
+sidata <= sodata;
 
-		-- bridge
-		sdwait			=> bridge_dw,
-		sdavail			=> bridge_da,
-		snwr			=> bridge_wr,
-		snrd			=> bridge_rd,
-		iodata			=> bridge_data
-	);
+s_loop_gen: process(rst, pclk)
+begin
+	if (rst = '1') then
+		srd			<= '1';
+		swr			<= '1';
+		srdst		<= a;
+		--sidata		<= x"00";
+		
+	elsif (rising_edge(pclk)) then
+		case (srdst) is
+		
+			when a	=>	
+				if (sdataa = '1') then
+					srd		<= '0';
+					srdst	<= b;
+				else
+					srd		<= '1';
+					srdst	<= a;
+				end if;
+				
+			when b	=>
+					srd		<= '1';
+
+				if (sbusy = '0') then
+					swr		<= '0';				
+					srdst	<= c;
+				else
+					srdst	<= b;
+				end if;
+				
+				--sidata	<= sodata;
+
+			when c	=>
+				srd		<= '1';
+				swr		<= '1';				
+				srdst	<= a;
+				
+			when others	=>
+				srd		<= '1';
+				srdst	<= a;
+
+		end case;	
+	end if;
+end process s_loop_gen;
+
+
+--	--63488b reset manager
+--	rstc_gen:
+--	rstgen port map
+--	(	
+--		clk				=> mclk,
+--		
+--		reset			=> resetc,
+--		
+--		rst				=> rstc
+--	);
+
+--	master_usb_transceiver_if:
+--	m_trif port map
+--	(
+--		clk				=> mclk,		
+--		clk_en			=> '1', 
+--		rst				=> rst,
+--		rstc    			=> rstc,
+--		
+--		-- params
+--		bcount			=> bcount,
+--		
+--		-- local
+--		dwait				=> dwait,
+--		davail			=> davail,
+--		nwr				=> wr,
+--		nrd				=> rd,
+--		idata				=> txbus,
+--		odata				=> rxbus,
+--
+--		-- bridge
+--		sdwait			=> bridge_dw,
+--		sdavail			=> bridge_da,
+--		snwr				=> bridge_wr,
+--		snrd				=> bridge_rd,
+--		iodata			=> bridge_data
+--	);
 
 
 end rtl;
