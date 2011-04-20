@@ -61,8 +61,6 @@ set_location_assignment PIN_A10 -to adc12_data[2]
 set_location_assignment PIN_A11 -to adc12_dco
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to adc12_dco
 set_global_assignment -name MISC_FILE "D:/Projetos/Neutrinos/QuartusII/ndaq_core/ndaq_core.dpf"
-set_global_assignment -name FMAX_REQUIREMENT "125 MHz" -section_id adc12_dco
-set_instance_assignment -name CLOCK_SETTINGS adc12_dco -to adc12_dco
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to adc34_data[11]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to adc34_data[10]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to adc34_data[9]
@@ -94,8 +92,6 @@ set_location_assignment PIN_C1 -to adc34_data[4]
 set_location_assignment PIN_B2 -to adc34_data[3]
 set_location_assignment PIN_B1 -to adc34_data[2]
 set_location_assignment PIN_G1 -to adc34_dco
-set_global_assignment -name FMAX_REQUIREMENT "125 MHz" -section_id adc34_dco
-set_instance_assignment -name CLOCK_SETTINGS adc34_dco -to adc34_dco
 set_location_assignment PIN_P4 -to adc56_data[11]
 set_location_assignment PIN_P3 -to adc56_data[10]
 set_location_assignment PIN_P2 -to adc56_data[9]
@@ -480,14 +476,8 @@ set_location_assignment PIN_A19 -to bridge_data[3]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to bridge_data[1]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to bridge_data[2]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to bridge_data[3]
-set_location_assignment PIN_C17 -to bridge_da
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to bridge_da
-set_location_assignment PIN_A20 -to bridge_wr
 set_location_assignment PIN_B20 -to bridge_rd
-set_location_assignment PIN_B17 -to bridge_dw
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to bridge_wr
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to bridge_rd
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to bridge_dw
 set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/ndaq_core_0.0/ndaq_core.dpf"
 set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
 set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
@@ -499,6 +489,8 @@ set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/
 set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/ndaq-pld/ndaq_core/ndaq_core.dpf"
 set_global_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION OFF
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/merged/ndaq_core/ndaq_core.dpf"
+set_global_assignment -name VHDL_FILE spi/s_spi.vhd
 set_global_assignment -name SDC_FILE ndaq_core.sdc
 set_global_assignment -name VHDL_FILE acq/idtfifo_top.vhd
 set_global_assignment -name VHDL_FILE acq/idtfifo_ctr.vhd
@@ -506,15 +498,10 @@ set_global_assignment -name VHDL_FILE tdc/tdcread.vhd
 set_global_assignment -name VHDL_FILE tdc/readtdc.vhd
 set_global_assignment -name VHDL_FILE tdc/tdc.vhd
 set_global_assignment -name VHDL_FILE tdc/tdcconfig.vhd
-set_global_assignment -name VHDL_FILE m_trif/m_rxfifoif.vhd
-set_global_assignment -name VHDL_FILE m_trif/m_trbusarb.vhd
-set_global_assignment -name VHDL_FILE m_trif/m_trif.vhd
-set_global_assignment -name VHDL_FILE m_trif/m_txfifoif.vhd
 set_global_assignment -name VHDL_FILE acq/fifos.vhd
 set_global_assignment -name VHDL_FILE acq/tpulse.vhd
 set_global_assignment -name VHDL_FILE acq/writefifo.vhd
 set_global_assignment -name QIP_FILE acq/prefifo.qip
-set_global_assignment -name QIP_FILE acq/adc12_pll.qip
 set_global_assignment -name QIP_FILE acq/postfifo.qip
 set_global_assignment -name VHDL_FILE system/bench0.vhd
 set_global_assignment -name VHDL_FILE system/cmddec.vhd
@@ -524,5 +511,12 @@ set_global_assignment -name VHDL_FILE system/reset.vhd
 set_global_assignment -name VHDL_FILE system/priarb4.vhd
 set_global_assignment -name QIP_FILE system/core_pll.qip
 set_global_assignment -name VHDL_FILE ndaq_core.vhd
-set_global_assignment -name VHDL_FILE system/priarb8.vhd
+set_location_assignment PIN_C17 -to mosi
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to mosi
+set_location_assignment PIN_A20 -to sclk
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sclk
+set_location_assignment PIN_B17 -to miso
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to miso
+set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to sclk -comment "Slave SPI clock input"
+set_global_assignment -name USE_TIMEQUEST_TIMING_ANALYZER ON
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

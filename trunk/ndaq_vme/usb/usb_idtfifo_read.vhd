@@ -1,14 +1,7 @@
 -- $ FIFO Read and Output Streamer. (TX streamer)
--- v: 0.3
--- 
--- 0.1	Changed to 10 bits width to match NDAQ requirements.
+-- v: svn controlled.
 --
--- 0.2	Changed everything to 'std_logic_vector'.
---
--- 0.3 	Changed to handle just one fifo path (pre+post), one channel.
---		Making this module parameterizable:
---
---		New parameters:
+--		Parameters:
 --
 --			@ 'RMIN'	: Read is prohibited if 'usedw' < 'RMIN'
 --			@ 'ESIZE'	: Number of samples (words) to build an event. 
@@ -32,9 +25,9 @@ entity readfifo is
 		signal isidle			: out	std_logic; -- arbiter if
 
 		signal rd				: out	std_logic;	
-		signal q				: in	std_logic_vector(9 downto 0);
+		signal q					: in	std_logic_vector(9 downto 0);
 				
-		signal usedw			: in	std_logic_vector(9 downto 0);
+		signal ef				: in	std_logic;
 		
 		signal wro				: out	std_logic;
 		signal dwait 			: in	std_logic;
@@ -117,7 +110,7 @@ begin
 					scounter	<= "0000000000";
 					--
 					if ((enable = '1') and (dwait_r = '0')
-						and (usedw > rmin)) then
+						and (ef = '1')) then --and (usedw > rmin)) then
 						
 						state <= rdfifoa;
 					else
@@ -128,13 +121,13 @@ begin
 				when rdfifoa =>
 					isidle  <= '0';
 					--
-					rd    <= '1';
+					rd    <= '0';
 					--
 					state <= rdfifod;
 
 				-- FIF0 Read Deassert
 				when rdfifod =>
-					rd    <= '0';
+					rd    <= '1';
 					--
 					state <= wrhi0a; --wrlo0a;
 
