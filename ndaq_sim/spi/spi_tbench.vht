@@ -35,7 +35,7 @@ component m_spi
 		signal wr				: in	std_logic;						-- write strobe
 		signal rd				: in  	std_logic;						-- read strobe
 		
-		signal busy				: out	std_logic;						-- busy flag
+		signal dwait			: out	std_logic;						-- busy flag
 		signal dataa			: out	std_logic;						-- data avaiable flag
 		
 		signal idata			: in	std_logic_vector(7 downto 0);	-- data input parallel bus
@@ -58,7 +58,7 @@ component s_spi
 		signal wr				: in	std_logic;						-- write strobe
 		signal rd				: in  	std_logic;						-- read strobe
 		
-		signal busy				: out	std_logic;						-- busy flag
+		signal dwait			: out	std_logic;						-- busy flag
 		signal dataa			: out	std_logic;						-- data avaiable flag
 		
 		signal idata			: in	std_logic_vector(7 downto 0);	-- data input parallel bus
@@ -114,7 +114,7 @@ Master_SPI : m_spi
 		wr				=> mwr,		-- write strobe
 		rd				=> mrd,		-- read strobe
 		
-		busy			=> mbusy,	-- busy flag
+		dwait			=> mbusy,	-- busy flag
 		dataa			=> mdataa,	-- data avaiable flag
 		
 		idata			=> mdata,	-- data input parallel bus
@@ -136,7 +136,7 @@ Slave_SPI : s_spi
 		wr				=> swr,		-- write strobe
 		rd				=> srd,		-- read strobe
 		
-		busy			=> sbusy,	-- busy flag
+		dwait			=> sbusy,	-- busy flag
 		dataa			=> sdataa,	-- data avaiable flag
 		
 		idata			=> sidata,	-- data input parallel bus
