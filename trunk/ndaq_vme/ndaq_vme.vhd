@@ -82,14 +82,13 @@ entity ndaq_vme is
 		signal fifo3_ef 	:in  	std_logic;
 		signal fifo4_ef 	:in  	std_logic;
 
-		---------------
-		-- FPGA bridge --
-		---------------
-		signal bridge_wr	 :in  		std_logic;
-		signal bridge_rd	 :in  		std_logic;
-		signal bridge_dw	 :out  		std_logic;
-		signal bridge_da	 :out  		std_logic;
-		signal bridge_data :inout  		std_logic_vector(3 downto 0);
+		----------------
+		-- Master SPI --
+		----------------
+		
+		signal spiclk		:out		std_logic;
+		signal mosi			:out		std_logic;
+		signal miso			:in			std_logic;
 		
 		-------------------
 		-- CAN interface --
@@ -381,11 +380,9 @@ architecture rtl of ndaq_vme is
 	signal s_spi_dwait	: std_logic := '0';
 	signal s_spi_dataa	: std_logic := '0';
 
-	-- SPI Interface
-	signal miso			: std_logic := '0';
-	signal mosi			: std_logic := '0';
-	signal spiclk		: std_logic := '0';
-	
+	signal i_spiclk		: std_logic;	
+	signal i_mosi		: std_logic;
+	signal i_miso		: std_logic;
 	
 ------------------------------------------
 ------------------------------------------
@@ -403,8 +400,8 @@ begin
 	fifo3_ren	<= '1'; --u_fifo3_ren;
 	fifo4_ren	<= '1'; --u_fifo4_ren;
 	
-	can_pgc <=  fifo1_ef;
-	can_pgd <= 'Z';
+	-- can_pgc <=  fifo1_ef;
+	-- can_pgd <= 'Z';
 	can_pgm <= 'Z';
 
 --	vme_berr		<= 'Z';
@@ -438,7 +435,10 @@ begin
 	
 	
 --*********************************************************************************************************	
-
+	
+	can_pgc	<= ft_dwait;
+	can_pgd	<= usb_TXE;
+	
 	usb_transceiver_if:
 	ft245bm_if port map
 	(	
@@ -514,7 +514,7 @@ begin
 		
 		mosi		=> mosi,		-- master serial out	- slave serial in
 		miso		=> miso,		-- master serial in		- slave serial out
-		sclk		=> spiclk,		-- spi clock out
+		sclk		=> spiclk,	-- spi clock out
 		
 		wr			=> m_spi_wr,	-- write strobe
 		rd			=> m_spi_rd,	-- read strobe
@@ -533,9 +533,9 @@ begin
 		clk			=> pclk,		-- sytem clock
 		rst			=> mrst,		-- asynchronous reset
 		
-		mosi		=> mosi,		-- master serial out	- slave serial in
-		miso		=> miso,		-- master serial in		- slave serial out
-		sclk		=> spiclk,		-- spi clock out
+		mosi		=> i_mosi,		-- master serial out	- slave serial in
+		miso		=> i_miso,		-- master serial in		- slave serial out
+		sclk		=> i_spiclk,	-- spi clock out
 		
 		wr			=> s_spi_wr,	-- write strobe
 		rd			=> s_spi_rd,	-- read strobe

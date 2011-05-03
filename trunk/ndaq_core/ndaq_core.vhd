@@ -141,11 +141,11 @@ entity ndaq_core is
 		--------------------
 		-- SRAM interface --
 		--------------------
-		signal sram_add	 : out		std_logic_vector(18 downto 0);
-		signal sram_data	 : inout  	std_logic_vector(7 downto 0);
-		signal sram_we		 : out		std_logic;
-		signal sram_oe		 : out		std_logic;
-		signal sram_cs		 : out		std_logic;
+		signal sram_add	 	: out		std_logic_vector(18 downto 0);
+		signal sram_data	: inout  	std_logic_vector(7 downto 0);
+		signal sram_we		: out		std_logic;
+		signal sram_oe		: out		std_logic;
+		signal sram_cs		: out		std_logic;
 		
 		
 		------------------------------
@@ -156,15 +156,9 @@ entity ndaq_core is
 		---------------
 		-- Slave SPI --
 		---------------
+		signal spiclk			: in		std_logic;
 		signal mosi				: in		std_logic;
 		signal miso				: out		std_logic;
-		signal sclk				: in		std_logic;
-
-		----------------------------
-		-- VME FPGA communication --
-		----------------------------
---		signal bridge_data	: inout	std_logic_vector(3 downto 0);
---		signal bridge_rd		: out	std_logic;
 
 		--------------------
 		-- Trigger inputs --
@@ -263,12 +257,12 @@ architecture rtl of ndaq_core is
 		signal reset			: out	std_logic_vector(7 downto 0);
 		signal adcpwdn			: out std_logic_vector(3 downto 0) := x"F";
 		signal control			: out	std_logic_vector(7 downto 0);
-		signal rcontrol		: out	std_logic_vector(7 downto 0);
+		signal rcontrol			: out	std_logic_vector(7 downto 0);
 		
 		signal bcount			: out	std_logic_vector(15 downto 0);
 		signal c8wmax			: out	std_logic_vector(9 downto 0);
 		
-		signal tdcstart		: out	std_logic
+		signal tdcstart			: out	std_logic
 	);
 	end component;
 	
@@ -364,13 +358,13 @@ architecture rtl of ndaq_core is
 		signal rclk				: in	std_logic;
 		
 		signal wr				: in 	std_logic;
-		signal d					: in	std_logic_vector(9 downto 0);
+		signal d				: in	std_logic_vector(9 downto 0);
 		
 		signal rd				: in	std_logic;	
-		signal q					: out	std_logic_vector(9 downto 0);
+		signal q				: out	std_logic_vector(9 downto 0);
 		
-		signal f					: out	std_logic;	
-		signal e					: out	std_logic;
+		signal f				: out	std_logic;	
+		signal e				: out	std_logic;
 
 		signal rdusedw			: out	std_logic_vector(9 downto 0);
 		signal wrusedw			: out	std_logic_vector(9 downto 0)
@@ -407,10 +401,10 @@ architecture rtl of ndaq_core is
 	component tpulse
 	port
 	(	
-		signal rst			: in std_logic;
-		signal clk	        : in std_Logic;
-		signal trig_in      : in std_logic;
-		signal trig_out     : out std_Logic
+		signal rst			: in	std_logic;
+		signal clk	        : in	std_Logic;
+		signal trig_in      : in	std_logic;
+		signal trig_out     : out	std_Logic
 	);
 	end component;
 
@@ -420,29 +414,29 @@ architecture rtl of ndaq_core is
 	port(	-- CONTROL/STATUS signals
 			rst						    : in std_logic;
 			clk						    : in std_logic;						
-			start_transfer				 : in std_logic;						-- Control signal to start the readout (command register)
-			enable_fifo				 	 : in std_logic_vector(1 to 4);	-- Indicates if the FIFO transfer is enabled ('1') 
-			idt_full					 	 : in std_logic_vector(1 to 4);
-			idt_wren					 	 : out std_logic_vector(1 to 4);
-			idt_data						 : out std_logic_vector(31 downto 0);
-			fifo_empty					 : in std_logic_vector(1 to 8);
-			fifo_used_A					 : in std_logic_vector(9 downto 0);
-			fifo_used_B					 : in std_logic_vector(9 downto 0);
-			fifo_used_C					 : in std_logic_vector(9 downto 0);
-			fifo_used_D					 : in std_logic_vector(9 downto 0);
-			fifo_used_E					 : in std_logic_vector(9 downto 0);
-			fifo_used_F					 : in std_logic_vector(9 downto 0);
-			fifo_used_G					 : in std_logic_vector(9 downto 0);
-			fifo_used_H					 : in std_logic_vector(9 downto 0);
-			fifo_rden					 : out std_logic_vector(1 to 8);
-			fifo_qA						 : in std_logic_vector(9 downto 0);
-			fifo_qB						 : in std_logic_vector(9 downto 0);
-			fifo_qC						 : in std_logic_vector(9 downto 0);
-			fifo_qD						 : in std_logic_vector(9 downto 0);
-			fifo_qE						 : in std_logic_vector(9 downto 0);
-			fifo_qF						 : in std_logic_vector(9 downto 0);
-			fifo_qG						 : in std_logic_vector(9 downto 0);
-			fifo_qH						 : in std_logic_vector(9 downto 0)	
+			start_transfer				: in std_logic;						-- Control signal to start the readout (command register)
+			enable_fifo				 	: in std_logic_vector(1 to 4);	-- Indicates if the FIFO transfer is enabled ('1') 
+			idt_full					: in std_logic_vector(1 to 4);
+			idt_wren					: out std_logic_vector(1 to 4);
+			idt_data					: out std_logic_vector(31 downto 0);
+			fifo_empty					: in std_logic_vector(1 to 8);
+			fifo_used_A					: in std_logic_vector(9 downto 0);
+			fifo_used_B					: in std_logic_vector(9 downto 0);
+			fifo_used_C					: in std_logic_vector(9 downto 0);
+			fifo_used_D					: in std_logic_vector(9 downto 0);
+			fifo_used_E					: in std_logic_vector(9 downto 0);
+			fifo_used_F					: in std_logic_vector(9 downto 0);
+			fifo_used_G					: in std_logic_vector(9 downto 0);
+			fifo_used_H					: in std_logic_vector(9 downto 0);
+			fifo_rden					: out std_logic_vector(1 to 8);
+			fifo_qA						: in std_logic_vector(9 downto 0);
+			fifo_qB						: in std_logic_vector(9 downto 0);
+			fifo_qC						: in std_logic_vector(9 downto 0);
+			fifo_qD						: in std_logic_vector(9 downto 0);
+			fifo_qE						: in std_logic_vector(9 downto 0);
+			fifo_qF						: in std_logic_vector(9 downto 0);
+			fifo_qG						: in std_logic_vector(9 downto 0);
+			fifo_qH						: in std_logic_vector(9 downto 0)	
 	);
 	end component;
 
@@ -506,22 +500,39 @@ architecture rtl of ndaq_core is
 	);
 	end component;
 	
-	-- Slave SPI
+	-- Synchronous Word Copier
+	component swc
+	port
+	(	
+		signal clk				: in 	std_logic; -- sync if
+		signal rst				: in	std_logic; -- async if
+		
+		--flags
+		signal dwait			: in	std_logic;
+		signal dataa			: in	std_logic;
+
+		--strobes
+		signal wr				: out 	std_logic := '1';
+		signal rd				: out 	std_logic := '1'
+	);
+	end component;
+
+	-- Slave SPI - Here for loopback test.
 	component s_spi
 	port
 	(	
-		signal clk				: in 	std_logic;						-- sytem clock (@20 MHz)
+		signal clk				: in	std_logic;						-- sytem clock (@20 MHz)
 		signal rst				: in 	std_logic;						-- asynchronous reset
 		
 		signal mosi				: in	std_logic;						-- master serial out	- slave serial in
-		signal miso				: out	std_logic;						-- master serial in	- slave serial out
+		signal miso				: out	std_logic := '0';				-- master serial in	- slave serial out
 		signal sclk				: in	std_logic;						-- spi clock out
 		
 		signal wr				: in	std_logic;						-- write strobe
-		signal rd				: in  	std_logic;						-- read strobe
+		signal rd				: in	std_logic;						-- read strobe
 		
-		signal busy				: out	std_logic;						-- busy flag
-		signal dataa			: out	std_logic;						-- data avaiable flag
+		signal dwait			: out	std_logic := '0';				-- dwait flag
+		signal dataa			: out	std_logic := '0';				-- data avaiable flag
 		
 		signal idata			: in	std_logic_vector(7 downto 0);	-- data input parallel bus
 		signal odata			: out	std_logic_vector(7 downto 0)	-- data output parallel bus	
@@ -605,29 +616,18 @@ architecture rtl of ndaq_core is
 
 	signal tdc_csn_wire 		: std_logic;
 	
-	signal temp					: std_logic;
-	
-	-- SPI Test
-	
-	signal swr		: std_logic := '1';
-	signal srd		: std_logic := '1';
-	signal sidata	: std_logic_vector(7 downto 0) := x"00";
-	signal sodata	: std_logic_vector(7 downto 0) := x"00";
+	signal temp					: std_logic;	
 
-	signal sbusy	: std_logic := '0';
-	signal sdataa	: std_logic := '0';
-	
-	-- Transfer finite state machine
-	type srdst_type	is (a, b, c); 
+	-- Slave SPI Test
+	signal s_spi_wr		: std_logic := '1';
+	signal s_spi_rd		: std_logic := '1';
+	signal s_spi_idata	: std_logic_vector(7 downto 0) := x"00";
+	signal s_spi_odata	: std_logic_vector(7 downto 0) := x"00";
 
-	-- Register to hold the current state
-	signal srdst	: srdst_type := a;
-	
-	-- FSM attributes
-	attribute syn_encoding : string;
-	attribute syn_encoding of srdst_type : type is "safe, one-hot";
+	signal s_spi_dwait	: std_logic := '0';
+	signal s_spi_dataa	: std_logic := '0';
 
-	------------------------------------------
+------------------------------------------
 ------------------------------------------
 
 begin
@@ -644,14 +644,14 @@ begin
 	----------------------
 	-- FIFO's interface --
 	----------------------
-	fifo_wck	<= pclk; --'1';
+	fifo_wck	<= 'Z'; --pclk; --'1';
 	
 	fifo_mrs	<= not(rst); --'1';
 	fifo_prs	<= '1';
 	fifo_fs0	<= '1';
 	fifo_fs1	<= '1';
-	fifo_ld	<= '1';
-	fifo_rt	<= '1';
+	fifo_ld		<= '1';
+	fifo_rt		<= '1';
 
 	
 	--------------------
@@ -677,7 +677,7 @@ begin
 	(
 		iclk				=> clkcore, 
 		
-		pclk				=> open, --pclk,
+		pclk				=> pclk,
 		nclk				=> open,
 		mclk				=> mclk,
 		sclk				=> open,
@@ -685,7 +685,6 @@ begin
 		tclk				=> open
 	);
 	
-	pclk <= mclk;
 	
 	rst_gen:
 	rstgen port map
@@ -736,7 +735,7 @@ begin
 		ii2				=> '0',	-- no component, never idle.
 		ii3				=> ii3,
 		
-		control        	=> control
+		control        	=> x"00" --control
 	);
 
 
@@ -825,7 +824,7 @@ begin
 		
 		trig0 		=> ptrigger12,
 		trig1 		=> '0',
-		trig2			=> '0',
+		trig2		=> '0',
 
 		wr			=> wr1,
 				
@@ -839,7 +838,7 @@ begin
 	c1_fifo_module:
 	dcfifom port map
 	(	
-		clk			=> adc12_dco,
+		clk				=> adc12_dco,
 		rdclk			=> pclk,
 		rst				=> rst,
 		rclk			=> pclk,
@@ -853,8 +852,8 @@ begin
 		f				=> open,
 		e				=> empty1, --open,
 
-		rdusedw		=> rdusedw1,
-		wrusedw		=> wrusedw1
+		rdusedw			=> rdusedw1,
+		wrusedw			=> wrusedw1
 	);
 
 
@@ -1227,7 +1226,7 @@ begin
 				
 		usedw		=> wrusedw8,
 		
-		wmax		=> c8wmax,	--"1101111110", --0x37E
+		wmax		=> "1101111110", --0x37E --c8wmax,
 		esize		=> "0001111111"
 	);
 
@@ -1261,7 +1260,7 @@ begin
 	(	-- CONTROL/STATUS signals
 		rst					=> rst,
 		clk					=> pclk,
-		start_transfer		=> '1',
+		start_transfer		=> '0', --'1',
 		enable_fifo			=> "1111",
 
 		idt_full(1)			=> fifo1_ff,
@@ -1274,7 +1273,7 @@ begin
 		idt_wren(3)			=> fifo3_wen,
 		idt_wren(4)			=> fifo4_wen,
 
-		idt_data				=> fifo_data_bus,
+		idt_data			=> fifo_data_bus,
 		
 		fifo_empty(1)		=> empty1,
 		fifo_empty(2)		=> empty2,
@@ -1354,7 +1353,7 @@ begin
 		tdc_out_LB	 	=> open,	--txbus, 		-- TDC Data Bus (HIGHEST Byte)		
 		otdc_data		=> open,
 		data_valid		=> data_valid,	-- Handshaking.
-		start_conf		=> tdcstart		-- Start the configuration machine (active high pulse with 2-periods width)
+		start_conf		=> '0' --tdcstart		-- Start the configuration machine (active high pulse with 2-periods width)
 	);
 	
 	
@@ -1381,88 +1380,44 @@ begin
 
 -- ************************************ BRIDGE ********************************
 
--- Slave SPI Map
-	sidata <=	sodata;
-	
-Slave_SPI : s_spi
+	Slave_SPI: 
+	s_spi
 	port map
 	(	
-		clk			=> pclk,	-- sytem clock
-		rst			=> rst,	-- asynchronous reset
+		clk			=> pclk,		-- sytem clock
+		rst			=> rst,		-- asynchronous reset
 		
-		mosi		=> mosi,	-- master serial out	- slave serial in
-		miso		=> miso,	-- master serial in	- slave serial out
-		sclk		=> sclk,	-- spi clock out
+		mosi		=> mosi,		-- master serial out	- slave serial in
+		miso		=> miso,		-- master serial in		- slave serial out
+		sclk		=> spiclk,		-- spi clock out
 		
-		wr			=> swr,		-- write strobe
-		rd			=> srd,		-- read strobe
+		wr			=> s_spi_wr,	-- write strobe
+		rd			=> s_spi_rd,	-- read strobe
 		
-		busy		=> sbusy,	-- busy flag
-		dataa		=> sdataa,	-- data avaiable flag
+		dwait		=> s_spi_dwait,	-- busy flag
+		dataa		=> s_spi_dataa,	-- data avaiable flag
 		
-		idata		=> sidata,	-- data input parallel bus
-		odata		=> sodata	-- data output parallel bus	
+		idata		=> s_spi_idata,	-- data input parallel bus
+		odata		=> s_spi_odata	-- data output parallel bus	
 	);
 
--- Slave Loopback Process;
-sidata <= sodata;
+	-- Slave SPI Loopback
+	s_spi_idata	<= s_spi_odata;
 
-s_loop_gen: process(rst, pclk)
-begin
-	if (rst = '1') then
-		srd			<= '1';
-		swr			<= '1';
-		srdst		<= a;
-		--sidata		<= x"00";
+	s_spi_loopback:
+	swc port map
+	(	
+		clk				=> pclk,
+		rst				=> rst,
 		
-	elsif (rising_edge(pclk)) then
-		case (srdst) is
-		
-			when a	=>	
-				if (sdataa = '1') then
-					srd		<= '0';
-					srdst	<= b;
-				else
-					srd		<= '1';
-					srdst	<= a;
-				end if;
-				
-			when b	=>
-					srd		<= '1';
+		--flags
+		dwait			=> s_spi_dwait,	--to
+		dataa			=> s_spi_dataa,	--from
 
-				if (sbusy = '0') then
-					swr		<= '0';				
-					srdst	<= c;
-				else
-					srdst	<= b;
-				end if;
-				
-				--sidata	<= sodata;
-
-			when c	=>
-				srd		<= '1';
-				swr		<= '1';				
-				srdst	<= a;
-				
-			when others	=>
-				srd		<= '1';
-				srdst	<= a;
-
-		end case;	
-	end if;
-end process s_loop_gen;
-
-
---	--63488b reset manager
---	rstc_gen:
---	rstgen port map
---	(	
---		clk				=> mclk,
---		
---		reset			=> resetc,
---		
---		rst				=> rstc
---	);
+		--strobes
+		wr				=> s_spi_wr,	--to
+		rd				=> s_spi_rd		--from
+	);
 
 --	master_usb_transceiver_if:
 --	m_trif port map
@@ -1470,24 +1425,24 @@ end process s_loop_gen;
 --		clk				=> mclk,		
 --		clk_en			=> '1', 
 --		rst				=> rst,
---		rstc    			=> rstc,
+--		rstc    		=> rstc,
 --		
 --		-- params
 --		bcount			=> bcount,
 --		
 --		-- local
---		dwait				=> dwait,
+--		dwait			=> dwait,
 --		davail			=> davail,
 --		nwr				=> wr,
 --		nrd				=> rd,
---		idata				=> txbus,
---		odata				=> rxbus,
+--		idata			=> txbus,
+--		odata			=> rxbus,
 --
 --		-- bridge
 --		sdwait			=> bridge_dw,
 --		sdavail			=> bridge_da,
---		snwr				=> bridge_wr,
---		snrd				=> bridge_rd,
+--		snwr			=> bridge_wr,
+--		snrd			=> bridge_rd,
 --		iodata			=> bridge_data
 --	);
 

@@ -151,9 +151,9 @@ mclk_gen: process
 begin
 loop
 	mclk <= '0';
-	wait for 25000 ps;
+	wait for 8333 ps;
 	mclk <= '1';
-	wait for 25000 ps;
+	wait for 8333 ps;
 	-- if (now >= 1000000 ps) then wait; end if;
 end loop;
 end process mclk_gen;

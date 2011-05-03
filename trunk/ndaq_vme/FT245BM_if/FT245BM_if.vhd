@@ -87,7 +87,7 @@ architecture rtl of ft245bm_if is
 		signal isidle			: out	std_logic; -- arbiter if
 
 		signal wr				: in	std_logic;
-		signal dwait 			: out	std_logic := '1';
+		signal dwait 			: out	std_logic := '0';
 		signal idata			: in 	std_logic_vector(7 downto 0);
 
 		signal f_txf			: in 	std_logic;

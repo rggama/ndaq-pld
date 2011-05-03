@@ -4,7 +4,7 @@ create_clock -period 8.000 -name adc34_clk [get_ports {adc34_dco}]
 create_clock -period 8.000 -name adc56_clk [get_ports {adc56_dco}]
 create_clock -period 8.000 -name adc78_clk [get_ports {adc78_dco}]
 
-create_clock -period 100.000 -name spi_clk [get_ports {sclk}]
+create_clock -period 33.333 -name spi_clk [get_ports {spiclk}]
 
 create_clock -period 8.000 -name virtual_dco
 

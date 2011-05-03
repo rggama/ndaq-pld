@@ -45,8 +45,8 @@ architecture rtl of s_spi is
 	
 	
 	-- Transfer finite state machine
-	type state_type		is (idle, rx_dataa); 
-	type txstate_type	is (idle, tx_load); 
+	type state_type		is (idle, rx_dataa, rx_sync); 
+	type txstate_type	is (idle, tx_load, tx_sync); 
 
 	-- Register to hold the current state
 	signal state	: state_type := idle;
@@ -104,12 +104,12 @@ begin
 	if (rst = '1') then
 		s_cntr_end	<= '0';
 		--s_cntr_zro	<= '1';
-		dwait		<= '0';
+		--dwait			<= '0';
 		
 	elsif (rising_edge(clk)) then          
 		s_cntr_end	<= r_cntr_end;
 		--s_cntr_zro	<= r_cntr_zro;
-		dwait		<= not(cntr_zro);
+		--dwait			<= not(cntr_zro);
 
 	end if;
 	end process;    
@@ -137,11 +137,18 @@ begin
 						
 				when tx_load	=>
 					if(txload = '1') then
-						txstate <= idle;
+						txstate <= tx_sync; --idle;
 					else
 						txstate	<= tx_load;
 					end if;
 
+				when tx_sync	=>
+					if((txload = '0') and (s_cntr_end = '1')) then
+						txstate	<= idle;
+					else
+						txstate <= tx_sync;
+					end if;
+					
 				when others		=>
 					txstate	<= idle;
 
@@ -149,6 +156,27 @@ begin
 		end if;
 	end process;
 
+	-- TX Write FSM *NON BUFFERED* Outputs
+	txwrite_fsm_ops:
+	process (txstate)
+	begin
+		case (txstate) is 
+			when idle		=> 
+				dwait	<= '0';
+
+			when tx_load	=>
+				dwait	<= '1';
+
+			when tx_sync	=>
+				dwait	<= '1';
+
+			when others 	=>
+				dwait	<= '0';
+
+		end case;
+	end process;
+
+--***************************************************************************************************************
 
 	--RX Read FSM
 	rxread_fsm:
@@ -157,7 +185,7 @@ begin
 		if (rst = '1') then	
 			--
 			state	<= idle;
-			dataa	<= '0';
+			--dataa	<= '0';
 			odata	<= x"00";
 			
 		elsif (rising_edge(clk)) then
@@ -165,33 +193,57 @@ begin
 				when idle	=>
 					if (s_cntr_end = '1') then
 						state	<= rx_dataa;
-						dataa	<= '1';
+						--dataa	<= '1';
 					else
 						state	<= idle;
-						dataa	<= '0';
+						--dataa	<= '0';
 					end if;
 						
 				when rx_dataa	=>
 					if (rd = '0') then
-						dataa	<= '0';
+						state	<= rx_sync;
+						--dataa	<= '0';
 						odata	<= obuf;
-					end if;
-						
-					if (s_cntr_end = '0') then	-- Rx started again...
-						state	<= idle;
-						dataa	<= '0';
 					else
 						state	<= rx_dataa;
 					end if;
-
+										
+				when rx_sync	=>
+					if (s_cntr_end = '0') then	-- Rx started again...
+						state	<= idle;
+						--dataa	<= '0';
+					else
+						state	<= rx_sync;
+					end if;
+				
 				when others		=>
-					dataa	<= '0';
+					--dataa	<= '0';
 					state	<= idle;
 
 			end case;
 		end if;
 	end process;
 	
+	-- RX Read FSM *NON BUFFERED* Outputs
+	rxread_fsm_ops:
+	process (state)
+	begin
+		case (state) is 
+			when idle		=> 
+				dataa	<= '0';
+
+			when rx_dataa	=>
+				dataa	<= '1';
+
+			when rx_sync	=>
+				dataa	<= '0';
+
+			when others 	=>
+				dataa	<= '0';
+
+		end case;
+	end process;
+
 	-- Transfer FSM *NON BUFFERED* Outputs
 	-- process (state)
 	-- begin
@@ -324,15 +376,15 @@ begin
 		
 	end process;
 
-	counter_zero:
-	process(t_cntr)
-	begin
-		if (t_cntr = x"0") then
-			cntr_zro <= '1';
-		else
-			cntr_zro <= '0';
-		end if;		
-	end process;
+	-- counter_zero:
+	-- process(t_cntr)
+	-- begin
+		-- if (t_cntr = x"0") then
+			-- cntr_zro <= '1';
+		-- else
+			-- cntr_zro <= '0';
+		-- end if;		
+	-- end process;
 	
 --***************************************************************************************************************
 

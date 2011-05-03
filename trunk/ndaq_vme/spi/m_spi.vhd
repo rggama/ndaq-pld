@@ -37,12 +37,13 @@ end m_spi;
 architecture rtl of m_spi is
 
 	-- CLK Divider/Enable Logic
-	signal clk_en		: std_logic := '0';
-	signal clk_div		: std_logic_vector(3 downto 0) := x"0";
+	signal cg_clk_en	: std_logic := '0';						-- Clock Generator clock enable
+	signal se_clk_en	: std_logic := '1';						-- Serial Engine clock enable
+	signal cg_clk_div	: std_logic_vector(3 downto 0) := x"0";	--
 	
 	
 	-- Transfer finite state machine
-	type state_type		is (idle, tx_load, transfer, w_test); 
+	type state_type		is (idle, tx_load, transfer, rx_latch); 
 	type rxstate_type	is (idle, rx_dataa); 
 
 	-- Register to hold the current state
@@ -81,20 +82,37 @@ begin
 
 --***************************************************************************************************************
 
-	-- CLK Divider/Enable Logic
+	-- Clock Generator CLK Divider/Enable Logic
 	process (rst, clk) begin
 		if (rst = '1') then	
-				clk_en <= '0';
-				clk_div <= x"0";
-
+			cg_clk_en	<= '0';
+			cg_clk_div	<= x"0";
+				
 		elsif (rising_edge(clk)) then
-			if(clk_div = x"1") then -- divided by 2 
-				clk_en <= '1';
-				clk_div <= x"0";
+			if(cg_clk_div = x"2") then -- divided by 2 
+				cg_clk_en	<= '1';
+				cg_clk_div	<= x"0";		
 			else
-				clk_en <= '0';
-				clk_div <= clk_div + 1;
+				cg_clk_en	<= '0';
+				cg_clk_div	<= cg_clk_div + 1;
 			end if;
+						
+		end if;
+	end process;
+
+	-- Serial Engine CLK Divider/Enable Logic
+	process (rst, clk, cg_clk_en) begin
+		if (rst = '1') then	
+			se_clk_en	<= '1';
+			
+		elsif (rising_edge(clk) and (cg_clk_en = '1')) then
+			
+			if(se_clk_en = '0') then
+				se_clk_en	<= '1';
+			else
+				se_clk_en	<= '0';
+			end if;
+			
 		end if;
 	end process;
 
@@ -102,29 +120,30 @@ begin
 
 	-- TX Write FSM
 	transfer_fsm:
-	process (clk, clk_en, rst)
+	process (clk, se_clk_en, rst)
 	begin
 		if (rst = '1') then	
 			--
 			state	<= idle;
 			ibuf	<= x"00";
-			dwait	<= '0';
+			obuf	<= x"00";
+			
 			
 		elsif (rising_edge(clk)) then
 			case state is
 				when idle		=>
 					--
 					if (wr = '0') then
-						ibuf	<= idata;			-- Buffering Input Data into 'ibuf'.
 						state	<= tx_load;						
-						dwait	<= '1';
+						--
+						ibuf	<= idata;			-- Buffering Input Data into 'ibuf'.
 						
 					else
 						state <= idle;
 					end if;
 				
 				when tx_load	=>					-- Load 'ibuf' into the SR.	
-					if (clk_en = '1') then
+					if ((se_clk_en = '1') and (cg_clk_en = '1')) then
 						state	<= transfer;
 					else
 						state <= tx_load;
@@ -132,17 +151,18 @@ begin
 					
 				when transfer	=>					-- Serial Transfer. 
 
-					if (t_cntr = x"7" and (clk_en = '1')) then
+					if ((t_cntr = x"7") and (se_clk_en = '1') and (cg_clk_en = '1')) then
 						
-						state	<= w_test;
+						state	<= rx_latch;
 					else
 						state <= transfer;
 					end if;
-								
-				when w_test		=>					-- Future test implementation.
+													
+				when rx_latch		=>					-- Future test implementation.
 					state	<= idle;
-					dwait	<= '0';
-										
+					--
+					obuf	<= tmp;
+					
 				when others		=>
 					state	<= idle;
 
@@ -150,146 +170,97 @@ begin
 		end if;
 	end process;
 	
-	--RX Read FSM
+	-- Transfer FSM *NON BUFFERED* Outputs
+	transfer_fsm_ops:
+	process (state)
+	begin
+		case (state) is 
+			when idle		=> 
+				dwait	<= '0';
+
+			when tx_load	=>
+				dwait	<= '1';
+
+			when transfer	=>
+				dwait	<= '1';
+
+			when rx_latch	=>
+				dwait	<= '1';
+
+			when others 	=>
+				dwait	<= '0';
+
+		end case;
+	end process;
+
+--***************************************************************************************************************
+
+	-- RX Read FSM
 	rxread_fsm:
 	process (clk, rst)
 	begin
 		if (rst = '1') then	
 			--
 			rxstate	<= idle;
-			dataa	<= '0';
+			--
 			odata	<= x"00";
-			obuf	<= x"00";
+			--obuf	<= x"00";
 			
 		elsif (rising_edge(clk)) then
 			case rxstate is
 				when idle	=>
-					if (t_cntr = x"8") then
+					if (state = rx_latch) then --(t_cntr = x"8")
 						rxstate	<= rx_dataa;
-						dataa	<= '1';
-						obuf	<= tmp;
+						--
+						--obuf	<= tmp;
 					else
 						rxstate	<= idle;
-						dataa	<= '0';
-					end if;
-						
-				when rx_dataa	=>
+				end if;
+											
+				when rx_dataa	=>					
 					if (rd = '0') then
-						dataa	<= '0';
-						odata	<= obuf;
 						rxstate	<= idle;
+						--
+						odata	<= obuf;
 					else
 						rxstate	<= rx_dataa;
-					end if;
-						
+					end if;						
+				
+					
 				when others		=>
-					dataa	<= '0';
 					rxstate	<= idle;
 
 			end case;
 		end if;
 	end process;
 
-	-- Transfer FSM *NON BUFFERED* Outputs
-	-- process (state)
-	-- begin
-		-- case state is 
-			-- when idle		=> 
-				-- i_load		<= '0';	-- parallel SR load strobe
-				-- i_transfer	<= '0';	-- enable transfer pulse
-				-- i_sclk		<= '0';  -- enable serial clock pulse
-				-- i_cntr_en	<= '0';	-- counter enable			
-				-- i_cntr_cl	<= '1';	-- counter synchronous clear
-				-- i_dwait		<= '0';	-- dwait flag
-				-- i_read		<= '0';	-- read issued flag
-				-- i_rbuf		<= '0';	-- parallel read buffer strobe
-			-- when w_issue	=>
-				-- i_load		<= '1';
-				-- i_transfer	<= '0';
-				-- i_sclk		<= '0';
-				-- i_cntr_en	<= '0';
-				-- i_cntr_cl	<= '0';
-				-- i_dwait		<= '1';
-				-- i_read		<= '0';
-				-- i_rbuf		<= '0';
-			-- when w	=>
-				-- i_load		<= '0';
-				-- i_transfer	<= '0';
-				-- i_sclk		<= '1';
-				-- i_cntr_en	<= '0';
-				-- i_cntr_cl	<= '0';
-				-- i_dwait		<= '0';
-				-- i_read		<= '0';
-				-- i_rbuf		<= '0';
-			-- when r_issue	=>
-				-- i_load		<= '0';
-				-- i_transfer	<= '0';
-				-- i_sclk		<= '0';
-				-- i_cntr_en	<= '0';
-				-- i_cntr_cl	<= '0';
-				-- i_dwait		<= '0';
-				-- i_read		<= '1';
-				-- i_rbuf		<= '0';
-			-- when transfer	=>
-				-- i_load		<= '0';
-				-- i_transfer	<= '1';
-				-- i_sclk		<= '1';
-				-- i_cntr_en	<= '1';
-				-- i_cntr_cl	<= '0';
-				-- i_dwait		<= '1';
-				-- i_read		<= '0';
-				-- i_rbuf		<= '0';
-			-- when transferw	=>
-				-- i_load		<= '0';
-				-- i_transfer	<= '0';
-				-- i_sclk		<= '1';
-				-- i_cntr_en	<= '0';
-				-- i_cntr_cl	<= '0';
-				-- i_dwait		<= '1';
-				-- i_read		<= '0';
-				-- i_rbuf		<= '0';
-			-- when w_test		=>
-				-- i_load		<= '0';
-				-- i_transfer	<= '0';
-				-- i_sclk		<= '0';
-				-- i_cntr_en	<= '0';
-				-- i_cntr_cl	<= '1';
-				-- i_dwait		<= '1';
-				-- i_read		<= '0';
-				-- i_rbuf		<= '0';
-			-- when r_buf		=>
-				-- i_load		<= '0';
-				-- i_transfer	<= '0';
-				-- i_sclk		<= '0';
-				-- i_cntr_en	<= '0';
-				-- i_cntr_cl	<= '1';
-				-- i_dwait		<= '0';
-				-- i_read		<= '0';
-				-- i_rbuf		<= '1';
-			-- when others 	=>
-				-- i_load		<= '0';
-				-- i_transfer	<= '0';
-				-- i_sclk		<= '0';
-				-- i_cntr_en	<= '0';
-				-- i_cntr_cl	<= '1';
-				-- i_dwait		<= '0';
-				-- i_read		<= '0';
-				-- i_rbuf		<= '0';
+	-- RX Read FSM *NON BUFFERED* Outputs
+	rxread_fsm_ops:
+	process (rxstate)
+	begin
+		case (rxstate) is 
+			when idle		=> 
+				dataa	<= '0';
 
-		-- end case;
-	-- end process;
-	
+			when rx_dataa	=>
+				dataa	<= '1';
+
+			when others 	=>
+				dataa	<= '0';
+
+		end case;
+	end process;
 	
 --***************************************************************************************************************
 
-	-- Serial Clock
+	-- Serial Clock Generator
 	serial_clock:
-	process (clk, rst, state)
+	process (clk, rst, cg_clk_en, state)
 	begin
 		if (rst = '1') then
 			r_sclk	<= '0';
 			
-		elsif (rising_edge(clk)) then
+		elsif (rising_edge(clk) and (cg_clk_en = '1')) then
 			case r_sclk is
 				
 				when '0'	=>
@@ -313,12 +284,12 @@ begin
 			
 	-- Shift Register
 	shift_register:
-	process (clk, clk_en, rst, state)      
+	process (clk, se_clk_en, cg_clk_en, rst, state)      
 	begin
 	if (rst = '1') then
 		tmp <= (others => '0');
 		
-	elsif (rising_edge(clk) and (clk_en = '1')) then          
+	elsif (rising_edge(clk) and (se_clk_en = '1') and (cg_clk_en = '1')) then          
 		
 		if (state = tx_load) then            
 			tmp <= ibuf;          
@@ -335,12 +306,12 @@ begin
 
 	-- Transfer Counter
 	transfer_counter:
-	process(clk, clk_en, rst, state)
+	process(clk, se_clk_en, cg_clk_en, rst, state)
 	begin
 	if (rst = '1') then
 		t_cntr <= x"0";
-	elsif (rising_edge(clk) and (clk_en = '1')) then
-		if (state = transfer) then
+	elsif (rising_edge(clk)) then
+		if ((state = transfer) and (se_clk_en = '1') and (cg_clk_en = '1')) then
 			t_cntr <= t_cntr + 1;
 		elsif (state = idle) then
 			t_cntr <= x"0";

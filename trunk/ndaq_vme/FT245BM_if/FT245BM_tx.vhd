@@ -72,8 +72,6 @@ begin
 	begin
 		if (rst = '1') then	
 			state	<= idle;
-			f_wr	<= '0';
-			ft_done	<= '0';
 			
 		elsif (rising_edge(ftclk) and (clk_en = '1')) then
 			case state is
@@ -81,26 +79,20 @@ begin
 
 					if (ft_req = '1') then		-- Waiting for the local writer request.
 						state	<= FTDI_wr_a;
-						--
-						f_wr	<= '1';
-						ft_done	<= '1';
-						
+						--						
 					else
 						state <= idle;
 					end if;
 
 				when FTDI_wr_a	=>
 					state	<= FTDI_wr_d;
-					--
-					f_wr	<= '0';
-					
-				
+					--				
+	
 				-- Pre-Charge
 				when FTDI_wr_d	=>
 					if (ft_req = '0') then		-- Handshake.
 						state	<= idle;
 						--
-						ft_done	<= '0';
 					else
 						state	<= FTDI_wr_d;
 					end if;
@@ -110,6 +102,30 @@ begin
 					 
 			end case;
 		end if;
+	end process;
+	
+	tx_ft_fsm_ops:
+	process (state)
+	begin
+		case(state) is
+		
+			when idle		=>
+				f_wr	<= '0';
+				ft_done	<= '0';
+			
+			when FTDI_wr_a	=>
+				f_wr	<= '1';
+				ft_done	<= '1';
+			
+			when FTDI_wr_d	=>
+				f_wr	<= '0';
+				ft_done	<= '1';
+			
+			when others		=>
+				f_wr	<= '0';
+				ft_done	<= '0';
+		
+		end case;
 	end process;
 
 --***************************************************************************************************************  						
@@ -121,9 +137,6 @@ begin
 			txlocalst	<= idle;
 			--
 			buf			<= x"00";
-			dwait		<= '0';
-			ft_req		<= '0';
-			isidle		<= '1';
 			f_odata		<= (others => 'Z');
 			
 		elsif (rising_edge(clk)) then
@@ -134,7 +147,6 @@ begin
 						txlocalst	<= localwrite;
 						--
 						buf			<= idata;
-						dwait		<= '1';
 					else
 						txlocalst	<= idle;	
 					end if;
@@ -144,8 +156,6 @@ begin
 						txlocalst	<= ftwrite;
 						--
 						f_odata		<= buf;
-						ft_req		<= '1';
-						isidle		<= '0';
 					
 					else
 						txlocalst	<= localwrite;
@@ -154,9 +164,7 @@ begin
 				when ftwrite	=>
 					if (ft_done = '1') then
 						txlocalst	<= handshake;
-						--
-						ft_req		<= '0';
-						
+						--						
 					else
 						txlocalst	<= ftwrite;
 					end if;
@@ -165,11 +173,7 @@ begin
 					if (ft_done = '0') then
 						txlocalst	<= idle;
 						--
-						dwait		<= '0';
-						ft_req		<= '0';
-						f_odata		<= (others => 'Z');					
-						isidle		<= '1';
-						
+						f_odata		<= (others => 'Z');											
 					else
 						txlocalst	<= handshake;
 					end if;
@@ -181,4 +185,36 @@ begin
 		end if;
 	end process;
 
+	tx_local_fsm_ops:
+	process (txlocalst)
+	begin
+		case(txlocalst) is
+			when idle		=>
+				dwait		<= '0';
+				ft_req		<= '0';
+				isidle		<= '1';
+			
+			when localwrite	=>
+				dwait		<= '1';
+				ft_req		<= '0';
+				isidle		<= '1';
+			
+			when ftwrite	=>
+				dwait		<= '1';
+				ft_req		<= '1';
+				isidle		<= '0';
+			
+			when handshake	=>
+				dwait		<= '1';
+				ft_req		<= '0';
+				isidle		<= '0';
+			
+			when others =>
+				dwait		<= '0';
+				ft_req		<= '0';
+				isidle		<= '1';
+
+		end case;
+	end process;
+	
 end rtl;

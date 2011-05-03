@@ -1,4 +1,4 @@
-./spi_tbench.vht {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/merged/ndaq_sim/spi/spi_tbench.vht}
+./spi_tbench.vht {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_sim/new_spi/spi_tbench.vht}
 Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
 -- Loading package standard
 -- Loading package std_logic_1164
@@ -7,7 +7,7 @@ Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
 -- Compiling entity spi_tbench
 -- Compiling architecture testbench of spi_tbench
 
-} {} {}} ../../ndaq_core/spi/s_spi.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/merged/ndaq_core/spi/s_spi.vhd}
+} {} {}} ../../ndaq_core/spi/s_spi.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_core/spi/s_spi.vhd}
 Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
 -- Loading package standard
 -- Loading package std_logic_1164
@@ -16,7 +16,7 @@ Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
 -- Compiling entity s_spi
 -- Compiling architecture rtl of s_spi
 
-} {} {}} ../../ndaq_vme/spi/m_spi.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/merged/ndaq_vme/spi/m_spi.vhd}
+} {} {}} ../../ndaq_vme/spi/m_spi.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_vme/spi/m_spi.vhd}
 Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
 -- Loading package standard
 -- Loading package std_logic_1164
