@@ -75,11 +75,8 @@ begin
 	process (ftclk, clk_en, rst)
 	begin
 		if (rst = '1') then	
-			--
 			state	<= idle;
 			--
-			ft_done	<= '0';
-			f_rd   	<= '1';
 
 		elsif (rising_edge(ftclk) and (clk_en = '1')) then
 			case (state) is
@@ -87,9 +84,7 @@ begin
 					--
 					if (ft_req = '1') then		-- Local reader request? Go get data.
 						state	<= FTDI_rd_a;
-						--
-						f_rd   	<= '0';
-						
+						--						
 					else
 						state	<= idle;
 					end if;
@@ -100,14 +95,13 @@ begin
 				when FTDI_waitst =>
 					state	<= FTDI_ldata; 
 					--							-- Data is ready at the FT bus.
-					ft_done	<= '1';				-- Tell it to the local reader.
+												-- Tell it to the local reader.
 
 				when FTDI_ldata	=>
 					if (ft_req = '0') then		-- If local read has finished we're
 						state	<= FTDI_rd_d;	-- free to go.
 						--
-						f_rd   	<= '1';
-						ft_done	<= '0';			-- Handshake.
+												-- Handshake.
 					else
 						state	<= FTDI_ldata;	-- Wait for the local reader.
 					end if;						
@@ -122,6 +116,37 @@ begin
 		end if;
 	end process;
 
+	process (state)
+	begin
+		case (state) is
+		
+			when idle			=>
+				ft_done	<= '0';
+				f_rd   	<= '1';
+			
+			when FTDI_rd_a		=>
+				ft_done	<= '0';
+				f_rd   	<= '0';
+			
+			when FTDI_waitst	=>
+				ft_done	<= '0';
+				f_rd   	<= '0';
+			
+			when FTDI_ldata		=>
+				ft_done	<= '1';
+				f_rd   	<= '0';
+			
+			when FTDI_rd_d		=>
+				ft_done	<= '0';
+				f_rd   	<= '1';
+			
+			when others	=>
+				ft_done	<= '0';
+				f_rd   	<= '1';
+		
+		end case;
+	end process;
+	
 --***************************************************************************************************************
 
 	rx_local_fsm:
@@ -132,9 +157,6 @@ begin
 			--
 			odata		<= x"00";
 			buf			<= x"00";
-			dataa		<= '0';
-			ft_req		<= '0';
-			isidle		<= '1';
 			
 		elsif (rising_edge(clk)) then
 			case(rxlocalst) is
@@ -143,8 +165,6 @@ begin
 					if (enable = '1') then
 						rxlocalst	<= FT_request;
 						--
-						ft_req		<= '1';
-						isidle		<= '0';
 					else
 						rxlocalst	<= idle;
 					end if;
@@ -154,7 +174,6 @@ begin
 						rxlocalst	<= localbuf;
 						--
 						buf			<= f_idata;
-						ft_req		<= '0';
 					else
 						rxlocalst	<= FT_request;
 					end if;
@@ -163,8 +182,6 @@ begin
 					if (ft_done = '0') then			-- Handshaking.
 						rxlocalst	<= localread;
 						--
-						dataa		<= '1';
-						isidle		<= '1';
 					else
 						rxlocalst	<= localbuf;	-- Wait for FT machine to complete its cycle.
 					end if;
@@ -174,7 +191,6 @@ begin
 						rxlocalst	<= idle;
 						--
 						odata		<= buf;
-						dataa		<= '0';
 					else
 						rxlocalst	<= localread;
 					end if;
@@ -184,6 +200,39 @@ begin
 					
 			end case;
 		end if;
+	end process;
+	
+	rx_local_fsm_ops:
+	process (rxlocalst)
+	begin
+		case (rxlocalst) is
+			
+			when idle		=>
+				dataa		<= '0';
+				ft_req		<= '0';
+				isidle		<= '1';
+			
+			when FT_request	=>
+				dataa		<= '0';
+				ft_req		<= '1';
+				isidle		<= '0';
+			
+			when localbuf	=>
+				dataa		<= '0';
+				ft_req		<= '0';
+				isidle		<= '0';
+			
+			when localread	=>
+				dataa		<= '1';
+				ft_req		<= '0';
+				isidle		<= '1';
+			
+			when others		=>
+				dataa		<= '0';
+				ft_req		<= '0';
+				isidle		<= '1';
+			
+		end case;
 	end process;
 	
 end rtl;

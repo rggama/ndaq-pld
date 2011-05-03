@@ -6,7 +6,6 @@ add wave -noupdate -format Logic /spi_tbench/master_spi/mosi
 add wave -noupdate -format Logic /spi_tbench/master_spi/miso
 add wave -noupdate -format Logic /spi_tbench/master_spi/sclk
 add wave -noupdate -format Logic /spi_tbench/master_spi/dataa
-add wave -noupdate -format Logic /spi_tbench/master_spi/busy
 add wave -noupdate -format Logic /spi_tbench/master_spi/wr
 add wave -noupdate -format Literal -radix hexadecimal /spi_tbench/master_spi/idata
 add wave -noupdate -format Logic /spi_tbench/master_spi/rd
@@ -16,17 +15,13 @@ add wave -noupdate -format Literal -radix hexadecimal /spi_tbench/master_spi/ibu
 add wave -noupdate -format Literal -radix hexadecimal /spi_tbench/master_spi/tmp
 add wave -noupdate -format Literal -radix hexadecimal /spi_tbench/master_spi/obuf
 add wave -noupdate -format Literal -radix hexadecimal /spi_tbench/master_spi/t_cntr
-add wave -noupdate -format Logic /spi_tbench/master_spi/i_load
-add wave -noupdate -format Logic /spi_tbench/master_spi/i_transfer
-add wave -noupdate -format Logic /spi_tbench/master_spi/i_sclk
-add wave -noupdate -format Logic /spi_tbench/master_spi/i_cntr_en
-add wave -noupdate -format Logic /spi_tbench/master_spi/i_cntr_cl
-add wave -noupdate -format Logic /spi_tbench/master_spi/i_busy
-add wave -noupdate -format Logic /spi_tbench/master_spi/i_read
-add wave -noupdate -format Logic /spi_tbench/master_spi/i_rbuf
 add wave -noupdate -format Logic /spi_tbench/master_spi/r_sclk
+add wave -noupdate -divider <NULL>
+add wave -noupdate -format Logic /spi_tbench/master_spi/cg_clk_en
+add wave -noupdate -format Literal -radix hexadecimal /spi_tbench/master_spi/cg_clk_div
+add wave -noupdate -format Logic /spi_tbench/master_spi/se_clk_en
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {1336208 ps} 0}
+WaveRestoreCursors {{Cursor 1} {2042084 ps} 0} {{Cursor 2} {371977 ps} 0}
 configure wave -namecolwidth 251
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
@@ -41,4 +36,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ps} {1839104 ps}
+WaveRestoreZoom {0 ps} {3678208 ps}
