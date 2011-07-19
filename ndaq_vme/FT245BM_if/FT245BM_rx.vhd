@@ -64,12 +64,26 @@ architecture rtl of ft245bm_rx is
 	signal buf		: std_logic_vector(7 downto 0) := x"00";
 	
 	-- Internal Signals
-	signal ft_req	: std_logic := '0';
-	signal ft_done	: std_logic := '0';
+	signal ft_req		: std_logic := '0';
+	signal ft_done		: std_logic := '0';
+	signal i_ft_req		: std_logic := '0';
+	signal i_ft_done	: std_logic := '0';
+	signal r_enable		: std_logic := '0';
 	
 --
 
 begin
+
+	from_local_reg:
+	process (ftclk, clk_en, rst)
+	begin
+		if (rst = '1') then
+			ft_req	<= '0';
+			
+		elsif (rising_edge(ftclk) and (clk_en = '1')) then
+			ft_req	<= i_ft_req;
+		end if;
+	end process;
 
 	rx_ft_fsm:
 	process (ftclk, clk_en, rst)
@@ -121,33 +135,46 @@ begin
 		case (state) is
 		
 			when idle			=>
-				ft_done	<= '0';
-				f_rd   	<= '1';
+				i_ft_done	<= '0';
+				f_rd   		<= '1';
 			
 			when FTDI_rd_a		=>
-				ft_done	<= '0';
-				f_rd   	<= '0';
+				i_ft_done	<= '0';
+				f_rd   		<= '0';
 			
 			when FTDI_waitst	=>
-				ft_done	<= '0';
-				f_rd   	<= '0';
+				i_ft_done	<= '0';
+				f_rd   		<= '0';
 			
 			when FTDI_ldata		=>
-				ft_done	<= '1';
-				f_rd   	<= '0';
+				i_ft_done	<= '1';
+				f_rd   		<= '0';
 			
 			when FTDI_rd_d		=>
-				ft_done	<= '0';
-				f_rd   	<= '1';
+				i_ft_done	<= '0';
+				f_rd   		<= '1';
 			
 			when others	=>
-				ft_done	<= '0';
-				f_rd   	<= '1';
+				i_ft_done	<= '0';
+				f_rd   		<= '1';
 		
 		end case;
 	end process;
 	
 --***************************************************************************************************************
+
+	from_ft_reg:
+	process (clk, rst)
+	begin
+		if (rst = '1') then
+			ft_done		<= '0';
+			r_enable	<= '0';
+			
+		elsif (rising_edge(clk)) then
+			ft_done		<= i_ft_done;
+			r_enable	<= enable;
+		end if;
+	end process;
 
 	rx_local_fsm:
 	process (clk, rst)
@@ -162,7 +189,7 @@ begin
 			case(rxlocalst) is
 			
 				when idle	=> 
-					if (enable = '1') then
+					if (r_enable = '1') then
 						rxlocalst	<= FT_request;
 						--
 					else
@@ -209,27 +236,27 @@ begin
 			
 			when idle		=>
 				dataa		<= '0';
-				ft_req		<= '0';
+				i_ft_req	<= '0';
 				isidle		<= '1';
 			
 			when FT_request	=>
 				dataa		<= '0';
-				ft_req		<= '1';
+				i_ft_req	<= '1';
 				isidle		<= '0';
 			
 			when localbuf	=>
 				dataa		<= '0';
-				ft_req		<= '0';
+				i_ft_req	<= '0';
 				isidle		<= '0';
 			
 			when localread	=>
 				dataa		<= '1';
-				ft_req		<= '0';
+				i_ft_req	<= '0';
 				isidle		<= '1';
 			
 			when others		=>
 				dataa		<= '0';
-				ft_req		<= '0';
+				i_ft_req	<= '0';
 				isidle		<= '1';
 			
 		end case;

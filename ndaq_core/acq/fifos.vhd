@@ -1,50 +1,32 @@
--- $ POSITIVE Transistion DUAL CLOCK FIFO Module (PRE+POST)
--- v: 0.5
--- 
--- 0.1	10 bits wide (NDAQ)
--- 		Modified for 2 channels. (1 pre and 1 post per channel)
---
--- 0.2	Changed everything to 'std_logic_vector'.
---
---
--- 0.3	Changed 'postfifo' from 'scfifo' to 'dcfifo'.
---		Added a 'rdclk' (read clock) input.	
---		Added rd/wr 'usedw' (used words) outputs.
---
---
--- 0.4	Added a sync stage to the 'aclk' (reset) input.
---
--- 0.5	Changed this module to integrate just one 'PRE FIFO' then
---		'POST FIFO' path (one channel). Main reasons: 1) 'writefifo' 
---		component was changed to handle just one fifo path and 
---		2) flexibility for one channel hardware like the SPRO.
+-- $ FIFO Module (PRE+POST)
+-- v: svn controlled;
 --
 --
 
 library ieee;
 use ieee.std_logic_1164.all;
 
+use work.acq_pkg.all;
 --
 
 entity dcfifom is
 	port
 	(	
-		signal clk				: in 	std_logic; -- sync if
-		signal rdclk			: in 	std_logic; -- sync if
-		signal rst				: in 	std_logic; -- async if
-		signal rclk				: in	std_logic;
+		signal wrclk			: in 	std_logic; -- write clock
+		signal rdclk			: in 	std_logic; -- read clock
+		signal rst				: in 	std_logic; -- async reset
 		
 		signal wr				: in 	std_logic;
-		signal d				: in	std_logic_vector(9 downto 0);
+		signal d					: in	DATA_T;
 		
 		signal rd				: in	std_logic;	
-		signal q				: out	std_logic_vector(9 downto 0);
+		signal q					: out	DATA_T;
 		
-		signal f				: out	std_logic;	
-		signal e				: out	std_logic;
+		signal f					: out	std_logic;	--full flag
+		signal e					: out	std_logic;	--empty flag
 
-		signal rdusedw			: out	std_logic_vector(9 downto 0);
-		signal wrusedw			: out	std_logic_vector(9 downto 0)
+		signal rdusedw			: out	USEDW_T;	-- used words sync'ed to read clock
+		signal wrusedw			: out	USEDW_T	-- used words sync'ed to write clock
 	);
 end dcfifom;
 
@@ -57,13 +39,13 @@ architecture rtl of dcfifom is
 	(
 		aclr		: IN STD_LOGIC ;
 		clock		: IN STD_LOGIC ;
-		data		: IN std_logic_vector (9 DOWNTO 0);
+		data		: IN DATA_T;
 		rdreq		: IN STD_LOGIC ;
 		wrreq		: IN STD_LOGIC ;
 		almost_full	: OUT STD_LOGIC ;
 		empty		: OUT STD_LOGIC ;
 		full		: OUT STD_LOGIC ;
-		q			: OUT std_logic_vector (9 DOWNTO 0)
+		q			: OUT DATA_T
 	);
 	end component;
 	
@@ -71,43 +53,35 @@ architecture rtl of dcfifom is
 	PORT
 	(
 		aclr		: IN STD_LOGIC  := '0';
-		data		: IN STD_LOGIC_VECTOR (9 DOWNTO 0);
+		data		: IN DATA_T;
 		rdclk		: IN STD_LOGIC ;
 		rdreq		: IN STD_LOGIC ;
 		wrclk		: IN STD_LOGIC ;
 		wrreq		: IN STD_LOGIC ;
-		q			: OUT STD_LOGIC_VECTOR (9 DOWNTO 0);
+		q			: OUT DATA_T;
 		rdempty		: OUT STD_LOGIC ;
-		rdusedw		: OUT STD_LOGIC_VECTOR (9 DOWNTO 0);
+		rdusedw		: OUT USEDW_T;
 		wrfull		: OUT STD_LOGIC ;
-		wrusedw		: OUT STD_LOGIC_VECTOR (9 DOWNTO 0)
+		wrusedw		: OUT USEDW_T
 	);
 	end component;
 	
 	--
 	
-	signal rst_0	: std_logic;
-	signal rst_1	: std_logic;
-	signal rst_2	: std_logic;
-	signal rst_3	: std_logic;
-	signal rst_l	: std_logic;
 	signal ar		: std_logic;
-	signal dbus		: std_logic_vector(9 downto 0);
-
+	signal dbus		: DATA_T;
+	signal data_r	: DATA_T;
 --
 
 begin
 
--- ** ACLR (reset) Register Interface 
-
-	process (clk)
-	begin		
-		if rising_edge(clk) then
-			rst_0	<= rst;
-			rst_1	<= rst_0;
-			rst_2	<= rst_1;
-			rst_3	<= rst_2;
-			rst_l	<= rst_3;
+	--Data input registers
+	process (wrclk, rst)
+	begin
+		if (rst = '1') then
+			data_r	<= (others => '0');
+		elsif (rising_edge(wrclk)) then
+			data_r	<= d;
 		end if;
 	end process;
 		
@@ -116,9 +90,9 @@ begin
 	pre:
 	prefifo port map
 	(
-		aclr		=> rst_l,
-		clock		=> clk,
-		data		=> d,
+		aclr		=> rst,
+		clock		=> wrclk,
+		data		=> data_r,
 		rdreq		=> ar,
 		wrreq		=> '1',
 		almost_full	=> ar,
@@ -130,11 +104,11 @@ begin
 	post:
 	postfifo port map
 	(
-		aclr	 	=> rst_l,
+		aclr	 	=> rst,
 		data	 	=> dbus,
 		rdclk	 	=> rdclk,
 		rdreq	 	=> rd,
-		wrclk	 	=> clk,
+		wrclk	 	=> wrclk,
 		wrreq	 	=> wr,
 		q	 		=> q,
 		rdempty	 	=> e,
