@@ -12,41 +12,46 @@ use ieee.std_logic_1164.all;
 --use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 --use ieee.numeric_std.all;
+
+use work.acq_pkg.all;
+
 --
 entity idtfifo_ctr is
 port(	-- CONTROL/STATUS signals
-		rst						     : in std_logic;
-		clk						     : in std_logic;		 
-		start_transfer				  : in std_logic;		 -- Control signal to start the readout
-		i_running					  : out std_logic;	 -- Indicates a block transfer running
+		rst							: in	std_logic;
+		clk							: in	std_logic;		 
+		start_transfer				: in	std_logic;						-- Control signal to start the readout
+		running						: out	std_logic;						-- Indicates a block transfer running
 		
 		-- IDT FIFO signals
-		idt_full					 	  : in std_logic;		 -- FULL flag
-		idt_wren					 	  : out std_logic;	 -- WRITE enable
+		idt_full					: in	std_logic;						-- FULL flag
+		idt_wren					: out	std_logic;						-- WRITE enable
 	
 		-- Internal FIFO signals
 		--
 		--
-		fifo_empty					 : in std_logic;								-- EMPTY flag
-		fifo_used				 	 : in std_logic_vector(9 downto 0);		-- USED WORDS bus
-		rden_A						 : out std_logic;								-- READ enable
-		rden_B						 : out std_logic								-- READ enable		
+		fifo_empty					: in	std_logic;						-- EMPTY flag
+		fifo_used					: in	USEDW_T;	-- USED WORDS bus
+		rden_A						: out	std_logic;						-- READ enable
+		rden_B						: out	std_logic						-- READ enable		
 );
 end idtfifo_ctr;
 --
 architecture one_idtfifo_ctr of idtfifo_ctr is
 --
-	constant TRANS_MAX 		: std_logic_vector(7 downto 0) := "01111111";		-- Number of 32-bit words transferred to the IDT FIFO each time (1 event)
-	constant USEDFIFO			: std_logic_vector(9 downto 0) := "0001111111"; 	-- 128 words
+	constant TRANS_MAX 			: std_logic_vector(7 downto 0) := "01111110";		-- 126 to terminate rd before wr - Number of 32-bit words transferred to the IDT FIFO each time (1 event)
+	constant USEDFIFO			: std_logic_vector(9 downto 0) := "0001111111"; 	-- 127 
 	
-	type state_values is (idle, test, active_rden, block_transfer, transfer_wait);
+	type state_values is (idle, test, active_rden, block_transfer, last_wren);
 	signal stateval,next_stateval				: state_values;
-	signal i_wren									: std_logic;
-	signal i_rden									: std_logic;
+	signal i_wren								: std_logic;
+	signal i_rden								: std_logic;
 	signal i_enable_counter						: std_logic;
 	signal i_clear_counter						: std_logic;
+	signal i_running							: std_logic;
 	signal transfer_counter						: std_logic_vector(7 downto 0);
-
+	signal clear_counter						: std_logic;
+	signal enable_counter						: std_logic;
 --
 
 begin
@@ -63,7 +68,7 @@ begin
 			end if;
 
 		when test =>							-- Internal FIFO must have 'USEDFIFO' words and external FIFO must not be full
-			if ((fifo_used > USEDFIFO) and (idt_full = '1')) then
+			if ((fifo_used > USEDFIFO) and (idt_full = '1') and (fifo_empty = '0')) then
 				next_stateval <= active_rden;			
 			else
 				next_stateval <= idle;
@@ -74,14 +79,14 @@ begin
 		
 		when block_transfer =>				-- Transfer block data to IDT FIFO
 			if transfer_counter = TRANS_MAX then
-				next_stateval <= idle;
+				next_stateval <= last_wren;
 			else
 				next_stateval <= block_transfer;
 			end if;
-	
---		when transfer_wait =>
---			next_stateval <= block_transfer;
-			
+
+		when last_wren =>						
+			next_stateval <= idle;
+				
 		when others =>
 			next_stateval <= idle;
 			
@@ -95,37 +100,37 @@ begin
 		when idle =>
 			i_wren				<= '1';
 			i_rden				<= '0';
-			i_clear_counter	<= '1';		
+			i_clear_counter		<= '1';		
 			i_enable_counter	<= '0';
 			i_running			<= '0';
 		when test =>
 			i_wren				<= '1';
 			i_rden				<= '0';
-			i_clear_counter	<= '0';		
+			i_clear_counter		<= '0';		
 			i_enable_counter	<= '0';
 			i_running			<= '0';
 		when active_rden =>
 			i_wren				<= '1';
 			i_rden				<= '1';
-			i_clear_counter	<= '0';		
+			i_clear_counter		<= '0';		
 			i_enable_counter	<= '0';
 			i_running			<= '1';
 		when block_transfer =>			
 			i_wren				<= '0';
 			i_rden				<= '1';
-			i_clear_counter	<= '0';		
+			i_clear_counter		<= '0';		
 			i_enable_counter	<= '1';
 			i_running			<= '1';
---		when transfer_wait =>			
---			i_wren				<= '1';
---			i_rden				<= '0';
---			i_clear_counter	<= '0';		
---			i_enable_counter	<= '0';
---			i_running			<= '1';
+		when last_wren		=>			
+			i_wren				<= '0';
+			i_rden				<= '0';
+			i_clear_counter		<= '0';		
+			i_enable_counter	<= '0';
+			i_running			<= '1';
 		when others =>
 			i_wren				<= '1';
 			i_rden				<= '0';
-			i_clear_counter	<= '1';		
+			i_clear_counter		<= '1';		
 			i_enable_counter	<= '0';
 			i_running			<= '0';
 	end case;
@@ -145,13 +150,20 @@ end process;
 OUTPUT_FLOPS: process(rst,clk)
 begin
 	if rst ='1' then
-		idt_wren <= '1';
-		rden_A	<= '0';
-		rden_B	<= '0';
+		idt_wren		<= '1';
+		rden_A			<= '0';
+		rden_B			<= '0';
+		running			<= '0';
+		enable_counter	<= '0';
+		clear_counter	<= '0';
 	elsif rising_edge(clk) then
-		idt_wren	<= i_wren;
-		rden_A	<= i_rden;
-		rden_B	<= i_rden;
+		idt_wren		<= i_wren;
+		rden_A			<= i_rden;
+		rden_B			<= i_rden;
+		running			<= i_running;
+		enable_counter	<= i_enable_counter;
+		clear_counter	<= i_clear_counter;
+		
 	end if;
 end process;
 --
@@ -161,12 +173,10 @@ begin
 	if rst = '1' then
 		transfer_counter <= "00000000";
 	elsif rising_edge(clk) then
-		if i_enable_counter = '1' then
+		if enable_counter = '1' then
 			transfer_counter <= transfer_counter + 1;
-		elsif i_clear_counter = '1' then
+		elsif clear_counter = '1' then
 			transfer_counter <= "00000000";
-		else
-			transfer_counter <= transfer_counter; --"00000000";
 		end if;
 	end if;
 end process;

@@ -1,5 +1,5 @@
 -- $ FIFO Writer
--- v: 0.2
+-- v: svn controlled.
 --
 -- 0.0	First Version.
 --
@@ -27,29 +27,33 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
+use work.acq_pkg.all;
 --
 
 entity writefifo is
 	port
 	(	
-		signal clk				: in 	std_logic; -- sync if
-		signal rst				: in 	std_logic; -- async if
-		signal rclk				: in	std_logic; -- clock from reset generator domain
+		signal clk				: in 	std_logic; 			-- sync if
+		signal rst				: in 	std_logic; 			-- async if
 		
-		signal acqin			: out 	std_logic := '0';
+		signal acqin			: out std_logic := '0';
 	
+		signal tmode			: in 	std_logic;
+		
 		signal trig0 			: in	std_logic;
 		signal trig1 			: in	std_logic;
 		signal trig2			: in	std_logic;
+		signal trig3			: in	std_logic;
 
 		signal wr				: out	std_logic := '0';
 				
-		signal usedw			: in	std_logic_vector(9 downto 0);
+		signal usedw			: in	USEDW_T;
+		signal full				: in	std_logic;
 		
 		-- Parameters
 		
-		signal wmax				: in	std_logic_vector(9 downto 0); 	-- same size of 'usedw'
-		signal esize			: in	std_logic_vector(9 downto 0)	-- maximum value must be equal fifo word size (max 'usedw')
+		signal wmax				: in	USEDW_T; 			-- same size of 'usedw'
+		signal esize			: in	USEDW_T				-- maximum value must be equal fifo word size (max 'usedw')
 	);
 end writefifo;
 
@@ -57,80 +61,69 @@ end writefifo;
 
 architecture rtl of writefifo is
 
-	signal rst_r, rst_l	: std_logic	:= '1';
-	signal scounter		: std_logic_vector(9 downto 0);	-- sample counter
+	signal rst_r		: std_logic	:= '1';
+	signal scounter	: USEDW_T;							-- sample counter
 	
 	
 	-- Build an enumerated type for the state machine
 	type state_type is (idle, 	
-						wrfifoa--, wrfifod
+						wrfifoa
 						);
 
 	-- Register to hold the current state
-	signal state   : state_type;
+	signal state   : state_type := idle;
 
 	-- Attribute "safe" implements a safe state machine.
 	-- This is a state machine that can recover from an
 	-- illegal state (by returning to the reset state).
 	attribute syn_encoding : string;
-	attribute syn_encoding of state_type : type is "safe";
+	attribute syn_encoding of state_type : type is "safe, one-hot";
 	
 	--
-	signal wmax_r, wmax_l	: std_logic_vector(9 downto 0);
+	signal wmax_r		: USEDW_T;
 	
+	signal i_wr			: std_logic := '0';
+	signal i_acqin		: std_logic := '0';
 --
 
 begin
 
 -- ** ACLR (reset) Register Interface 
-	process (rclk)
-	begin		
-		if rising_edge(rclk) then
-			rst_r	<= rst;
-		end if;
-	end process;
-
 	process (clk)
 	begin		
 		if rising_edge(clk) then
-			rst_l	<= rst_r;
+			rst_r	<= rst;
 		end if;
 	end process;
 	
 -- ** WMAX Register Interface 
-	process (rclk)
-	begin		
-		if rising_edge(rclk) then
-			wmax_r	<= wmax;
-		end if;
-	end process;
-
 	process (clk)
 	begin		
 		if rising_edge(clk) then
-			wmax_l	<= wmax_r;
+			wmax_r	<= wmax;
 		end if;
 	end process;
 --
 
 	writefifofsm:
-	process (clk, rst_l)
+	process (clk, rst_r)
 	begin
-		if (rst_l = '1') then
-			scounter <= "0000000000";
+		if (rst_r = '1') then
+			scounter <= (others => '0');
 			--	
 			state <= idle;
 			
 		elsif (rising_edge(clk)) then
 			case state is
 				when idle =>
-					acqin  <= '0';
-					--
-					wr		<= '0';
-					scounter	<= "0000000000";
-					--
-					if ( ((trig0 = '1') or (trig1 = '1') or (trig2 = '1'))
-						and (usedw < wmax_l)) then	-- x"37E"
+					if(  
+								(((trig0 = '1') or (trig1 = '1') or (trig2 = '1'))
+								and (usedw < wmax_r) and (full = '0') and (tmode = '0'))
+							or
+								((trig3 = '1') and (usedw < wmax_r) and (full = '0') 
+								and (tmode = '1'))
+							
+						) then
 						
 						state <= wrfifoa;
 					else
@@ -139,31 +132,45 @@ begin
 
 				-- FIF0 Write Assert (FIFO is deasserted on the 'idle' state)
 				when wrfifoa =>
-					acqin  <= '1';
-					--
-					wr    <= '1';
-					--
 					scounter <= scounter + 1;
 					--
-					if (scounter = esize) then	-- "0001111111"
+					if (scounter = esize) then
 						state <= idle;
+						--
+						scounter	<= (others => '0');
 					else
 						state <= wrfifoa;
 					end if;
 
---				-- FIF0 0 and FIFO 1 Write Deassert
---				when wrfifod =>
---					wr    <= '0';
---					--
---					scounter <= scounter + 1;
---					--
---					if (scounter = "0001111111") then
---						state <= idle;
---					else
---						state <= wrfifoa;
---					end if;
-
 			end case;
+		end if;
+	end process;
+
+	fsm_outputs:
+	process (state)
+	begin
+		case (state) is
+
+			when wrfifoa	=>
+				i_wr	<= '1';
+				i_acqin	<= '1';
+
+			when others	=>
+				i_wr	<= '0';
+				i_acqin	<= '0';
+			
+		end case;
+	end process;
+	
+	output_register:
+	process (clk, rst)
+	begin
+		if (rst = '1') then
+			wr		<= '0';
+			acqin	<= '0';
+		elsif (rising_edge(clk)) then
+			wr		<= i_wr;
+			acqin	<= i_acqin;
 		end if;
 	end process;
 

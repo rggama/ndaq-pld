@@ -34,13 +34,14 @@ architecture rtl of rstgen is
 	type reset_type is (reset_a, reset_d);
 	
 	signal reset_state 	: reset_type := reset_a; -- Hope it power-up at 'reset_a' state.
-
+	
 	-- Attribute "safe" implements a safe state machine.
 	-- This is a state machine that can recover from an
 	-- illegal state (by returning to the reset state).
 	attribute syn_encoding : string;
 	attribute syn_encoding of reset_type : type is "safe";	
 
+	signal counter			: std_logic_vector(3 downto 0) := x"0";
 --
 
 begin
@@ -59,11 +60,17 @@ begin
 				
 				when reset_a =>
 					rst			<= '1';		-- reset asserted
-										
-					reset_state	<= reset_d;
+					counter 	<= counter + 1;
+					
+					if (counter = x"4") then
+						reset_state	<= reset_d;
+					else
+						reset_state	<= reset_a;
+					end if;
 						
 				when reset_d =>
 					rst			<= '0';		-- reset deasserted
+					counter		<= x"0";
 					
 					if (reset = x"55") then
 						reset_state <= reset_a;

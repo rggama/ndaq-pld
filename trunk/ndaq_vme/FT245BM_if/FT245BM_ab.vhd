@@ -51,13 +51,15 @@ begin
 	-- The 'enable' signal must be at a high level for any running.
 	
 	--txen  <= ((f_rxf or dataa) and not(f_txf) and rxidle and enable); 	 
-	txen  <= ((f_rxf) and not(f_txf) and rxidle and enable); 	 
+	txen	<= ((f_rxf) and not(f_txf) and rxidle and enable); 	 
 
+	--txen	<= not(f_txf);
+	
 	-- We're gonna enable TX when there is NO RX data avaiable (f_rxf - RX priority), 
 	-- TX is ready to receiva data (not(f_txf)) and RX is idle.
 	
 
-	rxen  <= (not(f_rxf) and txidle and enable);
+	rxen	<= (not(f_rxf) and txidle and enable);
 	-- We're gonna enable RX when there is data avaible (not(f_rxf)) and TX is idle.
 	
 	

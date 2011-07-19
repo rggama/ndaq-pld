@@ -194,7 +194,9 @@ begin
 	end process;
 
 --***************************************************************************************************************
-
+	
+	odata	<= obuf;
+	
 	-- RX Read FSM
 	rxread_fsm:
 	process (clk, rst)
@@ -203,8 +205,8 @@ begin
 			--
 			rxstate	<= idle;
 			--
-			odata	<= x"00";
-			--obuf	<= x"00";
+			--odata	<= x"00";
+			
 			
 		elsif (rising_edge(clk)) then
 			case rxstate is
@@ -212,7 +214,7 @@ begin
 					if (state = rx_latch) then --(t_cntr = x"8")
 						rxstate	<= rx_dataa;
 						--
-						--obuf	<= tmp;
+						
 					else
 						rxstate	<= idle;
 				end if;
@@ -221,7 +223,7 @@ begin
 					if (rd = '0') then
 						rxstate	<= idle;
 						--
-						odata	<= obuf;
+						--odata	<= obuf;
 					else
 						rxstate	<= rx_dataa;
 					end if;						

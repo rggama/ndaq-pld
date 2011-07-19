@@ -60,12 +60,26 @@ architecture rtl of ft245bm_tx is
 	signal buf	: std_logic_vector(7 downto 0) := x"00";
 	
 	-- Internal Signals
-	signal ft_req	: std_logic := '0';
-	signal ft_done	: std_logic := '0';
+	signal ft_req		: std_logic := '0';
+	signal ft_done		: std_logic := '0';
+	signal i_ft_req		: std_logic := '0';
+	signal i_ft_done	: std_logic := '0';
+	signal r_enable		: std_logic := '0';
 
 --
 
 begin	
+
+	from_local_reg:
+	process (ftclk, clk_en, rst)
+	begin
+		if (rst = '1') then
+			ft_req	<= '0';
+			
+		elsif (rising_edge(ftclk) and (clk_en = '1')) then
+			ft_req	<= i_ft_req;
+		end if;
+	end process;
 
 	tx_ft_fsm:
 	process (ftclk, clk_en, rst)
@@ -110,25 +124,38 @@ begin
 		case(state) is
 		
 			when idle		=>
-				f_wr	<= '0';
-				ft_done	<= '0';
+				f_wr		<= '0';
+				i_ft_done	<= '0';
 			
 			when FTDI_wr_a	=>
-				f_wr	<= '1';
-				ft_done	<= '1';
+				f_wr		<= '1';
+				i_ft_done	<= '1';
 			
 			when FTDI_wr_d	=>
-				f_wr	<= '0';
-				ft_done	<= '1';
+				f_wr		<= '0';
+				i_ft_done	<= '1';
 			
 			when others		=>
-				f_wr	<= '0';
-				ft_done	<= '0';
+				f_wr		<= '0';
+				i_ft_done	<= '0';
 		
 		end case;
 	end process;
 
 --***************************************************************************************************************  						
+
+	from_ft_reg:
+	process (clk, rst)
+	begin
+		if (rst = '1') then
+			ft_done		<= '0';
+			r_enable	<= '0';
+			
+		elsif (rising_edge(clk)) then
+			ft_done		<= i_ft_done;
+			r_enable	<= enable;
+		end if;
+	end process;
 
 	tx_local_fsm:
 	process (clk, rst)
@@ -137,7 +164,7 @@ begin
 			txlocalst	<= idle;
 			--
 			buf			<= x"00";
-			f_odata		<= (others => 'Z');
+			--f_odata		<= (others => 'Z');
 			
 		elsif (rising_edge(clk)) then
 			case(txlocalst) is
@@ -152,10 +179,10 @@ begin
 					end if;
 				
 				when localwrite	=>
-					if (enable = '1') then	 	-- If the arbiter let us go...
+					if (r_enable = '1') then	 	-- If the arbiter let us go...
 						txlocalst	<= ftwrite;
 						--
-						f_odata		<= buf;
+						--f_odata		<= buf;
 					
 					else
 						txlocalst	<= localwrite;
@@ -173,7 +200,7 @@ begin
 					if (ft_done = '0') then
 						txlocalst	<= idle;
 						--
-						f_odata		<= (others => 'Z');											
+						--f_odata		<= (others => 'Z');											
 					else
 						txlocalst	<= handshake;
 					end if;
@@ -186,35 +213,60 @@ begin
 	end process;
 
 	tx_local_fsm_ops:
-	process (txlocalst)
+	process (txlocalst, buf)
 	begin
 		case(txlocalst) is
 			when idle		=>
 				dwait		<= '0';
-				ft_req		<= '0';
+				i_ft_req	<= '0';
 				isidle		<= '1';
-			
+				--
+				f_odata		<= (others => 'Z');	
+				
 			when localwrite	=>
 				dwait		<= '1';
-				ft_req		<= '0';
+				i_ft_req	<= '0';
 				isidle		<= '1';
+				--
+				f_odata		<= (others => 'Z');	
 			
 			when ftwrite	=>
 				dwait		<= '1';
-				ft_req		<= '1';
+				i_ft_req	<= '1';
 				isidle		<= '0';
-			
+				--
+				f_odata		<= buf;			
+
 			when handshake	=>
 				dwait		<= '1';
-				ft_req		<= '0';
+				i_ft_req	<= '0';
 				isidle		<= '0';
+				--
+				f_odata		<= buf;			
 			
 			when others =>
 				dwait		<= '0';
-				ft_req		<= '0';
+				i_ft_req	<= '0';
 				isidle		<= '1';
+				--
+				f_odata		<= (others => 'Z');	
 
 		end case;
 	end process;
+
+--***************************************************************************************************************  						
 	
+	-- input_register:
+	-- process (clk, rst)
+	-- begin
+		-- if (rst = '1') then
+			-- buf	<= x"00";
+			
+		-- elsif (rising_edge(clk)) then
+			-- if (wr = '0') then			-- Wait for local write request.
+				-- buf	<= idata;
+			-- end if;	
+		-- end if;
+	-- end process;
+
 end rtl;

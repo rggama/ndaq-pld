@@ -1,53 +1,106 @@
--- Trigger Pulse Generator
+-- $Trigger Pulse Generator
+-- v: svn controlled.
+--
+--
 
 library ieee;
 use ieee.std_logic_1164.all;
 --
 entity tpulse is
 	port
-	(	signal rst			: in std_logic;
-		signal clk	        : in std_Logic;
-		signal trig_in      : in std_logic;
-		signal trig_out     : out std_Logic);
+	(	signal rst			: in	std_logic;
+		signal clk	        : in	std_logic;
+		signal enable		: in	std_logic;
+		signal trig_in      : in	std_logic;
+		signal trig_out     : out	std_logic := '0'
+	);
 end tpulse;
 --
-architecture one of tpulse is
-	type trig is (s_one, s_two, s_three);
-	signal state_trig : trig;
+architecture rtl of tpulse is
+
+	-- Build an enumerated type for the state machine
+	type pdet_state_t	is (idle, p_low, p_high);
+
+	-- Register to hold the current state
+	signal pdet_state	: pdet_state_t := idle;
+
+	-- Attribute "safe" implements a safe state machine.
+	-- This is a state machine that can recover from an
+	-- illegal state (by returning to the reset state).
+	attribute syn_encoding	: string;
+	attribute syn_encoding of pdet_state_t		: type is "safe, one-hot";
+	
+	signal	r_trig_in	: std_logic := '0';
+	signal	i_trig_out	: std_logic := '0';
+	signal	r_enable	: std_logic	:= '0';
+
 begin
+
+	input_register:
+	process (clk, rst)
+	begin
+		if (rst = '1') then
+			r_trig_in	<= '0';
+			r_enable	<= '0';
+		elsif (rising_edge(clk)) then
+			r_trig_in	<= trig_in;
+			r_enable	<= enable;
+		end if;
+	end process;
+	
+	pulse_detect_fsm:
 	process (rst,clk) begin
 		if (rst = '1') then
-			state_trig <= s_one;
-			trig_out <= '0';
+			pdet_state <= idle;
 		elsif (clk'event and clk = '1') then
-				case state_trig is
+				case (pdet_state) is
 						
-					when s_one =>
-						if (trig_in = '1') then
-							state_trig <= s_two;
-							trig_out <= '1';
+					when idle =>
+						if ((r_trig_in = '1') and (r_enable = '1')) then
+							pdet_state	<=	p_high;
 						else
-							state_trig <= s_one;
-							trig_out <= '0';
+							pdet_state	<=	idle;
 						end if;
-						
-					when s_two =>
-						trig_out <= '0';
-						state_trig <= s_three;
-						
-					when s_three =>
-						trig_out <= '0';
-						if (trig_in = '0') then
-							state_trig <= s_one;
+												
+					when p_high =>
+						pdet_state	<=	p_low; --idle;
+
+					when p_low =>
+						if (r_trig_in = '0') then	--and (r_enable = '1')
+							pdet_state	<=	idle;
 						else
-							state_trig <= s_three;
+							pdet_state	<=	p_low;
 						end if;
 	
 					when others =>
-						trig_out <= '0';
-						state_trig <= s_one;
+						pdet_state	<=	idle;
 				
 				end case;
 		end if;
 	end process;
-end one;
+	
+	fsm_outputs:
+	process (pdet_state)
+	begin
+		case (pdet_state) is
+
+			when p_high	=>
+				i_trig_out	<= '1';
+
+			when others	=>
+				i_trig_out	<= '0';
+			
+		end case;
+	end process;
+	
+	output_register:
+	process (clk, rst)
+	begin
+		if (rst = '1') then
+			trig_out	<= '0';
+		elsif (rising_edge(clk)) then
+			trig_out	<= i_trig_out;
+		end if;
+	end process;
+	
+end rtl;
