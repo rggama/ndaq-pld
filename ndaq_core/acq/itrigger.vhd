@@ -7,8 +7,8 @@ library ieee;
 library work;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
---use ieee.std_logic_signed.all;
-use ieee.std_logic_unsigned.all;
+use ieee.std_logic_signed.all;
+--use ieee.std_logic_unsigned.all;
 
 use work.acq_pkg.all;				-- ACQ definitions
 use work.regs_pkg.all;				-- Registers handling definitions
@@ -56,13 +56,15 @@ begin
 	if pos_neg = '0' then
 		case current_state is
 			when s_low =>
-				if (abs(data_in) < threshold_fall) then	-- Wait that signal from the ADC is lower than threshold
+				--if (abs(data_in) < threshold_fall) then	-- Wait that signal from the ADC is lower than threshold
+				if (data_in < threshold_fall) then	-- Wait that signal from the ADC is lower than threshold
 					next_state <= s_high;
 				else
 					next_state <= s_low;
 				end if;
 			when s_high =>
-				if (abs(data_in) > threshold_rise) then	-- When signal from the ADC is higher than threshold, counter is incremented
+				--if (abs(data_in) > threshold_rise) then	-- When signal from the ADC is higher than threshold, counter is incremented
+				if (data_in > threshold_rise) then	-- When signal from the ADC is higher than threshold, counter is incremented
 					next_state <= s_cnt;
 				else
 					next_state <= s_high;
@@ -75,13 +77,15 @@ begin
 	else
 		case current_state is
 			when s_low =>
-				if (abs(data_in) > threshold_fall) then	-- Wait that signal from the ADC is higher than threshold
+				--if (abs(data_in) > threshold_fall) then	-- Wait that signal from the ADC is higher than threshold
+				if (data_in > threshold_fall) then	-- Wait that signal from the ADC is higher than threshold
 					next_state <= s_high;
 				else
 					next_state <= s_low;
 				end if;
 			when s_high =>
-				if (abs(data_in) < threshold_rise) then	-- When signal from the ADC is lower than threshold, counter is incremented
+				--if (abs(data_in) < threshold_rise) then	-- When signal from the ADC is lower than threshold, counter is incremented
+				if (data_in < threshold_rise) then	-- When signal from the ADC is lower than threshold, counter is incremented
 					next_state <= s_cnt;
 				else
 					next_state <= s_high;
