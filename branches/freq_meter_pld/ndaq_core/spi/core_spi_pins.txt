@@ -1,0 +1,6 @@
+Slave SPI
+
+spiclk	A19	in
+mosi	C19	in
+miso	D19	out
+

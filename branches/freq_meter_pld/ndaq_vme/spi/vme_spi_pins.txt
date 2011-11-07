@@ -1,0 +1,6 @@
+Master SPI
+
+spiclk	M1	out
+mosi	P1	out
+miso	P2	in
+

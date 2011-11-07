@@ -1,0 +1,165 @@
+m255
+K3
+13
+cModel Technology
+dC:\Documents and Settings\Rafael\Desktop\merged\ndaq_sim\FT245BM_if
+Eft245bm_ab
+Z0 w1304020187
+Z1 DPx4 ieee 18 std_logic_unsigned 0 22 hEMVMlaNCR^<OOoVNV;m90
+Z2 DPx4 ieee 15 std_logic_arith 0 22 GJbAT?7@hRQU9IQ702DT]2
+Z3 DPx4 ieee 14 std_logic_1164 0 22 GH1=`jDDBJ=`LM;:Ak`kf2
+Z4 dC:\Documents and Settings\Rafael\Desktop\pld_r14\ndaq_sim\FT245BM_if
+Z5 8C:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_vme/FT245BM_if/FT245BM_ab.vhd
+Z6 FC:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_vme/FT245BM_if/FT245BM_ab.vhd
+l0
+L15
+VM_bTmI:k]PkzES2kZkI]Y3
+Z7 OV;C;6.5e;42
+32
+Z8 o-work work -2002 -explicit -O0
+Z9 tExplicit 1
+!s100 EY=ZY`FH2ieHm]AKaDBaW1
+Artl
+R1
+R2
+R3
+DEx4 work 10 ft245bm_ab 0 22 M_bTmI:k]PkzES2kZkI]Y3
+l43
+L39
+V3FU9gKAeL0^5V6aE5Z]C>0
+!s100 VTc8PWQKcXGG^H;SLLSZE2
+R7
+32
+Z10 Mx3 4 ieee 14 std_logic_1164
+Z11 Mx2 4 ieee 15 std_logic_arith
+Z12 Mx1 4 ieee 18 std_logic_unsigned
+R8
+R9
+Eft245bm_if
+Z13 w1304021931
+R1
+R2
+R3
+R4
+Z14 8C:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_vme/FT245BM_if/FT245BM_if.vhd
+Z15 FC:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_vme/FT245BM_if/FT245BM_if.vhd
+l0
+L19
+VQgC_Kl_@D`EiF2<38d^ad1
+R7
+32
+R8
+R9
+!s100 MNAQ[J>>6A0mW>n4YzkWT1
+Artl
+R1
+R2
+R3
+DEx4 work 10 ft245bm_if 0 22 QgC_Kl_@D`EiF2<38d^ad1
+l134
+L48
+V0PXmzm:2iGL6o^8^M92kP1
+R7
+32
+R10
+R11
+R12
+R8
+R9
+!s100 A@fdQYj6RD7=HXKlZkDkh3
+Eft245bm_rx
+Z16 w1304022585
+R1
+R2
+R3
+R4
+Z17 8C:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_vme/FT245BM_if/FT245BM_rx.vhd
+Z18 FC:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_vme/FT245BM_if/FT245BM_rx.vhd
+l0
+L18
+V1VZP31T8zoJQbV@8KnfV71
+R7
+32
+R8
+R9
+!s100 CX98[_Xn5MXniQYX1ZM5d1
+Artl
+R1
+R2
+R3
+DEx4 work 10 ft245bm_rx 0 22 1VZP31T8zoJQbV@8KnfV71
+l72
+L41
+VSI>A9UUHSdP@kl`a[4L:53
+R7
+32
+R10
+R11
+R12
+R8
+R9
+!s100 _a3Ki4HaZW8>kVY[z^HL]2
+Eft245bm_tbench
+Z19 w1304020189
+R2
+R1
+R3
+R4
+Z20 8C:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_sim/FT245BM_if/FT245BM_tbench.vht
+Z21 FC:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_sim/FT245BM_if/FT245BM_tbench.vht
+l0
+L12
+VEXEJ;OQF6?GjaFY9;VjXO3
+!s100 n7GUSb9F<?TN[JLg8N`_21
+R7
+32
+R8
+R9
+Atestbench
+R2
+R1
+R3
+Z22 DEx4 work 14 ft245bm_tbench 0 22 EXEJ;OQF6?GjaFY9;VjXO3
+l86
+L16
+Z23 V;8_mS@NT<2nQRS:ko`LQX2
+Z24 !s100 Y]SKW`Qc5>DLGn;ARkZO03
+R7
+32
+R10
+Z25 Mx2 4 ieee 18 std_logic_unsigned
+Z26 Mx1 4 ieee 15 std_logic_arith
+R8
+R9
+Eft245bm_tx
+Z27 w1304022048
+R1
+R2
+R3
+R4
+Z28 8C:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_vme/FT245BM_if/FT245BM_tx.vhd
+Z29 FC:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_vme/FT245BM_if/FT245BM_tx.vhd
+l0
+L19
+VN[B<2]4zA=nX3K=:0D32b3
+R7
+32
+R8
+R9
+!s100 :W7UE5Vd1<:VdB_d9imWK3
+Artl
+R1
+R2
+R3
+DEx4 work 10 ft245bm_tx 0 22 N[B<2]4zA=nX3K=:0D32b3
+l68
+L42
+ViIXm322d4SQPKzSRkoijl0
+R7
+32
+R10
+R11
+R12
+R8
+R9
+!s100 ej0_i^YNAh^QG4_YXYJ380

@@ -1,0 +1,354 @@
+# Copyright (C) 1991-2008 Altera Corporation
+# Your use of Altera Corporation's design tools, logic functions 
+# and other software and tools, and its AMPP partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Altera Program License 
+# Subscription Agreement, Altera MegaCore Function License 
+# Agreement, or other applicable license agreement, including, 
+# without limitation, that your use is for the sole purpose of 
+# programming logic devices manufactured by Altera and sold by 
+# Altera or its authorized distributors.  Please refer to the 
+# applicable agreement for further details.
+
+
+# The default values for assignments are stored in the file
+#		ndaq_vme_assignment_defaults.qdf
+# If this file doesn't exist, and for assignments not listed, see file
+#		assignment_defaults.qdf
+
+# Altera recommends that you do not modify this file. This
+# file is updated automatically by the Quartus II software
+# and any changes you make may be lost or overwritten.
+
+
+set_global_assignment -name FAMILY "Cyclone III"
+set_global_assignment -name DEVICE EP3C25F324C8
+set_global_assignment -name TOP_LEVEL_ENTITY ndaq_vme
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 8.1
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "15:07:41  NOVEMBER 26, 2008"
+set_global_assignment -name LAST_QUARTUS_VERSION 10.0
+set_global_assignment -name USE_GENERATED_PHYSICAL_CONSTRAINTS OFF -section_id eda_blast_fpga
+set_global_assignment -name DEVICE_FILTER_PIN_COUNT 324
+set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 8
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name LL_ROOT_REGION ON -section_id "Root Region"
+set_global_assignment -name LL_MEMBER_STATE LOCKED -section_id "Root Region"
+set_global_assignment -name MISC_FILE "D:/Projetos/Neutrinos/QuartusII/ndaq_vme/ndaq_vme.dpf"
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[26]
+set_location_assignment PIN_U11 -to vme_add[26]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[25]
+set_location_assignment PIN_V11 -to vme_add[25]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[22]
+set_location_assignment PIN_U12 -to vme_add[22]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[21]
+set_location_assignment PIN_V12 -to vme_add[21]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb_Data[0]
+set_location_assignment PIN_U13 -to usb_Data[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb_Data[1]
+set_location_assignment PIN_V13 -to usb_Data[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[30]
+set_location_assignment PIN_P10 -to vme_add[30]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[28]
+set_location_assignment PIN_P11 -to vme_add[28]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb_Data[2]
+set_location_assignment PIN_U14 -to usb_Data[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb_Data[3]
+set_location_assignment PIN_V14 -to usb_Data[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb_Data[4]
+set_location_assignment PIN_U15 -to usb_Data[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb_Data[5]
+set_location_assignment PIN_V15 -to usb_Data[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[27]
+set_location_assignment PIN_R11 -to vme_add[27]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb_Data[6]
+set_location_assignment PIN_U16 -to usb_Data[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb_Data[7]
+set_location_assignment PIN_V16 -to usb_Data[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[31]
+set_location_assignment PIN_N10 -to vme_add[31]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[29]
+set_location_assignment PIN_N11 -to vme_add[29]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[16]
+set_location_assignment PIN_T13 -to vme_add[16]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[15]
+set_location_assignment PIN_T14 -to vme_add[15]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb_Read
+set_location_assignment PIN_U17 -to usb_Read
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb_Write
+set_location_assignment PIN_V17 -to usb_Write
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[17]
+set_location_assignment PIN_R13 -to vme_add[17]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[24]
+set_location_assignment PIN_N12 -to vme_add[24]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb_TXE
+set_location_assignment PIN_U18 -to usb_TXE
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to usb_RXF
+set_location_assignment PIN_V18 -to usb_RXF
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[20]
+set_location_assignment PIN_M13 -to vme_add[20]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[19]
+set_location_assignment PIN_N13 -to vme_add[19]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[23]
+set_location_assignment PIN_P12 -to vme_add[23]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[18]
+set_location_assignment PIN_P13 -to vme_add[18]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[12]
+set_location_assignment PIN_N15 -to vme_add[12]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[9]
+set_location_assignment PIN_T16 -to vme_add[9]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[10]
+set_location_assignment PIN_R16 -to vme_add[10]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[3]
+set_location_assignment PIN_T17 -to vme_add[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[4]
+set_location_assignment PIN_R17 -to vme_add[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[5]
+set_location_assignment PIN_P17 -to vme_add[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[14]
+set_location_assignment PIN_M14 -to vme_add[14]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[13]
+set_location_assignment PIN_L15 -to vme_add[13]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[6]
+set_location_assignment PIN_M17 -to vme_add[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[11]
+set_location_assignment PIN_L16 -to vme_add[11]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[7]
+set_location_assignment PIN_L17 -to vme_add[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[1]
+set_location_assignment PIN_L18 -to vme_add[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[2]
+set_location_assignment PIN_K18 -to vme_add[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[8]
+set_location_assignment PIN_K17 -to vme_add[8]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[1]
+set_location_assignment PIN_H18 -to vme_data[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[8]
+set_location_assignment PIN_H17 -to vme_data[8]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[2]
+set_location_assignment PIN_G18 -to vme_data[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[9]
+set_location_assignment PIN_G17 -to vme_data[9]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[0]
+set_location_assignment PIN_J13 -to vme_data[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[3]
+set_location_assignment PIN_H15 -to vme_data[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[10]
+set_location_assignment PIN_E17 -to vme_data[10]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[15]
+set_location_assignment PIN_H16 -to vme_data[15]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[4]
+set_location_assignment PIN_D18 -to vme_data[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[11]
+set_location_assignment PIN_D17 -to vme_data[11]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[22]
+set_location_assignment PIN_H14 -to vme_data[22]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[29]
+set_location_assignment PIN_H13 -to vme_data[29]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[23]
+set_location_assignment PIN_G14 -to vme_data[23]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[5]
+set_location_assignment PIN_C18 -to vme_data[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[12]
+set_location_assignment PIN_C17 -to vme_data[12]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[6]
+set_location_assignment PIN_B18 -to vme_data[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[13]
+set_location_assignment PIN_B17 -to vme_data[13]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[31]
+set_location_assignment PIN_F13 -to vme_data[31]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[30]
+set_location_assignment PIN_G13 -to vme_data[30]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[17]
+set_location_assignment PIN_C16 -to vme_data[17]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[16]
+set_location_assignment PIN_D16 -to vme_data[16]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[7]
+set_location_assignment PIN_A18 -to vme_data[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[14]
+set_location_assignment PIN_A17 -to vme_data[14]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[26]
+set_location_assignment PIN_C14 -to vme_data[26]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[25]
+set_location_assignment PIN_D14 -to vme_data[25]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[24]
+set_location_assignment PIN_E14 -to vme_data[24]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[19]
+set_location_assignment PIN_A16 -to vme_data[19]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[18]
+set_location_assignment PIN_B16 -to vme_data[18]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[21]
+set_location_assignment PIN_A15 -to vme_data[21]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[20]
+set_location_assignment PIN_B15 -to vme_data[20]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[28]
+set_location_assignment PIN_A14 -to vme_data[28]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_data[27]
+set_location_assignment PIN_B14 -to vme_data[27]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_berr
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to can_pgc
+set_location_assignment PIN_U1 -to can_pgc
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to can_pgd
+set_location_assignment PIN_V1 -to can_pgd
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to can_pgm
+set_location_assignment PIN_V2 -to can_pgm
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo1_ef
+set_location_assignment PIN_U3 -to fifo1_ef
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo2_ef
+set_location_assignment PIN_V3 -to fifo2_ef
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo3_ef
+set_location_assignment PIN_U4 -to fifo3_ef
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo4_ef
+set_location_assignment PIN_V4 -to fifo4_ef
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo1_oe
+set_location_assignment PIN_U5 -to fifo1_oe
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo2_oe
+set_location_assignment PIN_V5 -to fifo2_oe
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo3_oe
+set_location_assignment PIN_U6 -to fifo3_oe
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo4_oe
+set_location_assignment PIN_V6 -to fifo4_oe
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo1_ren
+set_location_assignment PIN_U7 -to fifo1_ren
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo2_ren
+set_location_assignment PIN_V7 -to fifo2_ren
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo3_ren
+set_location_assignment PIN_U8 -to fifo3_ren
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo4_ren
+set_location_assignment PIN_V8 -to fifo4_ren
+set_location_assignment PIN_A2 -to vme_am[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_am[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_am[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_am[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_am[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_am[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_am[0]
+set_location_assignment PIN_A3 -to vme_am[1]
+set_location_assignment PIN_A4 -to vme_am[2]
+set_location_assignment PIN_A5 -to vme_am[3]
+set_location_assignment PIN_A6 -to vme_am[4]
+set_location_assignment PIN_A7 -to vme_am[5]
+set_location_assignment PIN_B1 -to vme_as
+set_location_assignment PIN_B4 -to vme_berr
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_as
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_ds0
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_ds1
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_dtack
+set_location_assignment PIN_B8 -to vme_ds0
+set_location_assignment PIN_A8 -to vme_ds1
+set_location_assignment PIN_G1 -to vme_dtack
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_ga[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_ga[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_ga[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_ga[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_ga[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_gap
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_lw
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_wr
+set_location_assignment PIN_B2 -to vme_wr
+set_location_assignment PIN_C1 -to vme_lw
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_dird
+set_location_assignment PIN_H2 -to vme_dird
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_iack
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_iackin
+set_location_assignment PIN_C3 -to vme_iack
+set_location_assignment PIN_B3 -to vme_iackin
+set_location_assignment PIN_B5 -to vme_oea
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_oea
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_oed
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_oetack
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_sysclk
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_sysrst
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_vack
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_verr
+set_location_assignment PIN_H1 -to vme_oed
+set_location_assignment PIN_G2 -to vme_oetack
+set_location_assignment PIN_E1 -to vme_verr
+set_location_assignment PIN_D3 -to vme_vack
+set_location_assignment PIN_C2 -to vme_sysrst
+set_location_assignment PIN_D2 -to vme_sysclk
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to stsclk
+set_location_assignment PIN_A1 -to stsclk
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_irq[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_irq[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_irq[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_irq[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_irq[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_irq[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_irq[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_iackout
+set_location_assignment PIN_B6 -to vme_iackout
+set_location_assignment PIN_B7 -to vme_irq[1]
+set_location_assignment PIN_C5 -to vme_irq[2]
+set_location_assignment PIN_C9 -to vme_irq[3]
+set_location_assignment PIN_D5 -to vme_irq[4]
+set_location_assignment PIN_D9 -to vme_irq[5]
+set_location_assignment PIN_E6 -to vme_irq[6]
+set_location_assignment PIN_E7 -to vme_irq[7]
+set_global_assignment -name MISC_FILE "C:/Documents and Settings/Administrador/Meus documentos/Meus Projetos/Neutrinos/QuartusII/ndaq_vme/ndaq_vme.dpf"
+set_global_assignment -name OPTIMIZE_HOLD_TIMING "IO PATHS AND MINIMUM TPD PATHS"
+set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/ndaq_vme/ndaq_vme.dpf"
+set_global_assignment -name SETUP_HOLD_DETECTION ON
+set_global_assignment -name GLITCH_DETECTION OFF
+set_global_assignment -name ADD_DEFAULT_PINS_TO_SIMULATION_OUTPUT_WAVEFORMS OFF
+set_location_assignment PIN_A10 -to clk50M
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to clk50M
+set_location_assignment PIN_A12 -to vme_ga[0]
+set_location_assignment PIN_B13 -to vme_ga[1]
+set_location_assignment PIN_A13 -to vme_ga[2]
+set_location_assignment PIN_C12 -to vme_ga[3]
+set_location_assignment PIN_F10 -to vme_ga[4]
+set_location_assignment PIN_F11 -to vme_gap
+set_global_assignment -name USE_CONFIGURATION_DEVICE ON
+set_global_assignment -name CYCLONEIII_CONFIGURATION_DEVICE EPCS16
+set_global_assignment -name FORCE_CONFIGURATION_VCCIO ON
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS_WEAK_PULLUP "AS OUTPUT DRIVING GROUND"
+set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE sim0.vwf
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name STATE_MACHINE_PROCESSING "ONE-HOT"
+set_global_assignment -name SAFE_STATE_MACHINE ON
+set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/b_ndaq_vme_0.1/ndaq_vme.dpf"
+set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/bridge_ndaq_vme_0.0/ndaq_vme.dpf"
+set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/ndaq_vme_0.0/ndaq_vme.dpf"
+set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/ndaq-pld/ndaq_vme/ndaq_vme.dpf"
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name OUTPUT_IO_TIMING_ENDPOINT "NEAR END"
+set_global_assignment -name EDA_SIMULATION_TOOL "<None>"
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT NONE -section_id eda_simulation
+set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_vme/ndaq_vme.dpf"
+set_location_assignment PIN_M1 -to spiclk
+set_location_assignment PIN_P1 -to mosi
+set_location_assignment PIN_P2 -to miso
+set_global_assignment -name RTLV_GROUP_COMB_LOGIC_IN_CLOUD OFF
+set_global_assignment -name RTLV_SIMPLIFIED_LOGIC OFF
+set_global_assignment -name VHDL_FILE system/priarb8.vhd
+set_global_assignment -name VHDL_FILE system/priarb4.vhd
+set_global_assignment -name VHDL_FILE usb_readout/f2ft_copier.vhd
+set_global_assignment -name VHDL_FILE usb_readout/f2f_copier.vhd
+set_global_assignment -name VHDL_FILE system/regs_pkg.vhd
+set_global_assignment -name VHDL_FILE system/cmddec.vhd
+set_global_assignment -name VHDL_FILE system/regs.vhd
+set_global_assignment -name VHDL_FILE swc/swc.vhd
+set_global_assignment -name VHDL_FILE FT245BM_if/FT245BM_tx.vhd
+set_global_assignment -name VHDL_FILE FT245BM_if/FT245BM_rx.vhd
+set_global_assignment -name VHDL_FILE FT245BM_if/FT245BM_if.vhd
+set_global_assignment -name VHDL_FILE FT245BM_if/FT245BM_ab.vhd
+set_global_assignment -name VHDL_FILE system/my_pll.vhd
+set_global_assignment -name SOURCE_FILE system/my_pll.cmp
+set_global_assignment -name VHDL_FILE system/clkman.vhd
+set_global_assignment -name VHDL_FILE system/reset.vhd
+set_global_assignment -name VHDL_FILE vme_if/vmeif_pkg.vhd
+set_global_assignment -name VHDL_FILE vme_if/vmeif.vhd
+set_global_assignment -name VHDL_FILE vme_if/vmeif_usr.vhd
+set_global_assignment -name SDC_FILE ndaq_vme.sdc
+set_global_assignment -name VHDL_FILE ndaq_vme.vhd
+set_global_assignment -name QIP_FILE system/my_pll.qip
+set_global_assignment -name VHDL_FILE spi/m_spi.vhd
+set_global_assignment -name QIP_FILE usb_readout/readout_fifo.qip
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
