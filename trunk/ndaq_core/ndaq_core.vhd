@@ -783,7 +783,7 @@ begin
 			rst					=> acq_rst(i),
 			clk					=> clk(i),
 			enable				=> '1',
-			pos_neg				=> '0',
+			pos_neg				=> '1',										--'0' for pos, '1' for neg.
 			data_in				=>	MY_CONV_SIGNED(data(i)),
 			threshold_rise		=> CONV_SIGNED(T_RISE, data_width), --MY_CONV_SIGNED(thtemp),
 			threshold_fall		=> CONV_SIGNED(T_FALL, data_width), --MY_CONV_SIGNED(thtemp),
