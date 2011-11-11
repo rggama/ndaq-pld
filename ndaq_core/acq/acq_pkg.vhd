@@ -12,7 +12,7 @@ use ieee.std_logic_unsigned.all;	-- Synopsys extension to std_logic_arith to han
 package acq_pkg is
 
 	--Quantidade de canais de ADC
-	constant adc_channels			: integer	:= 8;
+	constant adc_channels			: integer	:= 1; --8;
 	
 	
 	--Tamanho da palavra do ADC em bits
@@ -69,8 +69,8 @@ package acq_pkg is
 																			
 --*******************************************************************************************************************************
 
-	constant	T_FALL				: signed	:= x"3F6"; --x"0A";	
-	constant	T_RISE				: signed	:= x"3F6"; --x"0A";	
+	constant	T_FALL				: unsigned	:= x"0A"; --0x0F = 40mV, 0x0A = 30mV, -0x06 = 20mV, 0x08 = 25mV, 0x09 = 27mV	
+	constant	T_RISE				: unsigned	:= x"0A";	
 
 --*******************************************************************************************************************************
 

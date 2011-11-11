@@ -18,31 +18,33 @@ use work.acq_pkg.all;
 --
 entity idtfifo_top is
 port(	-- CONTROL/STATUS signals
-		rst						     : in std_logic;
-		clk						     : in std_logic;						
-		start_transfer				 : in std_logic;				-- Control signal to start the readout (command register)
-		enable_fifo				 	 : in std_logic_vector(1 to 4);	-- Indicates if the FIFO transfer is enabled ('1') 
-		idt_full					 : in std_logic_vector(1 to 4);
-		idt_wren					 : out std_logic_vector(1 to 4);
-		idt_data					 : out std_logic_vector(31 downto 0);
-		fifo_empty					 : in std_logic_vector(1 to 8);
-		fifo_used_A					 : in USEDW_T;
-		fifo_used_B					 : in USEDW_T;
-		fifo_used_C					 : in USEDW_T;
-		fifo_used_D					 : in USEDW_T;
-		fifo_used_E					 : in USEDW_T;
-		fifo_used_F					 : in USEDW_T;
-		fifo_used_G					 : in USEDW_T;
-		fifo_used_H					 : in USEDW_T;
-		fifo_rden					 : out std_logic_vector(1 to 8);
-		fifo_qA						 : in DATA_T;
-		fifo_qB						 : in DATA_T;
-		fifo_qC						 : in DATA_T;
-		fifo_qD						 : in DATA_T;
-		fifo_qE						 : in DATA_T;
-		fifo_qF						 : in DATA_T;
-		fifo_qG						 : in DATA_T;
-		fifo_qH						 : in DATA_T
+		rst						   : in std_logic;
+		clk						   : in std_logic;
+		enable						: in std_logic;						-- arbiter if
+		isidle						: out std_logic;						-- arbiter if
+		start_transfer				: in std_logic;						-- Control signal to start the readout (command register)
+		enable_fifo				 	: in std_logic_vector(1 to 4);	-- Indicates if the FIFO transfer is enabled ('1') 
+		idt_full					 	: in std_logic_vector(1 to 4);
+		idt_wren					 	: out std_logic_vector(1 to 4);
+		idt_data					 	: out std_logic_vector(31 downto 0);
+		fifo_empty					: in std_logic_vector(1 to 8);
+		fifo_used_A					: in USEDW_T;
+		fifo_used_B					: in USEDW_T;
+		fifo_used_C					: in USEDW_T;
+		fifo_used_D					: in USEDW_T;
+		fifo_used_E					: in USEDW_T;
+		fifo_used_F					: in USEDW_T;
+		fifo_used_G					: in USEDW_T;
+		fifo_used_H					: in USEDW_T;
+		fifo_rden					: out std_logic_vector(1 to 8);
+		fifo_qA						: in DATA_T;
+		fifo_qB						: in DATA_T;
+		fifo_qC						: in DATA_T;
+		fifo_qD						: in DATA_T;
+		fifo_qE						: in DATA_T;
+		fifo_qF						: in DATA_T;
+		fifo_qG						: in DATA_T;
+		fifo_qH						: in DATA_T
 );
 end idtfifo_top;
 --
@@ -71,10 +73,13 @@ architecture one_idtfifo_top of idtfifo_top is
 
 -- Signals
 
-	type state_values is (fifo1_select, fifo1_start, fifo1_wait_test, fifo1_wait_transfer,
-								fifo2_select, fifo2_start, fifo2_wait_test, fifo2_wait_transfer,
-								fifo3_select, fifo3_start, fifo3_wait_test, fifo3_wait_transfer,
-								fifo4_select, fifo4_start, fifo4_wait_test, fifo4_wait_transfer);
+	type state_values is	(	
+									idle,
+									fifo1_select, fifo1_start, fifo1_wait_test, fifo1_wait_transfer,
+									fifo2_select, fifo2_start, fifo2_wait_test, fifo2_wait_transfer,
+									fifo3_select, fifo3_start, fifo3_wait_test, fifo3_wait_transfer,
+									fifo4_select, fifo4_start, fifo4_wait_test, fifo4_wait_transfer
+								);
 
 	signal stateval,next_stateval	: state_values;
 	signal i_start_transfer			: std_logic_vector(1 to 4);
@@ -83,17 +88,29 @@ architecture one_idtfifo_top of idtfifo_top is
 	
 
 	signal i_bus_enable				: std_logic_vector(2 downto 0);
-	signal bus_enable				: std_logic_vector(2 downto 0);
+	signal bus_enable					: std_logic_vector(2 downto 0);
+	signal ored_empty					: std_logic_vector(1 to 4);
+	
+	signal i_isidle					: std_logic := '1';
+
+
 --	
 --
 
 begin
 --
 -- Asynchronous assignments of 'next_stateval'
-NEXT_STATE_COMB: process(stateval, enable_fifo, start_transfer, transfer_running)
+NEXT_STATE_COMB: process(stateval, enable_fifo, start_transfer, transfer_running, enable)
 begin
 	case stateval is
-
+		
+		when idle	=>
+			if (enable = '1') then
+				next_stateval	<= fifo1_select;
+			else
+				next_stateval	<= idle;
+			end if;
+			
 		--------------------------
 		-- FIFO 1 / Channel 1-2 --
 		--------------------------		
@@ -170,7 +187,7 @@ begin
 			if ((enable_fifo(4) = '1') and (start_transfer = '1')) then
 				next_stateval <= fifo4_start;
 			else
-				next_stateval <= fifo1_select;			-- fifo not enabled, go try next fifo
+				next_stateval <= idle; --fifo1_select;			-- fifo not enabled, go try next fifo
 			end if;
 		
 		when fifo4_start =>									-- start the transfer component
@@ -183,64 +200,82 @@ begin
 			if transfer_running(4) = '1' then
 				next_stateval <= fifo4_wait_transfer;	-- Transfering 
 			else
-				next_stateval <= fifo1_select;			-- No transfer, go try next fifo
+				next_stateval <= idle; --fifo1_select;			-- No transfer, go try next fifo
 			end if;
 
 		when others =>
-			next_stateval <= fifo1_select;
+			next_stateval <= idle; --fifo1_select;
 			
 	end case;
 end process;
 
 --
 -- Asynchronous assignments of internal signals
+	
+isidle	<= i_isidle;
+	
 OUTPUT_COMB: process(next_stateval)
 begin
 	case next_stateval is
+		when idle	=>
+			i_start_transfer	<= "0000";
+			i_bus_enable		<= "000";
+			i_isidle				<= '1';
+			
 		when fifo1_start =>
 			i_start_transfer	<= "1000";
 			i_bus_enable		<= "000";
+			i_isidle				<= '0';
 
 		when fifo1_wait_transfer =>
 			i_start_transfer	<= "0000";
 			i_bus_enable		<= "001";
-
+			i_isidle				<= '0';
 
 		when fifo2_start =>
 			i_start_transfer	<= "0100";
 			i_bus_enable		<= "000";
+			i_isidle				<= '0';
 
 		when fifo2_wait_transfer =>
 			i_start_transfer	<= "0000";
 			i_bus_enable		<= "010";
+			i_isidle				<= '0';
 
 		when fifo3_start =>
 			i_start_transfer	<= "0010";
 			i_bus_enable		<= "000";
+			i_isidle				<= '0';
 
 		when fifo3_wait_transfer =>
 			i_start_transfer	<= "0000";
 			i_bus_enable		<= "011";
+			i_isidle				<= '0';
 
 		when fifo4_start =>
 			i_start_transfer	<= "0001";
 			i_bus_enable		<= "000";
+			i_isidle				<= '0';
 
 		when fifo4_wait_transfer =>
 			i_start_transfer	<= "0000";
 			i_bus_enable		<= "100";
+			i_isidle				<= '0';
 
 		when others =>
 			i_start_transfer	<= "0000";
 			i_bus_enable		<= "000";
+			i_isidle				<= '0';
+			
 	end case;
 end process;
+
 --
 -- Registered states
 STATE_FLOPS: process(clk,rst)
 begin
 if rst = '1' then
-	stateval <= fifo1_select;
+	stateval <= idle; --fifo1_select;
 elsif rising_edge(clk) then
 	stateval <= next_stateval;
 end if;
@@ -267,34 +302,34 @@ begin
 	case (bus_enable) is
 		
 		when "000"	=>
-			idt_data				<= (others => 'Z');
+			idt_data						<= (others => 'Z');
 			
 		when "001"	=>
-			idt_data(9 downto 0)	<= fifo_qA;
+			idt_data(9 downto 0)		<= fifo_qA;
 			idt_data(15 downto 10)	<= (others => '0');
 			idt_data(25 downto 16)	<= fifo_qB;
 			idt_data(31 downto 26)	<= (others => '0');
 
 		when "010"	=>
-			idt_data(9 downto 0)	<= fifo_qC;
+			idt_data(9 downto 0)		<= fifo_qC;
 			idt_data(15 downto 10)	<= (others => '0');
 			idt_data(25 downto 16)	<= fifo_qD;
 			idt_data(31 downto 26)	<= (others => '0');
 
 		when "011"	=>
-			idt_data(9 downto 0)	<= fifo_qE;
+			idt_data(9 downto 0)		<= fifo_qE;
 			idt_data(15 downto 10)	<= (others => '0');
 			idt_data(25 downto 16)	<= fifo_qF;
 			idt_data(31 downto 26)	<= (others => '0');
 
 		when "100"	=>
-			idt_data(9 downto 0)	<= fifo_qG;
+			idt_data(9 downto 0)		<= fifo_qG;
 			idt_data(15 downto 10)	<= (others => '0');
 			idt_data(25 downto 16)	<= fifo_qH;
 			idt_data(31 downto 26)	<= (others => '0');
 
 		when others	=>
-			idt_data				<= (others => 'Z');
+			idt_data						<= (others => 'Z');
 
 	end case;
 end process;
@@ -302,65 +337,73 @@ end process;
 --
 -- FIFO control instantiation
 --
-
-FIFO1_idtfifo_ctr:
+	
+	ored_empty(1)	<= (fifo_empty(1) or fifo_empty(2));
+	
+	FIFO1_idtfifo_ctr:
 	idtfifo_ctr port map
 	(	
 		rst					=> rst,
 		clk					=> clk,
 		start_transfer		=> r_start_transfer(1),
 		running				=> transfer_running(1),
-		idt_full			=> idt_full(1),
-		idt_wren			=> idt_wren(1),
-		fifo_empty			=> (fifo_empty(1) or fifo_empty(2)),
+		idt_full				=> idt_full(1),
+		idt_wren				=> idt_wren(1),
+		fifo_empty			=> ored_empty(1),
 		fifo_used			=> fifo_used_A,
 		rden_A				=> fifo_rden(1),
 		rden_B				=> fifo_rden(2)
 	);
 
 
-FIFO2_idtfifo_ctr:
+	ored_empty(2)	<= (fifo_empty(3) or fifo_empty(4));
+
+	FIFO2_idtfifo_ctr:
 	idtfifo_ctr port map
 	(	
 		rst					=> rst,
 		clk					=> clk,
 		start_transfer		=> r_start_transfer(2),
 		running				=> transfer_running(2),
-		idt_full			=> idt_full(2),
-		idt_wren			=> idt_wren(2),
-		fifo_empty			=> (fifo_empty(3) or fifo_empty(4)),
+		idt_full				=> idt_full(2),
+		idt_wren				=> idt_wren(2),
+		fifo_empty			=> ored_empty(2),
 		fifo_used			=> fifo_used_C,
 		rden_A				=> fifo_rden(3),
 		rden_B				=> fifo_rden(4)
 	);
 
 
-FIFO3_idtfifo_ctr:
+	ored_empty(3)	<= (fifo_empty(5) or fifo_empty(6));
+
+	FIFO3_idtfifo_ctr:
 	idtfifo_ctr port map
 	(	
 		rst					=> rst,
 		clk					=> clk,
 		start_transfer		=> r_start_transfer(3),
 		running				=> transfer_running(3),
-		idt_full			=> idt_full(3),
-		idt_wren			=> idt_wren(3),
-		fifo_empty			=> (fifo_empty(5) or fifo_empty(6)),
+		idt_full				=> idt_full(3),
+		idt_wren				=> idt_wren(3),
+		fifo_empty			=> ored_empty(3),
 		fifo_used			=> fifo_used_E,
 		rden_A				=> fifo_rden(5),
 		rden_B				=> fifo_rden(6)
 	);
 
 
-FIFO4_idtfifo_ctr:
+	ored_empty(4)	<= (fifo_empty(7) or fifo_empty(8));
+
+	FIFO4_idtfifo_ctr:
 	idtfifo_ctr port map
 	(	
 		rst					=> rst,
 		clk					=> clk,
 		start_transfer		=> r_start_transfer(4),
 		running				=> transfer_running(4),
-		idt_full			=> idt_full(4),
-		idt_wren			=> idt_wren(4),
-		fifo_empty			=> (fifo_empty(7) or fifo_empty(8)),
+		idt_full				=> idt_full(4),
+		idt_wren				=> idt_wren(4),
+		fifo_empty			=> ored_empty(4),
 		fifo_used			=> fifo_used_H,
 		rden_A				=> fifo_rden(7),
 		rden_B				=> fifo_rden(8)

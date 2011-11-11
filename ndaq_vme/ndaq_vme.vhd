@@ -743,8 +743,8 @@ begin
 		odata       => ft_idata,
 		
 		-- Parameters		
-		rmin			=> CONV_STD_LOGIC_VECTOR(x"7F", 8),
-		esize			=> CONV_STD_LOGIC_VECTOR(x"7F", 8)		--127
+		rmin			=> CONV_STD_LOGIC_VECTOR(x"01", 8),
+		esize			=> CONV_STD_LOGIC_VECTOR(x"01", 8)		--127
 	);
 
 	end generate usb_readout_construct;

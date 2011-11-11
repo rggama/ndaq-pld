@@ -24,22 +24,22 @@ set_input_delay -max 4.1 -clock [get_clocks virtual_dco] -clock_fall [get_ports 
 set_input_delay -min -2.0 -clock [get_clocks virtual_dco] -clock_fall [get_ports {adc12_data*}] -add_delay
 
 #34
-set_input_delay -max 4.1 -clock [get_clocks virtual_dco] [get_ports {adc34_data*}]
-set_input_delay -min -2.0 -clock [get_clocks virtual_dco] [get_ports {adc34_data*}]
+#set_input_delay -max 4.1 -clock [get_clocks virtual_dco] [get_ports {adc34_data*}]
+#set_input_delay -min -2.0 -clock [get_clocks virtual_dco] [get_ports {adc34_data*}]
 
-set_input_delay -max 4.1 -clock [get_clocks virtual_dco] -clock_fall [get_ports {adc34_data*}] -add_delay
-set_input_delay -min -2.0 -clock [get_clocks virtual_dco] -clock_fall [get_ports {adc34_data*}] -add_delay
+#set_input_delay -max 4.1 -clock [get_clocks virtual_dco] -clock_fall [get_ports {adc34_data*}] -add_delay
+#set_input_delay -min -2.0 -clock [get_clocks virtual_dco] -clock_fall [get_ports {adc34_data*}] -add_delay
 
 #56
-set_input_delay -max 4.1 -clock [get_clocks virtual_dco] [get_ports {adc56_data*}]
-set_input_delay -min -2.0 -clock [get_clocks virtual_dco] [get_ports {adc56_data*}]
+#set_input_delay -max 4.1 -clock [get_clocks virtual_dco] [get_ports {adc56_data*}]
+#set_input_delay -min -2.0 -clock [get_clocks virtual_dco] [get_ports {adc56_data*}]
 
-set_input_delay -max 4.1 -clock [get_clocks virtual_dco] -clock_fall [get_ports {adc56_data*}] -add_delay
-set_input_delay -min -2.0 -clock [get_clocks virtual_dco] -clock_fall [get_ports {adc56_data*}] -add_delay
+#set_input_delay -max 4.1 -clock [get_clocks virtual_dco] -clock_fall [get_ports {adc56_data*}] -add_delay
+#set_input_delay -min -2.0 -clock [get_clocks virtual_dco] -clock_fall [get_ports {adc56_data*}] -add_delay
 
 #78
-set_input_delay -max 4.1 -clock [get_clocks virtual_dco] [get_ports {adc78_data*}]
-set_input_delay -min -4.0 -clock [get_clocks virtual_dco] [get_ports {adc78_data*}]
+#set_input_delay -max 4.1 -clock [get_clocks virtual_dco] [get_ports {adc78_data*}]
+#set_input_delay -min -4.0 -clock [get_clocks virtual_dco] [get_ports {adc78_data*}]
 
-set_input_delay -max 4.1 -clock [get_clocks virtual_dco] -clock_fall [get_ports {adc78_data*}] -add_delay
-set_input_delay -min -2.0 -clock [get_clocks virtual_dco] -clock_fall [get_ports {adc78_data*}] -add_delay
+#set_input_delay -max 4.1 -clock [get_clocks virtual_dco] -clock_fall [get_ports {adc78_data*}] -add_delay
+#set_input_delay -min -2.0 -clock [get_clocks virtual_dco] -clock_fall [get_ports {adc78_data*}] -add_delay
