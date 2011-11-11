@@ -8,7 +8,7 @@ use ieee.std_logic_1164.all;
 package regs_pkg is
 
 	-- total system registers
-	constant num_regs			: integer := 6;
+	constant num_regs			: integer := 7;
 
 	type	SYS_REGS_STRUCT		is record
 			addr				: std_logic_vector(7 downto 0);
@@ -30,7 +30,10 @@ package regs_pkg is
 		(x"87",	true,	true,	false, x"00"),	--ADC Pwdn
 		(x"89",	true,	true,	false, x"00"),	--FIFO Reset
 		(x"91",	true,	true,	false, x"00"),	--ACQ Enable
-		(x"77",	true,	true,	false, x"55")	--Th
+		(x"77",	true,	true,	false, x"55"),	--Th
+		--
+		(x"27",	true,	true,	false, x"00")	--R/W Test Register
+		
 	);
 
 -------------------------------------------------------------------------------

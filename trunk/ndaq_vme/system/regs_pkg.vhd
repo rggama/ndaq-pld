@@ -8,7 +8,7 @@ use ieee.std_logic_1164.all;
 package regs_pkg is
 
 	-- total system registers
-	constant num_regs			: integer := 5;
+	constant num_regs			: integer := 6;
 
 	type	SYS_REGS_STRUCT		is record
 			addr				: std_logic_vector(7 downto 0);
@@ -29,7 +29,9 @@ package regs_pkg is
 		(x"81",	true,	true,	false),	--Readout		
 		--
 		(x"70",	true,	true,	true),	--SPI 
-		(x"71",	false,	true,	true)	--SPI Status
+		(x"71",	false,	true,	true),	--SPI Status
+		--
+		(x"27", true, true, false)		--R/W Test Register
 	);
 
 -------------------------------------------------------------------------------

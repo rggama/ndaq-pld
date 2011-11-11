@@ -611,8 +611,29 @@ begin
 		dataa		=> s_spi_dataa,	-- data avaiable flag
 		
 		idata		=> s_spi_idata,	-- data input parallel bus
-		odata		=> s_spi_odata	-- data output parallel bus	
+		odata		=> s_spi_odata		-- data output parallel bus	
 	);
+
+-- ****************************** LOOPBACK TEST ********************************
+
+	-- Slave SPI Loopback
+	-- s_spi_idata	<= s_spi_odata;
+
+	-- s_spi_loopback:
+	-- swc port map
+	-- (	
+		-- clk			=> pclk,
+		-- rst			=> rst,
+		
+		-- --flags
+		-- dwait			=> s_spi_dwait,	--to
+		-- dataa			=> s_spi_dataa,	--from
+
+		-- --strobes
+		-- wr				=> s_spi_wr,	--to
+		-- rd				=> s_spi_rd		--from
+	-- );
+
 
 -- ******************************* CMDDEC-REGS *********************************
 	
@@ -627,19 +648,19 @@ begin
 		rst			=> rst,
 
 		--register's strobes
-		a_wr			=> a_wr,
-		a_rd			=> a_rd,
+		a_wr		=> a_wr,
+		a_rd		=> a_rd,
 		
-		idata			=> reg_odata,
-		odata			=> reg_idata,
+		idata		=> reg_odata,
+		odata		=> reg_idata,
 		
 		--register's individual i/os
-		ireg			=> ireg,
-		oreg			=> oreg,
+		ireg		=> ireg,
+		oreg		=> oreg,
 
 		--peripherals outputs strobes
-		p_wr			=> p_wr,
-		p_rd			=> p_rd
+		p_wr		=> p_wr,
+		p_rd		=> p_rd
 	);
 	
 	-- Command Decoder
@@ -655,16 +676,16 @@ begin
 		isidle		=> open,	--Thus, no arbiter is needed.
 		
 		--flags
-		dwait			=> s_spi_dwait,
-		dataa			=> s_spi_dataa,
+		dwait		=> s_spi_dwait,
+		dataa		=> s_spi_dataa,
 
 		--FT245BM_if strobes
-		wr				=> s_spi_wr,
-		rd				=> s_spi_rd,
+		wr			=> s_spi_wr,
+		rd			=> s_spi_rd,
 		
 		--FT245BM_if local bus
-		idata			=> s_spi_odata,
-		odata			=> s_spi_idata,
+		idata		=> s_spi_odata,
+		odata		=> s_spi_idata,
 
 		--register's strobes
 		reg_wr		=> a_wr,
