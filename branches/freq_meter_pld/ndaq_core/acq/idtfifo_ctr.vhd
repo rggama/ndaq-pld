@@ -71,7 +71,8 @@ begin
 			if ((fifo_used > USEDFIFO) and (idt_full = '1') and (fifo_empty = '0')) then
 				next_stateval <= active_rden;			
 			else
-				next_stateval <= idle;
+				--next_stateval <= idle;
+				next_stateval <= test;	--Keep here for a known data construct. 
 			end if;
 			
 		when active_rden =>						
@@ -98,39 +99,39 @@ OUTPUT_COMB: process(next_stateval)
 begin
 	case next_stateval is
 		when idle =>
-			i_wren				<= '1';
+			i_wren				<= 'Z'; --'1';
 			i_rden				<= '0';
-			i_clear_counter		<= '1';		
+			i_clear_counter	<= '1';		
 			i_enable_counter	<= '0';
 			i_running			<= '0';
 		when test =>
-			i_wren				<= '1';
+			i_wren				<= 'Z'; --'1';
 			i_rden				<= '0';
-			i_clear_counter		<= '0';		
+			i_clear_counter	<= '0';		
 			i_enable_counter	<= '0';
-			i_running			<= '0';
+			i_running			<= '1'; --'0';	--For 'test' state keeping;
 		when active_rden =>
-			i_wren				<= '1';
+			i_wren				<= 'Z'; --'1';
 			i_rden				<= '1';
-			i_clear_counter		<= '0';		
+			i_clear_counter	<= '0';		
 			i_enable_counter	<= '0';
 			i_running			<= '1';
 		when block_transfer =>			
 			i_wren				<= '0';
 			i_rden				<= '1';
-			i_clear_counter		<= '0';		
+			i_clear_counter	<= '0';		
 			i_enable_counter	<= '1';
 			i_running			<= '1';
 		when last_wren		=>			
 			i_wren				<= '0';
 			i_rden				<= '0';
-			i_clear_counter		<= '0';		
+			i_clear_counter	<= '0';		
 			i_enable_counter	<= '0';
 			i_running			<= '1';
 		when others =>
-			i_wren				<= '1';
+			i_wren				<= 'Z'; --'1';
 			i_rden				<= '0';
-			i_clear_counter		<= '1';		
+			i_clear_counter	<= '1';		
 			i_enable_counter	<= '0';
 			i_running			<= '0';
 	end case;
@@ -150,7 +151,7 @@ end process;
 OUTPUT_FLOPS: process(rst,clk)
 begin
 	if rst ='1' then
-		idt_wren		<= '1';
+		idt_wren			<= 'Z';
 		rden_A			<= '0';
 		rden_B			<= '0';
 		running			<= '0';

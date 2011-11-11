@@ -3,988 +3,1278 @@ K3
 13
 cModel Technology
 dC:\Users\Rafael Gama\Desktop\pld_r15\ndaq_sim\whole
+Pacq_pkg
+Z0 DPx4 ieee 18 std_logic_unsigned 0 22 hEMVMlaNCR^<OOoVNV;m90
+Z1 DPx4 ieee 15 std_logic_arith 0 22 GJbAT?7@hRQU9IQ702DT]2
+Z2 DPx4 ieee 14 std_logic_1164 0 22 GH1=`jDDBJ=`LM;:Ak`kf2
+Z3 w1311611281
+Z4 dC:\Users\Rafael Gama\Desktop\counter_pld_r20\ndaq_sim\whole
+Z5 8C:/Users/Rafael Gama/Desktop/counter_pld_r20/ndaq_core/acq/acq_pkg.vhd
+Z6 FC:/Users/Rafael Gama/Desktop/counter_pld_r20/ndaq_core/acq/acq_pkg.vhd
+l0
+L12
+Vh`QXB1dlmiDnX<NfM9UnK0
+Z7 OV;C;6.5e;42
+32
+b1
+Z8 Mx3 4 ieee 14 std_logic_1164
+Z9 Mx2 4 ieee 15 std_logic_arith
+Z10 Mx1 4 ieee 18 std_logic_unsigned
+Z11 o-work work -2002 -explicit -O0
+Z12 tExplicit 1
+!s100 L8oDP=28PjozUJ:VTbHDH1
+Bbody
+DBx4 work 7 acq_pkg 0 22 h`QXB1dlmiDnX<NfM9UnK0
+Z13 DPx4 ieee 18 std_logic_unsigned 0 22 hEMVMlaNCR^<OOoVNV;m90
+R1
+R2
+l0
+L91
+V[_c?5SNmj0O_d@9OhRGbK1
+R7
+32
+R8
+R9
+R10
+R11
+R12
+nbody
+!s100 d4m[W5]Z9Xn;2nzXnQmne3
+Ec_counter
+Z14 w1311612908
+R13
+R1
+R2
+R4
+Z15 8C:/Users/Rafael Gama/Desktop/counter_pld_r20/ndaq_core/acq/c_counter.vhd
+Z16 FC:/Users/Rafael Gama/Desktop/counter_pld_r20/ndaq_core/acq/c_counter.vhd
+l0
+L14
+Va:lLkoo7ahN^B@:Z9649_2
+R7
+32
+R11
+R12
+!s100 igJ3ba_=@3J;jm[^YGm]P1
+Artl
+R13
+R1
+R2
+DEx4 work 9 c_counter 0 22 a:lLkoo7ahN^B@:Z9649_2
+l54
+L33
+VG9kKcZmbC]]];@3??hFeQ1
+R7
+32
+R8
+R9
+R10
+R11
+R12
+!s100 CF2kAme]OFm3@X3PVb?H20
 Eclkman
-Z0 w1304532435
-Z1 DPx4 ieee 18 std_logic_unsigned 0 22 hEMVMlaNCR^<OOoVNV;m90
-Z2 DPx4 ieee 15 std_logic_arith 0 22 GJbAT?7@hRQU9IQ702DT]2
-Z3 DPx4 ieee 14 std_logic_1164 0 22 GH1=`jDDBJ=`LM;:Ak`kf2
-Z4 dC:\Documents and Settings\Rafael\Desktop\pld_r15\ndaq_sim\whole
-Z5 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/system/clkman.vhd
-Z6 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/system/clkman.vhd
+Z17 w1311253120
+R13
+R1
+R2
+Z18 dC:\Users\Rafael Gama\Desktop\pld_r20\ndaq_sim\whole
+Z19 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/system/clkman.vhd
+Z20 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/system/clkman.vhd
 l0
 L15
 VmnKOUlW8z@P>L=iIX4S:Z3
-Z7 OV;C;6.5e;42
+R7
 32
-Z8 o-work work -2002 -explicit -O0
-Z9 tExplicit 1
+R11
+R12
 !s100 F^S4Ug>OeS7BDaTJAR@ES1
 Artl
+R13
 R1
 R2
-R3
 DEx4 work 6 clkman 0 22 mnKOUlW8z@P>L=iIX4S:Z3
 l69
 L31
 VO?ZkdEi>30l=6nD5FIQY10
 R7
 32
-Z10 Mx3 4 ieee 14 std_logic_1164
-Z11 Mx2 4 ieee 15 std_logic_arith
-Z12 Mx1 4 ieee 18 std_logic_unsigned
 R8
 R9
+R10
+R11
+R12
 !s100 FD=25RNQ1W^H5oQaPF7_?2
 Ecmddec
-Z13 w1304900363
-Z14 DPx4 ieee 11 numeric_std 0 22 =NSdli^?T5OD8;4F<blj<3
-Z15 DPx4 work 8 regs_pkg 0 22 HkCSiGE:OKXM1MUMn<1AS1
-R3
-R4
-Z16 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/system/cmddec.vhd
-Z17 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/system/cmddec.vhd
+Z21 w1311253124
+Z22 DPx4 ieee 11 numeric_std 0 22 =NSdli^?T5OD8;4F<blj<3
+Z23 DPx4 work 8 regs_pkg 0 22 :zUjE@E9bE`b;9b1CzXhe3
+R2
+R18
+Z24 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/system/cmddec.vhd
+Z25 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/system/cmddec.vhd
 l0
 L9
-V@hPQU2N89e4YLNQV0^Rb41
+V:d6h_;>Pf1ehEnWTR@FPg3
 R7
 32
-R8
-R9
-!s100 M2e]PJ9Zm`hSoCEE@@;I50
+R11
+R12
+!s100 aZU2>D1MocZ;1Hn;@U`;T2
 Artl
-R14
-R15
-R3
-DEx4 work 6 cmddec 0 22 @hPQU2N89e4YLNQV0^Rb41
-l115
-L39
-VVQ9OFI0KXH3;TE9R;^CNn2
+R22
+R23
+R2
+DEx4 work 6 cmddec 0 22 :d6h_;>Pf1ehEnWTR@FPg3
+l130
+L43
+VFhl=gVdPLWYoMPB9`4L6T1
 R7
 32
-R10
-Mx2 4 work 8 regs_pkg
-Z18 Mx1 4 ieee 11 numeric_std
 R8
-R9
-!s100 SjIm[UzXbYM414NK?Rd9B1
+Mx2 4 work 8 regs_pkg
+Z26 Mx1 4 ieee 11 numeric_std
+R11
+R12
+!s100 gg4?9f8NAT2d5BZ?V9E8f0
 Ecore_clkman
-Z19 w1304532438
+R21
+R13
 R1
 R2
-R3
-R4
-Z20 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/system/core_clkman.vhd
-Z21 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/system/core_clkman.vhd
+R18
+Z27 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/system/core_clkman.vhd
+Z28 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/system/core_clkman.vhd
 l0
 L15
 Vi>aI=L;QL8c7Z?FT@QI<f0
 R7
 32
-R8
-R9
+R11
+R12
 !s100 idL2A>=I7Q;^W0U20IEg41
 Artl
+R13
 R1
 R2
-R3
 DEx4 work 11 core_clkman 0 22 i>aI=L;QL8c7Z?FT@QI<f0
 l69
 L31
 VY6Q0^Wbb<06GW`o?aMJ7O1
 R7
 32
+R8
+R9
 R10
 R11
 R12
-R8
-R9
 !s100 >CQm?okG@?@@k?gcYF<`l2
 Ecore_pll
-R19
-R3
-R4
-Z22 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/system/core_pll.vhd
-Z23 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/system/core_pll.vhd
+R21
+R2
+R18
+Z29 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/system/core_pll.vhd
+Z30 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/system/core_pll.vhd
 l0
 L42
 VUmDf?agI40lSeS@5Nl4mU3
 R7
 32
-R8
-R9
+R11
+R12
 !s100 BAg2>3BmfYeBdY]XZo06i3
 Asyn
-R3
+R2
 DEx4 work 8 core_pll 0 22 UmDf?agI40lSeS@5Nl4mU3
 l149
 L56
 VPVMm6dVT;0AkHzk`k2SYB0
 R7
 32
-Z24 Mx1 4 ieee 14 std_logic_1164
-R8
-R9
+Z31 Mx1 4 ieee 14 std_logic_1164
+R11
+R12
 !s100 J1=^B7]LP@o5iQKcOo@nP3
+Ecore_priarb8
+Z32 w1311281591
+R2
+R18
+Z33 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/system/core_priarb8.vhd
+Z34 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/system/core_priarb8.vhd
+l0
+L17
+V_MGW^mU^d3QPE_RFVYJ2h1
+R7
+32
+R11
+R12
+!s100 [7W?GKE`^PnLCoaBiZ2bL0
+Artl
+R2
+DEx4 work 12 core_priarb8 0 22 _MGW^mU^d3QPE_RFVYJ2h1
+l68
+L36
+VGl9Tdb]8VJ7`PSPAeM3o11
+R7
+32
+R31
+R11
+R12
+!s100 1JM?7NWFB6cUUFfUh?8]X1
+Ecounter_fifo
+Z35 w1311610082
+R2
+R4
+Z36 8C:/Users/Rafael Gama/Desktop/counter_pld_r20/ndaq_core/acq/counter_fifo.vhd
+Z37 FC:/Users/Rafael Gama/Desktop/counter_pld_r20/ndaq_core/acq/counter_fifo.vhd
+l0
+L42
+VZJmTei<RJ_KCEO>]1^c;j1
+R7
+32
+R11
+R12
+!s100 RhA^;:B7k`W5Ib7Vak7Nj2
+Asyn
+R2
+DEx4 work 12 counter_fifo 0 22 ZJmTei<RJ_KCEO>]1^c;j1
+l96
+L58
+VLRC;AGfB2fj2`H[>MV3Jh0
+R7
+32
+R31
+R11
+R12
+!s100 1c:b=1B2HdGiL[G5Y2Ll`3
 Edcfifom
-R19
-R3
-R4
-Z25 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/acq/fifos.vhd
-Z26 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/acq/fifos.vhd
-l0
-L29
-VbDLPIUg_^E?SoAE2C@n^W3
-R7
-32
-R8
-R9
-!s100 fn7zMBP55HcS]fUGTE5MH2
-Artl
-R3
-DEx4 work 7 dcfifom 0 22 bDLPIUg_^E?SoAE2C@n^W3
-l99
-L53
-VegM`:I4L2XUNK9e85>4O93
-R7
-32
-R24
-R8
-R9
-!s100 cIjN[?[CKXEIjkAEe@V;23
-Ef2f_copier
-Z27 w1305148269
+R21
+R13
 R1
+Z38 DPx4 work 7 acq_pkg 0 22 4U<TIYnF3aJX[N[N;V?[n2
 R2
-R3
-R4
-Z28 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/usb_readout/f2f_copier.vhd
-Z29 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/usb_readout/f2f_copier.vhd
+R18
+Z39 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/acq/fifos.vhd
+Z40 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/acq/fifos.vhd
 l0
-L11
-V04ggF>Z3XbLK5AddSA1@T0
+L12
+VQl1QmNFV@ZK?>KQliJ6:b3
 R7
 32
-R8
-R9
-!s100 B:N0V@RFchOo]z>h35H6N0
+R11
+R12
+!s100 o_djzdT^=kM2GH2<BOhB;1
 Artl
+R13
 R1
+R38
 R2
-R3
-DEx4 work 10 f2f_copier 0 22 04ggF>Z3XbLK5AddSA1@T0
-l65
-L30
-Vkz@NLk3?ol:SggffImB611
+DEx4 work 7 dcfifom 0 22 Ql1QmNFV@ZK?>KQliJ6:b3
+l76
+L35
+V4BD6W]@8D01>>l;E[om1z3
 R7
 32
+Z41 Mx4 4 ieee 14 std_logic_1164
+Mx3 4 work 7 acq_pkg
+R9
 R10
 R11
 R12
-R8
-R9
-!s100 4BTQ_z_[?EF_3j<_kZoE70
-Ef2ft_copier
-Z30 w1305145507
+!s100 RDdg_[cL2nOB5Qi68`;Kb3
+Ef2f_copier
+Z42 w1311253121
+R13
 R1
 R2
-R3
-R4
-Z31 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/usb_readout/f2ft_copier.vhd
-Z32 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/usb_readout/f2ft_copier.vhd
+R18
+Z43 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/usb_readout/f2f_copier.vhd
+Z44 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/usb_readout/f2f_copier.vhd
+l0
+L14
+VVa71^<HcfBjlG;ACN<9Q>2
+R7
+32
+R11
+R12
+!s100 BDGHhN=a`O<zF`]cn[:<z0
+Artl
+R13
+R1
+R2
+DEx4 work 10 f2f_copier 0 22 Va71^<HcfBjlG;ACN<9Q>2
+l68
+L33
+V41ni5019?eKS98gY3NZ:A0
+R7
+32
+R8
+R9
+R10
+R11
+R12
+!s100 2@>k[]X;90PIjPV7eVX9d3
+Ef2ft_copier
+R42
+R13
+R1
+R2
+R18
+Z45 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/usb_readout/f2ft_copier.vhd
+Z46 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/usb_readout/f2ft_copier.vhd
 l0
 L18
 V0o8c>@`TB`b?A<oJF:?>g3
 R7
 32
-R8
-R9
+R11
+R12
 !s100 Y2YFCz@cX8E;4AneTBk4R3
 Artl
+R13
 R1
 R2
-R3
 DEx4 work 11 f2ft_copier 0 22 0o8c>@`TB`b?A<oJF:?>g3
-l79
+l89
 L47
-V?TPRakOYbKEn:l?BYHQhA1
+VPg@>dh38N1>G2l>nd5z:G2
 R7
 32
+R8
+R9
 R10
 R11
 R12
-R8
-R9
-!s100 dc3ofUdLNiWL=o8Ko5o>63
+!s100 6i=3[V68MIBIOj>oAMQD@1
 Eft245bm_ab
-Z33 w1304991826
+R17
+R13
 R1
 R2
-R3
-R4
-Z34 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/FT245BM_if/FT245BM_ab.vhd
-Z35 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/FT245BM_if/FT245BM_ab.vhd
+R18
+Z47 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/FT245BM_if/FT245BM_ab.vhd
+Z48 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/FT245BM_if/FT245BM_ab.vhd
 l0
 L15
 VM_bTmI:k]PkzES2kZkI]Y3
 R7
 32
-R8
-R9
+R11
+R12
 !s100 EY=ZY`FH2ieHm]AKaDBaW1
 Artl
+R13
 R1
 R2
-R3
 DEx4 work 10 ft245bm_ab 0 22 M_bTmI:k]PkzES2kZkI]Y3
 l43
 L39
 V3FU9gKAeL0^5V6aE5Z]C>0
 R7
 32
+R8
+R9
 R10
 R11
 R12
-R8
-R9
 !s100 :4GEkOkPF`1iADCMnEQ0?1
 Eft245bm_if
-Z36 w1304532434
+R17
+R13
 R1
 R2
-R3
-R4
-Z37 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/FT245BM_if/FT245BM_if.vhd
-Z38 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/FT245BM_if/FT245BM_if.vhd
+R18
+Z49 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/FT245BM_if/FT245BM_if.vhd
+Z50 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/FT245BM_if/FT245BM_if.vhd
 l0
 L19
 VQgC_Kl_@D`EiF2<38d^ad1
 R7
 32
-R8
-R9
+R11
+R12
 !s100 MNAQ[J>>6A0mW>n4YzkWT1
 Artl
+R13
 R1
 R2
-R3
 DEx4 work 10 ft245bm_if 0 22 QgC_Kl_@D`EiF2<38d^ad1
 l134
 L48
 V0PXmzm:2iGL6o^8^M92kP1
 R7
 32
+R8
+R9
 R10
 R11
 R12
-R8
-R9
 !s100 A@fdQYj6RD7=HXKlZkDkh3
 Eft245bm_rx
-R36
+R17
+R13
 R1
 R2
-R3
-R4
-Z39 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/FT245BM_if/FT245BM_rx.vhd
-Z40 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/FT245BM_if/FT245BM_rx.vhd
+R18
+Z51 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/FT245BM_if/FT245BM_rx.vhd
+Z52 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/FT245BM_if/FT245BM_rx.vhd
 l0
 L18
 V1VZP31T8zoJQbV@8KnfV71
 R7
 32
-R8
-R9
+R11
+R12
 !s100 CX98[_Xn5MXniQYX1ZM5d1
 Artl
+R13
 R1
 R2
-R3
 DEx4 work 10 ft245bm_rx 0 22 1VZP31T8zoJQbV@8KnfV71
-l72
+l75
 L41
-VSI>A9UUHSdP@kl`a[4L:53
+VgYK65V3`9Sc<Qiec[5Z8<2
 R7
 32
+R8
+R9
 R10
 R11
 R12
-R8
-R9
-!s100 _a3Ki4HaZW8>kVY[z^HL]2
+!s100 i^OzLYYUzek=RheQJGBm<1
 Eft245bm_tx
-Z41 w1304995612
+R17
+R13
 R1
 R2
-R3
-R4
-Z42 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/FT245BM_if/FT245BM_tx.vhd
-Z43 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/FT245BM_if/FT245BM_tx.vhd
+R18
+Z53 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/FT245BM_if/FT245BM_tx.vhd
+Z54 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/FT245BM_if/FT245BM_tx.vhd
 l0
 L19
 VN[B<2]4zA=nX3K=:0D32b3
 R7
 32
-R8
-R9
+R11
+R12
 !s100 :W7UE5Vd1<:VdB_d9imWK3
 Artl
+R13
 R1
 R2
-R3
 DEx4 work 10 ft245bm_tx 0 22 N[B<2]4zA=nX3K=:0D32b3
 l71
 L42
-VNXhPS^ZcT`]e^JEE_L6zT2
+Vi0VH_EQ=T>Szz43l[Roii3
 R7
 32
+R8
+R9
 R10
 R11
 R12
-R8
-R9
-!s100 ^MJXbdh3b[XUTJ6ki_`O?3
+!s100 4Wd[9e2_IAoV<Om4F74O63
 Eidt_fifo
-Z44 w1305140160
-R3
-R4
-Z45 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_sim/whole/board_level/idt_fifo.vhd
-Z46 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_sim/whole/board_level/idt_fifo.vhd
+R21
+R2
+R18
+Z55 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_sim/whole/board_level/idt_fifo.vhd
+Z56 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_sim/whole/board_level/idt_fifo.vhd
 l0
 L42
 VHf:jU7mU;5A<Nczz76_WX2
 R7
 32
-R8
-R9
+R11
+R12
 !s100 h8;@TznB^GQTL]iRiB6Cd2
 Asyn
-R3
+R2
 DEx4 work 8 idt_fifo 0 22 Hf:jU7mU;5A<Nczz76_WX2
 l97
 L59
 VQUIVHOnT<C28HYYjaWZZJ1
 R7
 32
-R24
-R8
-R9
+R31
+R11
+R12
 !s100 cOkY^ik<NiUDaQ:h^Oza20
 Eidtfifo_ctr
-Z47 w1305166615
-R2
+Z57 w1311283576
+R38
 R1
-R3
-R4
-Z48 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/acq/idtfifo_ctr.vhd
-Z49 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/acq/idtfifo_ctr.vhd
+R13
+R2
+R18
+Z58 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/acq/idtfifo_ctr.vhd
+Z59 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/acq/idtfifo_ctr.vhd
 l0
-L16
-VWT8?bTkhFMleX?^8XaN>82
+L19
+Vbi?PLS22H_C1[27VM=3`j2
 R7
 32
-R8
-R9
-!s100 af2<ao@1F?^eSB76EKIXi1
+R11
+R12
+!s100 C6LCgdDnnL38izA7^7dAj3
 Aone_idtfifo_ctr
-R2
+R38
 R1
-R3
-DEx4 work 11 idtfifo_ctr 0 22 WT8?bTkhFMleX?^8XaN>82
-l54
-L37
-V_o:4UG]O3N9gW:ImNW7Bf3
+R13
+R2
+DEx4 work 11 idtfifo_ctr 0 22 bi?PLS22H_C1[27VM=3`j2
+l57
+L40
+VW8]=S4oQE;0INWceJ7B2@3
 R7
 32
-R10
-Z50 Mx2 4 ieee 18 std_logic_unsigned
-Z51 Mx1 4 ieee 15 std_logic_arith
-R8
+R41
+Z60 Mx3 4 ieee 18 std_logic_unsigned
 R9
-!s100 TaJkYWF3VE3b]`8NF92T_1
+Z61 Mx1 4 work 7 acq_pkg
+R11
+R12
+!s100 DhH>G[SFWO0g?>lUI?D=K3
 Eidtfifo_top
-Z52 w1305163541
-R2
+Z62 w1311282365
+R38
 R1
-R3
-R4
-Z53 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/acq/idtfifo_top.vhd
-Z54 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/acq/idtfifo_top.vhd
+R13
+R2
+R18
+Z63 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/acq/idtfifo_top.vhd
+Z64 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/acq/idtfifo_top.vhd
 l0
-L16
-V=PgWFYDn81zTP]^_P39la0
+L19
+VSzd2nP:9a;Iz^?NNfQce03
 R7
 32
-R8
-R9
-!s100 HSX2=c0ET^Xz4O88bUOTl2
+R11
+R12
+!s100 hPaG@d9KRoN06l?GQQjb>1
 Aone_idtfifo_top
-R2
+R38
 R1
-R3
-DEx4 work 11 idtfifo_top 0 22 =PgWFYDn81zTP]^_P39la0
-l87
-L46
-V_GK3hnMa=g>R30:AmlV^93
+R13
+R2
+DEx4 work 11 idtfifo_top 0 22 Szd2nP:9a;Iz^?NNfQce03
+l100
+L51
+V4_=5__462a?mKCoQ2V:EU3
 R7
 32
-R10
-R50
-R51
-R8
+R41
+R60
 R9
-!s100 lLE?@AWMh<gUm^Dg?:NWL0
-Em_spi
-Z55 w1304903934
+R61
+R11
+R12
+!s100 YY;8?zLec]_zXjNbX;31P3
+Eitrigger
+Z65 w1311610682
+R23
+Z66 DPx4 work 7 acq_pkg 0 22 h`QXB1dlmiDnX<NfM9UnK0
+R13
 R1
 R2
-R3
 R4
-Z56 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/spi/m_spi.vhd
-Z57 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/spi/m_spi.vhd
+Z67 8C:/Users/Rafael Gama/Desktop/counter_pld_r20/ndaq_core/acq/itrigger.vhd
+Z68 FC:/Users/Rafael Gama/Desktop/counter_pld_r20/ndaq_core/acq/itrigger.vhd
+l0
+L17
+VjACJknAJ06BMM78gAj;5a3
+R7
+32
+R11
+R12
+!s100 iP>2lf1cXie[:L8<BMa9=0
+Artl
+R23
+R66
+R13
+R1
+R2
+DEx4 work 8 itrigger 0 22 jACJknAJ06BMM78gAj;5a3
+l92
+L38
+VaA4Clh28I5eEA?=g_H2nj3
+R7
+32
+Z69 Mx5 4 ieee 14 std_logic_1164
+Z70 Mx4 4 ieee 15 std_logic_arith
+R60
+Z71 Mx2 4 work 7 acq_pkg
+Z72 Mx1 4 work 8 regs_pkg
+R11
+R12
+!s100 0FUFAHJ6maBXO8]dk@9193
+Em_spi
+R17
+R13
+R1
+R2
+R18
+Z73 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/spi/m_spi.vhd
+Z74 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/spi/m_spi.vhd
 l0
 L14
 VC9GPK8Y`TEM3H9<jo5E`D1
 R7
 32
-R8
-R9
+R11
+R12
 !s100 ?a[bh14ma6RhgcOXmI@UE3
 Artl
+R13
 R1
 R2
-R3
 DEx4 work 5 m_spi 0 22 C9GPK8Y`TEM3H9<jo5E`D1
 l81
 L37
 VWMXQ`l?jOFkDUHQGHggc50
 R7
 32
+R8
+R9
 R10
 R11
 R12
-R8
-R9
 !s100 O7F8QiFI:Y`gUhW1Z1LDG3
 Emy_pll
-Z58 w1305168064
-R3
-R4
-Z59 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/system/my_pll.vhd
-Z60 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/system/my_pll.vhd
+R17
+R2
+R18
+Z75 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/system/my_pll.vhd
+Z76 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/system/my_pll.vhd
 l0
 L42
 VO0<MnRd:LI[zNzCYR;InY1
-!s100 0@:U`hF_IB=KOXUCQUNgQ3
 R7
 32
-R8
-R9
+R11
+R12
+!s100 0@:U`hF_IB=KOXUCQUNgQ3
 Asyn
-R3
-Z61 DEx4 work 6 my_pll 0 22 O0<MnRd:LI[zNzCYR;InY1
+R2
+DEx4 work 6 my_pll 0 22 O0<MnRd:LI[zNzCYR;InY1
 l149
 L56
 VoYWH0:3YJb9Ng:<[QMXf;1
-!s100 EfKJ5RNl7EQZKc^kQ0FPi0
 R7
 32
-R24
-R8
-R9
-Endaq_core
-Z62 w1305167439
-R1
-R2
-R3
-R4
-Z63 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/ndaq_core.vhd
-Z64 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/ndaq_core.vhd
-l0
-L48
-V;`Eg?f4Bn;@?WRmQUdaU22
-R7
-32
-R8
-R9
-!s100 S?5Y7PED4G4D[BSM4o]O<3
-Artl
-R1
-R2
-R3
-DEx4 work 9 ndaq_core 0 22 ;`Eg?f4Bn;@?WRmQUdaU22
-l398
-L178
-VKfonaLAo5UYYM0n7<b6Nh2
-R7
-32
-R10
+R31
 R11
 R12
-R8
-R9
-!s100 N[h5<]WBU^`b3Yk;Z9;ke2
-Endaq_sim_tbench
-Z65 w1305140647
-R2
+!s100 EfKJ5RNl7EQZKc^kQ0FPi0
+Endaq_core
+Z77 w1311613157
+R23
+R66
+R13
 R1
-R3
+R2
 R4
-Z66 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_sim/whole/ndaq_sim_tbench.vht
-Z67 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_sim/whole/ndaq_sim_tbench.vht
+Z78 8C:/Users/Rafael Gama/Desktop/counter_pld_r20/ndaq_core/ndaq_core.vhd
+Z79 FC:/Users/Rafael Gama/Desktop/counter_pld_r20/ndaq_core/ndaq_core.vhd
+l0
+L51
+V`VhEcgABV<=Zco8dlk^:E2
+!s100 jaaB`4>XkK5=d<HnjREBP3
+R7
+32
+R11
+R12
+Artl
+R23
+R66
+R13
+R1
+R2
+Z80 DEx4 work 9 ndaq_core 0 22 `VhEcgABV<=Zco8dlk^:E2
+l568
+L181
+VK5>:`b=Rb1=HY?:G0SC@>2
+!s100 <2mgY?CY1=QC]RJV3`J;P0
+R7
+32
+R69
+R70
+R60
+R71
+R72
+R11
+R12
+Endaq_sim_tbench
+Z81 w1311260804
+R1
+R13
+R2
+R18
+Z82 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_sim/whole/ndaq_sim_tbench.vht
+Z83 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_sim/whole/ndaq_sim_tbench.vht
 l0
 L12
 VVEfAIK@BdX]ARCf8=Ez>D0
 R7
 32
-R8
-R9
+R11
+R12
 !s100 Kg]dCYR@Y[k1FEUdUnQi=0
 Atestbench
-R2
 R1
-R3
+R13
+R2
 DEx4 work 15 ndaq_sim_tbench 0 22 VEfAIK@BdX]ARCf8=Ez>D0
-l304
+l312
 L16
-VFZU;9n=BV8kK9zPnE;oCi3
+V>I9L^MMG^Ejn^IR?6TJ>b0
 R7
 32
-R10
-R50
-R51
 R8
-R9
-!s100 fgfl:VaA;V@iAIAQ85Ldn0
+Z84 Mx2 4 ieee 18 std_logic_unsigned
+Z85 Mx1 4 ieee 15 std_logic_arith
+R11
+R12
+!s100 7JLFI^3zX0mkEkaQ>jca]3
 Endaq_vme
-Z68 w1305147640
-R15
-Z69 DPx4 work 9 vmeif_usr 0 22 iHGElK?RTYi]VEJInl6e`0
-R14
-Z70 DPx4 work 9 vmeif_pkg 0 22 SdCDn;E<ocRCP3Cgg0E<40
+Z86 w1311261514
+R23
+Z87 DPx4 work 9 vmeif_usr 0 22 iHGElK?RTYi]VEJInl6e`0
+R22
+Z88 DPx4 work 9 vmeif_pkg 0 22 SdCDn;E<ocRCP3Cgg0E<40
+Z89 DPx4 work 15 usb_readout_pkg 0 22 1kfY26mbK9hIBOQn2`ZHZ2
+R13
 R1
 R2
-R3
-R4
-Z71 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/ndaq_vme.vhd
-Z72 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/ndaq_vme.vhd
+R18
+Z90 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/ndaq_vme.vhd
+Z91 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/ndaq_vme.vhd
 l0
-L15
-Vba2DH3Dg^YVV1GMHGU6A`2
+L16
+Vk=V_614]F[CZe:19;CX392
 R7
 32
-R8
-R9
-!s100 O<9icid4iP^K^gLeC;`Te0
+R11
+R12
+!s100 U9lN;G>RWWPD_HgH]34R?1
 Artl
-R15
-R69
-R14
-R70
+R23
+R87
+R22
+R88
+R89
+R13
 R1
 R2
-R3
-DEx4 work 8 ndaq_vme 0 22 ba2DH3Dg^YVV1GMHGU6A`2
-l554
-L105
-VA`mke937A>[<1kJ8n2bN72
+DEx4 work 8 ndaq_vme 0 22 k=V_614]F[CZe:19;CX392
+l471
+L106
+V3;fkX:GlY=6F9LIDl@C2d0
 R7
 32
-Z73 Mx7 4 ieee 14 std_logic_1164
-Z74 Mx6 4 ieee 15 std_logic_arith
-Z75 Mx5 4 ieee 18 std_logic_unsigned
+Mx8 4 ieee 14 std_logic_1164
+Mx7 4 ieee 15 std_logic_arith
+Mx6 4 ieee 18 std_logic_unsigned
+Mx5 4 work 15 usb_readout_pkg
 Mx4 4 work 9 vmeif_pkg
-Z76 Mx3 4 ieee 11 numeric_std
+Z92 Mx3 4 ieee 11 numeric_std
 Mx2 4 work 9 vmeif_usr
-Z77 Mx1 4 work 8 regs_pkg
-R8
-R9
-!s100 f6SokE;oz?c9kK0;5zeY[2
+R72
+R11
+R12
+!s100 CEh7V]9Tc6k7;fIN272No2
 Epostfifo
-R19
-R3
-R4
-Z78 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/acq/postfifo.vhd
-Z79 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/acq/postfifo.vhd
+R21
+R2
+R18
+Z93 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/acq/postfifo.vhd
+Z94 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/acq/postfifo.vhd
 l0
 L42
-VG[bH2<Lzi1LV`^3UHZeYF1
+VeD[9:aIe`MXIniC^1mm>40
 R7
 32
-R8
-R9
-!s100 VnfGd>DonUzFk;aSS8gVz0
+R11
+R12
+!s100 hiARkLO^6mF[^iCeUla<j1
 Asyn
-R3
-DEx4 work 8 postfifo 0 22 G[bH2<Lzi1LV`^3UHZeYF1
-l100
+R2
+DEx4 work 8 postfifo 0 22 eD[9:aIe`MXIniC^1mm>40
+l101
 L60
-Vkfo_CJOO=[>NZGaXg4OWN0
+VSNkfm@OnUe024>8PPBa^]0
 R7
 32
-R24
-R8
-R9
-!s100 OT:UGSe=Uk]OM@8?V>_nI0
+R31
+R11
+R12
+!s100 kO1^XP^>G1^3e3;FLVhnN3
 Eprefifo
-R19
-R3
-R4
-Z80 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/acq/prefifo.vhd
-Z81 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/acq/prefifo.vhd
+R21
+R2
+R18
+Z95 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/acq/prefifo.vhd
+Z96 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/acq/prefifo.vhd
 l0
 L42
 Vin4GEmacTg1IGhbB<Vo0=0
 R7
 32
-R8
-R9
+R11
+R12
 !s100 CR2Ao9dRBazHiP2E1d_Jh0
 Asyn
-R3
+R2
 DEx4 work 7 prefifo 0 22 in4GEmacTg1IGhbB<Vo0=0
 l94
 L58
-V`@Z2@W[7Al<Ol>ZRaiNb60
+V;;<WnnKJQgegGBbSGC`Kz2
 R7
 32
-R24
-R8
-R9
-!s100 `FAS`7P]=U55Y43zEY[gh3
+R31
+R11
+R12
+!s100 :;MdcKGT4AHW4QeGKfP?52
+Epriarb8
+Z97 w1311264731
+R2
+R18
+Z98 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/system/priarb8.vhd
+Z99 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/system/priarb8.vhd
+l0
+L17
+VGO3nI1kFPLC7SA3MY0LBZ1
+R7
+32
+R11
+R12
+!s100 i2zZbZgoMPKO0ZTLFKR;P2
+Artl
+R2
+DEx4 work 7 priarb8 0 22 GO3nI1kFPLC7SA3MY0LBZ1
+l68
+L36
+V7e5N[decQeHL;DRK@6Kj<3
+R7
+32
+R31
+R11
+R12
+!s100 =[P;Z2Q3Ui=^jA78aUlQ@0
 Ereadout_fifo
-Z82 w1305145592
-R3
-R4
-Z83 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/usb_readout/readout_fifo.vhd
-Z84 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/usb_readout/readout_fifo.vhd
+R42
+R2
+R18
+Z100 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/usb_readout/readout_fifo.vhd
+Z101 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/usb_readout/readout_fifo.vhd
 l0
 L42
 VR0noHNdC^[:3032:D8hVR0
 R7
 32
-R8
-R9
+R11
+R12
 !s100 mPSH>8_Oi6KB1]<g1U_1:3
 Asyn
-R3
+R2
 DEx4 work 12 readout_fifo 0 22 R0noHNdC^[:3032:D8hVR0
 l93
 L58
 VF94OocAL<n^d:>;AER3=F0
 R7
 32
-R24
-R8
-R9
+R31
+R11
+R12
 !s100 ngj_fHW9>EBKjTlPb<Q2j2
 Eregs
-Z85 w1304901083
-R15
-R14
-R3
-R4
-Z86 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/system/regs.vhd
-Z87 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/system/regs.vhd
+R21
+R23
+R22
+R2
+R18
+Z102 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/system/regs.vhd
+Z103 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/system/regs.vhd
 l0
 L9
 VzoUD^`zKQDbn28d[M1=Lc2
 R7
 32
-R8
-R9
+R11
+R12
 !s100 02OD7L`I@HX8hSzJBXIE]1
 Artl
-R15
-R14
-R3
+R23
+R22
+R2
 DEx4 work 4 regs 0 22 zoUD^`zKQDbn28d[M1=Lc2
 l42
 L38
-V=E<Z0TnmAUYeMgDVehm[c0
+V6;YJ9<=eKk@S:cJ^=0ge23
 R7
 32
-R10
-Z88 Mx2 4 ieee 11 numeric_std
-R77
 R8
-R9
-!s100 0hLWWcm2GMf[97DP0V;]a3
+Z104 Mx2 4 ieee 11 numeric_std
+R72
+R11
+R12
+!s100 o:4E]QCUAdDi2FYoaI?_c0
 Pregs_pkg
-R3
-Z89 w1304888841
-R4
-Z90 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/system/regs_pkg.vhd
-Z91 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/system/regs_pkg.vhd
+R2
+R21
+R18
+Z105 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/system/regs_pkg.vhd
+Z106 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/system/regs_pkg.vhd
 l0
 L8
-VHkCSiGE:OKXM1MUMn<1AS1
+V:zUjE@E9bE`b;9b1CzXhe3
 R7
 32
-R24
-R8
-R9
-!s100 7D>kP;?m8TcDcMn??C?Sa0
+R31
+R11
+R12
+!s100 filF3n>QR3OZZ8jnn8YlS1
 Bbody
-DBx4 work 8 regs_pkg 0 22 HkCSiGE:OKXM1MUMn<1AS1
-R3
+DBx4 work 8 regs_pkg 0 22 :zUjE@E9bE`b;9b1CzXhe3
+R2
 l0
-L41
+L42
 V>EUJXgEiK6RWgd_W11ein1
 R7
 32
-R24
-R8
-R9
+R31
+R11
+R12
 nbody
-!s100 [K??H7jgE[1bg:eX0TiMP3
+!s100 G6Cm>f8NUM?6FV6Z?eIP>3
 Erstgen
-Z92 w1304954882
+R17
+R13
 R1
 R2
-R3
-R4
-Z93 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/system/reset.vhd
-Z94 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/system/reset.vhd
+R18
+Z107 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/system/reset.vhd
+Z108 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/system/reset.vhd
 l0
 L15
 VJH:K90^WXFo<:K2jCXaP]3
 R7
 32
-R8
-R9
+R11
+R12
 !s100 6k<cbnf]>Iiel43g:jljT0
 Artl
+R13
 R1
 R2
-R3
 DEx4 work 6 rstgen 0 22 JH:K90^WXFo<:K2jCXaP]3
 l47
 L28
 VzT5_;U]XW6E`?oYQmRWL21
 R7
 32
+R8
+R9
 R10
 R11
 R12
-R8
-R9
 !s100 cegD?dL3eD]VHdV>82_<l0
 Es_spi
-R19
+R21
+R13
 R1
 R2
-R3
-R4
-Z95 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/spi/s_spi.vhd
-Z96 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/spi/s_spi.vhd
+R18
+Z109 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/spi/s_spi.vhd
+Z110 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/spi/s_spi.vhd
 l0
 L14
 VN:>D?5VSKdVU]EPM5AaLS2
 R7
 32
-R8
-R9
+R11
+R12
 !s100 jbkkYC3HH@9Ifa_44>=Gm2
 Artl
+R13
 R1
 R2
-R3
 DEx4 work 5 s_spi 0 22 N:>D?5VSKdVU]EPM5AaLS2
 l96
 L37
 VLWDA5Q;LYLMngO8SZEmlZ1
 R7
 32
+R8
+R9
 R10
 R11
 R12
-R8
-R9
 !s100 WlK<i<jOdmCMnHQ::gOf32
 Eswc
-Z97 w1304532436
-R3
-R4
-Z98 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/swc/swc.vhd
-Z99 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/swc/swc.vhd
+R42
+R2
+R18
+Z111 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/swc/swc.vhd
+Z112 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/swc/swc.vhd
 l0
 L15
 VAeBKk?h??KLZz?SZCa7;@3
 R7
 32
-R8
-R9
+R11
+R12
 !s100 e:R>:4dhDQ2l`@Z2X:EOB1
 Artl
-R3
+R2
 DEx4 work 3 swc 0 22 AeBKk?h??KLZz?SZCa7;@3
 l45
 L33
 V>ihi<>Q2bQOlXkSjWNYJi2
 R7
 32
-R24
-R8
-R9
+R31
+R11
+R12
 !s100 <bK^KHzneWSU4Ul5L?d8K2
-Etpulse
-R19
-R3
+Etimebase_pll
+Z113 w1311594786
+R2
 R4
-Z100 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/acq/tpulse.vhd
-Z101 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/acq/tpulse.vhd
+Z114 8C:/Users/Rafael Gama/Desktop/counter_pld_r20/ndaq_core/acq/timebase_pll.vhd
+Z115 FC:/Users/Rafael Gama/Desktop/counter_pld_r20/ndaq_core/acq/timebase_pll.vhd
 l0
-L6
-VE`LR4Lin>nlbOkzChYS5[0
+L42
+V]I]OM@oU>>^WdX3S>>QE02
 R7
 32
-R8
-R9
-!s100 PRD1HGaV9aBLC]NGiSE]a2
+R11
+R12
+!s100 f@2F1CN:b]W;JG9f9TW5Q0
+Asyn
+R2
+DEx4 work 12 timebase_pll 0 22 ]I]OM@oU>>^WdX3S>>QE02
+l131
+L53
+VWWkikB7?hLIJ[]3jH<Q`A3
+R7
+32
+R31
+R11
+R12
+!s100 =@C9ZMn`VU1Sf<jcc3LiO0
+Etpulse
+R21
+R2
+R18
+Z116 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/acq/tpulse.vhd
+Z117 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/acq/tpulse.vhd
+l0
+L9
+V0m5Q<@DJQ==PP>CmGR?P]2
+R7
+32
+R11
+R12
+!s100 PY^=8?_62gKn7V4i0M=UM2
+Artl
+R2
+DEx4 work 6 tpulse 0 22 0m5Q<@DJQ==PP>CmGR?P]2
+l37
+L19
+VH:azG7m?N4ARL0F5>KccL0
+R7
+32
+R31
+R11
+R12
+!s100 hF;QPEk_W4[GVLf3`^W8D1
 Aone
-R3
+R2
 DEx4 work 6 tpulse 0 22 E`LR4Lin>nlbOkzChYS5[0
 l17
 L14
 VEJoFC]XjcWGUKLL>GV?;10
 R7
 32
-R24
+R31
+R11
+R12
+dC:\Documents and Settings\Rafael\Desktop\pld_r15\ndaq_sim\whole
+FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/acq/tpulse.vhd
+w1304532438
+8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/acq/tpulse.vhd
+!s100 LI_F>Bn3Ti@BYcaDWRlPA0
+Pusb_readout_pkg
+R13
+R1
+R2
+Z118 w1311254751
+R18
+Z119 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/usb_readout/usb_readout_pkg.vhd
+Z120 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/usb_readout/usb_readout_pkg.vhd
+l0
+L12
+V1kfY26mbK9hIBOQn2`ZHZ2
+R7
+32
 R8
 R9
-!s100 LI_F>Bn3Ti@BYcaDWRlPA0
+R10
+R11
+R12
+!s100 koZR^_]GXD?1Q<2?XdTz03
+Bbody
+DBx4 work 15 usb_readout_pkg 0 22 1kfY26mbK9hIBOQn2`ZHZ2
+R13
+R1
+R2
+l0
+L23
+VCCYe<QJRjXj[o>b>;jjae0
+R7
+32
+R8
+R9
+R10
+R11
+R12
+nbody
+!s100 3=gJokY:VLj0c=W8>_nYH0
 Evmeif
-Z102 w1304532435
-R69
-R70
-R14
-R3
-R4
-Z103 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/vme_if/vmeif.vhd
-Z104 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/vme_if/vmeif.vhd
+R17
+R87
+R88
+R22
+R2
+R18
+Z121 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/vme_if/vmeif.vhd
+Z122 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/vme_if/vmeif.vhd
 l0
 L53
 VgAL[_B;7R;Bc1mK<Li?Qc2
 R7
 32
-R8
-R9
+R11
+R12
 !s100 b8bjSY_LgPX3:6K_RVG113
 Avmeif_one
-R69
-R70
-R14
-R3
+R87
+R88
+R22
+R2
 DEx4 work 5 vmeif 0 22 gAL[_B;7R;Bc1mK<Li?Qc2
 l334
 L117
 VcV4][VIKPj0^zGdcj0e4W2
 R7
 32
-Z105 Mx4 4 ieee 14 std_logic_1164
-R76
+R41
+R92
 Mx2 4 work 9 vmeif_pkg
 Mx1 4 work 9 vmeif_usr
-R8
-R9
+R11
+R12
 !s100 YE9mJgBBJ3997:6I=nW1K1
 Pvmeif_pkg
-R14
-R3
-R102
-R4
-Z106 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/vme_if/vmeif_pkg.vhd
-Z107 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/vme_if/vmeif_pkg.vhd
+R22
+R2
+R17
+R18
+Z123 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/vme_if/vmeif_pkg.vhd
+Z124 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/vme_if/vmeif_pkg.vhd
 l0
 L18
 VSdCDn;E<ocRCP3Cgg0E<40
 R7
 32
-Z108 Mx2 4 ieee 14 std_logic_1164
-R18
-R8
-R9
+Z125 Mx2 4 ieee 14 std_logic_1164
+R26
+R11
+R12
 !s100 mjAI:P2l<XA5Wcl3BbgR`2
 Bbody
 DBx4 work 9 vmeif_pkg 0 22 SdCDn;E<ocRCP3Cgg0E<40
-R14
-R3
+R22
+R2
 l0
 L49
 VdNS5fU<50lIcB5HQJlC500
 R7
 32
-R108
-R18
-R8
-R9
+R125
+R26
+R11
+R12
 nbody
 !s100 ihT8FNjIVZjbKZ[9XYidB1
 Pvmeif_usr
-R70
-R14
-R3
-R102
-R4
-Z109 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/vme_if/vmeif_usr.vhd
-Z110 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_vme/vme_if/vmeif_usr.vhd
+R88
+R22
+R2
+R17
+R18
+Z126 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/vme_if/vmeif_usr.vhd
+Z127 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_vme/vme_if/vmeif_usr.vhd
 l0
 L18
 ViHGElK?RTYi]VEJInl6e`0
 R7
 32
-R10
-R88
-Z111 Mx1 4 work 9 vmeif_pkg
 R8
-R9
+R104
+Z128 Mx1 4 work 9 vmeif_pkg
+R11
+R12
 !s100 C7aML;PcMQ1SzJ]e?JgZL3
 Bbody
 DBx4 work 9 vmeif_usr 0 22 iHGElK?RTYi]VEJInl6e`0
-R70
-R14
-R3
+R88
+R22
+R2
 l0
 L165
 Vd23h3AAePoObOkg`g0YLo2
 R7
 32
-R10
-R88
-R111
 R8
-R9
+R104
+R128
+R11
+R12
 nbody
 !s100 =SQPmUg[eX9[ZULYkGBR>3
 Ewritefifo
-R19
+R21
+R38
+R13
 R1
 R2
-R3
-R4
-Z112 8C:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/acq/writefifo.vhd
-Z113 FC:/Documents and Settings/Rafael/Desktop/pld_r15/ndaq_core/acq/writefifo.vhd
+R18
+Z129 8C:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/acq/writefifo.vhd
+Z130 FC:/Users/Rafael Gama/Desktop/pld_r20/ndaq_core/acq/writefifo.vhd
 l0
-L32
-V4kA5VA`Of4=TaSH:m@>1>1
+L33
+Vj@ECBCn>46DD[c6:G=?bK0
 R7
 32
-R8
-R9
-!s100 OODXz^RSBez:@XDnbSzj;1
-Artl
-R1
-R2
-R3
-DEx4 work 9 writefifo 0 22 4kA5VA`Of4=TaSH:m@>1>1
-l83
-L58
-VeUdCgDz__nJdn9@8fJ=[X0
-R7
-32
-R10
 R11
 R12
-R8
-R9
-!s100 M;hgJP@QHW7QQ;G^CbgE=2
+!s100 UbXNj02g[zbUme_P2SBWC1
+Artl
+R38
+R13
+R1
+R2
+DEx4 work 9 writefifo 0 22 j@ECBCn>46DD[c6:G=?bK0
+l89
+L62
+V4Yl3^n;3V;c5O@cC0YY?30
+R7
+32
+R41
+Mx3 4 ieee 15 std_logic_arith
+R84
+R61
+R11
+R12
+!s100 bCDW1AzTHB1z]gV2LY]R=0

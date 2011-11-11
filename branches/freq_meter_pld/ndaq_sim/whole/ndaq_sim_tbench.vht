@@ -259,10 +259,18 @@ type datavec is array (0 to 1) of std_logic_vector(7 downto 0);
 	
 -- Signals                                                   
 
+signal rst		: std_logic := '0';
+
 -- Clocks
 signal adc12_dco: std_logic;
 signal clkcore	: std_logic;
 signal clkvme	: std_logic;
+
+-- ADC Data Behavior
+signal counter_a	: std_logic_vector(9 downto 0);
+signal counter_t	: std_logic := '0';
+signal counter_rd	: std_logic := '0';
+signal adc12_data	: std_logic_vector(9 downto 0);
 
 -- FT245BM chip behavior signals
 signal txe		: std_logic;
@@ -325,7 +333,7 @@ port map
 		--------------------
 		-- ADCs interface --
 		--------------------
-		adc12_data 	=>   	(others => 'Z'),
+		adc12_data 	=>   	adc12_data, --(others => 'Z'),
 		adc34_data 	=>   	(others => 'Z'),
 		adc56_data 	=>   	(others => 'Z'),
 		adc78_data 	=>   	(others => 'Z'),
@@ -581,15 +589,41 @@ loop
 end loop;
 end process clkvme_gen;
 
--- -- Reset 
--- rst_gen: process
--- begin
-	-- rst <= '1';
-	-- wait for 150 ns;
-	-- rst <= '0';
-	-- wait;
--- end process rst_gen;
+-- Reset 
+rst_gen: process
+	begin
+	rst <= '1';
+	wait for 150 ns;
+	rst <= '0';
+	wait;
+end process rst_gen;
 
+--**************************** ADC Data Behavior *******************************
+	
+	counter_rd <= '1';
+	
+	adc_data:
+	process (adc12_dco, rst)
+	begin
+		if (rst = '1') then
+			counter_a	<= (others => '0');
+			counter_t	<= '0';
+			--counter_d	<= (others => '0');
+		elsif (rising_edge(adc12_dco)) then
+			if (counter_rd = '1') then	-- IDT's RD is active low.
+				if (counter = "1111111111") then
+					counter_a	<= (others => '0');
+					counter_t	<= '0';
+				else
+					counter_a	<= counter_a + 1;
+					counter_t	<= '1';
+				end if;
+			end if;
+		end if;
+	end process;
+
+	adc12_data	<= counter_a;
+	
 --***************************** FT245BM Behavior *******************************
 
 -- data values

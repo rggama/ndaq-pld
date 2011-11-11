@@ -3,16 +3,15 @@ quietly WaveActivateNextPane {} 0
 add wave -noupdate -divider {Stream IN}
 add wave -noupdate -format Logic /ndaq_sim_tbench/ndaq_core_fpga/adc_data_acq_construct__0/stream_in/acqin
 add wave -noupdate -format Logic /ndaq_sim_tbench/ndaq_core_fpga/adc_data_acq_construct__0/stream_in/trig0
+add wave -noupdate -format Logic /ndaq_sim_tbench/ndaq_core_fpga/adc_data_acq_construct__0/stream_in/trig3
 add wave -noupdate -format Logic /ndaq_sim_tbench/ndaq_core_fpga/adc_data_acq_construct__0/stream_in/wr
 add wave -noupdate -format Literal -radix hexadecimal /ndaq_sim_tbench/ndaq_core_fpga/adc_data_acq_construct__0/stream_in/usedw
 add wave -noupdate -format Literal -radix hexadecimal /ndaq_sim_tbench/ndaq_core_fpga/adc_data_acq_construct__0/stream_in/wmax
 add wave -noupdate -format Literal -radix hexadecimal /ndaq_sim_tbench/ndaq_core_fpga/adc_data_acq_construct__0/stream_in/esize
 add wave -noupdate -format Logic /ndaq_sim_tbench/ndaq_core_fpga/adc_data_acq_construct__0/stream_in/rst_r
-add wave -noupdate -format Logic /ndaq_sim_tbench/ndaq_core_fpga/adc_data_acq_construct__0/stream_in/rst_l
 add wave -noupdate -format Literal -radix hexadecimal /ndaq_sim_tbench/ndaq_core_fpga/adc_data_acq_construct__0/stream_in/scounter
 add wave -noupdate -format Literal /ndaq_sim_tbench/ndaq_core_fpga/adc_data_acq_construct__0/stream_in/state
 add wave -noupdate -format Literal -radix hexadecimal /ndaq_sim_tbench/ndaq_core_fpga/adc_data_acq_construct__0/stream_in/wmax_r
-add wave -noupdate -format Literal -radix hexadecimal /ndaq_sim_tbench/ndaq_core_fpga/adc_data_acq_construct__0/stream_in/wmax_l
 add wave -noupdate -divider {FIFO Module}
 add wave -noupdate -format Logic /ndaq_sim_tbench/ndaq_core_fpga/adc_data_acq_construct__0/fifo_module/wr
 add wave -noupdate -format Literal -radix hexadecimal /ndaq_sim_tbench/ndaq_core_fpga/adc_data_acq_construct__0/fifo_module/d
@@ -55,4 +54,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {9810790 ps} {10009958 ps}
+WaveRestoreZoom {1574427 ps} {1773595 ps}

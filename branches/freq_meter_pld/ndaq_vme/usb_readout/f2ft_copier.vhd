@@ -82,7 +82,7 @@ architecture rtl of f2ft_copier is
 	signal i_rd			: std_logic := SOURCE_RD_DEASSERT;
 	signal i_wr			: std_logic := 'Z';
 	signal i_isidle	: std_logic := '1';
-	signal mode			: std_logic	:= '0';
+	signal mode			: std_logic	:= '1';
 	
 --
 
@@ -104,7 +104,7 @@ begin
 				
 				when idle	=>
 					if ((enable = '1') and (dwait = '0') 
-						and (ef = '0') and (usedw = x"00")) then   --and (usedw > rmin)
+						and (ef = '0')) then   --and (usedw = x"00") and (usedw > rmin)
 						state	<= read_st;
 					else
 						state	<= idle;
@@ -211,7 +211,8 @@ begin
 				--
 				i_isidle	<= '0';
 				--
-				odata		<= tmp(9 downto 2);
+				--odata		<= tmp(9 downto 2);
+				odata		<= tmp(7 downto 0);
 				
 			when test_st_HIGH	=>
 				i_rd		<= SOURCE_RD_DEASSERT;
@@ -219,7 +220,8 @@ begin
 				--
 				i_isidle	<= '0';
 				--
-				odata		<= tmp(9 downto 2);
+				--odata		<= tmp(9 downto 2);
+				odata		<= tmp(7 downto 0);
 			
 --********************************************************************************
 

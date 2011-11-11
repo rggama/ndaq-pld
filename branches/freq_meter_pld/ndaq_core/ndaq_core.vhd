@@ -168,7 +168,7 @@ entity ndaq_core is
 		--------------------
 		signal trigger_a		: in		std_logic;	
 		signal trigger_b		: in		std_logic;
-		signal trigger_c		: in		std_logic
+		signal trigger_c		: out		std_logic
 		
 		-----------------------
 		-- Temporary signals --
@@ -275,56 +275,96 @@ architecture rtl of ndaq_core is
 		signal trig_out     : out	std_logic
 	);
 	end component;
-
+	
+	--
 	component itrigger 
 	port
-	(	signal rst					: in std_logic;
-		signal clk					: in std_logic;
-		signal enable				: in std_logic;
-		signal pos_neg				: in std_logic;									-- To set positive ('0') or negative ('1') trigger
-		signal data_in				: in signed(data_width-1 downto 0);			-- Signal from the ADC
-		signal threshold_rise	: in signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
-		signal threshold_fall	: in signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
-		signal count_latcher		: buffer std_logic_vector(31 downto 0);	-- Trigger counter
-		signal latch_en			: in std_logic;									-- Signal to latch the counter in 8-bit words
-		signal rd_en				: in std_logic_vector(3 downto 0);			-- Read enable to read the counter
-		signal count_out_HB		: out std_logic_vector(7 downto 0);
-		signal count_out_MH		: out std_logic_vector(7 downto 0);
-		signal count_out_ML		: out std_logic_vector(7 downto 0);
-		signal count_out_LB		: out std_logic_vector(7 downto 0);
-		signal trigger_out		: out std_logic;
-		signal state_out			: out std_logic_vector(3 downto 0)
+	(	
+		signal rst					: in	std_logic;
+		signal clk					: in	std_logic;
+		-- Trigger
+		signal enable				: in	std_logic;
+		signal pos_neg				: in	std_logic;										-- To set positive ('0') or negative ('1') trigger
+		signal data_in				: in	signed(data_width-1 downto 0);			-- Signal from the ADC
+		signal threshold_rise	: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
+		signal threshold_fall	: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
+		signal trigger_out		: out	std_logic;
+		-- Counter
+		signal rdclk				: in	std_logic := '0';
+		signal rden					: in	std_logic := '0';
+		signal fifo_empty			: out	std_logic := '0';
+		signal counter_q			: out	std_logic_vector(7 downto 0) := x"00";
+		-- Debug
+		signal state_out			: out	std_logic_vector(3 downto 0)
 	);	
 	end component;
 	
+	--
+	component c_counter
+	port
+	(	
+		signal clk				: in 	std_logic; 			-- sync if
+		signal rst				: in 	std_logic; 			-- async if
+		
+		signal enable			: in 	std_logic;
+		signal isidle			: out std_logic := '1';
+	
+		signal empty			: in	std_logic;
+		signal rden				: out std_logic := '0';	-- Read enable to read the counter
+		
+		signal afull			: in	std_logic;
+		signal wr				: out	std_logic := '1'				
+	);
+	end component;
+
 	-- IDT FIFO controller
 	component idtfifo_top
 	port(	-- CONTROL/STATUS signals
-		rst						    : in std_logic;
-		clk						    : in std_logic;						
-		start_transfer				 : in std_logic;				-- Control signal to start the readout (command register)
-		enable_fifo				 	 : in std_logic_vector(1 to 4);	-- Indicates if the FIFO transfer is enabled ('1') 
-		idt_full					 	 : in std_logic_vector(1 to 4);
-		idt_wren					 	 : out std_logic_vector(1 to 4);
-		idt_data					 	 : out std_logic_vector(31 downto 0);
-		fifo_empty					 : in std_logic_vector(1 to 8);
-		fifo_used_A					 : in USEDW_T;
-		fifo_used_B					 : in USEDW_T;
-		fifo_used_C					 : in USEDW_T;
-		fifo_used_D					 : in USEDW_T;
-		fifo_used_E					 : in USEDW_T;
-		fifo_used_F					 : in USEDW_T;
-		fifo_used_G					 : in USEDW_T;
-		fifo_used_H					 : in USEDW_T;
-		fifo_rden					 : out std_logic_vector(1 to 8);
-		fifo_qA						 : in DATA_T;
-		fifo_qB						 : in DATA_T;
-		fifo_qC						 : in DATA_T;
-		fifo_qD						 : in DATA_T;
-		fifo_qE						 : in DATA_T;
-		fifo_qF						 : in DATA_T;
-		fifo_qG						 : in DATA_T;
-		fifo_qH						 : in DATA_T
+		rst						   : in std_logic;
+		clk						   : in std_logic;						
+		enable						: in std_logic;						-- arbiter if
+		isidle						: out std_logic;						-- arbiter if
+		start_transfer				: in std_logic;						-- Control signal to start the readout (command register)
+		enable_fifo				 	: in std_logic_vector(1 to 4);	-- Indicates if the FIFO transfer is enabled ('1') 
+		idt_full					 	: in std_logic_vector(1 to 4);
+		idt_wren					 	: out std_logic_vector(1 to 4);
+		idt_data					 	: out std_logic_vector(31 downto 0);
+		fifo_empty					: in std_logic_vector(1 to 8);
+		fifo_used_A					: in USEDW_T;
+		fifo_used_B					: in USEDW_T;
+		fifo_used_C					: in USEDW_T;
+		fifo_used_D					: in USEDW_T;
+		fifo_used_E					: in USEDW_T;
+		fifo_used_F					: in USEDW_T;
+		fifo_used_G					: in USEDW_T;
+		fifo_used_H					: in USEDW_T;
+		fifo_rden					: out std_logic_vector(1 to 8);
+		fifo_qA						: in DATA_T;
+		fifo_qB						: in DATA_T;
+		fifo_qC						: in DATA_T;
+		fifo_qD						: in DATA_T;
+		fifo_qE						: in DATA_T;
+		fifo_qF						: in DATA_T;
+		fifo_qG						: in DATA_T;
+		fifo_qH						: in DATA_T
+	);
+	end component;
+	
+	--Arbiter
+	component core_priarb8
+	port
+	(	
+		signal clk				: in 	std_logic; -- sync if
+		signal rst				: in 	std_logic; -- async if
+
+		signal enable			: in	std_logic; -- arbiter if
+		signal isidle			: out	std_logic; -- arbiter if
+
+		signal en	 			: out	std_logic_vector(7 downto 0) := x"00";
+
+		signal ii				: in	std_logic_vector(7 downto 0);
+
+		signal control       : in	std_logic_vector(7 downto 0)
 	);
 	end component;
 	
@@ -500,6 +540,27 @@ architecture rtl of ndaq_core is
 	signal reg_odata	: std_logic_vector(7 downto 0);
 	
 	signal thtemp		: DATA_T;
+	
+	-- Internal Trigger Counter
+	
+	signal itc_rden	: std_logic;
+	signal itc_empty	: std_logic;
+	signal counter_q	: std_logic_vector(7 downto 0);
+
+	--	type T_ITC_RD_EN	is array ((adc_channels-1) downto 0) of std_logic_vector(3 downto 0);
+--	type T_ITC_DATA	is array ((adc_channels-1) downto 0) of std_logic_vector(7 downto 0);
+--	
+--	signal itc_latch_en	: std_logic_vector((adc_channels-1) downto 0);
+--	signal itc_rd_en		: T_ITC_RD_EN;
+--	signal itc_LB			: T_ITC_DATA;
+--	signal itc_ML			: T_ITC_DATA;
+--	signal itc_MH			: T_ITC_DATA;
+--	signal itc_HB			: T_ITC_DATA;
+--	
+--	--Arbiter
+--	signal arb_en			: std_logic_vector(7 downto 0);
+--	signal arb_ii			: std_logic_vector(7 downto 0);
+	
 	
 ------------------------------------------
 ------------------------------------------
@@ -677,53 +738,53 @@ begin
 
 -- ******************************* TEST COUNTER ********************************
 	
-	test_counter:
-	process (adc12_dco, rst)
-	begin
-		if (rst = '1') then
-			counter		<= x"FF";
-			counter_t	<= '0';
-			--counter_d	<= (others => '0');
-		elsif (rising_edge(adc12_dco)) then
-			if (counter_rd = '1') then	-- IDT's RD is active low.
-				if (counter = x"FF") then
-					counter		<= x"01";
-					counter_t	<= '0';
-				else
-					counter		<= counter + 2;
-					counter_t	<= '1';
-				end if;
-			end if;
-		end if;
-	end process;
-	
-	counter_rd					<= '1';
-	counter_d(9 downto 8)	<= "00";
-	counter_d(7 downto 0)	<= counter;
+--	test_counter:
+--	process (adc12_dco, rst)
+--	begin
+--		if (rst = '1') then
+--			counter		<= x"FF";
+--			counter_t	<= '0';
+--			--counter_d	<= (others => '0');
+--		elsif (rising_edge(adc12_dco)) then
+--			if (counter_rd = '1') then	-- IDT's RD is active low.
+--				if (counter = x"FF") then
+--					counter		<= x"01";
+--					counter_t	<= '0';
+--				else
+--					counter		<= counter + 2;
+--					counter_t	<= '1';
+--				end if;
+--			end if;
+--		end if;
+--	end process;
+--	
+--	counter_rd					<= '1';
+--	counter_d(9 downto 8)	<= "00";
+--	counter_d(7 downto 0)	<= counter;
 	
 	
 -- ******************************* ACQ - CHANNELS *****************************
 
 	clk(0)	<= adc12_dco;
-	clk(1)	<= not(adc12_dco);
-	clk(2)	<= adc34_dco;
-	clk(3)	<= not(adc34_dco);
-	clk(4)	<= adc56_dco;
-	clk(5)	<= not(adc56_dco);
-	clk(6)	<= adc78_dco;
-	clk(7)	<= not(adc78_dco);
+--	clk(1)	<= not(adc12_dco);
+--	clk(2)	<= adc34_dco;
+--	clk(3)	<= not(adc34_dco);
+--	clk(4)	<= adc56_dco;
+--	clk(5)	<= not(adc56_dco);
+--	clk(6)	<= adc78_dco;
+--	clk(7)	<= not(adc78_dco);
 
 	data(0)	<= adc12_data;
-	data(1)	<= adc12_data;
-	data(2)	<= adc34_data;
-	data(3)	<= adc34_data;
-	data(4)	<= adc56_data;
-	data(5)	<= adc56_data;
-	data(6)	<= adc78_data;
-	data(7)	<= adc78_data;
-
-	acq_enable	<= oreg(4)(0);			--Nao e usado no teste VME porque registradores 
-												--nao sao escritos
+--	data(1)	<= adc12_data;
+--	data(2)	<= adc34_data;
+--	data(3)	<= adc34_data;
+--	data(4)	<= adc56_data;
+--	data(5)	<= adc56_data;
+--	data(6)	<= adc78_data;
+--	data(7)	<= adc78_data;
+--
+--	acq_enable	<= oreg(4)(0);			--Nao e usado no teste VME porque registradores 
+--												--nao sao escritos
 	
 	-- Constroi os 8 canais de aquisicao
 	adc_data_acq_construct:
@@ -740,116 +801,120 @@ begin
 			rst				=> acq_rst(i)
 		);
 
-		-- Condiciona trigger da entrada 'A'
-		a_etrigger_cond:
-		tpulse port map
-		(	
-			rst			=> acq_rst(i),
-			clk			=> clk(i),
-			enable		=> '1', 			--Sempre ligado para o teste VME  --acq_enable,
-			trig_in		=> trigger_a,
-			trig_out		=> c_trigger_a(i)
-		);
-
-		-- Condiciona trigger da entrada 'B'
-		b_etrigger_cond:
-		tpulse port map
-		(	
-			rst			=> acq_rst(i),
-			clk			=> clk(i),
-			enable		=> '1', 			--Sempre ligado para o teste VME  --acq_enable,
-			trig_in		=> trigger_b,
-			trig_out		=> c_trigger_b(i)
-		);
-
-		-- Condiciona trigger da entrada 'C'
-		c_etrigger_cond:
-		tpulse port map
-		(	
-			rst			=> acq_rst(i),
-			clk			=> clk(i),
-			enable		=> '1', 			--Sempre ligado para o teste VME  --acq_enable,
-			trig_in		=> trigger_c,
-			trig_out		=> c_trigger_c(i)
-		);
+--		-- Condiciona trigger da entrada 'A'
+--		a_etrigger_cond:
+--		tpulse port map
+--		(	
+--			rst			=> acq_rst(i),
+--			clk			=> clk(i),
+--			enable		=> '1', 			--Sempre ligado para o teste VME  --acq_enable,
+--			trig_in		=> trigger_a,
+--			trig_out		=> c_trigger_a(i)
+--		);
+--
+--		-- Condiciona trigger da entrada 'B'
+--		b_etrigger_cond:
+--		tpulse port map
+--		(	
+--			rst			=> acq_rst(i),
+--			clk			=> clk(i),
+--			enable		=> '1', 			--Sempre ligado para o teste VME  --acq_enable,
+--			trig_in		=> trigger_b,
+--			trig_out		=> c_trigger_b(i)
+--		);
+--
+--		-- Condiciona trigger da entrada 'C'
+--		c_etrigger_cond:
+--		tpulse port map
+--		(	
+--			rst			=> acq_rst(i),
+--			clk			=> clk(i),
+--			enable		=> '1', 			--Sempre ligado para o teste VME  --acq_enable,
+--			trig_in		=> trigger_c,
+--			trig_out		=> c_trigger_c(i)
+--		);
 
 		-- Gera Trigger Interno e conta a quantidade de triggers
-		thtemp(9 downto 8) <= "00";
-		thtemp(7 downto 0) <= oreg(5);
+--		thtemp(9 downto 8) <= "00";
+--		thtemp(7 downto 0) <= oreg(5);
 		
 		internal_trigger:
 		itrigger port map
 		(	
 			rst					=> acq_rst(i),
 			clk					=> clk(i),
+			
+			-- Trigger
 			enable				=> '1',
-			pos_neg				=> '1',										--'0' for pos, '1' for neg.
+			pos_neg				=> '0',
 			data_in				=>	MY_CONV_SIGNED(data(i)),
 			threshold_rise		=> CONV_SIGNED(T_RISE, data_width), --MY_CONV_SIGNED(thtemp),
 			threshold_fall		=> CONV_SIGNED(T_FALL, data_width), --MY_CONV_SIGNED(thtemp),
-			count_latcher		=> open,
-			latch_en				=> '0',
-			rd_en					=>	(others => '0'),
-			count_out_HB		=> open,
-			count_out_MH		=> open,
-			count_out_ML		=> open,
-			count_out_LB		=> open,
-			trigger_out			=> int_trigger(i),
+			trigger_out			=> trigger_c, --int_trigger(i),
+			
+			-- Counter
+			rdclk					=> pclk,
+			rden					=> itc_rden,
+			fifo_empty			=> itc_empty,
+			counter_q			=> counter_q,
+			
+			-- Debug
 			state_out			=>	open
 		);	
 
-		-- Controla a escrita nas POST FIFOs a partir de um 'trigger' condicionado
-		stream_IN:
-		writefifo port map
-		(	
-			clk		=> clk(i),
-			rst		=> acq_rst(i),
-		
-			acqin		=> open,
-			
-			tmode		=> '1',	-- '0' for External, '1' for Interal
-			
-			--OR'ed conditioned trigger inputs, active when 'tmode = '0''
-			trig0 	=> c_trigger_a(i),
-			trig1 	=> c_trigger_b(i),
-			trig2		=> c_trigger_c(i),
 
-			-- conditioned trigger input, active when 'tmode = '1''
-			trig3		=> int_trigger(0),
-			
-			wr			=> wr(i),
-				
-			usedw		=> wrusedw(i),
-			full		=> full(i),
-		
-			wmax		=> CONV_STD_LOGIC_VECTOR(MAX_WORDS, usedw_width),
-			esize		=> CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)
-		);
-
-		
-		-- Modulo de FIFO: PRE+POST
-		fifo_module:
-		dcfifom port map
-		(	
-			wrclk			=> clk(i),
-			rdclk			=> pclk,
-			rst			=> acq_rst(i),
-		
-			wr				=> wr(i),
-			d				=> data(i),
-		
-			rd				=> rd(i),
-			q				=> q(i),
-		
-			f				=> full(i),
-			e				=> empty(i),
-
-			rdusedw		=> rdusedw(i),
-			wrusedw		=> wrusedw(i)
-		);
+--		-- Controla a escrita nas POST FIFOs a partir de um 'trigger' condicionado
+--		stream_IN:
+--		writefifo port map
+--		(	
+--			clk		=> clk(i),
+--			rst		=> acq_rst(i),
+--		
+--			acqin		=> open,
+--			
+--			tmode		=> '1',	-- '0' for External, '1' for Interal
+--			
+--			--OR'ed conditioned trigger inputs, active when 'tmode = '0''
+--			trig0 	=> c_trigger_a(i),
+--			trig1 	=> c_trigger_b(i),
+--			trig2		=> c_trigger_c(i),
+--
+--			-- conditioned trigger input, active when 'tmode = '1''
+--			trig3		=> int_trigger(0),
+--			
+--			wr			=> wr(i),
+--				
+--			usedw		=> wrusedw(i),
+--			full		=> full(i),
+--		
+--			wmax		=> CONV_STD_LOGIC_VECTOR(MAX_WORDS, usedw_width),
+--			esize		=> CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)
+--		);
+--
+--		
+--		-- Modulo de FIFO: PRE+POST
+--		fifo_module:
+--		dcfifom port map
+--		(	
+--			wrclk			=> clk(i),
+--			rdclk			=> pclk,
+--			rst			=> acq_rst(i),
+--		
+--			wr				=> wr(i),
+--			d				=> data(i),
+--		
+--			rd				=> rd(i),
+--			q				=> q(i),
+--		
+--			f				=> full(i),
+--			e				=> empty(i),
+--
+--			rdusedw		=> rdusedw(i),
+--			wrusedw		=> wrusedw(i)
+--		);
 	
 	end generate adc_data_acq_construct;
-
+		
 -- ************************************ IDT TEST COUNTER ***************************
 
 	-- test_counter:
@@ -871,64 +936,97 @@ begin
 
 -- ************************************ IDT COPIER ********************************
 
-	-- Copia das FIFOs internas para as IDT FIFOs
-	idt_writer:
-	idtfifo_top port map
-	(	-- CONTROL/STATUS signals
-		rst					=> rst,
-		clk					=> pclk,							-- Read clock das FIFOs internas e Write clock das IDT FIFOs		
-		start_transfer		=> '1',
-		enable_fifo			=> "1111",						-- A copia para as 4 FIFOs esta habilitada "1111";
+	fifo2_wen	<= '1';
+	fifo3_wen	<= '1';
+	fifo4_wen	<= '1';
 
-		idt_full(1)			=> fifo1_paf, --fifo1_ff,	-- Nao da pra usar a full flag para fazer uma copia em bloco.
-		idt_full(2)			=> fifo2_paf,				 	-- Agora a programmable almost full flag esta sendo usada
-		idt_full(3)			=> fifo3_paf,					-- E esta configurada para ficar ativa quando a FIFO tiver apenas
-		idt_full(4)			=> fifo4_paf,					-- 255 palavras livres. Como se quer copiar 128 palavras, devera 
-																	-- funcionar.
-																	
-		idt_wren(1)			=> fifo1_wen,
-		idt_wren(2)			=> fifo2_wen,
-		idt_wren(3)			=> fifo3_wen,
-		idt_wren(4)			=> fifo4_wen,
-
-		idt_data			=> fifo_data_bus,
+--	-- Copia das FIFOs internas para as IDT FIFOs
+--	idt_writer:
+--	idtfifo_top port map
+--	(	-- CONTROL/STATUS signals
+--		rst					=> rst,
+--		clk					=> pclk,							-- Read clock das FIFOs internas e Write clock das IDT FIFOs		
+--		
+--		enable				=> '1',							-- arbiter if
+--		isidle				=> open,							-- arbiter if
+--		
+--		start_transfer		=> '1',
+--		enable_fifo			=> "1111",						-- A copia para as 4 FIFOs esta habilitada "1111";
+--
+--		idt_full(1)			=> fifo1_paf, --fifo1_ff,	-- Nao da pra usar a full flag para fazer uma copia em bloco.
+--		idt_full(2)			=> fifo2_paf,				 	-- Agora a programmable almost full flag esta sendo usada
+--		idt_full(3)			=> fifo3_paf,					-- E esta configurada para ficar ativa quando a FIFO tiver apenas
+--		idt_full(4)			=> fifo4_paf,					-- 255 palavras livres. Como se quer copiar 128 palavras, devera 
+--																	-- funcionar.
+--																	
+--		idt_wren				=> open,
+--		--idt_wren(1)			=> fifo1_wen,
+--		--idt_wren(2)			=> fifo2_wen,
+--		--idt_wren(3)			=> fifo3_wen,
+--		--idt_wren(4)			=> fifo4_wen,
+--
+--		idt_data				=> open, --fifo_data_bus,
+--		
+--		fifo_used_A			=> rdusedw(0),					-- Mudar para barramento no futuro
+--		fifo_used_B			=> rdusedw(1),
+--		fifo_used_C			=> rdusedw(2),
+--		fifo_used_D			=> rdusedw(3),
+--		fifo_used_E			=> rdusedw(4),
+--		fifo_used_F			=> rdusedw(5),
+--		fifo_used_G			=> rdusedw(6),
+--		fifo_used_H			=> rdusedw(7),
+--
+--		fifo_empty(1)		=> empty(0),
+--		fifo_empty(2)		=> empty(1),
+--		fifo_empty(3)		=> empty(2),
+--		fifo_empty(4)		=> empty(3),
+--		fifo_empty(5)		=> empty(4),
+--		fifo_empty(6)		=> empty(5),
+--		fifo_empty(7)		=> empty(6),
+--		fifo_empty(8)		=> empty(7),
+--
+--		fifo_rden(1)		=> rd(0),						-- Mudar para barramento quando possivel
+--		fifo_rden(2)		=> rd(1),
+--		fifo_rden(3)		=> rd(2),
+--		fifo_rden(4)		=> rd(3),
+--		fifo_rden(5)		=> rd(4),
+--		fifo_rden(6)		=> rd(5),
+--		fifo_rden(7)		=> rd(6),
+--		fifo_rden(8)		=> rd(7),
+--		
+--		fifo_qA   			=> q(0),
+--		fifo_qB				=> q(1),
+--		fifo_qC				=> q(2),
+--		fifo_qD				=> q(3),
+--		fifo_qE				=> q(4),
+--		fifo_qF				=> q(5),
+--		fifo_qG				=> q(6),
+--		fifo_qH				=> q(7)
+--		
+--	);
 		
-		fifo_used_A			=> rdusedw(0),					-- Mudar para barramento no futuro
-		fifo_used_B			=> rdusedw(1),
-		fifo_used_C			=> rdusedw(2),
-		fifo_used_D			=> rdusedw(3),
-		fifo_used_E			=> rdusedw(4),
-		fifo_used_F			=> rdusedw(5),
-		fifo_used_G			=> rdusedw(6),
-		fifo_used_H			=> rdusedw(7),
+-- ********************************* COUNTER COPIER ******************************
+	
+	fifo_data_bus(31 downto 8)	<= (others => '0');
+	fifo_data_bus(7 downto 0)	<= counter_q;
 
-		fifo_empty(1)		=> empty(0),
-		fifo_empty(2)		=> empty(1),
-		fifo_empty(3)		=> empty(2),
-		fifo_empty(4)		=> empty(3),
-		fifo_empty(5)		=> empty(4),
-		fifo_empty(6)		=> empty(5),
-		fifo_empty(7)		=> empty(6),
-		fifo_empty(8)		=> empty(7),
-
-		fifo_rden(1)		=> rd(0),						-- Mudar para barramento quando possivel
-		fifo_rden(2)		=> rd(1),
-		fifo_rden(3)		=> rd(2),
-		fifo_rden(4)		=> rd(3),
-		fifo_rden(5)		=> rd(4),
-		fifo_rden(6)		=> rd(5),
-		fifo_rden(7)		=> rd(6),
-		fifo_rden(8)		=> rd(7),
+	itc_copier:
+	c_counter port map
+	(	
+		clk				=> pclk,
+		rst				=> rst,
 		
-		fifo_qA   			=> q(0),
-		fifo_qB				=> q(1),
-		fifo_qC				=> q(2),
-		fifo_qD				=> q(3),
-		fifo_qE				=> q(4),
-		fifo_qF				=> q(5),
-		fifo_qG				=> q(6),
-		fifo_qH				=> q(7)
+		enable			=> '1',
+		isidle			=> open,
+	
+		empty				=> itc_empty,
+		rden				=> itc_rden,
 		
+		afull				=> fifo1_paf,
+		wr					=> fifo1_wen
 	);
-		
+
+
+
+
 end rtl;
