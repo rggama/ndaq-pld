@@ -345,7 +345,7 @@ architecture rtl of ndaq_core is
 	);
 	end component;
 
-	-- Slave SPI - Here for loopback test.
+	-- Slave SPI
 	component s_spi
 	port
 	(	
@@ -442,10 +442,11 @@ architecture rtl of ndaq_core is
 	signal adcpwdn					: std_logic_vector(3 downto 0);
 
 	signal adc_dco					: std_logic_vector(3 downto 0);
-	signal nadc_dco				: std_logic_vector(3 downto 0);
+	signal nadc_dco					: std_logic_vector(3 downto 0);
 	signal acq_enable				: std_logic;
 	
 	signal pclk						: std_logic;
+	signal fclk						: std_logic;
 
 	signal acq_rst					: std_logic_vector((adc_channels-1) downto 0);	
 	signal clk						: std_logic_vector((adc_channels-1) downto 0);
@@ -453,14 +454,14 @@ architecture rtl of ndaq_core is
 	signal wr						: std_logic_vector((adc_channels-1) downto 0);
 	signal full						: std_logic_vector((adc_channels-1) downto 0);
 	signal empty					: std_logic_vector((adc_channels-1) downto 0);
-	signal c_trigger_a			: std_logic_vector((adc_channels-1) downto 0);
-	signal c_trigger_b			: std_logic_vector((adc_channels-1) downto 0);
-	signal c_trigger_c			: std_logic_vector((adc_channels-1) downto 0);
-	signal int_trigger			: std_logic_vector((adc_channels-1) downto 0);
+	signal c_trigger_a				: std_logic_vector((adc_channels-1) downto 0);
+	signal c_trigger_b				: std_logic_vector((adc_channels-1) downto 0);
+	signal c_trigger_c				: std_logic_vector((adc_channels-1) downto 0);
+	signal int_trigger				: std_logic_vector((adc_channels-1) downto 0);
 
 
 	signal data						: F_DATA_WIDTH_T;	-- FIFOs input DATA bus vector
-	signal q							: F_DATA_WIDTH_T;	-- FIFOs output DATA  bus vector 
+	signal q						: F_DATA_WIDTH_T;	-- FIFOs output DATA  bus vector 
 
 
 	signal rdusedw					: F_USEDW_WIDTH_T; -- FIFOs USED WORDS bus vector sync'ed to read clock
@@ -531,7 +532,7 @@ begin
 	----------------------
 	-- FIFO's interface --
 	----------------------
-	fifo_wck	<= pclk;
+	fifo_wck	<= fclk; --pclk;
 	
 	fifo_mrs	<= not(rst);
 	fifo_prs	<= '1';
@@ -540,7 +541,7 @@ begin
 	-- IDT FIFO: Configuracao da Programmable Almost Full Flag durante o RESET. 
 	fifo_fs0	<= '1';			--high for m = 255 -- See IDT FIFO1s manual.
 	fifo_fs1	<= '1';			--high for m = 255 -- See IDT FIFO1s manual.
-	fifo_ld	<= '1';			--high during reset for m = 255 -- See IDT FIFO's manual.
+	fifo_ld		<= '1';			--high during reset for m = 255 -- See IDT FIFO's manual.
 
 	
 	--------------------
@@ -566,11 +567,11 @@ begin
 	(
 		iclk				=> clkcore, 
 		
-		pclk				=> open, --pclk,
+		pclk				=> open,
 		nclk				=> open,
 		mclk				=> pclk, --pclk esta ligado ao mclk=40MHz porque quando estava em pclk=60MHz, a escrita nas IDT FIFOs nao funcionou
-		sclk				=> open,
-		clk_enable		=> open,
+		sclk				=> fclk,
+		clk_enable			=> open,
 		tclk				=> open
 	);
 	
@@ -580,7 +581,7 @@ begin
 	(	
 		clk				=> pclk,
 		
-		reset				=> oreg(0),
+		reset			=> oreg(0),
 		
 		rst				=> rst
 	);
@@ -597,8 +598,8 @@ begin
 	s_spi
 	port map
 	(	
-		clk		=> pclk,		-- sytem clock
-		rst		=> rst,			-- asynchronous reset
+		clk			=> pclk,		-- sytem clock
+		rst			=> rst,			-- asynchronous reset
 		
 		mosi		=> mosi,		-- master serial out	- slave serial in
 		miso		=> miso,		-- master serial in		- slave serial out
@@ -756,7 +757,7 @@ begin
 		(	
 			clk				=> clk(i),
 		
-			reset				=> x"00",
+			reset			=> x"00",
 		
 			rst				=> acq_rst(i)
 		);
@@ -769,7 +770,7 @@ begin
 			clk			=> clk(i),
 			enable		=> '1', 			--Sempre ligado para o teste VME  --acq_enable,
 			trig_in		=> trigger_a,
-			trig_out		=> c_trigger_a(i)
+			trig_out	=> c_trigger_a(i)
 		);
 
 		-- Condiciona trigger da entrada 'B'
@@ -780,7 +781,7 @@ begin
 			clk			=> clk(i),
 			enable		=> '1', 			--Sempre ligado para o teste VME  --acq_enable,
 			trig_in		=> trigger_b,
-			trig_out		=> c_trigger_b(i)
+			trig_out	=> c_trigger_b(i)
 		);
 
 		-- Condiciona trigger da entrada 'C'
@@ -791,7 +792,7 @@ begin
 			clk			=> clk(i),
 			enable		=> '1', 			--Sempre ligado para o teste VME  --acq_enable,
 			trig_in		=> trigger_c,
-			trig_out		=> c_trigger_c(i)
+			trig_out	=> c_trigger_c(i)
 		);
 
 		-- Gera Trigger Interno e conta a quantidade de triggers
@@ -809,8 +810,8 @@ begin
 			threshold_rise		=> CONV_SIGNED(T_RISE, data_width), --MY_CONV_SIGNED(thtemp),
 			threshold_fall		=> CONV_SIGNED(T_FALL, data_width), --MY_CONV_SIGNED(thtemp),
 			count_latcher		=> open,
-			latch_en				=> '0',
-			rd_en					=>	(others => '0'),
+			latch_en			=> '0',
+			rd_en				=>	(others => '0'),
 			count_out_HB		=> open,
 			count_out_MH		=> open,
 			count_out_ML		=> open,
@@ -823,16 +824,16 @@ begin
 		stream_IN:
 		writefifo port map
 		(	
-			clk		=> clk(i),
-			rst		=> acq_rst(i),
+			clk			=> clk(i),
+			rst			=> acq_rst(i),
 		
 			acqin		=> open,
 			
-			tmode		=> '1',	-- '0' for External, '1' for Interal
+			tmode		=> '0',	-- '0' for External, '1' for Interal
 			
 			--OR'ed conditioned trigger inputs, active when 'tmode = '0''
-			trig0 	=> c_trigger_a(i),
-			trig1 	=> c_trigger_b(i),
+			trig0 		=> c_trigger_a(i),
+			trig1 		=> c_trigger_b(i),
 			trig2		=> c_trigger_c(i),
 
 			-- conditioned trigger input, active when 'tmode = '1''
@@ -852,18 +853,18 @@ begin
 		fifo_module:
 		dcfifom port map
 		(	
-			wrclk			=> clk(i),
-			rdclk			=> pclk,
+			wrclk		=> clk(i),
+			rdclk		=> fclk, --pclk,
 			rst			=> acq_rst(i),
 		
-			wr				=> wr(i),
-			d				=> data(i),
+			wr			=> wr(i),
+			d			=> data(i),
 		
-			rd				=> rd(i),
-			q				=> q(i),
+			rd			=> rd(i),
+			q			=> q(i),
 		
-			f				=> full(i),
-			e				=> empty(i),
+			f			=> full(i),
+			e			=> empty(i),
 
 			rdusedw		=> rdusedw(i),
 			wrusedw		=> wrusedw(i)
