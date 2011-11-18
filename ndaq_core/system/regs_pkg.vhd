@@ -22,17 +22,17 @@ package regs_pkg is
 
 ------------------------------------------------------------------------------- 
 
-	--(addr, writable, readable, peripheral)
+	--(addr, writable, readable, peripheral, reset state)
 	constant system_regs_enum	: SYS_REGS_VECTOR :=
 	(
-		(x"AA",	true,	true,	false, x"00"),	--Reset
-		(x"80",	true,	true,	false, x"00"),	--Readout Enable	--IDT Writer is always enabled. No readout control here... Change it!?
-		(x"87",	true,	true,	false, x"00"),	--ADC Pwdn
-		(x"89",	true,	true,	false, x"00"),	--FIFO Reset
-		(x"91",	true,	true,	false, x"00"),	--ACQ Enable
-		(x"77",	true,	true,	false, x"55"),	--Th
+		(x"AA",	true,	true,	false,	x"00"),	--Reset
+		(x"80",	true,	true,	false,	x"00"),	--Readout Enable	--IDT Writer is always enabled. No readout control here... Change it!?
+		(x"87",	true,	true,	false,	x"00"),	--ADC Pwdn
+		(x"89",	true,	true,	false,	x"00"),	--FIFO Reset
+		(x"91",	true,	true,	false,	x"00"),	--ACQ Enable
+		(x"77",	true,	true,	false,	x"55"),	--Th
 		--
-		(x"27",	true,	true,	false, x"00")	--R/W Test Register
+		(x"27",	true,	true,	false,	x"00")	--R/W Test Register
 		
 	);
 

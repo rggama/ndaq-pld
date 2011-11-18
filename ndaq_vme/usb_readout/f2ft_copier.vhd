@@ -47,7 +47,7 @@ end f2ft_copier;
 architecture rtl of f2ft_copier is
 	
 	constant SOURCE_RD_ASSERT		:	std_logic := '1';	-- Altera's SC FIFO.
-	constant SOURCE_RD_DEASSERT	:	std_logic := '0';	-- Altera's SC FIFO.
+	constant SOURCE_RD_DEASSERT		:	std_logic := '0';	-- Altera's SC FIFO.
 
 	-- Components
 	component opndrn
@@ -81,7 +81,7 @@ architecture rtl of f2ft_copier is
 	
 	signal i_rd			: std_logic := SOURCE_RD_DEASSERT;
 	signal i_wr			: std_logic := 'Z';
-	signal i_isidle	: std_logic := '1';
+	signal i_isidle		: std_logic := '1';
 	signal mode			: std_logic	:= '0';
 	
 --
@@ -104,7 +104,7 @@ begin
 				
 				when idle	=>
 					if ((enable = '1') and (dwait = '0') 
-						and (ef = '0') and (usedw = x"00")) then   --and (usedw > rmin)
+						and (ef = '0') and (usedw = x"00")) then
 						state	<= read_st;
 					else
 						state	<= idle;
@@ -125,7 +125,7 @@ begin
 					state <= test_st_LOW;						
 				
 				when test_st_LOW	=>
-					if ((enable = '1') and (dwait = '0')) then
+					if ( (dwait = '0')) then --(enable = '1') and
 						state	<= write_st_HIGH;
 					else
 						state	<= test_st_LOW;
@@ -145,7 +145,7 @@ begin
 					end if;
 				
 				when test_st_HIGH	=>
-					if ((enable = '1') and (dwait = '0')) then
+					if ( (dwait = '0')) then --(enable = '1') and 
 						state	<= read_st;
 					else
 						state	<= test_st_HIGH;

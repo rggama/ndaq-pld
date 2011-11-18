@@ -24,34 +24,34 @@ entity ndaq_vme is
 		-- VME bus --
 		-------------
 		signal vme_add 		:in  		std_logic_vector(31 downto 1);-- 'vmeif' OK :VME Address Bus
-		signal vme_oea			:out  	std_logic;-- 'vmeif' OK ('vme_xbuf_addrle') :VME Address Bus Enable
+		signal vme_oea		:out  		std_logic;-- 'vmeif' OK ('vme_xbuf_addrle') :VME Address Bus Enable
 				
-		signal vme_data		:inout 	std_logic_vector(31 downto 0);-- 'vmeif' OK :VME Data Bus
-		signal vme_oed			:out  	std_logic;-- 'vmeif' OK ('vme_xbuf_dataoe') :VME Data Bus Enable
-		signal vme_dird		:out  	std_logic;-- 'vmeif' OK ('vme_xbuf_datadir'):VME Data Bus Direction
+		signal vme_data		:inout 		std_logic_vector(31 downto 0);-- 'vmeif' OK :VME Data Bus
+		signal vme_oed		:out  		std_logic;-- 'vmeif' OK ('vme_xbuf_dataoe') :VME Data Bus Enable
+		signal vme_dird		:out  		std_logic;-- 'vmeif' OK ('vme_xbuf_datadir'):VME Data Bus Direction
 		
 		signal vme_gap 		:in  		std_logic;-- 'vmeif' OK						:VME Geographical Address Parity
-		signal vme_ga 			:in  		std_logic_vector(4 downto 0);-- 'vmeif' OK	:VME Geographical Address
+		signal vme_ga 		:in  		std_logic_vector(4 downto 0);-- 'vmeif' OK	:VME Geographical Address
 		
-		signal vme_dtack		:out 		std_logic;-- 'vmeif' OK						: VME Data Transfer Acknowledge
-		signal vme_oetack		:out 		std_logic;-- 'vmeif' OK ('vme_xbuf_dtackoe'): VME Data Transfer Acknowledge Output Enable
+		signal vme_dtack	:out 		std_logic;-- 'vmeif' OK						: VME Data Transfer Acknowledge
+		signal vme_oetack	:out 		std_logic;-- 'vmeif' OK ('vme_xbuf_dtackoe'): VME Data Transfer Acknowledge Output Enable
 		signal vme_vack		:in  		std_logic;-- 'vmeif' OK						: VME Data Transfer Acknowledge Read Value
 		
-		signal vme_as 			:in  		std_logic;-- 'vmeif' OK						: VME Address Strobe
-		signal vme_lw 			:in  		std_logic;-- 'vmeif' OK ('vme_lword')		: VME Long Word
-		signal vme_wr 			:in  		std_logic;-- 'vmeif' OK ('vme_write')		: VME Read/Write
+		signal vme_as 		:in  		std_logic;-- 'vmeif' OK						: VME Address Strobe
+		signal vme_lw 		:in  		std_logic;-- 'vmeif' OK ('vme_lword')		: VME Long Word
+		signal vme_wr 		:in  		std_logic;-- 'vmeif' OK ('vme_write')		: VME Read/Write
 		signal vme_ds0 		:in  		std_logic;-- 'vmeif' OK						: VME Data Strobe 0
 		signal vme_ds1 		:in  		std_logic;-- 'vmeif' OK						: VME Data Strobe 1
-		signal vme_am 			:in  		std_logic_vector(5 downto 0);-- 'vmeif' OK	: VME Address Modifier
-		signal vme_sysrst		:in  		std_logic;-- 'vmeif' OK ('vme_sysreset')	: VME System Reset
-		signal vme_sysclk		:in  		std_logic;-- 'vmeif' OK ('vme_sysclock')	: VME System Clock
+		signal vme_am 		:in  		std_logic_vector(5 downto 0);-- 'vmeif' OK	: VME Address Modifier
+		signal vme_sysrst	:in  		std_logic;-- 'vmeif' OK ('vme_sysreset')	: VME System Reset
+		signal vme_sysclk	:in  		std_logic;-- 'vmeif' OK ('vme_sysclock')	: VME System Clock
 		
 		signal vme_iack		:in  		std_logic;-- 'vmeif' OK						: VME Interrupt Acknowledge
-		signal vme_iackin		:in  		std_logic;-- 'vmeif' OK ('vme_iack_in')		: VME Interrupt Acknowledge Daisy-Chain Input
+		signal vme_iackin	:in  		std_logic;-- 'vmeif' OK ('vme_iack_in')		: VME Interrupt Acknowledge Daisy-Chain Input
 		signal vme_iackout	:out		std_logic;-- 'vmeif' OK ('vme_iack_out')	: VME Interrupt Acknoweldge Daisy-Chain Output
-		signal vme_irq			:out		std_logic_vector(7 downto 1);-- 'vmeif' OK	: VME Interrupt Request
+		signal vme_irq		:out		std_logic_vector(7 downto 1);-- 'vmeif' OK	: VME Interrupt Request
 		
-		signal vme_berr		:out  	std_logic;-- 'vmeif' OK						: VME Bus Error
+		signal vme_berr		:out  		std_logic;-- 'vmeif' OK						: VME Bus Error
 		signal vme_verr		:in  		std_logic;-- 'vmeif' OK						: VME Bus Error Read Value
 		
 
@@ -72,25 +72,33 @@ entity ndaq_vme is
 		---------------------
 		-- FIFOs interface --
 		---------------------
-		signal fifo1_oe 	:out  	std_logic;
-		signal fifo2_oe 	:out  	std_logic;
-		signal fifo3_oe 	:out  	std_logic;
-		signal fifo4_oe 	:out  	std_logic;
-		signal fifo1_ren 	:out  	std_logic;
-		signal fifo2_ren 	:out  	std_logic;
-		signal fifo3_ren 	:out  	std_logic;
-		signal fifo4_ren 	:out  	std_logic;
-		signal fifo1_ef 	:in  		std_logic;
-		signal fifo2_ef 	:in  		std_logic;
-		signal fifo3_ef 	:in  		std_logic;
-		signal fifo4_ef 	:in  		std_logic;
+		--signal fifo1_oe 	:out  	std_logic;
+		--signal fifo2_oe 	:out  	std_logic;
+		--signal fifo3_oe 	:out  	std_logic;
+		--signal fifo4_oe 	:out  	std_logic;
+		
+		signal fifo_oe		:out	std_logic_vector(3 downto 0) := x"F";
+		
+		--signal fifo1_ren 	:out  	std_logic;
+		--signal fifo2_ren 	:out  	std_logic;
+		--signal fifo3_ren 	:out  	std_logic;
+		--signal fifo4_ren 	:out  	std_logic;
+		
+		signal fifo_ren		:out	std_logic_vector(3 downto 0) := x"F";
+		
+		--signal fifo1_ef 	:in  	std_logic;
+		--signal fifo2_ef 	:in  	std_logic;
+		--signal fifo3_ef 	:in  	std_logic;
+		--signal fifo4_ef 	:in  	std_logic;
 
+		signal fifo_ef		:in		std_logic_vector(3 downto 0);
+		
 		----------------
 		-- Master SPI --
 		----------------
 		
-		signal spiclk		:out		std_logic;
-		signal mosi			:out		std_logic;
+		signal spiclk		:out	std_logic;
+		signal mosi			:out	std_logic;
 		signal miso			:in		std_logic;
 		
 		-------------------
@@ -118,8 +126,8 @@ architecture rtl of ndaq_vme is
 		 	
 		signal pclk				: out	std_logic;
 		signal nclk				: out	std_logic;
-		signal mclk    		: out	std_logic;
-		signal sclk    		: out	std_logic;
+		signal mclk    			: out	std_logic;
+		signal sclk    			: out	std_logic;
 		signal clk_enable		: out	std_logic;
 		signal tclk				: out	std_logic
 	);
@@ -162,7 +170,7 @@ architecture rtl of ndaq_vme is
 		signal f_rxf			: in 	std_logic;
 		signal f_wr				: out	std_logic;
 		signal f_rd				: out	std_logic;
-		signal f_iodata		: inout	std_logic_vector(7 downto 0)
+		signal f_iodata			: inout	std_logic_vector(7 downto 0)
 	);
 	end component;
 
@@ -193,16 +201,16 @@ architecture rtl of ndaq_vme is
 	port
 	( testpin			: out	std_logic;
 	  vme_addr			: in	std_logic_vector(31 downto 1);									-- VME address bus
-     vme_xbuf_addrle : out	std_logic;														-- VME address bus latch enable
-     vme_am				: in	std_logic_vector(5 downto 0);  									-- VME address modifier code
+	  vme_xbuf_addrle 	: out	std_logic;														-- VME address bus latch enable
+      vme_am			: in	std_logic_vector(5 downto 0);  									-- VME address modifier code
 	  vme_data			: inout	std_logic_vector(31 downto 0);									-- VME data bus
 	  vme_xbuf_dataoe	: out	std_logic;														-- VME data bus output enable
-	  vme_xbuf_datadir: out	std_logic;														-- VME data bus direction
+	  vme_xbuf_datadir	: out	std_logic;														-- VME data bus direction
 	  vme_lword			: in	std_logic;														-- VME long word
 	  vme_dtack			: out	std_logic;														-- VME data transfer acknowledge
-	  vme_xbuf_dtackoe: out	std_logic;														-- VME data transfer acknowledge output enable
+	  vme_xbuf_dtackoe	: out	std_logic;														-- VME data transfer acknowledge output enable
 	  vme_vack			: in	std_logic;														-- VME data transfer acknowledge read value
-	  vme_as				: in	std_logic;														-- VME address strobe
+	  vme_as			: in	std_logic;														-- VME address strobe
 	  vme_ds0			: in	std_logic;														-- VME data strobe #0
 	  vme_ds1			: in	std_logic;														-- VME data strobe #1
 	  vme_write			: in	std_logic;														-- VME read/write
@@ -215,10 +223,10 @@ architecture rtl of ndaq_vme is
 	  vme_sysreset		: in	std_logic;														-- VME system reset
 	  vme_sysclock		: in	std_logic;														-- VME system clock
 	  vme_retry			: out	std_logic;														-- VME retry
-	  vme_xbuf_retryoe: out	std_logic;														-- VME retry output enable
-	  vme_ga				: in	std_logic_vector(4 downto 0);									-- VME geographical address
+	  vme_xbuf_retryoe	: out	std_logic;														-- VME retry output enable
+	  vme_ga			: in	std_logic_vector(4 downto 0);									-- VME geographical address
 	  vme_gap			: in	std_logic;														-- VME geographical address parity
-	  powerup_reset	: in	std_logic := '0';												-- COM power-up reset
+	  powerup_reset		: in	std_logic := '0';												-- COM power-up reset
 	  clock_40mhz		: in	std_logic;														-- COM 40 MHz clock
 	  user_addr			: out	std_logic_vector(24 downto 0);									-- USR latched address bus (32-bit words)
 	  user_am			: out	std_logic_vector(5 downto 0);									-- USR addres modifier
@@ -230,9 +238,9 @@ architecture rtl of ndaq_vme is
 	  user_ireq			: in	std_logic_vector((NUM_USR_IRQ-1) downto 0) := (others => '0');	-- USR interrupt request
 	  user_iack			: out	std_logic_vector((NUM_USR_IRQ-1) downto 0);						-- USR interrupt acknowledge
 	  user_reset		: out	std_logic_vector((NUM_USR_RST-1) downto 0);						-- USR reset	
-	  user_addr_out	: out	std_logic_vector(24 downto 0);									-- USR latched address bus (32-bit words)
+	  user_addr_out		: out	std_logic_vector(24 downto 0);									-- USR latched address bus (32-bit words)
 	  user_am_out		: out	std_logic_vector(5 downto 0);									-- USR addres modifier
-	  user_data_out	: out	std_logic_vector(31 downto 0);									-- USR data bus
+	  user_data_out		: out	std_logic_vector(31 downto 0);									-- USR data bus
 	  user_valid		: out	std_logic;														-- USR addr/am/data valid
 	  user_data_in		: in	std_logic_vector(31 downto 0) := (others => '0'));				-- USR data bus
 	end component;
@@ -248,8 +256,8 @@ architecture rtl of ndaq_vme is
 		signal a_wr				: in	std_logic_vector((num_regs-1) downto 0);
 		signal a_rd				: in	std_logic_vector((num_regs-1) downto 0);
 
-		--signal b_wr				: in	std_logic_vector((num_regs-1) downto 0);
-		--signal b_rd				: in	std_logic_vector((num_regs-1) downto 0);
+		--signal b_wr			: in	std_logic_vector((num_regs-1) downto 0);
+		--signal b_rd			: in	std_logic_vector((num_regs-1) downto 0);
 
 		--common i/o
 		signal idata			: in	std_logic_vector(7 downto 0);
@@ -313,7 +321,7 @@ architecture rtl of ndaq_vme is
 		signal ef				: in	std_logic;
 		signal usedw			: in	std_logic_vector(7 downto 0);
 		signal rd				: out	std_logic;	
-		signal q					: in	std_logic_vector(9 downto 0);
+		signal q				: in	std_logic_vector(9 downto 0);
 				
 		-- FT245BM interface
 		signal dwait 			: in	std_logic;
@@ -354,9 +362,17 @@ architecture rtl of ndaq_vme is
 
 		signal s_ef				: in	std_logic;
 		signal s_rd				: out	std_logic;	
-				
-		signal d_ff				: in	std_logic;
-		signal d_wr				: out	std_logic		
+		
+		signal ena				: in	std_logic;
+		signal enb				: in	std_logic;
+		
+		signal a_ff				: in	std_logic;
+		signal a_wr				: out	std_logic;		
+
+		signal b_ff				: in	std_logic;
+		signal b_wr				: out	std_logic;		
+		
+		signal esize			: in	std_logic_vector(7 downto 0)
 	);
 	end component;
 	
@@ -383,14 +399,14 @@ architecture rtl of ndaq_vme is
 --***********************--
 ---------------------------
 
-	signal srst, mrst				: std_logic;
+	signal srst, mrst			: std_logic;
 	signal pclk, sclk, mclk		: std_logic; 
 	signal tclk, clk_en			: std_logic;
 	
-	signal user_read				: std_logic_vector((NUM_USR_MAP-1) downto 0);
-	signal iuser_data_in			: std_logic_vector(31 downto 0);	-- TEST by HERMAN 29/07/10
+	signal user_read			: std_logic_vector((NUM_USR_MAP-1) downto 0);
+	signal iuser_data_in		: std_logic_vector(31 downto 0);	-- TEST by HERMAN 29/07/10
 	signal iuser_data_out		: std_logic_vector(31 downto 0);	-- TEST by HERMAN 29/07/10
-	signal iuser_addr				: std_logic_vector(24 downto 0);	-- Added by Herman in 08/09/10
+	signal iuser_addr			: std_logic_vector(24 downto 0);	-- Added by Herman in 08/09/10
 	signal clk_wr, clk_rd		: std_logic; 						-- TEST by HERMAN 29/07/10
 	signal iuser_addr_lat		: std_logic_vector(7 downto 0);		-- Added by Herman in 08/09/10
 	
@@ -408,8 +424,8 @@ architecture rtl of ndaq_vme is
 	signal u_fifo4_ren	: std_logic;
 
 	-- FT245bm_if
-	signal ft_wr		: std_logic := '1';
-	signal ft_rd		: std_logic := '1';
+	signal ft_wr	: std_logic := '1';
+	signal ft_rd	: std_logic := '1';
 	signal ft_idata	: std_logic_vector(7 downto 0) := x"00";
 	signal ft_odata	: std_logic_vector(7 downto 0) := x"00";
 
@@ -438,31 +454,48 @@ architecture rtl of ndaq_vme is
 	signal temp_wr				: std_logic;
 	
 	--
-	-- USB Readout FIFOs
+	-- USB Readout Channels
 	--
-	constant usb_channels :	integer := 1;
+	constant usb_channels :	integer := 4;
 	
 	type rdf_bus_t		is array ((usb_channels-1) downto 0) of std_logic_vector(9 downto 0);
 	type rdf_usedw_t	is array ((usb_channels-1) downto 0) of std_logic_vector(7 downto 0);
 	
-	signal rdf_data	: rdf_bus_t;
-	signal rdf_q		: rdf_bus_t;
-	signal rdf_rd		: std_logic_vector((usb_channels-1) downto 0);
-	signal rdf_wr		: std_logic_vector((usb_channels-1) downto 0);
-	signal rdf_ef		: std_logic_vector((usb_channels-1) downto 0);
-	signal rdf_ff		: std_logic_vector((usb_channels-1) downto 0);
-	signal rdf_af		: std_logic_vector((usb_channels-1) downto 0);
-	signal rdf_usedw	: rdf_usedw_t;
+	-- A Readout FIFO signals
+	signal a_rdf_data	: rdf_bus_t;
+	signal a_rdf_q		: rdf_bus_t;
+	signal a_rdf_wr		: std_logic_vector((usb_channels-1) downto 0);
+	signal a_rdf_ff		: std_logic_vector((usb_channels-1) downto 0);
+	signal a_rdf_rd		: std_logic_vector((usb_channels-1) downto 0);
+	signal a_rdf_ef		: std_logic_vector((usb_channels-1) downto 0);
+	signal a_rdf_usedw	: rdf_usedw_t;
+
+	-- B Readout FIFO signals
+	signal b_rdf_data	: rdf_bus_t;
+	signal b_rdf_q		: rdf_bus_t;
+	signal b_rdf_wr		: std_logic_vector((usb_channels-1) downto 0);
+	signal b_rdf_ff		: std_logic_vector((usb_channels-1) downto 0);
+	signal b_rdf_rd		: std_logic_vector((usb_channels-1) downto 0);
+	signal b_rdf_ef		: std_logic_vector((usb_channels-1) downto 0);
+	signal b_rdf_usedw	: rdf_usedw_t;
 
 	--
+
+	--IDT Arbiter
+	signal idt_en		: std_logic_vector(7 downto 0) := x"00";
+	signal idt_ii		: std_logic_vector(7 downto 0) := x"FF";
+
+	--USB Readout Arbiter
+	signal usb_rdout_en	: std_logic_vector(7 downto 0) := x"00";
+	signal usb_rdout_ii	: std_logic_vector(7 downto 0) := x"FF";
+
 	--Main Arbiter
+	signal main_en		: std_logic_vector(7 downto 0) := x"00";
+	signal main_ii		: std_logic_vector(7 downto 0) := x"FF";
+
+	-- Read enable, Output enable and Flag signals for IDT FIFOs
+	signal rdtemp		: std_logic_vector((usb_channels-1) downto 0);
 	
-	signal main_en		: std_logic_vector(7 downto 0);
-	signal main_ii		: std_logic_vector(7 downto 0);
-	
-	--
-	
-	signal rdtemp		: std_logic;
 ------------------------------------------
 ------------------------------------------
 
@@ -470,14 +503,14 @@ architecture rtl of ndaq_vme is
 begin
 	
 	--fifo1_oe	<= '1'; --not(u_read0);
-	fifo2_oe	<= '1'; --not(u_read1);
-	fifo3_oe	<= '1'; --not(u_read2);
-	fifo4_oe	<= '1'; --not(u_read3);
+	--fifo2_oe	<= '1'; --not(u_read1);
+	--fifo3_oe	<= '1'; --not(u_read2);
+	--fifo4_oe	<= '1'; --not(u_read3);
 	
 	--fifo1_ren	<= '1'; --u_fifo1_ren;
-	fifo2_ren	<= '1'; --u_fifo2_ren;
-	fifo3_ren	<= '1'; --u_fifo3_ren;
-	fifo4_ren	<= '1'; --u_fifo4_ren;
+	--fifo2_ren	<= '1'; --u_fifo2_ren;
+	--fifo3_ren	<= '1'; --u_fifo3_ren;
+	--fifo4_ren	<= '1'; --u_fifo4_ren;
 	
 	-- can_pgc <=  fifo1_ef;
 	-- can_pgd <= 'Z';
@@ -504,7 +537,7 @@ begin
 	(	
 		clk				=> pclk,
 		
-		reset				=> oreg(0),
+		reset			=> oreg(0),
 		
 		rst				=> mrst
 	);
@@ -514,14 +547,15 @@ begin
 	(
 		iclk				=> clk50M,
 		
-		pclk				=> pclk,
-		nclk				=> open,
-		mclk				=> mclk,
-		sclk				=> sclk,
-		clk_enable		=> open,
+		pclk				=> pclk,	--50 MHz - 0	degree
+		nclk				=> open,	--50 MHz - 180	degrees
+		mclk				=> open,    --40 MHz
+		sclk				=> sclk,    --20 MHz
+		clk_enable			=> open,
 		tclk				=> open
 	);
 	
+	--pclk	<= clk50M;
 	
 --*********************************************************************************************************	
 	
@@ -529,7 +563,7 @@ begin
 	ft245bm_if port map
 	(	
 		clk				=> pclk,
-		ftclk				=> sclk,
+		ftclk			=> sclk,
 		clk_en			=> '1',
 		rst				=> mrst,
 
@@ -553,14 +587,18 @@ begin
 
 	usb_Write	<= temp_wr;
 
+	test_pins:
+	can_pgc		<= not(ft_wr);
+	can_pgd		<= temp_wr;
+
 --*********************************************************************************************************	
 
 	Master_SPI: 
 	m_spi
 	port map
 	(	
-		clk		=> pclk,			-- sytem clock
-		rst		=> mrst,			-- asynchronous reset
+		clk			=> pclk,			-- sytem clock
+		rst			=> mrst,			-- asynchronous reset
 		
 		mosi		=> mosi,			-- master serial out	- slave serial in
 		miso		=> miso,			-- master serial in		- slave serial out
@@ -587,25 +625,25 @@ begin
 							user_data_in		=> iuser_data_in,
 							user_data_out		=> iuser_data_out,
 							user_read			=> user_read,
-							vme_addr				=> vme_add,
+							vme_addr			=> vme_add,
 							vme_am				=> vme_am,
-							vme_data				=> vme_data,
-							vme_xbuf_dataoe	=> vme_oed, --
+							vme_data			=> vme_data,
+							vme_xbuf_dataoe		=> vme_oed, --
 							vme_xbuf_datadir	=> vme_dird, --
 							vme_lword			=> vme_lw,
 							vme_dtack			=> vme_dtack, --
 							vme_xbuf_dtackoe	=> vme_oetack, --
-							vme_vack				=> vme_vack,
+							vme_vack			=> vme_vack,
 							vme_as				=> vme_as,
 							vme_ds0				=> vme_ds0,
 							vme_ds1				=> vme_ds1,
 							vme_write			=> vme_wr,
-							vme_iack				=> vme_iack,
+							vme_iack			=> vme_iack,
 							vme_iack_in			=> vme_iackin,
 							vme_iack_out		=> vme_iackout,
 							vme_irq				=> open, --vme_irq,
-							vme_berr				=> vme_berr, --
-							vme_verr				=> vme_verr,
+							vme_berr			=> vme_berr, --
+							vme_verr			=> vme_verr,
 							vme_sysreset		=> vme_sysrst,
 							vme_sysclock		=> vme_sysclk,
 							vme_ga				=> vme_ga,
@@ -672,22 +710,49 @@ begin
 	);
 
 --*********************************************************************************************************
-
-	test_pins:
-	can_pgc		<= not(ft_wr);
-	can_pgd		<= temp_wr;
 	
-	fifo1_ren	<= rdtemp;
-	fifo1_oe		<= rdtemp;
+	fifo_signals_construct:
+	for i in 0 to (usb_channels-1) generate
+	
+		test_used:
+		if (usb_channels > i) generate
+			fifo_ren(i)	<= rdtemp(i);
+			fifo_oe(i)	<= rdtemp(i);
+		end generate test_used;
+	
+	end generate fifo_signals_construct;
+	
+--*********************************************************************************************************
+
+	idt_arbiter:
+	priarb8 port map
+	(	
+		clk					=> pclk,
+		rst					=> mrst,
+
+		enable				=> '1',
+		isidle				=> open,
+
+		en	 				=> idt_en,
+
+		ii					=> idt_ii,
+
+		control(0)			=> (oreg(2)(0) or oreg(2)(1)),	--Channel 1 or Channel 2 must read IDT FIFO 1. 
+		control(1)			=> (oreg(2)(2) or oreg(2)(3)),	--Channel 3 or Channel 4 must read IDT FIFO 2. 
+		control(2)			=> (oreg(2)(4) or oreg(2)(5)), 	--Channel 5 or Channel 6 must read IDT FIFO 3.
+		control(3)			=> (oreg(2)(6) or oreg(2)(7)),	--Channel 7 or Channel 8 must read IDT FIFO 4.
+		
+		control(7 downto 4) => (others => '0')
+	);
+	
+--*********************************************************************************************************
 	
 	usb_readout_construct:
 	for i in 0 to (usb_channels-1) generate
-	
-	--rdf_data(i)	<= counter_data_temp;
-	rdf_data(i)		<= vme_data(9 downto 0);
 
-	-- Almost Full
-	--rdf_af(i)		<= rdf_usedw(i)(7);
+	a_rdf_data(i)		<= vme_data(9 downto 0);	-- ODD Channels.
+	b_rdf_data(i)		<= vme_data(25 downto 16);	-- EVEN Channels.
+
 	
 	idt_to_intfifo:
 	f2f_copier port map
@@ -695,61 +760,129 @@ begin
 		clk			=> pclk,
 		rst			=> mrst,
 	
-		enable		=> '1',		--always enabled.
-		isidle		=> open,		--no arbiter check needed.
+		enable		=> idt_en(i),	
+		isidle		=> idt_ii(i),	
 
 		--source
-		s_ef			=> fifo1_ef,	--IDT NOT EMPTY.
-		s_rd			=> rdtemp,
+		s_ef		=> fifo_ef(i),	--IDT NOT EMPTY.
+		s_rd		=> rdtemp(i),
 
-		--dest
-		d_ff			=> rdf_ff(i),	--FULL FLAG
-		d_wr			=> rdf_wr(i)
+		-- Dest Enable
+		ena			=>	oreg(2)(i*2),		--enable for Channels: 1,3,5 and 7.	
+		enb			=>	oreg(2)((i*2)+1),	--enable for Channels: 2,4,6 and 8.
+
+		--A Dest
+		a_ff		=> a_rdf_ff(i),	--FULL FLAG
+		a_wr		=> a_rdf_wr(i),
+		
+		--B Dest
+		b_ff		=> b_rdf_ff(i),	--FULL FLAG
+		b_wr		=> b_rdf_wr(i),
+
+		esize		=> CONV_STD_LOGIC_VECTOR(x"7F", 8)		--127		
 	);
 
-	usb_readout_fifo:
+	A_readout_fifo:
 	readout_fifo port map
 	(
 		aclr		=> mrst,
 		clock		=> pclk,
-		data		=> rdf_data(i),
-		rdreq		=> rdf_rd(i),
-		wrreq		=> rdf_wr(i),
-		empty		=> rdf_ef(i),
-		full		=> rdf_ff(i),
-		q			=> rdf_q(i),
-		usedw		=> rdf_usedw(i)
+		data		=> a_rdf_data(i),
+		rdreq		=> a_rdf_rd(i),
+		wrreq		=> a_rdf_wr(i),
+		empty		=> a_rdf_ef(i),
+		full		=> a_rdf_ff(i),
+		q			=> a_rdf_q(i),
+		usedw		=> a_rdf_usedw(i)
 	);
 
-	fifo_to_ft_copier:
+	B_readout_fifo:
+	readout_fifo port map
+	(
+		aclr		=> mrst,
+		clock		=> pclk,
+		data		=> b_rdf_data(i),
+		rdreq		=> b_rdf_rd(i),
+		wrreq		=> b_rdf_wr(i),
+		empty		=> b_rdf_ef(i),
+		full		=> b_rdf_ff(i),
+		q			=> b_rdf_q(i),
+		usedw		=> b_rdf_usedw(i)
+	);
+
+	A_to_ft_copier:
 	f2ft_copier port map
 	(	
 		clk			=> pclk,
 		rst			=> mrst,
 
 		-- Arbiter interface
-		enable		=> main_en(0),
-		isidle		=> main_ii(0),
+		enable		=> usb_rdout_en(i*2),
+		isidle		=> usb_rdout_ii(i*2),
 	
 		-- FIFO interface
-		ef				=> rdf_ef(i),
-		usedw			=> rdf_usedw(i),
-		rd				=> rdf_rd(i),
-		q				=> rdf_q(i),
+		ef			=> a_rdf_ef(i),
+		usedw		=> a_rdf_usedw(i),
+		rd			=> a_rdf_rd(i),
+		q			=> a_rdf_q(i),
 		
 		-- FT245BM interface
 		dwait 		=> ft_dwait,
-		wr				=> ft_wr,
+		wr			=> ft_wr,
 		odata       => ft_idata,
 		
 		-- Parameters		
-		rmin			=> CONV_STD_LOGIC_VECTOR(x"7F", 8),
-		esize			=> CONV_STD_LOGIC_VECTOR(x"7F", 8)		--127
+		rmin		=> CONV_STD_LOGIC_VECTOR(x"7F", 8),
+		esize		=> CONV_STD_LOGIC_VECTOR(x"7F", 8)		--127
+	);
+
+	B_to_ft_copier:
+	f2ft_copier port map
+	(	
+		clk			=> pclk,
+		rst			=> mrst,
+
+		-- Arbiter interface
+		enable		=> usb_rdout_en((i*2)+1),
+		isidle		=> usb_rdout_ii((i*2)+1),
+	
+		-- FIFO interface
+		ef			=> b_rdf_ef(i),
+		usedw		=> b_rdf_usedw(i),
+		rd			=> b_rdf_rd(i),
+		q			=> b_rdf_q(i),
+		
+		-- FT245BM interface
+		dwait 		=> ft_dwait,
+		wr			=> ft_wr,
+		odata       => ft_idata,
+		
+		-- Parameters		
+		rmin		=> CONV_STD_LOGIC_VECTOR(x"7F", 8),
+		esize		=> CONV_STD_LOGIC_VECTOR(x"7F", 8)		--127
 	);
 
 	end generate usb_readout_construct;
 
 	
+--*********************************************************************************************************
+
+	usb_readout_arbiter:
+	priarb8 port map
+	(	
+		clk			=> pclk,
+		rst			=> mrst,
+
+		enable		=> main_en(0),
+		isidle		=> main_ii(0),
+
+		en	 		=> usb_rdout_en,
+
+		ii			=> usb_rdout_ii,
+
+		control     => oreg(2)
+	);
+
 --*********************************************************************************************************
 
 	main_arbiter:
@@ -761,9 +894,9 @@ begin
 		enable		=> '1',
 		isidle		=> open,
 
-		en	 			=> main_en,
+		en	 		=> main_en,
 
-		ii				=> main_ii,
+		ii			=> main_ii,
 
 		control     => oreg(1)
 	);
@@ -809,7 +942,6 @@ begin
 				end case;
 		end if;
 	end process;
-
 
 	process (srst,clk50m) begin
 		if (srst = '1') then

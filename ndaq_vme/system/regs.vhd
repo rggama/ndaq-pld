@@ -54,7 +54,7 @@ begin
 				process(clk, rst, a_wr)							
 				begin
 					if (rst = '1') then
-						regs(i)	<= x"00";
+						regs(i)	<= system_regs_enum(i).rstate;
 
 					elsif(rising_edge(clk)) then
 						if (a_wr(i) = '1') then
