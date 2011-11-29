@@ -6,6 +6,8 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
+use work.usbcmds_pkg.all;
+
 --library std;                                                            
 --use std.textio.all;                                                     
 
@@ -15,7 +17,6 @@ end ndaq_sim_tbench;
 
 architecture testbench of ndaq_sim_tbench is
 
-type datavec is array (0 to 1) of std_logic_vector(7 downto 0);
 
 -- devices under test
 
@@ -26,45 +27,45 @@ type datavec is array (0 to 1) of std_logic_vector(7 downto 0);
 		------------------
 		-- Clock inputs --
 		------------------
-		signal clkcore		:in		std_logic;	-- Same frequency of DCOs (125MHz in first version)
+		signal clkcore			:in		std_logic;	-- Same frequency of DCOs (125MHz in first version)
 		
 		--------------------
 		-- ADCs interface --
 		--------------------
-		signal adc12_data 	:in  	std_logic_vector(11 downto 2);
-		signal adc34_data 	:in  	std_logic_vector(11 downto 2);
-		signal adc56_data 	:in  	std_logic_vector(11 downto 2);
-		signal adc78_data 	:in  	std_logic_vector(11 downto 2);
+		signal adc12_data 		:in  	std_logic_vector(11 downto 2);
+		signal adc34_data 		:in  	std_logic_vector(11 downto 2);
+		signal adc56_data 		:in  	std_logic_vector(11 downto 2);
+		signal adc78_data 		:in  	std_logic_vector(11 downto 2);
 		
-		signal adc12_dco	:in 	std_logic;				-- ADC 1 Data Clock
-		signal adc34_dco	:in 	std_logic;				-- ADC 2 Data Clock
-		signal adc56_dco	:in 	std_logic;				-- ADC 3 Data Clock
-		signal adc78_dco	:in 	std_logic;				-- ADC 4 Data Clock
+		signal adc12_dco		:in 	std_logic;				-- ADC 1 Data Clock
+		signal adc34_dco		:in 	std_logic;				-- ADC 2 Data Clock
+		signal adc56_dco		:in 	std_logic;				-- ADC 3 Data Clock
+		signal adc78_dco		:in 	std_logic;				-- ADC 4 Data Clock
 		
-		signal adc12_pwdn	:out	std_logic;				-- ADC 1 Power Down control
-		signal adc34_pwdn	:out	std_logic;				-- ADC 2 Power Down control
-		signal adc56_pwdn	:out	std_logic;				-- ADC 3 Power Down control
-		signal adc78_pwdn	:out	std_logic;				-- ADC 4 Power Down control
+		signal adc12_pwdn		:out	std_logic;				-- ADC 1 Power Down control
+		signal adc34_pwdn		:out	std_logic;				-- ADC 2 Power Down control
+		signal adc56_pwdn		:out	std_logic;				-- ADC 3 Power Down control
+		signal adc78_pwdn		:out	std_logic;				-- ADC 4 Power Down control
 
 		-------------------
 		-- TDC interface --
 		-------------------
-		signal tdc_data		 : inout	std_logic_vector(27 downto 0); --***WATCH OUT***
-		signal tdc_stop_dis	 : out		std_logic_vector(1 to 4);
-		signal tdc_start_dis : out		std_logic;
-		signal tdc_wrn		 : out		std_logic;
-		signal tdc_rdn		 : out		std_logic;
-		signal tdc_csn		 : out		std_logic;
-		signal tdc_alutr	 : out  	std_logic;
-		signal tdc_puresn	 : out  	std_logic;
-		signal tdc_oen		 : out  	std_logic;
-		signal tdc_adr		 : out  	std_logic_vector(3 downto 0);
-		signal tdc_errflag	 : in   	std_logic;
-		signal tdc_irflag	 : in   	std_logic;
-		signal tdc_lf2		 : in   	std_logic;
-		signal tdc_lf1		 : in   	std_logic;
-		signal tdc_ef2		 : in   	std_logic;
-		signal tdc_ef1		 : in   	std_logic;
+		signal tdc_data			: inout	std_logic_vector(27 downto 0); --***WATCH OUT***
+		signal tdc_stop_dis		: out		std_logic_vector(1 to 4);
+		signal tdc_start_dis 	: out		std_logic;
+		signal tdc_wrn		 	: out		std_logic;
+		signal tdc_rdn		 	: out		std_logic;
+		signal tdc_csn		 	: out		std_logic;
+		signal tdc_alutr	 	: out  	std_logic;
+		signal tdc_puresn	 	: out  	std_logic;
+		signal tdc_oen		 	: out  	std_logic;
+		signal tdc_adr		 	: out  	std_logic_vector(3 downto 0);
+		signal tdc_errflag		: in   	std_logic;
+		signal tdc_irflag	 	: in   	std_logic;
+		signal tdc_lf2		 	: in   	std_logic;
+		signal tdc_lf1		 	: in   	std_logic;
+		signal tdc_ef2		 	: in   	std_logic;
+		signal tdc_ef1		 	: in   	std_logic;
 
 		----------------------
 		-- FIFO's interface --
@@ -73,60 +74,60 @@ type datavec is array (0 to 1) of std_logic_vector(7 downto 0);
 		signal fifo_data_bus : out std_logic_vector(31 downto 0);
 		
 		-- Control signals
-		signal fifo1_wen	 : out   	std_logic;	-- Write Enable
-		signal fifo2_wen	 : out   	std_logic;
-		signal fifo3_wen	 : out   	std_logic;
-		signal fifo4_wen	 : out   	std_logic;
-		signal fifo_wck		 : out		std_logic;	-- Write Clock to all FIFOs (PLL-4 output)
+		signal fifo1_wen	 	: out   	std_logic;	-- Write Enable
+		signal fifo2_wen	 	: out   	std_logic;
+		signal fifo3_wen	 	: out   	std_logic;
+		signal fifo4_wen	 	: out   	std_logic;
+		signal fifo_wck			: out		std_logic;	-- Write Clock to all FIFOs (PLL-4 output)
 		
-		signal fifo_mrs		 : out		std_logic;	-- Master Reset
-		signal fifo_prs		 : out		std_logic;	-- Partial Reset
-		signal fifo_fs0		 : out		std_logic;	-- Flag Select Bit 0
-		signal fifo_fs1		 : out		std_logic;	-- Flag Select Bit 1
-		signal fifo_ld		 : out		std_logic;	-- Load
-		signal fifo_rt		 : out		std_logic;	-- Retransmit
+		signal fifo_mrs			: out		std_logic;	-- Master Reset
+		signal fifo_prs			: out		std_logic;	-- Partial Reset
+		signal fifo_fs0			: out		std_logic;	-- Flag Select Bit 0
+		signal fifo_fs1			: out		std_logic;	-- Flag Select Bit 1
+		signal fifo_ld		 	: out		std_logic;	-- Load
+		signal fifo_rt		 	: out		std_logic;	-- Retransmit
 		
 		-- Flags
-		signal fifo1_ff		 : in   	std_logic;	-- FULL flag
-		signal fifo2_ff		 : in   	std_logic;
-		signal fifo3_ff		 : in   	std_logic;
-		signal fifo4_ff		 : in   	std_logic;
+		signal fifo1_ff			: in   	std_logic;	-- FULL flag
+		signal fifo2_ff			: in   	std_logic;
+		signal fifo3_ff			: in   	std_logic;
+		signal fifo4_ff			: in   	std_logic;
 		
-		signal fifo1_ef		 : in   	std_logic;	-- EMPTY flag
-		signal fifo2_ef		 : in   	std_logic;
-		signal fifo3_ef		 : in   	std_logic;
-		signal fifo4_ef		 : in   	std_logic;
+		signal fifo1_ef			: in   	std_logic;	-- EMPTY flag
+		signal fifo2_ef			: in   	std_logic;
+		signal fifo3_ef			: in   	std_logic;
+		signal fifo4_ef			: in   	std_logic;
 		
-		signal fifo1_hf		 : in   	std_logic;	-- HALF-FULL flag
-		signal fifo2_hf		 : in   	std_logic;
-		signal fifo3_hf		 : in   	std_logic;
-		signal fifo4_hf		 : in   	std_logic;
+		signal fifo1_hf			: in   	std_logic;	-- HALF-FULL flag
+		signal fifo2_hf			: in   	std_logic;
+		signal fifo3_hf			: in   	std_logic;
+		signal fifo4_hf			: in   	std_logic;
 		
-		signal fifo1_paf	 : in   	std_logic;	-- ALMOST-FULL flag
-		signal fifo2_paf	 : in   	std_logic;
-		signal fifo3_paf	 : in   	std_logic;
-		signal fifo4_paf	 : in   	std_logic;		
+		signal fifo1_paf	 	: in   	std_logic;	-- ALMOST-FULL flag
+		signal fifo2_paf	 	: in   	std_logic;
+		signal fifo3_paf	 	: in   	std_logic;
+		signal fifo4_paf	 	: in   	std_logic;		
 		
-		signal fifo1_pae	 : in   	std_logic;	-- ALMOST-EMPTY flag
-		signal fifo2_pae	 : in   	std_logic;
-		signal fifo3_pae	 : in   	std_logic;
-		signal fifo4_pae	 : in   	std_logic;
+		signal fifo1_pae	 	: in   	std_logic;	-- ALMOST-EMPTY flag
+		signal fifo2_pae	 	: in   	std_logic;
+		signal fifo3_pae	 	: in   	std_logic;
+		signal fifo4_pae	 	: in   	std_logic;
 
 		
 		--------------------
 		-- SRAM interface --
 		--------------------
-		signal sram_add	 	: out		std_logic_vector(18 downto 0);
-		signal sram_data	: inout  	std_logic_vector(7 downto 0);
-		signal sram_we		: out		std_logic;
-		signal sram_oe		: out		std_logic;
-		signal sram_cs		: out		std_logic;
+		signal sram_add	 		: out		std_logic_vector(18 downto 0);
+		signal sram_data		: inout 	std_logic_vector(7 downto 0);
+		signal sram_we			: out		std_logic;
+		signal sram_oe			: out		std_logic;
+		signal sram_cs			: out		std_logic;
 		
 		
 		------------------------------
 		-- LVDS connector interface --
 		------------------------------
-		signal lvdsin 		 :in  		std_logic_vector(15 downto 0);		
+		signal lvdsin 		 	:in  		std_logic_vector(15 downto 0);		
 		
 		---------------
 		-- Slave SPI --
@@ -138,9 +139,9 @@ type datavec is array (0 to 1) of std_logic_vector(7 downto 0);
 		--------------------
 		-- Trigger inputs --
 		--------------------
-		signal trigger_a	: in		std_logic;	
-		signal trigger_b	: out		std_logic;
-		signal trigger_c	: out		std_logic
+		signal trigger_a		: in		std_logic;	
+		signal trigger_b		: in		std_logic;
+		signal trigger_c		: in		std_logic
 		
 		-----------------------
 		-- Temporary signals --
@@ -210,33 +211,41 @@ type datavec is array (0 to 1) of std_logic_vector(7 downto 0);
 		---------------------
 		-- FIFOs interface --
 		---------------------
-		signal fifo1_oe 	:out  	std_logic;
-		signal fifo2_oe 	:out  	std_logic;
-		signal fifo3_oe 	:out  	std_logic;
-		signal fifo4_oe 	:out  	std_logic;
-		signal fifo1_ren 	:out  	std_logic;
-		signal fifo2_ren 	:out  	std_logic;
-		signal fifo3_ren 	:out  	std_logic;
-		signal fifo4_ren 	:out  	std_logic;
-		signal fifo1_ef 	:in  	std_logic;
-		signal fifo2_ef 	:in  	std_logic;
-		signal fifo3_ef 	:in  	std_logic;
-		signal fifo4_ef 	:in  	std_logic;
+		--signal fifo1_oe 	:out  	std_logic;
+		--signal fifo2_oe 	:out  	std_logic;
+		--signal fifo3_oe 	:out  	std_logic;
+		--signal fifo4_oe 	:out  	std_logic;
+		
+		signal fifo_oe		:out	std_logic_vector(3 downto 0) := x"F";
+		
+		--signal fifo1_ren 	:out  	std_logic;
+		--signal fifo2_ren 	:out  	std_logic;
+		--signal fifo3_ren 	:out  	std_logic;
+		--signal fifo4_ren 	:out  	std_logic;
+		
+		signal fifo_ren		:out	std_logic_vector(3 downto 0) := x"F";
+		
+		--signal fifo1_ef 	:in  	std_logic;
+		--signal fifo2_ef 	:in  	std_logic;
+		--signal fifo3_ef 	:in  	std_logic;
+		--signal fifo4_ef 	:in  	std_logic;
 
+		signal fifo_ef		:in		std_logic_vector(3 downto 0);
+		
 		----------------
 		-- Master SPI --
 		----------------
 		
-		signal spiclk		:out		std_logic;
-		signal mosi			:out		std_logic;
-		signal miso			:in			std_logic;
+		signal spiclk		:out	std_logic;
+		signal mosi			:out	std_logic;
+		signal miso			:in		std_logic;
 		
 		-------------------
 		-- CAN interface --
 		-------------------
-		signal can_pgc	 	 :out  		std_logic;
-		signal can_pgd	 	 :out  		std_logic;
-		signal can_pgm	 	 :out  		std_logic
+		signal can_pgc	 	 :out  	std_logic;
+		signal can_pgd	 	 :out  	std_logic;
+		signal can_pgm	 	 :out  	std_logic
 	);			
 	end component;
 
@@ -260,9 +269,16 @@ type datavec is array (0 to 1) of std_logic_vector(7 downto 0);
 -- Signals                                                   
 
 -- Clocks
-signal adc12_dco: std_logic;
+signal adc_dco	: std_logic;
 signal clkcore	: std_logic;
 signal clkvme	: std_logic;
+
+-- ADC Data Simulation
+signal dcounter		: std_logic_vector(7 downto 0) := x"FF";
+signal dcounter_t	: std_logic := '0';
+signal dcounter_en	: std_logic := '0';
+signal trigger		: std_logic := '0';
+signal adc_data		: std_logic_vector(9 downto 0);
 
 -- FT245BM chip behavior signals
 signal txe		: std_logic;
@@ -270,9 +286,9 @@ signal rxf		: std_logic;
 signal nrd		: std_logic;
 signal nwr		: std_logic;
 signal data		: std_logic_vector(7 downto 0) := x"00";
-signal value	: datavec;
-signal toggle	: std_logic := '0';
-signal counter	: std_logic_vector(7 downto 0) := x"00";
+signal cmd_cntr	: integer := 0;
+signal del_cntr	: integer := 0;
+signal delayed	: boolean := false;
 
 -- SPI link
 signal spiclk	: std_logic;
@@ -280,38 +296,31 @@ signal mosi		: std_logic;
 signal miso		: std_logic;
 
 -- IDT FIFO
+
+type IDTQ_T is array (1 to 4) of std_logic_vector(31 downto 0);
+type USEDW_T is array (1 to 4) of std_logic_vector(7 downto 0);
+
 signal idt_data		: std_logic_vector(31 downto 0);
-signal idt_q		: std_logic_vector(31 downto 0);
+signal idt_q		: IDTQ_T;
+signal idt_q_bus	: std_logic_vector(31 downto 0);
 signal idt_wrclk	: std_logic;
-
 signal idt_rst		: std_logic;
-signal idt_rd		: std_logic;
-signal idt_wr		: std_logic;
-signal idt_empty	: std_logic;
-signal idt_full		: std_logic;
-
+signal idt_oe		: std_logic_vector(1 to 4);
+signal idt_rd		: std_logic_vector(1 to 4);
+signal idt_wr		: std_logic_vector(1 to 4);
+signal idt_empty	: std_logic_vector(1 to 4);
+signal idt_full		: std_logic_vector(1 to 4);
 signal n_idt_rst	: std_logic;
-signal n_idt_rd		: std_logic;
-signal n_idt_wr		: std_logic;
-signal n_idt_empty	: std_logic;
-signal n_idt_full	: std_logic;
+signal n_idt_rd		: std_logic_vector(1 to 4);
+signal n_idt_wr		: std_logic_vector(1 to 4);
+signal n_idt_empty	: std_logic_vector(1 to 4);
+signal n_idt_full	: std_logic_vector(1 to 4);
+signal wrusedw		: USEDW_T;
+signal idt_paf		: std_logic_vector(1 to 4);
 
-signal wrusedw		: std_logic_vector(7 downto 0);
-
-signal idt_paf		: std_logic;
-
+--
 -- arch begin
 begin
-
-n_idt_rst	<= not(idt_rst);
-n_idt_rd	<= not(idt_rd);
-n_idt_wr	<= not(idt_wr);
-n_idt_empty	<= not(idt_empty);
-n_idt_full	<= not(idt_full);
-
--- FIFO PAF
-
-idt_paf	<= not(wrusedw(7));
 
 -- core fpga map
 ndaq_core_fpga : ndaq_core
@@ -325,15 +334,15 @@ port map
 		--------------------
 		-- ADCs interface --
 		--------------------
-		adc12_data 	=>   	(others => 'Z'),
-		adc34_data 	=>   	(others => 'Z'),
-		adc56_data 	=>   	(others => 'Z'),
-		adc78_data 	=>   	(others => 'Z'),
+		adc12_data 	=>   	adc_data,
+		adc34_data 	=>   	adc_data,
+		adc56_data 	=>   	adc_data,
+		adc78_data 	=>   	adc_data,
 		
-		adc12_dco	=>  	adc12_dco,			-- ADC 1 Data Clock
-		adc34_dco	=>  	'Z',				-- ADC 2 Data Clock
-		adc56_dco	=>  	'Z',				-- ADC 3 Data Clock
-		adc78_dco	=>  	'Z',				-- ADC 4 Data Clock
+		adc12_dco	=>  	adc_dco,			-- ADC 1 Data Clock
+		adc34_dco	=>  	adc_dco,			-- ADC 2 Data Clock
+		adc56_dco	=>  	adc_dco,			-- ADC 3 Data Clock
+		adc78_dco	=>  	adc_dco,			-- ADC 4 Data Clock
 		
 		adc12_pwdn	=> open,					-- ADC 1 Power Down control
 		adc34_pwdn	=> open,					-- ADC 2 Power Down control
@@ -367,10 +376,10 @@ port map
 		fifo_data_bus =>  idt_data,
 		
 		-- Control signals
-		fifo1_wen	 	=>  idt_wr,   		-- Write Enable
-		fifo2_wen	 	=>  open,   	
-		fifo3_wen	 	=>  open,   	
-		fifo4_wen	 	=>  open,   	
+		fifo1_wen	 	=>  idt_wr(1), 		-- Write Enable
+		fifo2_wen	 	=>  idt_wr(2),   	
+		fifo3_wen	 	=>  idt_wr(3),   	
+		fifo4_wen	 	=>  idt_wr(4),   	
 		fifo_wck		=>  idt_wrclk,		-- Write Clock to all FIFOs (PLL-4 open,put)
 		
 		fifo_mrs		=>  idt_rst,		-- Master Reset
@@ -381,10 +390,10 @@ port map
 		fifo_rt		  	=>  open,			-- Retransmit
 		
 		-- Flags
-		fifo1_ff		=> n_idt_full,	-- FULL flag
-		fifo2_ff		=>     	'Z',
-		fifo3_ff		=>     	'Z',
-		fifo4_ff		=>     	'Z',
+		fifo1_ff		=> n_idt_full(1),	-- FULL flag
+		fifo2_ff		=> n_idt_full(2),
+		fifo3_ff		=> n_idt_full(3),
+		fifo4_ff		=> n_idt_full(4),
 		
 		fifo1_ef		=>     	'Z',	-- EMPTY flag
 		fifo2_ef		=>     	'Z',
@@ -396,10 +405,10 @@ port map
 		fifo3_hf		=>     	'Z',
 		fifo4_hf		=>     	'Z',
 		
-		fifo1_paf	 	=> idt_paf,	-- ALMOST-FULL flag
-		fifo2_paf		=>     	'Z',
-		fifo3_paf		=>     	'Z',
-		fifo4_paf	 	=>     	'Z',		
+		fifo1_paf	 	=> idt_paf(1),	-- ALMOST-FULL flag
+		fifo2_paf		=> idt_paf(2),
+		fifo3_paf		=> idt_paf(3),
+		fifo4_paf	 	=> idt_paf(4),		
 		
 		fifo1_pae	 	=>     	'Z',	-- ALMOST-EMPTY flag
 		fifo2_pae	 	=>     	'Z',
@@ -420,7 +429,7 @@ port map
 		------------------------------
 		-- LVDS connector interface --
 		------------------------------
-		lvdsin 		 =>   		(others => 'Z'),		
+		lvdsin 		 =>	(others => 'Z'),		
 		
 		---------------
 		-- Slave SPI --
@@ -432,9 +441,9 @@ port map
 		--------------------
 		-- Trigger inputs --
 		--------------------
-		trigger_a	=> '0',
-		trigger_b	=> open,
-		trigger_c 	=> open 
+		trigger_a	=> trigger,
+		trigger_b	=> 'Z',
+		trigger_c 	=> 'Z' 
 	);
 		
 
@@ -453,7 +462,7 @@ port map
 		vme_add     => (others => 'Z'),
 		vme_oea     => open,
 				
-		vme_data    => idt_q,
+		vme_data    => idt_q_bus,
 		vme_oed     => open,
 		vme_dird    => open,
 		
@@ -498,18 +507,18 @@ port map
 		---------------------
 		-- FIFOs interface --
 		---------------------
-		fifo1_oe    => open,
-		fifo2_oe    => open,
-		fifo3_oe    => open,
-		fifo4_oe    => open,
-		fifo1_ren   => idt_rd,
-		fifo2_ren   => open,
-		fifo3_ren   => open,
-		fifo4_ren   => open,
-		fifo1_ef    => n_idt_empty,
-		fifo2_ef    => 'Z',
-		fifo3_ef    => 'Z',
-		fifo4_ef    => 'Z',
+		fifo_oe(0)	=> idt_oe(1),
+		fifo_oe(1)	=> idt_oe(2),
+		fifo_oe(2)	=> idt_oe(3),
+		fifo_oe(3)	=> idt_oe(4),
+		fifo_ren(0)	=> idt_rd(1),
+		fifo_ren(1)	=> idt_rd(2),
+		fifo_ren(2)	=> idt_rd(3),
+		fifo_ren(3)	=> idt_rd(4),
+		fifo_ef(0)	=> n_idt_empty(1),
+		fifo_ef(1)	=> n_idt_empty(2),
+		fifo_ef(2)	=> n_idt_empty(3),
+		fifo_ef(3)	=> n_idt_empty(4),
 
 		----------------
 		-- Master SPI --
@@ -526,32 +535,54 @@ port map
 		can_pgm     => open
 	);
 
-  fake_idt_fifo:
+-- Fake IDT FIFOs
+
+-- Negating signal as real IDT FIFO works this way
+n_idt_rst	<= not(idt_rst);
+
+fake_idt_construct:
+for i in 1 to 4 generate
+
+	fake_idt_fifo:
 	idt_fifo port map
 	(
 		aclr		=> n_idt_rst,
 		data		=> idt_data,
 		rdclk		=> clkvme,
-		rdreq		=> n_idt_rd,
+		rdreq		=> n_idt_rd(i),
 		wrclk		=> idt_wrclk,
-		wrreq		=> n_idt_wr,
-		q			=> idt_q,
-		rdempty		=> idt_empty,
-		wrfull		=> idt_full,
-		wrusedw		=> wrusedw
+		wrreq		=> n_idt_wr(i),
+		q			=> idt_q(i),
+		rdempty		=> idt_empty(i),
+		wrfull		=> idt_full(i),
+		wrusedw		=> wrusedw(i)
 	);
+
+	-- Tri-state outputs
+	idt_q_bus	<= idt_q(i) when (idt_oe(i) = '0') else (others => 'Z');
+	
+	-- FIFO PAF
+	idt_paf(i)	<= not(wrusedw(i)(7));
+
+	-- Negating signals as real IDT FIFO works this way
+	n_idt_rd(i)		<= not(idt_rd(i));
+	n_idt_wr(i)		<= not(idt_wr(i));
+	n_idt_empty(i)	<= not(idt_empty(i));
+	n_idt_full(i)	<= not(idt_full(i));
+
+end generate fake_idt_construct;
 
 	-- Stimulus!
 
 --********************************** Clocks ************************************
 
--- adc12_dco @ 124 MHz as 'adc_dco'
+-- adc_dco @ 124 MHz as 'adc_dco'
 adc12_dco_gen: process
 begin
 loop
-	adc12_dco <= '1';
+	adc_dco <= '1';
 	wait for 4000 ps;
-	adc12_dco <= '0';
+	adc_dco <= '0';
 	wait for 4000 ps;
 	-- if (now >= 1000000 ps) then wait; end if;
 end loop;
@@ -590,25 +621,49 @@ end process clkvme_gen;
 	-- wait;
 -- end process rst_gen;
 
---***************************** FT245BM Behavior *******************************
+--**************************** ADC DATA SIMULATION *****************************
+	
+	dcounter_en	<= '1';
+	
+	adc_data_sim:
+	process (adc_dco)
+	begin
+		--if (rst = '1') then
+		--	dcounter	<= x"FF";
+		--	dcounter_t	<= '0';
+		--elsif (rising_edge(adc_dco)) then
+		if (rising_edge(adc_dco)) then
+			if (dcounter_en = '1') then	-- IDT's RD is active low.
+				if (dcounter = x"FF") then
+					dcounter	<= x"01";
+					dcounter_t	<= '0';
+				else
+					dcounter	<= dcounter + 2;
+					dcounter_t	<= '1';
+				end if;
+			end if;
+		end if;
+	end process;
 
--- data values
-value(0)  <= x"12";
-value(1)  <= x"34";
+	adc_data(7 downto 0)	<= dcounter;
+	adc_data(9 downto 8)	<= "00";
+	trigger					<= dcounter_t;
+	
+--***************************** FT245BM Behavior *******************************
 
 -- rxf
 rxf_gen: process
 begin
   
-  --initil transceiver condition
+	--initil transceiver condition
 	rxf  <= '1';
 	data <= "ZZZZZZZZ";
-  --wait for 28572 us;
+	--wait for 10 ns;
   
 loop
   --wait for 300 ns;
   --let's indicate that there is data avaiable
-	rxf  <= '1'; --'0'; --Stoped RX for usb_readout test purposes.
+	rxf  <= '0';
 
   --now, we're gonna wait for the counterpart's read strobe
 	wait until (nrd = '0');
@@ -616,34 +671,47 @@ loop
 	-- Transceiver's RD strobe to valid data output latency
 	wait for 50 ns; -- T3: 20 to 50ns
 	
-	-- if (toggle = '0') then
-	 -- data    <= value(0);
-	 -- toggle  <= '1';
-	-- else
-	 -- data    <= value(1);
-	 -- toggle  <= '0';
-	-- end if;
+	-- Data Input
+	if (delayed = false) then
+		data	<= COMMAND(cmd_cntr);
+	else
+		data	<= D_COMMAND(del_cntr);
+	end if;
 	
-	data	<= counter;
-	counter	<= counter+1;
-	
-  --now, we're gonna wait for the counterpart to end the cycle
-  wait until (nrd = '1');
+	--now, we're gonna wait for the counterpart to end the cycle
+	wait until (nrd = '1');
   
-  -- Transceiver's Valid Data Hold Time from RD Strobe inactive
-  wait for 0 ns; -- T4: 0ns
-
+	-- Transceiver's Valid Data Hold Time from RD Strobe inactive
+	wait for 0 ns; -- T4: 0ns
+	
 	data <= "ZZZZZZZZ";
 
-  -- RD inactive to RXF = '1'
-  wait for 25 ns; -- T5: 0 to 25 ns;
+	-- RD inactive to RXF = '1'
+	wait for 25 ns; -- T5: 0 to 25 ns;
   
-  rxf <= '1';
+	rxf <= '1';
   
-  -- RXF inactive after cycle
-  wait for 80 ns; -- T6: 80 ns; 
+	-- RXF inactive after cycle
+	wait for 80 ns; -- T6: 80 ns; 
+	
+	-- Command counting and loop waiting
+	if (delayed = false) then
+		if (cmd_cntr = (total_cmds-1)) then
+			wait for 777 us;
+			delayed		<= true;
+		else
+			cmd_cntr	<= cmd_cntr+1;
+			delayed		<= false;
+		end if;
+	else
+		-- Delayed command counting and loop ending
+		if (del_cntr = (del_cmds-1)) then
+			wait;
+		else
+			del_cntr	<= del_cntr+1;
+		end if;
+	end if;
 end loop; 
-
 end process rxf_gen;
 
 -- txe
@@ -670,9 +738,7 @@ loop
   -- TXF inactive after cycle
   wait for 80 ns; -- T12: 80 ns; 
 end loop; 
-
 end process txe_gen;
-
 
 
 end testbench;

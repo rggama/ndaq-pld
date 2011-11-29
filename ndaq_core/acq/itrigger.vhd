@@ -11,7 +11,7 @@ use ieee.std_logic_signed.all;
 --use ieee.std_logic_unsigned.all;
 
 use work.acq_pkg.all;				-- ACQ definitions
-use work.regs_pkg.all;				-- Registers handling definitions
+use work.core_regs.all;				-- Registers handling definitions
 --
 --
 entity itrigger is

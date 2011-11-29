@@ -29,7 +29,7 @@ entity f2ft_copier is
 		signal ef				: in	std_logic;
 		signal usedw			: in	std_logic_vector(7 downto 0);
 		signal rd				: out	std_logic;	
-		signal q					: in	std_logic_vector(9 downto 0);
+		signal q				: in	std_logic_vector(9 downto 0);
 				
 		-- FT245BM interface
 		signal dwait 			: in	std_logic;
@@ -46,6 +46,8 @@ end f2ft_copier;
 
 architecture rtl of f2ft_copier is
 	
+	constant BYPASS_OPNDRN			:	boolean := false;
+	
 	constant SOURCE_RD_ASSERT		:	std_logic := '1';	-- Altera's SC FIFO.
 	constant SOURCE_RD_DEASSERT		:	std_logic := '0';	-- Altera's SC FIFO.
 
@@ -61,7 +63,7 @@ architecture rtl of f2ft_copier is
 	--
 	
 	-- Build an enumerated type for the state machine
-	type state_type is (idle, read_st, write_st_LOW, test_st_LOW, write_st_HIGH, test_st_HIGH);
+	type state_type is (idle, read_st, write_st_LOW, test_st_LOW, write_st_HIGH, test_st_HIGH, go_idle);
 
 	-- Register to hold the current state
 	signal state	: state_type := idle;
@@ -75,22 +77,21 @@ architecture rtl of f2ft_copier is
 	--
 
 	signal scounter	: std_logic_vector(7 downto 0);
-	signal tmp			: std_logic_vector(9 downto 0); --:= x"00";
+	signal tmp		: std_logic_vector(9 downto 0); --:= x"00";
 	
 	--
 	
 	signal i_rd			: std_logic := SOURCE_RD_DEASSERT;
 	signal i_wr			: std_logic := 'Z';
 	signal i_isidle		: std_logic := '1';
+	signal i_odata		: std_logic_vector(7 downto 0) := x"00";
+	signal oe			: std_logic := '0';
 	signal mode			: std_logic	:= '0';
 	
 --
 
 begin
-	--tmp	<= q(7 downto 0);
-	--tmp	<= q(9 downto 2);
-	tmp <= q(9 downto 0);
-	
+
 	transfer_fsm:
 	process (clk, rst)
 	begin
@@ -103,8 +104,8 @@ begin
 			case (state) is
 				
 				when idle	=>
-					if ((enable = '1') and (dwait = '0') 
-						and (ef = '0') and (usedw = x"00")) then
+					if ((enable = '1') and (dwait = '0')  
+						and (ef = '0') and ((usedw > x"7F") or (usedw = x"00"))) then
 						state	<= read_st;
 					else
 						state	<= idle;
@@ -125,10 +126,16 @@ begin
 					state <= test_st_LOW;						
 				
 				when test_st_LOW	=>
-					if ( (dwait = '0')) then --(enable = '1') and
-						state	<= write_st_HIGH;
+					if (enable = '1') then
+						if (dwait = '0') then
+							state	<= write_st_HIGH;
+						else
+							state	<= test_st_LOW;
+						end if;
 					else
-						state	<= test_st_LOW;
+						state 	<= idle; --go_idle;
+						--
+						scounter	<= (others => '0');
 					end if;
 
 --********************************************************************************
@@ -137,7 +144,7 @@ begin
 					scounter <= scounter + 1;
 					--
 					if (scounter = esize) then
-						state <= idle;
+						state <= go_idle;			--When ending, we must 'go_idle'.
 						--
 						scounter	<= (others => '0');
 					else
@@ -145,22 +152,34 @@ begin
 					end if;
 				
 				when test_st_HIGH	=>
-					if ( (dwait = '0')) then --(enable = '1') and 
-						state	<= read_st;
+					if (enable = '1') then
+						if (dwait = '0') then
+							state	<= read_st;
+						else
+							state	<= test_st_HIGH;
+						end if;
 					else
-						state	<= test_st_HIGH;
+						state 	<= idle; --go_idle;
+						--
+						scounter	<= (others => '0');
 					end if;
 
 --********************************************************************************
 				
+				when go_idle	=>
+					state		<= idle;
+
 				when others	=>
-					state <= idle;
+					state		<= idle;
 					--	
 					scounter	<= (others => '0');
 					
 			end case;
 		end if;
 	end process;
+
+	odata_assignment:
+	tmp <= q(9 downto 0);
 
 	transfer_fsm_ops:
 	process (state, tmp)
@@ -169,39 +188,47 @@ begin
 			
 			when idle	=>
 				i_rd		<= SOURCE_RD_DEASSERT;
-				i_wr		<= 'Z';						-- Tri-state output.
+				i_wr		<= '1';						-- Tri-state output.
 				--
 				i_isidle	<= '1';
 				--
-				odata		<= (others => 'Z');
+				i_odata		<= tmp(9 downto 2);			--(others => 'Z');
+				--
+				oe			<= '0';
 				
 			when read_st	=>
 				i_rd		<= SOURCE_RD_ASSERT;
-				i_wr		<= 'Z';						-- Tri-state output.
+				i_wr		<= '1';						-- Tri-state output.
 				--
 				i_isidle	<= '0';
 				--
-				odata		<= (others => 'Z');
+				i_odata		<= tmp(9 downto 2);			--(others => 'Z');
+				--
+				oe			<= '0';
 		
 --********************************************************************************
 
 			when write_st_LOW	=>
-				i_rd		<= SOURCE_RD_DEASSERT;
-				i_wr		<= '0';						-- Write Assert.
+				i_rd				<= SOURCE_RD_DEASSERT;
+				i_wr				<= '0';						-- Write Assert.
 				--
-				i_isidle	<= '0';
+				i_isidle			<= '0';
 				--
-				odata(7 downto 2)	<= (others => '0');
-				odata(1 downto 0)	<= tmp(1 downto 0);
+				i_odata(7 downto 2)	<= (others => '0');
+				i_odata(1 downto 0)	<= tmp(1 downto 0);
+				--
+				oe					<= '1';
 				
 			when test_st_LOW	=>
-				i_rd		<= SOURCE_RD_DEASSERT;
-				i_wr		<= 'Z';						-- Tri-state output.
+				i_rd				<= SOURCE_RD_DEASSERT;
+				i_wr				<= '1';						-- Tri-state output.
 				--
-				i_isidle	<= '0';
+				i_isidle			<= '0';
 				--
-				odata(7 downto 2)	<= (others => '0');
-				odata(1 downto 0)	<= tmp(1 downto 0);
+				i_odata(7 downto 2)	<= (others => '0');
+				i_odata(1 downto 0)	<= tmp(1 downto 0);
+				--
+				oe					<= '1';
 
 --********************************************************************************
 
@@ -211,43 +238,77 @@ begin
 				--
 				i_isidle	<= '0';
 				--
-				odata		<= tmp(9 downto 2);
+				i_odata		<= tmp(9 downto 2);
+				--
+				oe			<= '1';
 				
 			when test_st_HIGH	=>
 				i_rd		<= SOURCE_RD_DEASSERT;
-				i_wr		<= 'Z';						-- Tri-state output.
+				i_wr		<= '1';						-- Tri-state output.
 				--
 				i_isidle	<= '0';
 				--
-				odata		<= tmp(9 downto 2);
+				i_odata		<= tmp(9 downto 2);
+				--
+				oe			<= '1';
 			
 --********************************************************************************
 
-			when others	=>
+			when go_idle	=>
 				i_rd		<= SOURCE_RD_DEASSERT;
-				i_wr		<= 'Z';						-- Tri-state output.
+				i_wr		<= '1';						-- Tri-state output.
 				--
 				i_isidle	<= '1';
 				--
-				odata		<= (others => 'Z');
+				i_odata		<= tmp(9 downto 2);			--(others => 'Z');
+				--
+				oe			<= '0';
+
+			when others	=>
+				i_rd		<= SOURCE_RD_DEASSERT;
+				i_wr		<= '1';						-- Tri-state output.
+				--
+				i_isidle	<= '1';
+				--
+				i_odata		<= tmp(9 downto 2);			--(others => 'Z');
+				--
+				oe			<= '0';
 				
 		end case;
 	end process;
 	
 --*****************************************************************************
 
-    open_drain:
-	opndrn port map 
-    (
-		a_in	=>	i_wr,
-		a_out =>	wr
-    );
+	test_opndrn:
+	if (BYPASS_OPNDRN = false) generate
+
+		open_drain:
+		opndrn port map 
+		(
+			a_in	=>	i_wr,
+			a_out 	=>	wr
+		);
+	
+		hi_z_odata:
+		odata	<= i_odata when (oe = '1') else (others => 'Z');
+		
+	end generate test_opndrn;
+
+	test_bypass_opndrn:
+	if (BYPASS_OPNDRN = true) generate
+
+		direct_wr:
+		wr		<= i_wr;
+	
+		direct_odata:
+		odata	<= i_odata;
+		
+	end generate test_bypass_opndrn;
 
 --*****************************************************************************
-
-	direct_ops:
+	
+	direct_ops:	
 	rd		<= i_rd;
-	--wr		<= i_wr;
 	isidle	<= i_isidle;
 	
 end rtl;

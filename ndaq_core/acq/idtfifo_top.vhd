@@ -84,6 +84,8 @@ architecture one_idtfifo_top of idtfifo_top is
 
 	signal i_bus_enable				: std_logic_vector(2 downto 0);
 	signal bus_enable				: std_logic_vector(2 downto 0);
+	
+	signal empty         : std_logic_vector(1 to 4);
 --	
 --
 
@@ -303,6 +305,8 @@ end process;
 -- FIFO control instantiation
 --
 
+empty(1)  <= (fifo_empty(1) or fifo_empty(2));
+
 FIFO1_idtfifo_ctr:
 	idtfifo_ctr port map
 	(	
@@ -312,12 +316,13 @@ FIFO1_idtfifo_ctr:
 		running				=> transfer_running(1),
 		idt_full			=> idt_full(1),
 		idt_wren			=> idt_wren(1),
-		fifo_empty			=> (fifo_empty(1) or fifo_empty(2)),
+		fifo_empty			=> empty(1),
 		fifo_used			=> fifo_used_A,
 		rden_A				=> fifo_rden(1),
 		rden_B				=> fifo_rden(2)
 	);
 
+empty(2)  <= (fifo_empty(3) or fifo_empty(4));
 
 FIFO2_idtfifo_ctr:
 	idtfifo_ctr port map
@@ -328,12 +333,13 @@ FIFO2_idtfifo_ctr:
 		running				=> transfer_running(2),
 		idt_full			=> idt_full(2),
 		idt_wren			=> idt_wren(2),
-		fifo_empty			=> (fifo_empty(3) or fifo_empty(4)),
+		fifo_empty			=> empty(2),
 		fifo_used			=> fifo_used_C,
 		rden_A				=> fifo_rden(3),
 		rden_B				=> fifo_rden(4)
 	);
 
+empty(3)  <= (fifo_empty(5) or fifo_empty(6));
 
 FIFO3_idtfifo_ctr:
 	idtfifo_ctr port map
@@ -344,12 +350,13 @@ FIFO3_idtfifo_ctr:
 		running				=> transfer_running(3),
 		idt_full			=> idt_full(3),
 		idt_wren			=> idt_wren(3),
-		fifo_empty			=> (fifo_empty(5) or fifo_empty(6)),
+		fifo_empty			=> empty(3),
 		fifo_used			=> fifo_used_E,
 		rden_A				=> fifo_rden(5),
 		rden_B				=> fifo_rden(6)
 	);
 
+empty(4)  <= (fifo_empty(7) or fifo_empty(8));
 
 FIFO4_idtfifo_ctr:
 	idtfifo_ctr port map
@@ -360,7 +367,7 @@ FIFO4_idtfifo_ctr:
 		running				=> transfer_running(4),
 		idt_full			=> idt_full(4),
 		idt_wren			=> idt_wren(4),
-		fifo_empty			=> (fifo_empty(7) or fifo_empty(8)),
+		fifo_empty			=> empty(4),
 		fifo_used			=> fifo_used_H,
 		rden_A				=> fifo_rden(7),
 		rden_B				=> fifo_rden(8)
