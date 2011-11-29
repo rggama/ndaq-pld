@@ -331,12 +331,12 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_ren[0]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spiclk
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to miso
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to mosi
+set_global_assignment -name VHDL_FILE system/vme_cmddec.vhd
+set_global_assignment -name VHDL_FILE system/vme_rconst.vhd
+set_global_assignment -name VHDL_FILE system/vme_regs.vhd
 set_global_assignment -name VHDL_FILE system/priarb8.vhd
 set_global_assignment -name VHDL_FILE usb_readout/f2ft_copier.vhd
 set_global_assignment -name VHDL_FILE usb_readout/f2f_copier.vhd
-set_global_assignment -name VHDL_FILE system/regs_pkg.vhd
-set_global_assignment -name VHDL_FILE system/cmddec.vhd
-set_global_assignment -name VHDL_FILE system/regs.vhd
 set_global_assignment -name VHDL_FILE swc/swc.vhd
 set_global_assignment -name VHDL_FILE FT245BM_if/FT245BM_tx.vhd
 set_global_assignment -name VHDL_FILE FT245BM_if/FT245BM_rx.vhd

@@ -57,7 +57,7 @@ architecture one_idtfifo_ctr of idtfifo_ctr is
 begin
 --
 -- Asynchronous assignments of 'next_stateval'
-NEXT_STATE_COMB: process(stateval, start_transfer, fifo_used, idt_full, transfer_counter)
+NEXT_STATE_COMB: process(stateval, start_transfer, fifo_used, idt_full, transfer_counter, fifo_empty)
 begin
 	case stateval is
 		when idle =>							-- IDLE state

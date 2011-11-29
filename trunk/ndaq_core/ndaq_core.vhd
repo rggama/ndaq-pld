@@ -46,7 +46,7 @@ use ieee.std_logic_unsigned.all;	-- Synopsys extension to std_logic_arith to han
 --use ieee.numeric_std.all;		-- altenative to std_logic_arith, used for maths too (will conflict with std_logic_arith if 'signed' is used in interfaces).
 
 use work.acq_pkg.all;				-- ACQ definitions
-use work.regs_pkg.all;				-- Registers handling definitions
+use work.core_regs.all;				-- Registers handling definitions
 
 entity ndaq_core is 
 	port
@@ -368,7 +368,7 @@ architecture rtl of ndaq_core is
 	end component;
 	
 	-- Registers
-	component regs
+	component core_rconst
 	port
 	(
 		signal clk				: in 	std_logic; -- sync if
@@ -396,7 +396,7 @@ architecture rtl of ndaq_core is
 	end component;
 	
 	-- Command Decoder
-	component cmddec
+	component core_cmddec
 	port
 	(
 		signal clk				: in 	std_logic; -- sync if
@@ -438,6 +438,7 @@ architecture rtl of ndaq_core is
 	--
 	
 	signal rst						: std_logic;
+	signal idt_rst					: std_logic;
 	
 	signal adcpwdn					: std_logic_vector(3 downto 0);
 
@@ -534,7 +535,7 @@ begin
 	----------------------
 	fifo_wck	<= fclk; --pclk;
 	
-	fifo_mrs	<= not(rst);
+	fifo_mrs	<= not(idt_rst);
 	fifo_prs	<= '1';
 	fifo_rt		<= '1';
 
@@ -586,9 +587,9 @@ begin
 		rst				=> rst
 	);
 	
-	--acq_rst	<= oreg(3)(0);	--Reset para as FIFOs sera gerado automaticamente por um componente abaixo.
-										--Ja que registradores nao podem ser escritos no teste VME
-										
+
+	idt_rst				<= oreg(3)(0);							
+
 	
 -- ************************************ SLAVE SPI ******************************
 	-- *** Utilizado para configuracao de registradores que ainda so funciona no
@@ -643,7 +644,7 @@ begin
 	
 
 	registers:
-	regs port map
+	core_rconst port map
 	(
 		clk			=> pclk,
 		rst			=> rst,
@@ -667,7 +668,7 @@ begin
 	-- Command Decoder
 
 	command_decoder:
-	cmddec port map
+	core_cmddec port map
 	(
 		clk			=> pclk,
 		rst			=> rst,
@@ -745,12 +746,14 @@ begin
 	data(7)	<= adc78_data;
 
 	acq_enable	<= oreg(4)(0);			--Nao e usado no teste VME porque registradores 
-												--nao sao escritos
-	
+										--nao sao escritos
+										
 	-- Constroi os 8 canais de aquisicao
 	adc_data_acq_construct:
 	for i in 0 to (adc_channels-1) generate
 
+		acq_rst(i)	<= oreg(3)(0);
+		
 		-- Gera reset automatico para a Aquisicao.
 		acq_rst_gen:
 		rstgen port map
@@ -759,7 +762,7 @@ begin
 		
 			reset			=> x"00",
 		
-			rst				=> acq_rst(i)
+			rst				=> open --acq_rst(i)
 		);
 
 		-- Condiciona trigger da entrada 'A'

@@ -51,7 +51,7 @@ architecture rtl of f2f_copier is
 	constant DEST_WR_DEASSERT		: std_logic := '0';	-- Altera's SC FIFO
 	
 	-- Build an enumerated type for the state machine
-	type state_type is (idle, read_st, write_st, test_st);
+	type state_type is (idle, read_st, write_st, test_st, go_idle);
 
 	-- Register to hold the current state
 	signal state   : state_type;
@@ -110,23 +110,27 @@ begin
 					state	<= write_st;
 					
 				when write_st	=>
-					state		<= idle;
+					state		<= test_st;
 					--
 					scounter	<= scounter + 1;
 				
 				when test_st	=>
-					if (scounter = esize) then
-						state		<= idle;
-						--
-						scounter	<= (others => '0');
-						
-					elsif ((dest_enable = '1')) then
-						state		<= write_st;
-						
+					if (enable = '1') then
+						if (scounter = esize) then
+							state		<= go_idle;	--When ending, we must 'go_idle'.
+							--
+							scounter	<= (others => '0');
+						elsif ((dest_enable = '1')) then
+							state		<= write_st;
+						else
+							state		<= test_st;
+						end if;
 					else
-						state		<= test_st;
-						
+						state <= idle; --go_idle;
 					end if;
+				
+				when go_idle	=>
+					state		<= idle;
 					
 				when others	=>
 					state		<= idle;
@@ -176,6 +180,12 @@ begin
 				i_a_wr		<= DEST_WR_DEASSERT;	
 				i_b_wr		<= DEST_WR_DEASSERT;	
 				i_isidle	<= '0';
+
+			when go_idle	=>
+				i_rd		<= SOURCE_RD_DEASSERT;
+				i_a_wr		<= DEST_WR_DEASSERT;
+				i_b_wr		<= DEST_WR_DEASSERT;
+				i_isidle	<= '1';
 
 			when others		=>
 				i_rd		<= SOURCE_RD_DEASSERT;

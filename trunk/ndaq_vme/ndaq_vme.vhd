@@ -10,7 +10,7 @@ use ieee.std_logic_unsigned.all;
 
 use work.vmeif_pkg.all;
 use work.vmeif_usr.all;
-use work.regs_pkg.all;
+use work.vme_regs.all;
 
 entity ndaq_vme is 
 	port
@@ -246,7 +246,7 @@ architecture rtl of ndaq_vme is
 	end component;
 
 	-- Registers
-	component regs
+	component vme_rconst
 	port
 	(
 		signal clk				: in 	std_logic; -- sync if
@@ -274,7 +274,7 @@ architecture rtl of ndaq_vme is
 	end component;
 	
 	-- Command Decoder
-	component cmddec
+	component vme_cmddec
 	port
 	(
 		signal clk				: in 	std_logic; -- sync if
@@ -457,9 +457,14 @@ architecture rtl of ndaq_vme is
 	-- USB Readout Channels
 	--
 	constant usb_channels :	integer := 4;
+	constant	EVENT_SIZE   : unsigned	:= x"7F";		
 	
+	--
 	type rdf_bus_t		is array ((usb_channels-1) downto 0) of std_logic_vector(9 downto 0);
 	type rdf_usedw_t	is array ((usb_channels-1) downto 0) of std_logic_vector(7 downto 0);
+	
+	-- Readout Reset
+	signal rdout_rst	: std_logic := '0';
 	
 	-- A Readout FIFO signals
 	signal a_rdf_data	: rdf_bus_t;
@@ -484,6 +489,8 @@ architecture rtl of ndaq_vme is
 	--IDT Arbiter
 	signal idt_en		: std_logic_vector(7 downto 0) := x"00";
 	signal idt_ii		: std_logic_vector(7 downto 0) := x"FF";
+	
+	signal control : std_logic_vector(3 downto 0) := x"0";
 
 	--USB Readout Arbiter
 	signal usb_rdout_en	: std_logic_vector(7 downto 0) := x"00";
@@ -655,7 +662,7 @@ begin
 --*********************************************************************************************************
 
 	registers:
-	regs port map
+	vme_rconst port map
 	(
 		clk				=> pclk,
 		rst				=> mrst,
@@ -679,7 +686,7 @@ begin
 	-- Command Decoder
 
 	command_decoder:
-	cmddec port map
+	vme_cmddec port map
 	(
 		clk				=> pclk,
 		rst				=> mrst,
@@ -710,6 +717,11 @@ begin
 	);
 
 --*********************************************************************************************************
+
+	--Readout Reset Assignement
+	rdout_rst	<= oreg(6)(0);
+
+--*********************************************************************************************************
 	
 	fifo_signals_construct:
 	for i in 0 to (usb_channels-1) generate
@@ -724,6 +736,11 @@ begin
 	
 --*********************************************************************************************************
 
+	control(0)			<= (oreg(2)(0) or oreg(2)(1));  --Channel 1 or Channel 2 must read IDT FIFO 1. 
+	control(1)			<= (oreg(2)(2) or oreg(2)(3));  --Channel 3 or Channel 4 must read IDT FIFO 2. 
+	control(2)			<= (oreg(2)(4) or oreg(2)(5));  --Channel 5 or Channel 6 must read IDT FIFO 3.
+	control(3)			<= (oreg(2)(6) or oreg(2)(7));  --Channel 7 or Channel 8 must read IDT FIFO 4.
+	
 	idt_arbiter:
 	priarb8 port map
 	(	
@@ -737,10 +754,10 @@ begin
 
 		ii					=> idt_ii,
 
-		control(0)			=> (oreg(2)(0) or oreg(2)(1)),	--Channel 1 or Channel 2 must read IDT FIFO 1. 
-		control(1)			=> (oreg(2)(2) or oreg(2)(3)),	--Channel 3 or Channel 4 must read IDT FIFO 2. 
-		control(2)			=> (oreg(2)(4) or oreg(2)(5)), 	--Channel 5 or Channel 6 must read IDT FIFO 3.
-		control(3)			=> (oreg(2)(6) or oreg(2)(7)),	--Channel 7 or Channel 8 must read IDT FIFO 4.
+		control(0)			=> control(0),
+		control(1)			=> control(1),
+		control(2)			=> control(2),
+		control(3)			=> control(3),
 		
 		control(7 downto 4) => (others => '0')
 	);
@@ -779,13 +796,13 @@ begin
 		b_ff		=> b_rdf_ff(i),	--FULL FLAG
 		b_wr		=> b_rdf_wr(i),
 
-		esize		=> CONV_STD_LOGIC_VECTOR(x"7F", 8)		--127		
+		esize		=> CONV_STD_LOGIC_VECTOR(EVENT_SIZE, 8)		--127		
 	);
 
 	A_readout_fifo:
 	readout_fifo port map
 	(
-		aclr		=> mrst,
+		aclr		=> rdout_rst, --mrst,
 		clock		=> pclk,
 		data		=> a_rdf_data(i),
 		rdreq		=> a_rdf_rd(i),
@@ -799,7 +816,7 @@ begin
 	B_readout_fifo:
 	readout_fifo port map
 	(
-		aclr		=> mrst,
+		aclr		=> rdout_rst, --mrst,
 		clock		=> pclk,
 		data		=> b_rdf_data(i),
 		rdreq		=> b_rdf_rd(i),
@@ -832,8 +849,8 @@ begin
 		odata       => ft_idata,
 		
 		-- Parameters		
-		rmin		=> CONV_STD_LOGIC_VECTOR(x"7F", 8),
-		esize		=> CONV_STD_LOGIC_VECTOR(x"7F", 8)		--127
+		rmin		=> CONV_STD_LOGIC_VECTOR(EVENT_SIZE, 8),
+		esize		=> CONV_STD_LOGIC_VECTOR(EVENT_SIZE, 8)		--127
 	);
 
 	B_to_ft_copier:
@@ -858,8 +875,8 @@ begin
 		odata       => ft_idata,
 		
 		-- Parameters		
-		rmin		=> CONV_STD_LOGIC_VECTOR(x"7F", 8),
-		esize		=> CONV_STD_LOGIC_VECTOR(x"7F", 8)		--127
+		rmin		=> CONV_STD_LOGIC_VECTOR(EVENT_SIZE, 8),
+		esize		=> CONV_STD_LOGIC_VECTOR(EVENT_SIZE, 8)		--127
 	);
 
 	end generate usb_readout_construct;

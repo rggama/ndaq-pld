@@ -490,7 +490,11 @@ set_instance_assignment -name FAST_INPUT_REGISTER OFF -to adc12_data*
 set_instance_assignment -name FAST_INPUT_REGISTER OFF -to adc34_data*
 set_instance_assignment -name FAST_INPUT_REGISTER OFF -to adc56_data*
 set_instance_assignment -name FAST_INPUT_REGISTER OFF -to adc78_data*
+set_global_assignment -name VHDL_FILE ../ndaq_vme/system/reset.vhd
 set_global_assignment -name VHDL_FILE ../ndaq_vme/swc/swc.vhd
+set_global_assignment -name VHDL_FILE system/core_regs.vhd
+set_global_assignment -name VHDL_FILE system/core_cmddec.vhd
+set_global_assignment -name VHDL_FILE system/core_rconst.vhd
 set_global_assignment -name VHDL_FILE spi/s_spi.vhd
 set_global_assignment -name SDC_FILE ndaq_core.sdc
 set_global_assignment -name VHDL_FILE acq/idtfifo_top.vhd
@@ -500,11 +504,7 @@ set_global_assignment -name VHDL_FILE acq/tpulse.vhd
 set_global_assignment -name VHDL_FILE acq/writefifo.vhd
 set_global_assignment -name QIP_FILE acq/prefifo.qip
 set_global_assignment -name QIP_FILE acq/postfifo.qip
-set_global_assignment -name VHDL_FILE system/regs_pkg.vhd
-set_global_assignment -name VHDL_FILE system/regs.vhd
-set_global_assignment -name VHDL_FILE system/cmddec.vhd
 set_global_assignment -name VHDL_FILE system/core_clkman.vhd
-set_global_assignment -name VHDL_FILE system/reset.vhd
 set_global_assignment -name QIP_FILE system/core_pll.qip
 set_global_assignment -name VHDL_FILE ndaq_core.vhd
 set_global_assignment -name VHDL_FILE acq/acq_pkg.vhd

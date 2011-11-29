@@ -62,7 +62,7 @@ begin
 					rst			<= '1';		-- reset asserted
 					counter 	<= counter + 1;
 					
-					if (counter = x"4") then
+					if (counter = x"7") then
 						reset_state	<= reset_d;
 					else
 						reset_state	<= reset_a;
