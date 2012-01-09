@@ -223,13 +223,13 @@ architecture rtl of ndaq_core is
 		signal rst				: in 	std_logic; -- async reset
 		
 		signal wr				: in 	std_logic;
-		signal d					: in	DATA_T;
+		signal d				: in	DATA_T;
 		
 		signal rd				: in	std_logic;	
-		signal q					: out	DATA_T;
+		signal q				: out	DATA_T;
 		
-		signal f					: out	std_logic;	--full flag
-		signal e					: out	std_logic;	--empty flag
+		signal f				: out	std_logic;	--full flag
+		signal e				: out	std_logic;	--empty flag
 
 		signal rdusedw			: out	USEDW_T;	-- used words sync'ed to read clock
 		signal wrusedw			: out	USEDW_T	-- used words sync'ed to write clock
@@ -242,8 +242,9 @@ architecture rtl of ndaq_core is
 	(	
 		signal clk				: in 	std_logic; 			-- sync if
 		signal rst				: in 	std_logic; 			-- async if
-		
-		signal acqin			: out std_logic := '0';
+
+		signal enable			: in 	std_logic;
+		signal acqin			: out	std_logic := '0';
 	
 		signal tmode			: in 	std_logic;
 		
@@ -278,22 +279,22 @@ architecture rtl of ndaq_core is
 
 	component itrigger 
 	port
-	(	signal rst					: in std_logic;
-		signal clk					: in std_logic;
-		signal enable				: in std_logic;
-		signal pos_neg				: in std_logic;									-- To set positive ('0') or negative ('1') trigger
-		signal data_in				: in signed(data_width-1 downto 0);			-- Signal from the ADC
-		signal threshold_rise	: in signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
-		signal threshold_fall	: in signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
-		signal count_latcher		: buffer std_logic_vector(31 downto 0);	-- Trigger counter
-		signal latch_en			: in std_logic;									-- Signal to latch the counter in 8-bit words
-		signal rd_en				: in std_logic_vector(3 downto 0);			-- Read enable to read the counter
-		signal count_out_HB		: out std_logic_vector(7 downto 0);
-		signal count_out_MH		: out std_logic_vector(7 downto 0);
-		signal count_out_ML		: out std_logic_vector(7 downto 0);
-		signal count_out_LB		: out std_logic_vector(7 downto 0);
-		signal trigger_out		: out std_logic;
-		signal state_out			: out std_logic_vector(3 downto 0)
+	(	signal rst					: in	std_logic;
+		signal clk					: in	std_logic;
+		-- Trigger
+		signal enable				: in	std_logic;
+		signal pos_neg				: in	std_logic;								-- To set positive ('0') or negative ('1') trigger
+		signal data_in				: in	signed(data_width-1 downto 0);			-- Signal from the ADC
+		signal threshold_rise		: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
+		signal threshold_fall		: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
+		signal trigger_out			: out	std_logic;
+		-- Counter
+		signal rdclk				: in	std_logic := '0';
+		signal rden					: in	std_logic := '0';
+		signal fifo_empty			: out	std_logic := '0';
+		signal counter_q			: out	std_logic_vector(31 downto 0) := x"00000000";
+		-- Debug
+		signal state_out			: out	std_logic_vector(3 downto 0)
 	);	
 	end component;
 	
@@ -447,6 +448,7 @@ architecture rtl of ndaq_core is
 	signal acq_enable				: std_logic;
 	
 	signal pclk						: std_logic;
+	signal dclk						: std_logic;
 	signal fclk						: std_logic;
 
 	signal acq_rst					: std_logic_vector((adc_channels-1) downto 0);	
@@ -459,6 +461,8 @@ architecture rtl of ndaq_core is
 	signal c_trigger_b				: std_logic_vector((adc_channels-1) downto 0);
 	signal c_trigger_c				: std_logic_vector((adc_channels-1) downto 0);
 	signal int_trigger				: std_logic_vector((adc_channels-1) downto 0);
+	signal acqin					: std_logic_vector((adc_channels-1) downto 0);
+	signal wf_en					: std_logic_vector((adc_channels-1) downto 0);
 
 
 	signal data						: F_DATA_WIDTH_T;	-- FIFOs input DATA bus vector
@@ -533,7 +537,7 @@ begin
 	----------------------
 	-- FIFO's interface --
 	----------------------
-	fifo_wck	<= fclk; --pclk;
+	fifo_wck	<= fclk;
 	
 	fifo_mrs	<= not(idt_rst);
 	fifo_prs	<= '1';
@@ -568,10 +572,10 @@ begin
 	(
 		iclk				=> clkcore, 
 		
-		pclk				=> open,
-		nclk				=> open,
-		mclk				=> pclk, --pclk esta ligado ao mclk=40MHz porque quando estava em pclk=60MHz, a escrita nas IDT FIFOs nao funcionou
-		sclk				=> fclk,
+		pclk				=> pclk, -- @ 40 MHz - 0 deg.
+		nclk				=> dclk, -- @ 30 Mhz - 0 deg.
+		mclk				=> fclk, -- @ 30 MHz - 90 deg.
+		sclk				=> open, -- @ 60 MHz - 0 deg.
 		clk_enable			=> open,
 		tclk				=> open
 	);
@@ -727,23 +731,32 @@ begin
 	
 -- ******************************* ACQ - CHANNELS *****************************
 
-	clk(0)	<= adc12_dco;
-	clk(1)	<= not(adc12_dco);
-	clk(2)	<= adc34_dco;
-	clk(3)	<= not(adc34_dco);
-	clk(4)	<= adc56_dco;
-	clk(5)	<= not(adc56_dco);
-	clk(6)	<= adc78_dco;
-	clk(7)	<= not(adc78_dco);
+	clk(0)		<= adc12_dco;
+	clk(1)		<= not(adc12_dco);
+	clk(2)		<= adc34_dco;
+	clk(3)		<= not(adc34_dco);
+	clk(4)		<= adc56_dco;
+	clk(5)		<= not(adc56_dco);
+	clk(6)		<= adc78_dco;
+	clk(7)		<= not(adc78_dco);
 
-	data(0)	<= adc12_data;
-	data(1)	<= adc12_data;
-	data(2)	<= adc34_data;
-	data(3)	<= adc34_data;
-	data(4)	<= adc56_data;
-	data(5)	<= adc56_data;
-	data(6)	<= adc78_data;
-	data(7)	<= adc78_data;
+	data(0)		<= adc12_data;
+	data(1)		<= adc12_data;
+	data(2)		<= adc34_data;
+	data(3)		<= adc34_data;
+	data(4)		<= adc56_data;
+	data(5)		<= adc56_data;
+	data(6)		<= adc78_data;
+	data(7)		<= adc78_data;
+	
+	wf_en(0)	<= '1';
+	wf_en(1)	<= '1';
+	wf_en(2)	<= '1'; --acqin(0);	-- 0 and 2 interleaved mode.
+	wf_en(3)	<= '1';
+	wf_en(4)	<= '1';
+	wf_en(5)	<= '1';
+	wf_en(6)	<= '1';
+	wf_en(7)	<= '1';
 
 	acq_enable	<= oreg(4)(0);			--Nao e usado no teste VME porque registradores 
 										--nao sao escritos
@@ -807,20 +820,20 @@ begin
 		(	
 			rst					=> acq_rst(i),
 			clk					=> clk(i),
+			-- Trigger
 			enable				=> '1',
-			pos_neg				=> '1',										--'0' for pos, '1' for neg.
-			data_in				=>	MY_CONV_SIGNED(data(i)),
+			pos_neg				=> '1',								--'0' for pos, '1' for neg.
+			data_in				=> MY_CONV_SIGNED(data(i)),
 			threshold_rise		=> CONV_SIGNED(T_RISE, data_width), --MY_CONV_SIGNED(thtemp),
 			threshold_fall		=> CONV_SIGNED(T_FALL, data_width), --MY_CONV_SIGNED(thtemp),
-			count_latcher		=> open,
-			latch_en			=> '0',
-			rd_en				=>	(others => '0'),
-			count_out_HB		=> open,
-			count_out_MH		=> open,
-			count_out_ML		=> open,
-			count_out_LB		=> open,
 			trigger_out			=> int_trigger(i),
-			state_out			=>	open
+			-- Counter
+			rdclk				=> fclk,
+			rden				=> '0',
+			fifo_empty			=> open,
+			counter_q			=> open,
+			-- Debug
+			state_out			=> open
 		);	
 
 		-- Controla a escrita nas POST FIFOs a partir de um 'trigger' condicionado
@@ -830,9 +843,10 @@ begin
 			clk			=> clk(i),
 			rst			=> acq_rst(i),
 		
-			acqin		=> open,
+			enable		=> wf_en(i),
+			acqin		=> acqin(i),
 			
-			tmode		=> '0',	-- '0' for External, '1' for Interal
+			tmode		=> oreg(4)(7),	-- '0' for External, '1' for Interal
 			
 			--OR'ed conditioned trigger inputs, active when 'tmode = '0''
 			trig0 		=> c_trigger_a(i),
@@ -857,7 +871,7 @@ begin
 		dcfifom port map
 		(	
 			wrclk		=> clk(i),
-			rdclk		=> fclk, --pclk,
+			rdclk		=> dclk,
 			rst			=> acq_rst(i),
 		
 			wr			=> wr(i),
@@ -901,15 +915,15 @@ begin
 	idtfifo_top port map
 	(	-- CONTROL/STATUS signals
 		rst					=> rst,
-		clk					=> pclk,							-- Read clock das FIFOs internas e Write clock das IDT FIFOs		
+		clk					=> dclk,						-- Read clock das FIFOs internas		
 		start_transfer		=> '1',
 		enable_fifo			=> "1111",						-- A copia para as 4 FIFOs esta habilitada "1111";
 
-		idt_full(1)			=> fifo1_paf, --fifo1_ff,	-- Nao da pra usar a full flag para fazer uma copia em bloco.
+		idt_full(1)			=> fifo1_paf, --fifo1_ff,		-- Nao da pra usar a full flag para fazer uma copia em bloco.
 		idt_full(2)			=> fifo2_paf,				 	-- Agora a programmable almost full flag esta sendo usada
 		idt_full(3)			=> fifo3_paf,					-- E esta configurada para ficar ativa quando a FIFO tiver apenas
 		idt_full(4)			=> fifo4_paf,					-- 255 palavras livres. Como se quer copiar 128 palavras, devera 
-																	-- funcionar.
+															-- funcionar.
 																	
 		idt_wren(1)			=> fifo1_wen,
 		idt_wren(2)			=> fifo2_wen,

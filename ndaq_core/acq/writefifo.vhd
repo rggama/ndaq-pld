@@ -36,7 +36,8 @@ entity writefifo is
 		signal clk				: in 	std_logic; 			-- sync if
 		signal rst				: in 	std_logic; 			-- async if
 		
-		signal acqin			: out std_logic := '0';
+		signal enable			: in 	std_logic;
+		signal acqin			: out	std_logic := '0';
 	
 		signal tmode			: in 	std_logic;
 		
@@ -62,7 +63,7 @@ end writefifo;
 architecture rtl of writefifo is
 
 	signal rst_r		: std_logic	:= '1';
-	signal scounter	: USEDW_T;							-- sample counter
+	signal scounter		: USEDW_T;							-- sample counter
 	
 	
 	-- Build an enumerated type for the state machine
@@ -116,15 +117,17 @@ begin
 		elsif (rising_edge(clk)) then
 			case state is
 				when idle =>
-					if(  
+					if 
+					((enable = '1') and 
+						(  
 								(((trig0 = '1') or (trig1 = '1') or (trig2 = '1'))
 								and (usedw < wmax_r) and (full = '0') and (tmode = '0'))
 							or
 								((trig3 = '1') and (usedw < wmax_r) and (full = '0') 
 								and (tmode = '1'))
 							
-						) then
-						
+						) 
+					) then	
 						state <= wrfifoa;
 					else
 						state <= idle;
