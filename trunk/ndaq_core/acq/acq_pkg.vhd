@@ -75,11 +75,11 @@ package acq_pkg is
 --*******************************************************************************************************************************
 
 	--Data Types
-	subtype DATA_T						is std_logic_vector((data_width-1) downto 0);
+	subtype DATA_T					is std_logic_vector((data_width-1) downto 0);
 	subtype USEDW_T					is std_logic_vector((usedw_width-1) downto 0);
 
 	type F_DATA_WIDTH_T				is array ((adc_channels-1) downto 0) of DATA_T;
-	type F_USEDW_WIDTH_T				is array ((adc_channels-1) downto 0) of USEDW_T;
+	type F_USEDW_WIDTH_T			is array ((adc_channels-1) downto 0) of USEDW_T;
 	
 --*******************************************************************************************************************************
 
