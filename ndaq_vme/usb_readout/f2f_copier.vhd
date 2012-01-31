@@ -120,7 +120,7 @@ begin
 							state		<= go_idle;	--When ending, we must 'go_idle'.
 							--
 							scounter	<= (others => '0');
-						elsif ((dest_enable = '1')) then
+						elsif ((s_ef = SOURCE_NOT_EMPTY) and (dest_enable = '1')) then
 							state		<= write_st;
 						else
 							state		<= test_st;
