@@ -456,7 +456,7 @@ architecture rtl of ndaq_vme is
 	--
 	-- USB Readout Channels
 	--
-	constant usb_channels :	integer := 4;
+	constant	usb_channels :	integer := 4;
 	constant	EVENT_SIZE   : unsigned	:= x"7F";		
 	
 	--

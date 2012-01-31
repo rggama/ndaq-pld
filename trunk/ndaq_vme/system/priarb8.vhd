@@ -160,7 +160,7 @@ begin
 					end if;
 				
 				when d0disable =>
-					-- if it is still running, stuck here as we has a *PROBLEM*
+					-- if it is still running, stuck here as we have a *PROBLEM*
 					if (ii(0) = '0') then
 						state <= d0disable;
 					else
@@ -189,7 +189,7 @@ begin
 					end if;
 				
 				when d1disable =>
-					-- if it is still running, stuck here as we has a *PROBLEM*
+					-- if it is still running, stuck here as we have a *PROBLEM*
 					if (ii(1) = '0') then
 						state <= d1disable;
 					else
@@ -218,7 +218,7 @@ begin
 					end if;
 				
 				when d2disable =>
-					-- if it is still running, stuck here as we has a *PROBLEM*
+					-- if it is still running, stuck here as we have a *PROBLEM*
 					if (ii(2) = '0') then
 						state <= d2disable;
 					else
@@ -247,7 +247,7 @@ begin
 					end if;
 				
 				when d3disable =>
-					-- if it is still running, stuck here as we has a *PROBLEM*
+					-- if it is still running, stuck here as we have a *PROBLEM*
 					if (ii(3) = '0') then
 						state <= d3disable;
 					else
@@ -278,7 +278,7 @@ begin
 					end if;
 				
 				when d4disable =>
-					-- if it is still running, stuck here as we has a *PROBLEM*
+					-- if it is still running, stuck here as we have a *PROBLEM*
 					if (ii(4) = '0') then
 						state <= d4disable;
 					else
@@ -307,7 +307,7 @@ begin
 					end if;
 				
 				when d5disable =>
-					-- if it is still running, stuck here as we has a *PROBLEM*
+					-- if it is still running, stuck here as we have a *PROBLEM*
 					if (ii(5) = '0') then
 						state <= d5disable;
 					else
@@ -336,7 +336,7 @@ begin
 					end if;
 				
 				when d6disable =>
-					-- if it is still running, stuck here as we has a *PROBLEM*
+					-- if it is still running, stuck here as we have a *PROBLEM*
 					if (ii(6) = '0') then
 						state <= d6disable;
 					else
@@ -365,7 +365,7 @@ begin
 					end if;
 				
 				when d7disable =>
-					-- if it is still running, stuck here as we has a *PROBLEM*
+					-- if it is still running, stuck here as we have a *PROBLEM*
 					if (ii(7) = '0') then
 						state <= d7disable;
 					else
