@@ -1,0 +1,168 @@
+m255
+K3
+13
+cModel Technology
+dC:\altera\10.0
+Edatabuilder
+Z0 w1328642371
+Z1 DPx4 work 15 databuilder_pkg 0 22 j6>0I;bkRfm6eZR810a[S2
+Z2 DPx4 ieee 9 math_real 0 22 zjAF7SKfg_RPI0GT^n1N`1
+Z3 DPx4 work 13 functions_pkg 0 22 iXQOzoEo@5WW9DJBBaS<j0
+Z4 DPx4 ieee 18 std_logic_unsigned 0 22 hEMVMlaNCR^<OOoVNV;m90
+Z5 DPx4 ieee 15 std_logic_arith 0 22 GJbAT?7@hRQU9IQ702DT]2
+Z6 DPx4 ieee 14 std_logic_1164 0 22 GH1=`jDDBJ=`LM;:Ak`kf2
+Z7 dC:\Documents and Settings\Rafael\Desktop\pld_r35\ndaq_sim\databuilder
+Z8 8C:/Documents and Settings/Rafael/Desktop/pld_r35/ndaq_core/acq/databuilder.vhd
+Z9 FC:/Documents and Settings/Rafael/Desktop/pld_r35/ndaq_core/acq/databuilder.vhd
+l0
+L16
+VnQWbgWf55e_1o@0HIWcLK3
+Z10 OV;C;6.5e;42
+32
+Z11 o-work work -2002 -explicit -O0
+Z12 tExplicit 1
+!s100 ^o1J2EEWFhbiLC>zKcJE30
+Artl
+R1
+R2
+R3
+R4
+R5
+R6
+DEx4 work 11 databuilder 0 22 nQWbgWf55e_1o@0HIWcLK3
+l77
+L41
+VCea`:<NRHh6<G4IVM4NQg1
+R10
+32
+Z13 Mx6 4 ieee 14 std_logic_1164
+Z14 Mx5 4 ieee 15 std_logic_arith
+Z15 Mx4 4 ieee 18 std_logic_unsigned
+Z16 Mx3 4 work 13 functions_pkg
+Z17 Mx2 4 ieee 9 math_real
+Z18 Mx1 4 work 15 databuilder_pkg
+R11
+R12
+!s100 C@[[9?9n;Ql<RUYXOIo4n1
+Pdatabuilder_pkg
+R2
+R3
+R4
+R5
+R6
+Z19 w1328642687
+R7
+Z20 8C:/Documents and Settings/Rafael/Desktop/pld_r35/ndaq_core/acq/databuilder_pkg.vhd
+Z21 FC:/Documents and Settings/Rafael/Desktop/pld_r35/ndaq_core/acq/databuilder_pkg.vhd
+l0
+L15
+Vj6>0I;bkRfm6eZR810a[S2
+R10
+32
+Z22 Mx5 4 ieee 14 std_logic_1164
+Z23 Mx4 4 ieee 15 std_logic_arith
+Z24 Mx3 4 ieee 18 std_logic_unsigned
+Z25 Mx2 4 work 13 functions_pkg
+Z26 Mx1 4 ieee 9 math_real
+R11
+R12
+!s100 nIWbb>?:5JCFDL_RL2hM90
+Bbody
+DBx4 work 15 databuilder_pkg 0 22 j6>0I;bkRfm6eZR810a[S2
+R2
+R3
+R4
+R5
+R6
+l0
+L54
+Vk<MCF3HZAk>K7X>fKogW=2
+R10
+32
+R22
+R23
+R24
+R25
+R26
+R11
+R12
+nbody
+!s100 B_NV^b:I?@:9b3LJ[Lek31
+Edatabuilder_tbench
+Z27 w1328639342
+R1
+R2
+R3
+R4
+R5
+R6
+R7
+Z28 8C:/Documents and Settings/Rafael/Desktop/pld_r35/ndaq_sim/databuilder/databuilder_tbench.vht
+Z29 FC:/Documents and Settings/Rafael/Desktop/pld_r35/ndaq_sim/databuilder/databuilder_tbench.vht
+l0
+L11
+Vz3^G3[BEIVY]?m;FJGWn:1
+R10
+32
+R11
+R12
+!s100 0`M0ZQSAHc0UmzGVcOnHi0
+Atestbench
+R1
+R2
+R3
+R4
+R5
+R6
+DEx4 work 18 databuilder_tbench 0 22 z3^G3[BEIVY]?m;FJGWn:1
+l69
+L15
+VefG0TZ0n?VWO]FN[`7^TO1
+!s100 mDhR]@KjEimljmFY?AlEL3
+R10
+32
+R13
+R14
+R15
+R16
+R17
+R18
+R11
+R12
+Pfunctions_pkg
+R2
+R5
+R6
+Z30 w1328638382
+R7
+Z31 8C:/Documents and Settings/Rafael/Desktop/pld_r35/ndaq_core/acq/functions_pkg.vhd
+Z32 FC:/Documents and Settings/Rafael/Desktop/pld_r35/ndaq_core/acq/functions_pkg.vhd
+l0
+L16
+ViXQOzoEo@5WW9DJBBaS<j0
+!s100 __@Gn`Fe`667]6=8O@kkn0
+R10
+32
+b1
+Z33 Mx3 4 ieee 14 std_logic_1164
+Z34 Mx2 4 ieee 15 std_logic_arith
+R26
+R11
+R12
+Bbody
+Z35 DBx4 work 13 functions_pkg 0 22 iXQOzoEo@5WW9DJBBaS<j0
+R2
+R5
+R6
+l0
+L31
+Z36 V<z`U40AZ^ZeaE^;R>UUnl2
+Z37 !s100 W?dgfX=0c3JYKFld>blnP3
+R10
+32
+R33
+R34
+R26
+R11
+R12
+nbody
