@@ -90,19 +90,14 @@ end package acq_pkg;
 
 package body acq_pkg is
 
-
-	function MY_CONV_SIGNED(in_data : std_logic_vector) return signed is 
-		
-		variable out_data : signed(in_data'high downto in_data'low) ; 
-    
-		begin 
-		for i in 0 to in_data'LENGTH-1 loop 
-			out_data(i) := in_data(i);
-		end loop; 
-    
-		return out_data; 
-		
-    end MY_CONV_SIGNED; -- end function 	conv: 
-
+--
+function MY_CONV_SIGNED(in_data : std_logic_vector) return signed is 
+	variable out_data : signed(in_data'high downto in_data'low) ; 
+begin 
+	for i in 0 to in_data'LENGTH-1 loop 
+		out_data(i) := in_data(i);
+	end loop; 
+	return out_data; 		
+end MY_CONV_SIGNED; -- end function
 
 end package body acq_pkg;

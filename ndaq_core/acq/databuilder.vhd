@@ -1,0 +1,308 @@
+-- $ Data Builder - NDAQ's Data Builder
+-- v: svn controlled.
+--
+--
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_arith.all;
+use ieee.std_logic_unsigned.all;
+--use ieee.numeric_std.all;
+
+use work.functions_pkg.all;
+use work.databuilder_pkg.all;
+
+--
+entity databuilder is
+port(	
+		--
+		rst							: in	std_logic;
+		clk							: in	std_logic;		 
+
+		--
+		enable_A					: in	SLOTS_T;
+		enable_B					: in	SLOTS_T;
+		transfer					: in	TRANSFER_A;
+		
+		--
+		empty						: in	SLOTS_T;
+		rd							: out	SLOTS_T;
+		idata						: in	IDATA_A;
+		
+		--
+		full						: in	SLOTS_T;
+		wr							: out	SLOTS_T;
+		odata						: out	ODATA_T
+	);
+end databuilder;
+
+--
+
+architecture rtl of databuilder is
+
+	-- Slot Counter
+	signal	s_counter_en			: std_logic := '0';
+	signal	s_counter_cl			: std_logic := '0';
+	signal	s_counter				: SLOTS_REG_T;
+	
+	-- Idata Bus
+	signal idata_bus				: IDATA_T;
+	-- Enable A 
+	signal en_a						: std_logic := '0';
+	-- Enable B 
+	signal en_b						: std_logic := '0';
+	-- Transfer Size 
+	signal t_size					: TRANSFER_REG_T;
+	-- Empty Flag
+	signal eflag					: std_logic := '0';
+	-- Full Flag
+	signal fflag					: std_logic := '0';
+	
+	-- Read Strobe
+	signal rds						: std_logic := '0';
+	-- Write Strobe
+	signal wrs						: std_logic := '0';
+
+	-- Transfer FSM
+	type	state_values is (idle, active_rden, block_transfer, last_wren, inc_slot);
+	signal	stateval, next_stateval	: state_values;
+
+	-- Transfer Counter
+	signal	t_counter_en			: std_logic := '0';
+	signal	t_counter_cl			: std_logic := '0';
+	signal	t_counter				: TRANSFER_REG_T;
+
+--
+
+begin
+
+-- Slot Counter
+slot_counter:
+process(clk, rst)
+begin
+	if (rst = '1') then
+		s_counter	<= (others => '0');
+	elsif rising_edge(clk) then
+		if (s_counter_cl = '1') then
+			s_counter	<= (others => '0');
+		elsif (s_counter_en = '1') then
+			s_counter	<= s_counter + 1;
+		end if;
+	end if;
+end process;
+
+--
+-- Input Muxes
+--
+
+-- Idata Mux
+idata_mux: idata_bus	<=	idata(conv_integer(s_counter));
+
+-- Enable A Mux
+enable_a_mux: en_a		<= enable_A(conv_integer(s_counter));
+
+-- Enable A Mux
+enable_b_mux: en_b		<= enable_B(conv_integer(s_counter));
+
+-- Transfer Size Mux
+transfer_mux: t_size	<= transfer(conv_integer(s_counter));
+
+-- Empty Flag Mux
+empty_mux: eflag		<= empty(conv_integer(s_counter));
+
+-- Full Flag Mux
+full_mux: fflag			<= full(conv_integer(s_counter));
+
+--
+-- Output Demuxes
+--
+
+-- Rd Demux
+rd_demux:
+process(s_counter, rds)
+begin
+	rd <= (others => '0');
+	if (rds = '1') then
+		rd(conv_integer(s_counter))	<= '1';
+	end if;
+end process;
+
+-- Wr Demux
+wr_demux: 
+process(s_counter, wrs)
+begin
+	wr <= (others => '0');
+	if (wrs = '1') then
+		wr(conv_integer(s_counter))	<= '1';
+	end if;
+end process;
+
+--
+-- Transfer FSM
+--
+
+--
+-- Asynchronous assignments of 'next_stateval'
+next_state_comb:
+process(stateval, en_a, en_b, t_counter, t_size)
+begin
+	case stateval is
+		when idle =>			
+			-- If the slot is disabled, increment the slot counter and start again.
+			if (en_a = '0') then
+				next_stateval	<= inc_slot;
+			-- If enable_A and enable_B are asserted, start transfer.
+			elsif ((en_a = '1') and (en_b = '1')) then
+				next_stateval	<= active_rden;
+			-- Else, keep waiting.
+			else
+				next_stateval	<= idle;
+			end if;
+			
+		when active_rden =>						
+			next_stateval <= block_transfer;
+		
+		when block_transfer =>
+			-- If transfer counter has reached transfer size, finish transferring.
+			if (t_counter = t_size) then
+				next_stateval <= last_wren;
+			-- Else, keep transferring.
+			else
+				next_stateval <= block_transfer;
+			end if;
+
+		when last_wren =>						
+			next_stateval <= idle;
+				
+		when inc_slot =>						
+			next_stateval <= idle;
+
+		when others =>
+			next_stateval <= idle;
+			
+	end case;
+end process;
+
+--
+-- Synchronous assignments of fsm outputs
+reg_output_decoder: 
+process(clk, rst, next_stateval, s_counter)
+begin
+	if (rst = '1') then
+		--
+		s_counter_en	<= '0';
+		s_counter_cl	<= '0';
+		t_counter_en	<= '0';
+		t_counter_cl	<= '0';
+		--
+		rds				<= '0';
+		wrs				<= '0';	
+	elsif (rising_edge(clk)) then
+		case (next_stateval) is
+			when idle =>
+				--
+				s_counter_en	<= '0';
+				s_counter_cl	<= '0';
+				t_counter_en	<= '0';
+				t_counter_cl	<= '1';
+				--
+				rds				<= '0';
+				wrs				<= '0';
+
+			when active_rden =>
+				--
+				s_counter_en	<= '0';
+				s_counter_cl	<= '0';
+				t_counter_en	<= '0';
+				t_counter_cl	<= '0';
+				--
+				rds				<= '1';
+				wrs				<= '0';
+
+			when block_transfer =>
+				--
+				s_counter_en	<= '0';
+				s_counter_cl	<= '0';
+				t_counter_en	<= '1';
+				t_counter_cl	<= '0';
+				--
+				rds				<= '1';
+				wrs				<= '1';
+
+			when last_wren =>
+				-- Slot Counter Clear Logic
+				if (s_counter = CONV_STD_LOGIC_VECTOR((slots-1), NumBits(slots))) then
+					s_counter_cl	<= '1';
+				else
+					s_counter_cl	<= '0';
+				end if;
+				--
+				s_counter_en	<= '1';
+				t_counter_en	<= '0';
+				t_counter_cl	<= '0';
+				--
+				rds				<= '0';
+				wrs				<= '1';
+
+			when inc_slot =>
+				--
+				s_counter_en	<= '1';
+				s_counter_cl	<= '0';
+				t_counter_en	<= '0';
+				t_counter_cl	<= '0';
+				--
+				rds				<= '0';
+				wrs				<= '0';
+
+			when others	=>
+				--
+				s_counter_en	<= '0';
+				s_counter_cl	<= '0';
+				t_counter_en	<= '0';
+				t_counter_cl	<= '1';
+				--
+				rds				<= '0';
+				wrs				<= '0';
+		end case;
+	end if;
+end process;
+
+--
+-- Registered states
+fsm_ff:
+process(clk,rst)
+begin
+if (rst = '1') then
+	stateval <= idle;
+elsif (rising_edge(clk)) then
+	stateval <= next_stateval;
+end if;
+end process;
+
+--
+-- Transfer Counter
+transfer_counter:
+process(clk, rst)
+begin
+	if (rst = '1') then
+		t_counter	<= (others => '0');
+	elsif (rising_edge(clk)) then
+		if (t_counter_cl = '1') then
+			t_counter	<= (others => '0');
+		elsif (t_counter_en = '1') then
+			t_counter	<= t_counter + 1;
+		end if;
+	end if;
+end process;
+
+--
+--
+--
+
+--
+--
+odata	<= idata_bus;
+
+--
+
+end rtl;
