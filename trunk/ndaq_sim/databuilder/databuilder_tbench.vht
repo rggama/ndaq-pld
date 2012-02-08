@@ -14,7 +14,8 @@ end databuilder_tbench;
 
 architecture testbench of databuilder_tbench is
 
-	constant	TRANSFER_SIZE	:	unsigned := x"10";
+	constant	TRANSFER_SIZE	:	unsigned := x"09";
+	constant	FIFO_ADDRESS	:	unsigned := x"03";
 	
 --
 -- DUT: Data Builder
@@ -31,19 +32,35 @@ architecture testbench of databuilder_tbench is
 		enable_A					: in	SLOTS_T;
 		enable_B					: in	SLOTS_T;
 		transfer					: in	TRANSFER_A;
+		address						: in	ADDRESS_A;
 		
 		--
-		empty						: in	SLOTS_T;
 		rd							: out	SLOTS_T;
 		idata						: in	IDATA_A;
 		
 		--
-		full						: in	SLOTS_T;
-		wr							: out	SLOTS_T;
+		wr							: out	ADDRESS_T;
 		odata						: out	ODATA_T
 	);
 	end component;
-	
+
+-- Test FIFO
+	component test_fifo
+	PORT
+	(
+		aclr		: IN STD_LOGIC  := '0';
+		data		: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+		rdclk		: IN STD_LOGIC ;
+		rdreq		: IN STD_LOGIC ;
+		wrclk		: IN STD_LOGIC ;
+		wrreq		: IN STD_LOGIC ;
+		q			: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+		rdempty		: OUT STD_LOGIC ;
+		rdusedw		: OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
+		wrfull		: OUT STD_LOGIC ;
+		wrusedw		: OUT STD_LOGIC_VECTOR (3 DOWNTO 0)
+	);
+	end component;
 
 --	
 -- Signals
@@ -56,14 +73,19 @@ architecture testbench of databuilder_tbench is
 	signal	enable_A	: SLOTS_T;
 	signal	enable_B	: SLOTS_T;
 	signal	transfer	: TRANSFER_A;
+	signal	address		: ADDRESS_A;
 	
 	--
-	signal	empty		: SLOTS_T;
-	signal	idata		: IDATA_A;
-		
-	--
-	signal	full		: SLOTS_T;
+	signal  idata		: IDATA_A;
 	
+	--
+	signal inp_q		: IDATA_A;	
+	signal inp_data		: IDATA_A;
+	signal inp_rd		: SLOTS_T;
+	signal inp_wr		: SLOTS_T;
+	signal inp_empty	: SLOTS_T;
+	signal inp_full		: SLOTS_T;
+			
 --
 
 begin
@@ -83,17 +105,51 @@ begin
 		enable_A					=> enable_A,
 		enable_B					=> enable_B,
 		transfer					=> transfer,
+		address						=> address,
 		
 		--
-		empty						=> empty,
-		rd							=> open,
-		idata						=> idata,
+		rd							=> inp_rd,
+		idata						=> inp_q,
 		
 		--
-		full						=> full,
 		wr							=> open,
 		odata						=> open
 	);
+
+	
+fifo_construct:
+for i in 0 to (slots - 1) generate
+
+	read_testfifo:
+	test_fifo port map
+	(
+		aclr		=> rst,
+		data		=> inp_data(i),
+		rdclk		=> clk,
+		rdreq		=> inp_rd(i),
+		wrclk		=> clk,
+		wrreq		=> inp_wr(i),
+		q			=> inp_q(i),
+		rdempty		=> inp_empty(i),
+		rdusedw		=> open,
+		wrfull		=> inp_full(i),
+		wrusedw		=> open
+	);
+
+end generate fifo_construct;
+
+
+--
+-- INPUT FIFO Data Construct
+--
+
+inp_data_construct:
+for i in 0 to (slots - 1) generate
+	
+	inp_data(i)	<= CONV_STD_LOGIC_VECTOR(i, in_width);
+	inp_wr(i)	<= '1';
+	
+end generate inp_data_construct;
 
 --
 -- I/O Construct
@@ -103,14 +159,12 @@ io_construct:
 for i in 0 to (slots - 1) generate
 
 	enable_A(i)	<= '1';
-	enable_B(i)	<= '1';
+	enable_B(i)	<= not(inp_empty(i));
 	transfer(i)	<= CONV_STD_LOGIC_VECTOR(TRANSFER_SIZE, NumBits(transfer_max));
+	address(i)	<= CONV_STD_LOGIC_VECTOR(FIFO_ADDRESS, NumBits(address_max));
 	
-	empty(i)	<= '0';
-	idata(i)	<= CONV_STD_LOGIC_VECTOR(i, in_width);
-	
-	full(i)		<= '0';
-	
+	idata(i)	<= inp_q(i);
+		
 end generate io_construct;
 
 --	

@@ -19,11 +19,14 @@ package databuilder_pkg is
 	--
 	
 	--
-	constant slots			: integer	:= 18;
+	constant slots			: integer	:= 2;
 	
 	--
 	constant transfer_max	: integer	:= 128;
 	
+	--
+	constant address_max	: integer	:= 4;
+
 	--
 	constant in_width		: integer	:= 32;
 	
@@ -39,11 +42,14 @@ package databuilder_pkg is
 	subtype	SLOTS_T					is std_logic_vector((slots-1) downto 0);
 	subtype	SLOTS_REG_T				is std_logic_vector((NumBits(slots)-1) downto 0);
 	subtype	TRANSFER_REG_T			is std_logic_vector((NumBits(transfer_max)-1) downto 0);
+	subtype	ADDRESS_T				is std_logic_vector((address_max-1) downto 0);
+	subtype	ADDRESS_REG_T			is std_logic_vector((Numbits(address_max)-1) downto 0);
 	subtype	IDATA_T					is std_logic_vector((in_width-1) downto 0);
 	subtype	ODATA_T					is std_logic_vector((out_width-1) downto 0);
 	
 	type	TRANSFER_A				is array ((slots-1) downto 0) of TRANSFER_REG_T;
 	type	IDATA_A					is array ((slots-1) downto 0) of IDATA_T;
+	type	ADDRESS_A				is array ((slots-1) downto 0) of ADDRESS_REG_T;
 	
 --*******************************************************************************************************************************
 	
