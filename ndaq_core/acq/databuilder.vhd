@@ -23,15 +23,14 @@ port(
 		enable_A					: in	SLOTS_T;
 		enable_B					: in	SLOTS_T;
 		transfer					: in	TRANSFER_A;
+		address						: in	ADDRESS_A;
 		
 		--
-		empty						: in	SLOTS_T;
 		rd							: out	SLOTS_T;
 		idata						: in	IDATA_A;
 		
 		--
-		full						: in	SLOTS_T;
-		wr							: out	SLOTS_T;
+		wr							: out	ADDRESS_T;
 		odata						: out	ODATA_T
 	);
 end databuilder;
@@ -53,15 +52,17 @@ architecture rtl of databuilder is
 	signal en_b						: std_logic := '0';
 	-- Transfer Size 
 	signal t_size					: TRANSFER_REG_T;
-	-- Empty Flag
-	signal eflag					: std_logic := '0';
-	-- Full Flag
-	signal fflag					: std_logic := '0';
+	-- Address Bus
+	signal addr_bus					: ADDRESS_REG_T;
 	
 	-- Read Strobe
 	signal rds						: std_logic := '0';
 	-- Write Strobe
 	signal wrs						: std_logic := '0';
+	-- Read Strobe Array
+	signal rda						: SLOTS_T;
+	-- Write Strobe Array
+	signal wra						: ADDRESS_T;
 
 	-- Transfer FSM
 	type	state_values is (idle, active_rden, block_transfer, last_wren, inc_slot);
@@ -76,7 +77,11 @@ architecture rtl of databuilder is
 
 begin
 
+--
 -- Slot Counter
+--
+
+-- 
 slot_counter:
 process(clk, rst)
 begin
@@ -107,35 +112,8 @@ enable_b_mux: en_b		<= enable_B(conv_integer(s_counter));
 -- Transfer Size Mux
 transfer_mux: t_size	<= transfer(conv_integer(s_counter));
 
--- Empty Flag Mux
-empty_mux: eflag		<= empty(conv_integer(s_counter));
-
--- Full Flag Mux
-full_mux: fflag			<= full(conv_integer(s_counter));
-
---
--- Output Demuxes
---
-
--- Rd Demux
-rd_demux:
-process(s_counter, rds)
-begin
-	rd <= (others => '0');
-	if (rds = '1') then
-		rd(conv_integer(s_counter))	<= '1';
-	end if;
-end process;
-
--- Wr Demux
-wr_demux: 
-process(s_counter, wrs)
-begin
-	wr <= (others => '0');
-	if (wrs = '1') then
-		wr(conv_integer(s_counter))	<= '1';
-	end if;
-end process;
+-- Address Mux
+address_mux: addr_bus	<= address(conv_integer(s_counter));
 
 --
 -- Transfer FSM
@@ -150,17 +128,24 @@ begin
 		when idle =>			
 			-- If the slot is disabled, increment the slot counter and start again.
 			if (en_a = '0') then
-				next_stateval	<= inc_slot;
+				next_stateval <= inc_slot;
 			-- If enable_A and enable_B are asserted, start transfer.
 			elsif ((en_a = '1') and (en_b = '1')) then
-				next_stateval	<= active_rden;
+				next_stateval <= active_rden;
 			-- Else, keep waiting.
 			else
 				next_stateval	<= idle;
 			end if;
 			
-		when active_rden =>						
-			next_stateval <= block_transfer;
+		when active_rden =>
+			if(t_size < 1) then
+			  report "Transfer Size MUST be greater than ZERO!" severity error;
+			end if;			
+			if (t_size = 1) then
+				next_stateval <= last_wren;
+			else
+				next_stateval <= block_transfer;
+			end if;
 		
 		when block_transfer =>
 			-- If transfer counter has reached transfer size, finish transferring.
@@ -184,7 +169,7 @@ begin
 end process;
 
 --
--- Synchronous assignments of fsm outputs
+-- Synchronous assignments of FSM outputs
 reg_output_decoder: 
 process(clk, rst, next_stateval, s_counter)
 begin
@@ -194,9 +179,7 @@ begin
 		s_counter_cl	<= '0';
 		t_counter_en	<= '0';
 		t_counter_cl	<= '0';
-		--
-		rds				<= '0';
-		wrs				<= '0';	
+
 	elsif (rising_edge(clk)) then
 		case (next_stateval) is
 			when idle =>
@@ -204,20 +187,14 @@ begin
 				s_counter_en	<= '0';
 				s_counter_cl	<= '0';
 				t_counter_en	<= '0';
-				t_counter_cl	<= '1';
-				--
-				rds				<= '0';
-				wrs				<= '0';
+				t_counter_cl	<= '0';
 
 			when active_rden =>
 				--
 				s_counter_en	<= '0';
 				s_counter_cl	<= '0';
-				t_counter_en	<= '0';
+				t_counter_en	<= '1';
 				t_counter_cl	<= '0';
-				--
-				rds				<= '1';
-				wrs				<= '0';
 
 			when block_transfer =>
 				--
@@ -225,9 +202,6 @@ begin
 				s_counter_cl	<= '0';
 				t_counter_en	<= '1';
 				t_counter_cl	<= '0';
-				--
-				rds				<= '1';
-				wrs				<= '1';
 
 			when last_wren =>
 				-- Slot Counter Clear Logic
@@ -239,36 +213,71 @@ begin
 				--
 				s_counter_en	<= '1';
 				t_counter_en	<= '0';
-				t_counter_cl	<= '0';
-				--
-				rds				<= '0';
-				wrs				<= '1';
+				t_counter_cl	<= '1';
 
 			when inc_slot =>
+				-- Slot Counter Clear Logic
+				if (s_counter = CONV_STD_LOGIC_VECTOR((slots-1), NumBits(slots))) then
+					s_counter_cl	<= '1';
+				else
+					s_counter_cl	<= '0';
+				end if;
 				--
 				s_counter_en	<= '1';
-				s_counter_cl	<= '0';
 				t_counter_en	<= '0';
 				t_counter_cl	<= '0';
-				--
-				rds				<= '0';
-				wrs				<= '0';
 
 			when others	=>
 				--
 				s_counter_en	<= '0';
 				s_counter_cl	<= '0';
 				t_counter_en	<= '0';
-				t_counter_cl	<= '1';
-				--
-				rds				<= '0';
-				wrs				<= '0';
+				t_counter_cl	<= '0';
+
 		end case;
 	end if;
 end process;
 
 --
--- Registered states
+-- Asynchronous assignments of FSM outputs
+comb_output_decoder: 
+process(next_stateval)
+begin
+	case (next_stateval) is
+		when idle =>
+			--
+			rds				<= '0';
+			wrs				<= '0';
+
+		when active_rden =>
+			--
+			rds				<= '1';
+			wrs				<= '0';
+
+		when block_transfer =>
+			--
+			rds				<= '1';
+			wrs				<= '1';
+
+		when last_wren =>
+			--
+			rds				<= '0';
+			wrs				<= '1';
+
+		when inc_slot =>
+			--
+			rds				<= '0';
+			wrs				<= '0';
+
+		when others	=>
+			--
+			rds				<= '0';
+			wrs				<= '0';
+	end case;
+end process;
+
+--
+-- Registered FSM states
 fsm_ff:
 process(clk,rst)
 begin
@@ -296,12 +305,47 @@ begin
 end process;
 
 --
+-- Output Demuxes
 --
+
+-- Rd Demux
+rd_demux:
+process(s_counter, rds)
+begin
+	rda <= (others => '0');
+	if (rds = '1') then
+		rda(conv_integer(s_counter))	<= '1';
+	end if;
+end process;
+
+-- Wr Demux
+wr_demux: 
+process(addr_bus, wrs)
+begin
+	wra <= (others => '0');
+	if (wrs = '1') then
+		wra(conv_integer(addr_bus))		<= '1';
+	end if;
+end process;
+
+--
+-- Output Registers
 --
 
 --
 --
-odata	<= idata_bus;
+process(clk, rst)
+begin
+	if (rst = '1') then
+		rd		<= (others => '0');
+		wr		<= (others => '0');
+		odata	<= (others => '0');
+	elsif (rising_edge(clk)) then
+		rd		<= rda;
+		wr		<= wra;
+		odata	<= idata_bus;
+	end if;
+end process;
 
 --
 
