@@ -14,9 +14,11 @@ end databuilder_tbench;
 
 architecture testbench of databuilder_tbench is
 
-	constant	TRANSFER_SIZE	:	unsigned := x"09";
-	constant	FIFO_ADDRESS	:	unsigned := x"03";
-	
+	constant	TRANSFER_SIZE	:	unsigned 	:= x"0F";	-- Real Size is the declared size plus one.
+	constant	FIFO_ADDRESS	:	unsigned 	:= x"00";
+	constant	INP				:	integer		:= 8;
+	constant	OUP				:	integer		:= 4;
+
 --
 -- DUT: Data Builder
 --
@@ -66,26 +68,46 @@ architecture testbench of databuilder_tbench is
 -- Signals
 --
 	--
-	signal	rst			: std_logic := '0';
-	signal	clk			: std_logic := '0';
+	signal	rst				: std_logic := '0';
+	signal	clk				: std_logic := '0';
+	signal	clkwr			: std_logic := '0';
 	
 	--
-	signal	enable_A	: SLOTS_T;
-	signal	enable_B	: SLOTS_T;
-	signal	transfer	: TRANSFER_A;
-	signal	address		: ADDRESS_A;
+	signal	enable_A		: SLOTS_T;
+	signal	enable_B		: SLOTS_T;
+	signal	transfer		: TRANSFER_A;
+	signal	address			: ADDRESS_A;
 	
 	--
-	signal  idata		: IDATA_A;
+	signal	rd				: SLOTS_T;
+	signal  idata			: IDATA_A;
 	
 	--
-	signal inp_q		: IDATA_A;	
-	signal inp_data		: IDATA_A;
-	signal inp_rd		: SLOTS_T;
-	signal inp_wr		: SLOTS_T;
-	signal inp_empty	: SLOTS_T;
-	signal inp_full		: SLOTS_T;
-			
+	signal	wr				: ADDRESS_T;
+	signal	odata			: ODATA_T;
+	
+	--
+	signal	inp_q			: IDATA_A;	
+	signal	inp_data		: IDATA_A;
+	signal	inp_rd			: SLOTS_T;
+	signal	inp_wr			: SLOTS_T;
+	signal	inp_empty		: SLOTS_T;
+	signal	inp_full		: SLOTS_T;
+
+	--
+	subtype	INP_COUNTER_T	is std_logic_vector(3 downto 0);
+	type	INP_COUNTER_A	is array ((INP-1) downto 0) of INP_COUNTER_T;
+	
+	signal	inp_counter		: INP_COUNTER_A;
+	signal	inp_counter_en	: std_logic_vector((INP-1) downto 0);
+	
+	--
+	signal	oup_data		: ODATA_T;
+	signal	oup_rd			: ADDRESS_T;
+	signal	oup_wr			: ADDRESS_T;
+	signal	oup_empty		: ADDRESS_T;
+	signal	oup_full		: ADDRESS_T;
+
 --
 
 begin
@@ -108,17 +130,17 @@ begin
 		address						=> address,
 		
 		--
-		rd							=> inp_rd,
-		idata						=> inp_q,
+		rd							=> rd,
+		idata						=> idata,
 		
 		--
-		wr							=> open,
-		odata						=> open
+		wr							=> wr,
+		odata						=> odata
 	);
 
 	
-fifo_construct:
-for i in 0 to (slots - 1) generate
+inp_fifo_construct:
+for i in 0 to (INP - 1) generate
 
 	read_testfifo:
 	test_fifo port map
@@ -136,36 +158,92 @@ for i in 0 to (slots - 1) generate
 		wrusedw		=> open
 	);
 
-end generate fifo_construct;
+end generate inp_fifo_construct;
 
+oup_fifo_construct:
+for i in 0 to (OUP - 1) generate
+
+	write_testfifo:
+	test_fifo port map
+	(
+		aclr		=> rst,
+		data		=> oup_data,
+		rdclk		=> clkwr,
+		rdreq		=> oup_rd(i),
+		wrclk		=> clkwr,
+		wrreq		=> oup_wr(i),
+		q			=> open,
+		rdempty		=> oup_empty(i),
+		rdusedw		=> open,
+		wrfull		=> oup_full(i),
+		wrusedw		=> open
+	);
+
+end generate oup_fifo_construct;
 
 --
 -- INPUT FIFO Data Construct
 --
 
 inp_data_construct:
-for i in 0 to (slots - 1) generate
-	
-	inp_data(i)	<= CONV_STD_LOGIC_VECTOR(i, in_width);
-	inp_wr(i)	<= '1';
+for i in 0 to (INP - 1) generate
+		
+	input_counter:
+	process(clk, rst)
+	begin
+		if (rst = '1') then
+			inp_counter(i) <= (others => '1');
+		elsif (rising_edge(clk)) then
+			if (inp_counter_en(i) = '1') then
+				inp_counter(i) <= inp_counter(i) + 1;
+			end if;
+		end if;
+	end process;
+
+	inp_counter_en(i)	<= not(inp_full(i));
+	inp_data(i)			<= CONV_STD_LOGIC_VECTOR(i, 4) & x"000000" & inp_counter(i);
+	inp_wr(i)			<= '1';
 	
 end generate inp_data_construct;
 
 --
--- I/O Construct
+-- Data Builder Slots Construct
 --
 
-io_construct:
+slots_construct:
 for i in 0 to (slots - 1) generate
 
 	enable_A(i)	<= '1';
-	enable_B(i)	<= not(inp_empty(i));
+	enable_B(i)	<= (not(inp_empty(i))) and (not(oup_full(i/2)));
 	transfer(i)	<= CONV_STD_LOGIC_VECTOR(TRANSFER_SIZE, NumBits(transfer_max));
-	address(i)	<= CONV_STD_LOGIC_VECTOR(FIFO_ADDRESS, NumBits(address_max));
-	
-	idata(i)	<= inp_q(i);
+	address(i)	<= CONV_STD_LOGIC_VECTOR((i/2), NumBits(address_max));
 		
-end generate io_construct;
+end generate slots_construct;
+
+--
+-- Data Builder Read Side Construct
+--
+
+read_side_construct:
+for i in 0 to (slots - 1) generate
+
+	inp_rd(i)	<= rd(i);
+	idata(i)	<= inp_q(i);
+	
+end generate read_side_construct;
+
+--
+-- Data Builder Ouput Construct
+--
+
+write_side_construct:
+for i in 0 to (OUP - 1) generate
+
+	oup_wr(i)		<= wr(i);
+	oup_data		<= odata;
+	oup_rd(i)		<= not(oup_empty(i));
+	
+end generate write_side_construct;
 
 --	
 -- Stimulus!
@@ -182,6 +260,19 @@ loop
 	-- if (now >= 1000000 ps) then wait; end if;
 end loop;
 end process clkvme_gen;
+
+-- clk @ 50 MHz - 90 deg
+clkwr_gen: process
+begin
+loop
+	--wait for 5000 ps;
+	clkwr	<= '1';
+	wait for 10000 ps;
+	clkwr	<= '0';
+	wait for 10000 ps;
+	-- if (now >= 1000000 ps) then wait; end if;
+end loop;
+end process clkwr_gen;
 
 -- Reset 
 rst_gen: process

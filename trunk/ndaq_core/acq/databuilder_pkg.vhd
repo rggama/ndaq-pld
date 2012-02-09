@@ -19,7 +19,7 @@ package databuilder_pkg is
 	--
 	
 	--
-	constant slots			: integer	:= 2;
+	constant slots			: integer	:= 8;
 	
 	--
 	constant transfer_max	: integer	:= 128;

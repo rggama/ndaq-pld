@@ -179,6 +179,8 @@ begin
 		s_counter_cl	<= '0';
 		t_counter_en	<= '0';
 		t_counter_cl	<= '0';
+		--
+		wrs				<= '0';		-- Write must be delayed by one clock cycle, as data is registered too.
 
 	elsif (rising_edge(clk)) then
 		case (next_stateval) is
@@ -188,6 +190,8 @@ begin
 				s_counter_cl	<= '0';
 				t_counter_en	<= '0';
 				t_counter_cl	<= '0';
+				--
+				wrs				<= '0';
 
 			when active_rden =>
 				--
@@ -195,6 +199,8 @@ begin
 				s_counter_cl	<= '0';
 				t_counter_en	<= '1';
 				t_counter_cl	<= '0';
+				--
+				wrs				<= '0';
 
 			when block_transfer =>
 				--
@@ -202,6 +208,8 @@ begin
 				s_counter_cl	<= '0';
 				t_counter_en	<= '1';
 				t_counter_cl	<= '0';
+				--
+				wrs				<= '1';
 
 			when last_wren =>
 				-- Slot Counter Clear Logic
@@ -214,6 +222,8 @@ begin
 				s_counter_en	<= '1';
 				t_counter_en	<= '0';
 				t_counter_cl	<= '1';
+				--
+				wrs				<= '1';
 
 			when inc_slot =>
 				-- Slot Counter Clear Logic
@@ -226,6 +236,8 @@ begin
 				s_counter_en	<= '1';
 				t_counter_en	<= '0';
 				t_counter_cl	<= '0';
+				--
+				wrs				<= '0';
 
 			when others	=>
 				--
@@ -233,6 +245,8 @@ begin
 				s_counter_cl	<= '0';
 				t_counter_en	<= '0';
 				t_counter_cl	<= '0';
+				--
+				wrs				<= '0';
 
 		end case;
 	end if;
@@ -247,32 +261,32 @@ begin
 		when idle =>
 			--
 			rds				<= '0';
-			wrs				<= '0';
+			--wrs				<= '0';
 
 		when active_rden =>
 			--
 			rds				<= '1';
-			wrs				<= '0';
+			--wrs				<= '0';
 
 		when block_transfer =>
 			--
 			rds				<= '1';
-			wrs				<= '1';
+			--wrs				<= '1';
 
 		when last_wren =>
 			--
 			rds				<= '0';
-			wrs				<= '1';
+			--wrs				<= '1';
 
 		when inc_slot =>
 			--
 			rds				<= '0';
-			wrs				<= '0';
+			--wrs				<= '0';
 
 		when others	=>
 			--
 			rds				<= '0';
-			wrs				<= '0';
+			--wrs				<= '0';
 	end case;
 end process;
 
