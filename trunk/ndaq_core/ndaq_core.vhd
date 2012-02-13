@@ -45,8 +45,11 @@ use ieee.std_logic_unsigned.all;	-- Synopsys extension to std_logic_arith to han
 --use ieee.std_logic_signed.all;	-- Synopsys extension to std_logic_arith to handle std_logic_vector as signed integers (used together with std_logic_unsigned is ambiguous).
 --use ieee.numeric_std.all;		-- altenative to std_logic_arith, used for maths too (will conflict with std_logic_arith if 'signed' is used in interfaces).
 
+use work.functions_pkg.all;
 use work.acq_pkg.all;				-- ACQ definitions
 use work.core_regs.all;				-- Registers handling definitions
+use work.databuilder_pkg.all;
+
 
 entity ndaq_core is 
 	port
@@ -54,15 +57,15 @@ entity ndaq_core is
 		------------------
 		-- Clock inputs --
 		------------------
-		signal clkcore		:in		std_logic;	-- Same frequency of DCOs (125MHz in first version)
+		signal clkcore			:in		std_logic;	-- Same frequency of DCOs (125MHz in first version)
 		
 		--------------------
 		-- ADCs interface --
 		--------------------
-		signal adc12_data 	:in  	std_logic_vector(11 downto 2);
-		signal adc34_data 	:in  	std_logic_vector(11 downto 2);
-		signal adc56_data 	:in  	std_logic_vector(11 downto 2);
-		signal adc78_data 	:in  	std_logic_vector(11 downto 2);
+		signal adc12_data 		:in  	std_logic_vector(11 downto 2);
+		signal adc34_data 		:in  	std_logic_vector(11 downto 2);
+		signal adc56_data 		:in  	std_logic_vector(11 downto 2);
+		signal adc78_data 		:in  	std_logic_vector(11 downto 2);
 		
 		signal adc12_dco		:in 	std_logic;				-- ADC 1 Data Clock
 		signal adc34_dco		:in 	std_logic;				-- ADC 2 Data Clock
@@ -77,9 +80,9 @@ entity ndaq_core is
 		-------------------
 		-- TDC interface --
 		-------------------
-		signal tdc_data		: inout	std_logic_vector(27 downto 0); --***WATCH OUT***
-		signal tdc_stop_dis	: out		std_logic_vector(1 to 4);
-		signal tdc_start_dis : out		std_logic;
+		signal tdc_data			: inout	std_logic_vector(27 downto 0); --***WATCH OUT***
+		signal tdc_stop_dis		: out		std_logic_vector(1 to 4);
+		signal tdc_start_dis 	: out		std_logic;
 		signal tdc_wrn		 	: out		std_logic;
 		signal tdc_rdn		 	: out		std_logic;
 		signal tdc_csn		 	: out		std_logic;
@@ -87,7 +90,7 @@ entity ndaq_core is
 		signal tdc_puresn	 	: out  	std_logic;
 		signal tdc_oen		 	: out  	std_logic;
 		signal tdc_adr		 	: out  	std_logic_vector(3 downto 0);
-		signal tdc_errflag	: in   	std_logic;
+		signal tdc_errflag		: in   	std_logic;
 		signal tdc_irflag	 	: in   	std_logic;
 		signal tdc_lf2		 	: in   	std_logic;
 		signal tdc_lf1		 	: in   	std_logic;
@@ -98,42 +101,37 @@ entity ndaq_core is
 		-- FIFO's interface --
 		----------------------
 		-- Data Bus
-		signal fifo_data_bus : out std_logic_vector(31 downto 0);
+		signal fifo_data_bus 	: out std_logic_vector(31 downto 0);
 		
 		-- Control signals
-		signal fifo1_wen	 	: out   	std_logic;	-- Write Enable
-		signal fifo2_wen	 	: out   	std_logic;
-		signal fifo3_wen	 	: out   	std_logic;
-		signal fifo4_wen	 	: out   	std_logic;
-		signal fifo_wck		: out		std_logic;	-- Write Clock to all FIFOs (PLL-4 output)
+		signal fifo_wen	 		: out   std_logic_vector(3 downto 0);	-- Write Enable
+
+		signal fifo_wck			: out	std_logic;	-- Write Clock to all FIFOs (PLL-4 output)
 		
-		signal fifo_mrs		: out		std_logic;	-- Master Reset
-		signal fifo_prs		: out		std_logic;	-- Partial Reset
-		signal fifo_fs0		: out		std_logic;	-- Flag Select Bit 0
-		signal fifo_fs1		: out		std_logic;	-- Flag Select Bit 1
-		signal fifo_ld		 	: out		std_logic;	-- Load
-		signal fifo_rt		 	: out		std_logic;	-- Retransmit
+		signal fifo_mrs			: out	std_logic;	-- Master Reset
+		signal fifo_prs			: out	std_logic;	-- Partial Reset
+		signal fifo_fs0			: out	std_logic;	-- Flag Select Bit 0
+		signal fifo_fs1			: out	std_logic;	-- Flag Select Bit 1
+		signal fifo_ld		 	: out	std_logic;	-- Load
+		signal fifo_rt		 	: out	std_logic;	-- Retransmit
 		
 		-- Flags
-		signal fifo1_ff		: in   	std_logic;	-- FULL flag
-		signal fifo2_ff		: in   	std_logic;
-		signal fifo3_ff		: in   	std_logic;
-		signal fifo4_ff		: in   	std_logic;
+		signal fifo1_ff			: in   	std_logic;	-- FULL flag
+		signal fifo2_ff			: in   	std_logic;
+		signal fifo3_ff			: in   	std_logic;
+		signal fifo4_ff			: in   	std_logic;
 		
-		signal fifo1_ef		: in   	std_logic;	-- EMPTY flag
-		signal fifo2_ef		: in   	std_logic;
-		signal fifo3_ef		: in   	std_logic;
-		signal fifo4_ef		: in   	std_logic;
+		signal fifo1_ef			: in   	std_logic;	-- EMPTY flag
+		signal fifo2_ef			: in   	std_logic;
+		signal fifo3_ef			: in   	std_logic;
+		signal fifo4_ef			: in   	std_logic;
 		
-		signal fifo1_hf		: in   	std_logic;	-- HALF-FULL flag
-		signal fifo2_hf		: in   	std_logic;
-		signal fifo3_hf		: in   	std_logic;
-		signal fifo4_hf		: in   	std_logic;
+		signal fifo1_hf			: in   	std_logic;	-- HALF-FULL flag
+		signal fifo2_hf			: in   	std_logic;
+		signal fifo3_hf			: in   	std_logic;
+		signal fifo4_hf			: in   	std_logic;
 		
-		signal fifo1_paf	 	: in   	std_logic;	-- ALMOST-FULL flag
-		signal fifo2_paf	 	: in   	std_logic;
-		signal fifo3_paf	 	: in   	std_logic;
-		signal fifo4_paf	 	: in   	std_logic;		
+		signal fifo_paf	 		: in   	std_logic_vector(3 downto 0);	-- ALMOST-FULL flag
 		
 		signal fifo1_pae	 	: in   	std_logic;	-- ALMOST-EMPTY flag
 		signal fifo2_pae	 	: in   	std_logic;
@@ -144,31 +142,31 @@ entity ndaq_core is
 		--------------------
 		-- SRAM interface --
 		--------------------
-		signal sram_add	 	: out		std_logic_vector(18 downto 0);
-		signal sram_data		: inout 	std_logic_vector(7 downto 0);
-		signal sram_we			: out		std_logic;
-		signal sram_oe			: out		std_logic;
-		signal sram_cs			: out		std_logic;
+		signal sram_add	 		: out	std_logic_vector(18 downto 0);
+		signal sram_data		: inout std_logic_vector(7 downto 0);
+		signal sram_we			: out	std_logic;
+		signal sram_oe			: out	std_logic;
+		signal sram_cs			: out	std_logic;
 		
 		
 		------------------------------
 		-- LVDS connector interface --
 		------------------------------
-		signal lvdsin 		 	:in  		std_logic_vector(15 downto 0);		
+		signal lvdsin 		 	:in  	std_logic_vector(15 downto 0);		
 		
 		---------------
 		-- Slave SPI --
 		---------------
-		signal spiclk			: in		std_logic;
-		signal mosi				: in		std_logic;
-		signal miso				: out		std_logic;
+		signal spiclk			: in	std_logic;
+		signal mosi				: in	std_logic;
+		signal miso				: out	std_logic;
 
 		--------------------
 		-- Trigger inputs --
 		--------------------
-		signal trigger_a		: in		std_logic;	
-		signal trigger_b		: in		std_logic;
-		signal trigger_c		: in		std_logic
+		signal trigger_a		: in	std_logic;	
+		signal trigger_b		: in	std_logic;
+		signal trigger_c		: in	std_logic
 		
 		-----------------------
 		-- Temporary signals --
@@ -269,63 +267,57 @@ architecture rtl of ndaq_core is
 	component tpulse
 	port
 	(	
-		signal rst			  : in	std_logic;
-		signal clk	        : in	std_logic;
-		signal enable		  : in	std_logic;		
-		signal trig_in		  : in	std_logic;
-		signal trig_out     : out	std_logic
+		signal rst			  	: in	std_logic;
+		signal clk				: in	std_logic;
+		signal enable		  	: in	std_logic;		
+		signal trig_in		  	: in	std_logic;
+		signal trig_out     	: out	std_logic
 	);
 	end component;
 
 	component itrigger 
 	port
-	(	signal rst					: in	std_logic;
-		signal clk					: in	std_logic;
+	(	signal rst				: in	std_logic;
+		signal clk				: in	std_logic;
 		-- Trigger
-		signal enable				: in	std_logic;
-		signal pos_neg				: in	std_logic;								-- To set positive ('0') or negative ('1') trigger
-		signal data_in				: in	signed(data_width-1 downto 0);			-- Signal from the ADC
-		signal threshold_rise		: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
-		signal threshold_fall		: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
-		signal trigger_out			: out	std_logic;
+		signal enable			: in	std_logic;
+		signal pos_neg			: in	std_logic;								-- To set positive ('0') or negative ('1') trigger
+		signal data_in			: in	signed(data_width-1 downto 0);			-- Signal from the ADC
+		signal threshold_rise	: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
+		signal threshold_fall	: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
+		signal trigger_out		: out	std_logic;
 		-- Counter
-		signal rdclk				: in	std_logic := '0';
-		signal rden					: in	std_logic := '0';
-		signal fifo_empty			: out	std_logic := '0';
-		signal counter_q			: out	std_logic_vector(31 downto 0) := x"00000000";
+		signal rdclk			: in	std_logic := '0';
+		signal rden				: in	std_logic := '0';
+		signal fifo_empty		: out	std_logic := '0';
+		signal counter_q		: out	std_logic_vector(31 downto 0) := x"00000000";
 		-- Debug
-		signal state_out			: out	std_logic_vector(3 downto 0)
+		signal state_out		: out	std_logic_vector(3 downto 0)
 	);	
 	end component;
 	
-	-- IDT FIFO controller
-	component idtfifo_top
-	port(	-- CONTROL/STATUS signals
-		rst						    : in std_logic;
-		clk						    : in std_logic;						
-		start_transfer				 : in std_logic;				-- Control signal to start the readout (command register)
-		enable_fifo				 	 : in std_logic_vector(1 to 4);	-- Indicates if the FIFO transfer is enabled ('1') 
-		idt_full					 	 : in std_logic_vector(1 to 4);
-		idt_wren					 	 : out std_logic_vector(1 to 4);
-		idt_data					 	 : out std_logic_vector(31 downto 0);
-		fifo_empty					 : in std_logic_vector(1 to 8);
-		fifo_used_A					 : in USEDW_T;
-		fifo_used_B					 : in USEDW_T;
-		fifo_used_C					 : in USEDW_T;
-		fifo_used_D					 : in USEDW_T;
-		fifo_used_E					 : in USEDW_T;
-		fifo_used_F					 : in USEDW_T;
-		fifo_used_G					 : in USEDW_T;
-		fifo_used_H					 : in USEDW_T;
-		fifo_rden					 : out std_logic_vector(1 to 8);
-		fifo_qA						 : in DATA_T;
-		fifo_qB						 : in DATA_T;
-		fifo_qC						 : in DATA_T;
-		fifo_qD						 : in DATA_T;
-		fifo_qE						 : in DATA_T;
-		fifo_qF						 : in DATA_T;
-		fifo_qG						 : in DATA_T;
-		fifo_qH						 : in DATA_T
+	-- Data Builder
+	component databuilder
+	port
+	(	
+		--
+		rst							: in	std_logic;
+		clk							: in	std_logic;		 
+
+		--
+		enable_A					: in	SLOTS_T;
+		enable_B					: in	SLOTS_T;
+		transfer					: in	TRANSFER_A;
+		address						: in	ADDRESS_A;
+		mode						: in	SLOTS_T;
+		
+		--
+		rd							: out	SLOTS_T;
+		idata						: in	IDATA_A;
+		
+		--
+		wr							: out	ADDRESS_T;
+		odata						: out	ODATA_T
 	);
 	end component;
 	
@@ -438,19 +430,23 @@ architecture rtl of ndaq_core is
 	
 	--
 	
+	--
 	signal rst						: std_logic;
 	signal idt_rst					: std_logic;
 	
+	--
 	signal adcpwdn					: std_logic_vector(3 downto 0);
 
 	signal adc_dco					: std_logic_vector(3 downto 0);
 	signal nadc_dco					: std_logic_vector(3 downto 0);
 	signal acq_enable				: std_logic;
 	
+	--
 	signal pclk						: std_logic;
 	signal dclk						: std_logic;
 	signal fclk						: std_logic;
 
+	--
 	signal acq_rst					: std_logic_vector((adc_channels-1) downto 0);	
 	signal clk						: std_logic_vector((adc_channels-1) downto 0);
 	signal rd						: std_logic_vector((adc_channels-1) downto 0);
@@ -472,9 +468,44 @@ architecture rtl of ndaq_core is
 	signal rdusedw					: F_USEDW_WIDTH_T; -- FIFOs USED WORDS bus vector sync'ed to read clock
 	signal wrusedw					: F_USEDW_WIDTH_T; -- FIFOs USED WORDS bus vector sync'ed to write clock
 
-	--
+	-- Data Builder
+	signal	enable_A				: SLOTS_T;
+	signal	enable_B				: SLOTS_T;
+	signal	transfer				: TRANSFER_A;
+	signal	address					: ADDRESS_A;
+	signal	mode					: SLOTS_T;
 	
-	signal temp						: std_logic;	
+	--
+	signal	db_rd					: SLOTS_T;
+	signal  idata					: IDATA_A;
+	
+	--
+	signal	db_wr					: ADDRESS_T;
+	signal	odata					: ODATA_T;
+
+	--
+	signal even_enable				: SLOTS_T;
+	signal odd_enable				: SLOTS_T;
+
+	
+	-- Command Decoder / Registers Test
+	--register's strobes
+	signal a_wr			: std_logic_vector((num_regs-1) downto 0);
+	signal a_rd			: std_logic_vector((num_regs-1) downto 0);
+	
+	signal p_wr			: std_logic_vector((num_regs-1) downto 0);
+	signal p_rd			: std_logic_vector((num_regs-1) downto 0);
+
+	signal ireg			: SYS_REGS;
+	signal oreg			: SYS_REGS;
+
+	signal reg_idata	: std_logic_vector(7 downto 0);
+	signal reg_odata	: std_logic_vector(7 downto 0);
+	
+	signal thtemp		: DATA_T;
+
+	--
+	--signal temp						: std_logic;	
 
 	-- Slave SPI Test
 	signal s_spi_wr					: std_logic := '1';
@@ -491,21 +522,6 @@ architecture rtl of ndaq_core is
 	signal counter_rd				: std_logic;
 	signal counter_t				: std_logic;
 
-	-- Command Decoder / Registers Test
-	--register's strobes
-	signal a_wr			: std_logic_vector((num_regs-1) downto 0);
-	signal a_rd			: std_logic_vector((num_regs-1) downto 0);
-	
-	signal p_wr			: std_logic_vector((num_regs-1) downto 0);
-	signal p_rd			: std_logic_vector((num_regs-1) downto 0);
-
-	signal ireg			: SYS_REGS;
-	signal oreg			: SYS_REGS;
-
-	signal reg_idata	: std_logic_vector(7 downto 0);
-	signal reg_odata	: std_logic_vector(7 downto 0);
-	
-	signal thtemp		: DATA_T;
 	
 ------------------------------------------
 ------------------------------------------
@@ -645,7 +661,6 @@ begin
 	
 	-- *** ESCREVER/LER em registrador so funciona no modo USB. Ainda depende de
 	-- *** testes e progressos no FPGA VME.
-	
 
 	registers:
 	core_rconst port map
@@ -889,85 +904,168 @@ begin
 	
 	end generate adc_data_acq_construct;
 
--- ************************************ IDT TEST COUNTER ***************************
-
-	-- test_counter:
-	-- process (pclk, rst)
-	-- begin
-		-- if (rst = '1') then
-			-- counter <= x"FF";
-			----counter_d	<= (others => '0');
-		-- elsif (rising_edge(pclk)) then
-			-- if (counter_rd = '1') then	-- IDT's RD is active low.
-				-- counter 	<= counter + 1;
-			-- end if;
-		-- end if;
-	-- end process;
-
-	-- counter_d(9 downto 8)	<= "00";
-	-- counter_d(7 downto 0)	<= counter;
-
-
 -- ************************************ IDT COPIER ********************************
 
 	-- Copia das FIFOs internas para as IDT FIFOs
-	idt_writer:
-	idtfifo_top port map
-	(	-- CONTROL/STATUS signals
-		rst					=> rst,
-		clk					=> dclk,						-- Read clock das FIFOs internas		
-		start_transfer		=> '1',
-		enable_fifo			=> "1111",						-- A copia para as 4 FIFOs esta habilitada "1111";
+	-- idt_writer:
+	-- idtfifo_top port map
+	-- (	-- CONTROL/STATUS signals
+		-- rst					=> rst,
+		-- clk					=> dclk,						-- Read clock das FIFOs internas		
+		-- start_transfer		=> '1',
+		-- enable_fifo			=> "1111",						-- A copia para as 4 FIFOs esta habilitada "1111";
 
-		idt_full(1)			=> fifo1_paf, --fifo1_ff,		-- Nao da pra usar a full flag para fazer uma copia em bloco.
-		idt_full(2)			=> fifo2_paf,				 	-- Agora a programmable almost full flag esta sendo usada
-		idt_full(3)			=> fifo3_paf,					-- E esta configurada para ficar ativa quando a FIFO tiver apenas
-		idt_full(4)			=> fifo4_paf,					-- 255 palavras livres. Como se quer copiar 128 palavras, devera 
-															-- funcionar.
+		-- idt_full(1)			=> fifo1_paf, --fifo1_ff,		-- Nao da pra usar a full flag para fazer uma copia em bloco.
+		-- idt_full(2)			=> fifo2_paf,				 	-- Agora a programmable almost full flag esta sendo usada
+		-- idt_full(3)			=> fifo3_paf,					-- E esta configurada para ficar ativa quando a FIFO tiver apenas
+		-- idt_full(4)			=> fifo4_paf,					-- 255 palavras livres. Como se quer copiar 128 palavras, devera 
+															-- -- funcionar.
 																	
-		idt_wren(1)			=> fifo1_wen,
-		idt_wren(2)			=> fifo2_wen,
-		idt_wren(3)			=> fifo3_wen,
-		idt_wren(4)			=> fifo4_wen,
+		-- idt_wren(1)			=> fifo1_wen,
+		-- idt_wren(2)			=> fifo2_wen,
+		-- idt_wren(3)			=> fifo3_wen,
+		-- idt_wren(4)			=> fifo4_wen,
 
-		idt_data			=> fifo_data_bus,
+		-- idt_data			=> fifo_data_bus,
 		
-		fifo_used_A			=> rdusedw(0),					-- Mudar para barramento no futuro
-		fifo_used_B			=> rdusedw(1),
-		fifo_used_C			=> rdusedw(2),
-		fifo_used_D			=> rdusedw(3),
-		fifo_used_E			=> rdusedw(4),
-		fifo_used_F			=> rdusedw(5),
-		fifo_used_G			=> rdusedw(6),
-		fifo_used_H			=> rdusedw(7),
+		-- fifo_used_A			=> rdusedw(0),					-- Mudar para barramento no futuro
+		-- fifo_used_B			=> rdusedw(1),
+		-- fifo_used_C			=> rdusedw(2),
+		-- fifo_used_D			=> rdusedw(3),
+		-- fifo_used_E			=> rdusedw(4),
+		-- fifo_used_F			=> rdusedw(5),
+		-- fifo_used_G			=> rdusedw(6),
+		-- fifo_used_H			=> rdusedw(7),
 
-		fifo_empty(1)		=> empty(0),
-		fifo_empty(2)		=> empty(1),
-		fifo_empty(3)		=> empty(2),
-		fifo_empty(4)		=> empty(3),
-		fifo_empty(5)		=> empty(4),
-		fifo_empty(6)		=> empty(5),
-		fifo_empty(7)		=> empty(6),
-		fifo_empty(8)		=> empty(7),
+		-- fifo_empty(1)		=> empty(0),
+		-- fifo_empty(2)		=> empty(1),
+		-- fifo_empty(3)		=> empty(2),
+		-- fifo_empty(4)		=> empty(3),
+		-- fifo_empty(5)		=> empty(4),
+		-- fifo_empty(6)		=> empty(5),
+		-- fifo_empty(7)		=> empty(6),
+		-- fifo_empty(8)		=> empty(7),
 
-		fifo_rden(1)		=> rd(0),						-- Mudar para barramento quando possivel
-		fifo_rden(2)		=> rd(1),
-		fifo_rden(3)		=> rd(2),
-		fifo_rden(4)		=> rd(3),
-		fifo_rden(5)		=> rd(4),
-		fifo_rden(6)		=> rd(5),
-		fifo_rden(7)		=> rd(6),
-		fifo_rden(8)		=> rd(7),
+		-- fifo_rden(1)		=> rd(0),						-- Mudar para barramento quando possivel
+		-- fifo_rden(2)		=> rd(1),
+		-- fifo_rden(3)		=> rd(2),
+		-- fifo_rden(4)		=> rd(3),
+		-- fifo_rden(5)		=> rd(4),
+		-- fifo_rden(6)		=> rd(5),
+		-- fifo_rden(7)		=> rd(6),
+		-- fifo_rden(8)		=> rd(7),
 		
-		fifo_qA   			=> q(0),
-		fifo_qB				=> q(1),
-		fifo_qC				=> q(2),
-		fifo_qD				=> q(3),
-		fifo_qE				=> q(4),
-		fifo_qF				=> q(5),
-		fifo_qG				=> q(6),
-		fifo_qH				=> q(7)
+		-- fifo_qA   			=> q(0),
+		-- fifo_qB				=> q(1),
+		-- fifo_qC				=> q(2),
+		-- fifo_qD				=> q(3),
+		-- fifo_qE				=> q(4),
+		-- fifo_qF				=> q(5),
+		-- fifo_qG				=> q(6),
+		-- fifo_qH				=> q(7)
 		
+	-- );
+
+-- ******************************* DATA BUILDER *******************************
+
+
+--
+-- Data Builder Slots Construct
+--
+
+	data_builder: 
+	databuilder port map 
+	(
+		--
+		rst							=> rst,
+		clk							=> dclk,
+
+		--
+		enable_A					=> enable_A,
+		enable_B					=> enable_B,
+		transfer					=> transfer,
+		address						=> address,
+		mode						=> mode,
+		
+		--
+		rd							=> db_rd,
+		idata						=> idata,
+		
+		--
+		wr							=> db_wr,
+		odata						=> odata
 	);
+
+slots_construct:
+for i in 0 to (slots - 1) generate
+	
+	--
+	-- Internal FIFOs enough data test
+	--
+	
+	even_read_test:
+	process(rdusedw, empty)
+	begin
+		-- Means that the FIFO is FULL of data.
+		if (rdusedw(i*2) > CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)) and (empty(i*2) = '0') then
+			even_enable(i) <= '1';
+		else
+			even_enable(i) <= '0';
+		end if;
+	end process;
+	
+	odd_read_test:
+	process(rdusedw, empty)
+	begin
+		-- Means that the FIFO is FULL of data.
+		if (rdusedw((i*2)+1) > CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)) and (empty((i*2)+1) = '0') then
+			odd_enable(i) <= '1';
+		else
+			odd_enable(i) <= '0';
+		end if;
+	end process;
+
+	--
+	-- Slots Definitions
+	--
+	
+	--
+	-- Slot Enable: '1' for enable.
+	enable_A(i)	<= '1';
+	-- Transfer Enable: even channel and odd channel and IDT ALMOST Full Flag must let us go. 
+	-- 'fifo_paf' is NOT negated because it is active low.
+	enable_B(i)	<= even_enable(i) and odd_enable(i) and fifo_paf(i);
+	-- Slot Transfer Size:
+	transfer(i)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	-- Slot Address:
+	address(i)	<= CONV_STD_LOGIC_VECTOR(i, NumBits(address_max));
+	-- Mode: '0' for non branch and '1' for branch.
+	mode(i)		<= '1';
+
+	--
+	-- Read Side Construct - Internal FIFOs
+	--
+	
+	-- even channels
+	rd(i*2)		<= db_rd(i);	-- 0 <= 0, 2 <= 1, 4 <= 2, 6 <= 3 
+	-- odd channels
+	rd((i*2)+1)	<= db_rd(i);	-- 1 <= 0, 3 <= 1, 5 <= 2, 7 <= 3 
+	
+	-- 32 bits construct.
+	idata(i)(9 downto 0)	<= q(i*2);				-- 0, 2, 4, 6  --- (1), (3), (5), (7) --- index number --- channel number		
+	idata(i)(15 downto 10)	<= (others => '0');
+	idata(i)(25 downto 16)	<= q((i*2)+1);			-- 1, 3, 5, 7  --- (2), (4), (6), (8) --- index number --- channel number	
+	idata(i)(31 downto 26)	<= (others => '0');
+
+	--
+	-- Write Side Construct - IDT (external) FIFOs
+	--
+	
+	-- 'fifo_wen' is active low.
+	fifo_wen(i)				<= not(db_wr(i));
+	fifo_data_bus			<= odata;
+
+end generate slots_construct;
 		
+
 end rtl;

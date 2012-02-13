@@ -206,10 +206,6 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to tdc_stop_dis[1]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to tdc_stop_dis[2]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to tdc_stop_dis[3]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to tdc_stop_dis[4]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo1_wen
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo2_wen
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo3_wen
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo4_wen
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_data_bus[31]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_data_bus[30]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_data_bus[29]
@@ -266,15 +262,12 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to adc78_data[4]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to adc78_data[3]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to adc78_data[2]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to adc78_dco
-set_location_assignment PIN_B21 -to fifo1_wen
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo1_ff
 set_location_assignment PIN_B22 -to fifo1_ff
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo1_ef
 set_location_assignment PIN_C20 -to fifo1_ef
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo1_hf
 set_location_assignment PIN_C21 -to fifo1_hf
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo1_paf
-set_location_assignment PIN_C22 -to fifo1_paf
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo1_pae
 set_location_assignment PIN_D21 -to fifo1_pae
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo2_ef
@@ -285,9 +278,6 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo2_hf
 set_location_assignment PIN_E22 -to fifo2_hf
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo2_pae
 set_location_assignment PIN_F17 -to fifo2_pae
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo2_paf
-set_location_assignment PIN_F19 -to fifo2_paf
-set_location_assignment PIN_F20 -to fifo2_wen
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo3_ef
 set_location_assignment PIN_F21 -to fifo3_ef
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo3_ff
@@ -296,9 +286,6 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo3_hf
 set_location_assignment PIN_G17 -to fifo3_hf
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo3_pae
 set_location_assignment PIN_G18 -to fifo3_pae
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo3_paf
-set_location_assignment PIN_H16 -to fifo3_paf
-set_location_assignment PIN_H17 -to fifo3_wen
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo4_ef
 set_location_assignment PIN_H19 -to fifo4_ef
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo4_ff
@@ -307,9 +294,6 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo4_hf
 set_location_assignment PIN_H21 -to fifo4_hf
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo4_pae
 set_location_assignment PIN_H22 -to fifo4_pae
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo4_paf
-set_location_assignment PIN_J17 -to fifo4_paf
-set_location_assignment PIN_J21 -to fifo4_wen
 set_location_assignment PIN_J22 -to fifo_data_bus[31]
 set_location_assignment PIN_K17 -to fifo_data_bus[30]
 set_location_assignment PIN_K18 -to fifo_data_bus[29]
@@ -491,6 +475,7 @@ set_instance_assignment -name FAST_INPUT_REGISTER OFF -to adc34_data*
 set_instance_assignment -name FAST_INPUT_REGISTER OFF -to adc56_data*
 set_instance_assignment -name FAST_INPUT_REGISTER OFF -to adc78_data*
 set_global_assignment -name FLOW_ENABLE_RTL_VIEWER OFF
+set_global_assignment -name VHDL_FILE acq/functions_pkg.vhd
 set_global_assignment -name VHDL_FILE acq/databuilder_pkg.vhd
 set_global_assignment -name VHDL_FILE acq/databuilder.vhd
 set_global_assignment -name VHDL_FILE counter/counter_fifo.vhd
@@ -502,8 +487,6 @@ set_global_assignment -name VHDL_FILE system/core_cmddec.vhd
 set_global_assignment -name VHDL_FILE system/core_rconst.vhd
 set_global_assignment -name VHDL_FILE spi/s_spi.vhd
 set_global_assignment -name SDC_FILE ndaq_core.sdc
-set_global_assignment -name VHDL_FILE acq/idtfifo_top.vhd
-set_global_assignment -name VHDL_FILE acq/idtfifo_ctr.vhd
 set_global_assignment -name VHDL_FILE acq/fifos.vhd
 set_global_assignment -name VHDL_FILE acq/tpulse.vhd
 set_global_assignment -name VHDL_FILE acq/writefifo.vhd
@@ -514,4 +497,21 @@ set_global_assignment -name QIP_FILE system/core_pll.qip
 set_global_assignment -name VHDL_FILE ndaq_core.vhd
 set_global_assignment -name VHDL_FILE acq/acq_pkg.vhd
 set_global_assignment -name QIP_FILE counter/counter_fifo.qip
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_paf[3]
+set_location_assignment PIN_J17 -to fifo_paf[3]
+set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/pld_r40/ndaq_core/ndaq_core.dpf"
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_paf[2]
+set_location_assignment PIN_H16 -to fifo_paf[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_paf[1]
+set_location_assignment PIN_F19 -to fifo_paf[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_paf[0]
+set_location_assignment PIN_C22 -to fifo_paf[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_wen[3]
+set_location_assignment PIN_J21 -to fifo_wen[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_wen[2]
+set_location_assignment PIN_H17 -to fifo_wen[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_wen[1]
+set_location_assignment PIN_F20 -to fifo_wen[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_wen[0]
+set_location_assignment PIN_B21 -to fifo_wen[0]
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

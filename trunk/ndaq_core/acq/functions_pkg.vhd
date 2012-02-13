@@ -18,6 +18,9 @@ package functions_pkg is
 	--
 	--Functions
 	--
+
+	--
+	function MY_CONV_SIGNED(in_data : std_logic_vector) return signed;
 	
 	--
 	function NumBits(val : integer) return integer;
@@ -29,6 +32,16 @@ end package functions_pkg;
 --
 
 package body functions_pkg is
+
+--
+function MY_CONV_SIGNED(in_data : std_logic_vector) return signed is 
+	variable out_data : signed(in_data'high downto in_data'low) ; 
+begin 
+	for i in 0 to in_data'LENGTH-1 loop 
+		out_data(i) := in_data(i);
+	end loop; 
+	return out_data; 		
+end MY_CONV_SIGNED; -- end function
 
 -- Calculate the number of bits required to represent a given value
 function NumBits(val : integer) return integer is
