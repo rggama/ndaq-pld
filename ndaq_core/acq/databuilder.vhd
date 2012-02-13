@@ -24,6 +24,7 @@ port(
 		enable_B					: in	SLOTS_T;
 		transfer					: in	TRANSFER_A;
 		address						: in	ADDRESS_A;
+		mode						: in	SLOTS_T;
 		
 		--
 		rd							: out	SLOTS_T;
@@ -54,6 +55,8 @@ architecture rtl of databuilder is
 	signal t_size					: TRANSFER_REG_T;
 	-- Address Bus
 	signal addr_bus					: ADDRESS_REG_T;
+	-- Mode Selector 
+	signal mode_sel					: std_logic := '0';
 	
 	-- Read Strobe
 	signal rds						: std_logic := '0';
@@ -115,6 +118,9 @@ transfer_mux: t_size	<= transfer(conv_integer(s_counter));
 -- Address Mux
 address_mux: addr_bus	<= address(conv_integer(s_counter));
 
+-- Mode Mux
+mode_mux: mode_sel		<=	mode(conv_integer(s_counter));
+
 --
 -- Transfer FSM
 --
@@ -122,9 +128,9 @@ address_mux: addr_bus	<= address(conv_integer(s_counter));
 --
 -- Asynchronous assignments of 'next_stateval'
 next_state_comb:
-process(stateval, en_a, en_b, t_counter, t_size)
+process(stateval, en_a, en_b, mode_sel, t_counter, t_size)
 begin
-	case stateval is
+	case stateval is			
 		when idle =>			
 			-- If the slot is disabled, increment the slot counter and start again.
 			if (en_a = '0') then
@@ -134,9 +140,13 @@ begin
 				next_stateval <= active_rden;
 			-- Else, keep waiting.
 			else
-				next_stateval	<= idle;
+				if (mode_sel = '0') then
+					next_stateval <= idle;
+				else
+					next_stateval <= inc_slot;
+				end if;
 			end if;
-			
+
 		when active_rden =>
 			if(t_size < 1) then
 			  report "Transfer Size MUST be greater than ZERO!" severity error;
@@ -291,7 +301,7 @@ begin
 end process;
 
 --
--- Registered FSM states
+-- FSM states register
 fsm_ff:
 process(clk,rst)
 begin

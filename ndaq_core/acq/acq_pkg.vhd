@@ -8,16 +8,18 @@ use ieee.std_logic_1164.all;		-- defines std_logic / std_logic_vector types and 
 use ieee.std_logic_arith.all;		-- defines basic arithmetic ops, CONV_STD_LOGIC_VECTOR() is here, 'signed' type too (will conflit with numeric_std if 'signed' is used in interfaces).
 use ieee.std_logic_unsigned.all;	-- Synopsys extension to std_logic_arith to handle std_logic_vector as unsigned integers (used together with std_logic_signed is ambiguous).
 
+use work.functions_pkg.all;
+
 
 package acq_pkg is
 
 	--Quantidade de canais de ADC
-	constant adc_channels			: integer	:= 8;
+	constant adc_channels				: integer	:= 8;
 	
 	
 	--Tamanho da palavra do ADC em bits
 	--*** ALTERAR ESTE VALOR CAUSARA PROBLEMAS NO COMPONENTE 'idt_writer' ***
-	constant data_width				: integer	:= 10;		
+	constant data_width					: integer	:= 10;		
 
 
 	--usedw_width = (log(2) W) + 1, onde W e o tamanho maximo da POST FIFO
@@ -26,11 +28,11 @@ package acq_pkg is
 	--serao necessarios 11 bits. Repare: e necessario representar o valor e 
 	--nao somente o intervalo, que no caso do exemplo seria satisfeito com
 	--10 bits.
-	constant usedw_width				: integer	:= 11;		
+	constant	usedw_width				: integer	:= 11;		
 
 
 	-- MAX de palavras na POST FIFO																		
-	constant	FIFO_MAX					: natural	:= (2**(usedw_width-1));	
+	constant	FIFO_MAX				: natural	:= (2**(usedw_width-1));	
 	
 																		
 	--Evento = 512 palavras, 4096 ns
@@ -38,7 +40,7 @@ package acq_pkg is
 	--que devem ser gravadas por 'trigger'. [EM PALAVRAS DE FIFO]
 	constant	EVENT_SIZE				: unsigned	:= x"7F";	
 																			
-	constant t							: unsigned 	:= x"00";
+	constant 	t						: unsigned 	:= x"00";
 	
 	--Este valor deve ser o tamanho maximo da POST FIFO subtraido do tamanho	
 	--do evento (parametro acima). Para POST FIFO (max) = 1024 e tamanho do 
@@ -54,50 +56,37 @@ package acq_pkg is
 		
 
 	--Power para o ADC - '1' -> ADC LIGADO e '0' -> ADC DESLIGADO		
-	constant ADC12_PWR				: std_logic	:= '1';		
+	constant 	ADC12_PWR				: std_logic	:= '1';		
 	
 	--Power para o ADC - '1' -> ADC LIGADO e '0' -> ADC DESLIGADO	
-	constant ADC34_PWR				: std_logic	:= '1';		
+	constant 	ADC34_PWR				: std_logic	:= '1';		
 	
 	--Power para o ADC - '1' -> ADC LIGADO e '0' -> ADC DESLIGADO	
 	
-	constant ADC56_PWR				: std_logic	:= '1';		
+	constant	ADC56_PWR				: std_logic	:= '1';		
 	
 	--Power para o ADC - '1' -> ADC LIGADO e '0' -> ADC DESLIGADO
-	constant ADC78_PWR				: std_logic	:= '1';		
+	constant 	ADC78_PWR				: std_logic	:= '1';		
 	
 																			
 --*******************************************************************************************************************************
 
-	constant	T_FALL				: signed	:= x"3F6"; --x"0A";	
-	constant	T_RISE				: signed	:= x"3F6"; --x"0A";	
+	constant	T_FALL					: signed	:= x"3F6"; --x"0A";	
+	constant	T_RISE					: signed	:= x"3F6"; --x"0A";	
 
 --*******************************************************************************************************************************
 
 	--Data Types
-	subtype DATA_T					is std_logic_vector((data_width-1) downto 0);
-	subtype USEDW_T					is std_logic_vector((usedw_width-1) downto 0);
+	subtype	DATA_T						is std_logic_vector((data_width-1) downto 0);
+	subtype	USEDW_T						is std_logic_vector((usedw_width-1) downto 0);
 
-	type F_DATA_WIDTH_T				is array ((adc_channels-1) downto 0) of DATA_T;
-	type F_USEDW_WIDTH_T			is array ((adc_channels-1) downto 0) of USEDW_T;
+	type	F_DATA_WIDTH_T				is array ((adc_channels-1) downto 0) of DATA_T;
+	type	F_USEDW_WIDTH_T				is array ((adc_channels-1) downto 0) of USEDW_T;
 	
 --*******************************************************************************************************************************
 
-	function MY_CONV_SIGNED(in_data : std_logic_vector) return signed;
-	
 end package acq_pkg;
 
 
 package body acq_pkg is
-
---
-function MY_CONV_SIGNED(in_data : std_logic_vector) return signed is 
-	variable out_data : signed(in_data'high downto in_data'low) ; 
-begin 
-	for i in 0 to in_data'LENGTH-1 loop 
-		out_data(i) := in_data(i);
-	end loop; 
-	return out_data; 		
-end MY_CONV_SIGNED; -- end function
-
 end package body acq_pkg;

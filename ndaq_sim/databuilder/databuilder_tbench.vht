@@ -16,7 +16,7 @@ architecture testbench of databuilder_tbench is
 
 	constant	TRANSFER_SIZE	:	unsigned 	:= x"0F";	-- Real Size is the declared size plus one.
 	constant	FIFO_ADDRESS	:	unsigned 	:= x"00";
-	constant	INP				:	integer		:= 8;
+	constant	INP				:	integer		:= 4;
 	constant	OUP				:	integer		:= 4;
 
 --
@@ -35,6 +35,7 @@ architecture testbench of databuilder_tbench is
 		enable_B					: in	SLOTS_T;
 		transfer					: in	TRANSFER_A;
 		address						: in	ADDRESS_A;
+		mode						: in	SLOTS_T;
 		
 		--
 		rd							: out	SLOTS_T;
@@ -58,7 +59,9 @@ architecture testbench of databuilder_tbench is
 		wrreq		: IN STD_LOGIC ;
 		q			: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
 		rdempty		: OUT STD_LOGIC ;
+		rdfull		: OUT STD_LOGIC ;
 		rdusedw		: OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
+		wrempty		: OUT STD_LOGIC ;
 		wrfull		: OUT STD_LOGIC ;
 		wrusedw		: OUT STD_LOGIC_VECTOR (3 DOWNTO 0)
 	);
@@ -71,12 +74,14 @@ architecture testbench of databuilder_tbench is
 	signal	rst				: std_logic := '0';
 	signal	clk				: std_logic := '0';
 	signal	clkwr			: std_logic := '0';
+	signal	clkrd			: std_logic := '0';
 	
 	--
 	signal	enable_A		: SLOTS_T;
 	signal	enable_B		: SLOTS_T;
 	signal	transfer		: TRANSFER_A;
 	signal	address			: ADDRESS_A;
+	signal	mode			: SLOTS_T;
 	
 	--
 	signal	rd				: SLOTS_T;
@@ -87,14 +92,20 @@ architecture testbench of databuilder_tbench is
 	signal	odata			: ODATA_T;
 	
 	--
+	subtype	INP_USEDW_T		is std_logic_vector(3 downto 0);
+	type	INP_USEDW_A		is array ((INP-1) downto 0) of INP_USEDW_T;
+
 	signal	inp_q			: IDATA_A;	
 	signal	inp_data		: IDATA_A;
 	signal	inp_rd			: SLOTS_T;
 	signal	inp_wr			: SLOTS_T;
-	signal	inp_empty		: SLOTS_T;
-	signal	inp_full		: SLOTS_T;
+	signal	inp_wrempty		: SLOTS_T;
+	signal	inp_wrfull		: SLOTS_T;
+	signal	inp_rdempty		: SLOTS_T;
+	signal	inp_rdfull		: SLOTS_T;
+	signal	inp_rdusedw		: INP_USEDW_A;
+	signal	inp_enable		: SLOTS_T;
 
-	--
 	subtype	INP_COUNTER_T	is std_logic_vector(3 downto 0);
 	type	INP_COUNTER_A	is array ((INP-1) downto 0) of INP_COUNTER_T;
 	
@@ -105,8 +116,10 @@ architecture testbench of databuilder_tbench is
 	signal	oup_data		: ODATA_T;
 	signal	oup_rd			: ADDRESS_T;
 	signal	oup_wr			: ADDRESS_T;
-	signal	oup_empty		: ADDRESS_T;
-	signal	oup_full		: ADDRESS_T;
+	signal	oup_wrempty		: ADDRESS_T;
+	signal	oup_wrfull		: ADDRESS_T;
+	signal	oup_rdempty		: ADDRESS_T;
+	signal	oup_rdfull		: ADDRESS_T;
 
 --
 
@@ -128,6 +141,7 @@ begin
 		enable_B					=> enable_B,
 		transfer					=> transfer,
 		address						=> address,
+		mode						=> mode,
 		
 		--
 		rd							=> rd,
@@ -152,9 +166,11 @@ for i in 0 to (INP - 1) generate
 		wrclk		=> clk,
 		wrreq		=> inp_wr(i),
 		q			=> inp_q(i),
-		rdempty		=> inp_empty(i),
-		rdusedw		=> open,
-		wrfull		=> inp_full(i),
+		rdempty		=> inp_rdempty(i),
+		rdfull		=> inp_rdfull(i),
+		rdusedw		=> inp_rdusedw(i),
+		wrempty		=> inp_wrempty(i),
+		wrfull		=> inp_wrfull(i),
 		wrusedw		=> open
 	);
 
@@ -168,14 +184,16 @@ for i in 0 to (OUP - 1) generate
 	(
 		aclr		=> rst,
 		data		=> oup_data,
-		rdclk		=> clkwr,
+		rdclk		=> clkrd,
 		rdreq		=> oup_rd(i),
 		wrclk		=> clkwr,
 		wrreq		=> oup_wr(i),
 		q			=> open,
-		rdempty		=> oup_empty(i),
+		rdempty		=> oup_rdempty(i),
+		rdfull		=> oup_rdfull(i),
 		rdusedw		=> open,
-		wrfull		=> oup_full(i),
+		wrempty		=> oup_wrempty(i),
+		wrfull		=> oup_wrfull(i),
 		wrusedw		=> open
 	);
 
@@ -200,7 +218,7 @@ for i in 0 to (INP - 1) generate
 		end if;
 	end process;
 
-	inp_counter_en(i)	<= not(inp_full(i));
+	inp_counter_en(i)	<= not(inp_wrfull(i));
 	inp_data(i)			<= CONV_STD_LOGIC_VECTOR(i, 4) & x"000000" & inp_counter(i);
 	inp_wr(i)			<= '1';
 	
@@ -213,10 +231,23 @@ end generate inp_data_construct;
 slots_construct:
 for i in 0 to (slots - 1) generate
 
+	inp_read_test:
+	process(inp_rdusedw, inp_rdempty)
+	begin
+		-- Means that the FIFO is FULL of data.
+		if (inp_rdusedw(i) = x"0") and (inp_rdempty(i) = '0') then
+			inp_enable(i) <= '1';
+		else
+			inp_enable(i) <= '0';
+		end if;
+	end process;
+	
 	enable_A(i)	<= '1';
-	enable_B(i)	<= (not(inp_empty(i))) and (not(oup_full(i/2)));
+	--enable_B(i)	<= inp_rdfull(i) and oup_wrempty(i/2);
+	enable_B(i)	<= inp_enable(i) and oup_wrempty(i/2);
 	transfer(i)	<= CONV_STD_LOGIC_VECTOR(TRANSFER_SIZE, NumBits(transfer_max));
 	address(i)	<= CONV_STD_LOGIC_VECTOR((i/2), NumBits(address_max));
+	mode(i)		<= '0';
 		
 end generate slots_construct;
 
@@ -241,7 +272,7 @@ for i in 0 to (OUP - 1) generate
 
 	oup_wr(i)		<= wr(i);
 	oup_data		<= odata;
-	oup_rd(i)		<= not(oup_empty(i));
+	oup_rd(i)		<= not(oup_rdempty(i));
 	
 end generate write_side_construct;
 
@@ -261,7 +292,7 @@ loop
 end loop;
 end process clkvme_gen;
 
--- clk @ 50 MHz - 90 deg
+-- clk @ 50 MHz - 180 deg
 clkwr_gen: process
 begin
 loop
@@ -273,6 +304,19 @@ loop
 	-- if (now >= 1000000 ps) then wait; end if;
 end loop;
 end process clkwr_gen;
+
+-- clk @ 10 MHz - 180 deg
+clkrd_gen: process
+begin
+loop
+	--wait for 5000 ps;
+	clkrd	<= '1';
+	wait for 10000 ps;
+	clkrd	<= '0';
+	wait for 10000 ps;
+	-- if (now >= 1000000 ps) then wait; end if;
+end loop;
+end process clkrd_gen;
 
 -- Reset 
 rst_gen: process
