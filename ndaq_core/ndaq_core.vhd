@@ -996,76 +996,117 @@ begin
 		odata						=> odata
 	);
 
-slots_construct:
-for i in 0 to (slots - 1) generate
+-- slots_construct:
+-- for i in 0 to (slots - 1) generate
 	
-	--
-	-- Internal FIFOs enough data test
-	--
+	-- --
+	-- -- Internal FIFOs enough data test
+	-- --
 	
-	even_read_test:
-	process(rdusedw, empty)
-	begin
-		-- Means that the FIFO is FULL of data.
-		if (rdusedw(i*2) > CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)) and (empty(i*2) = '0') then
-			even_enable(i) <= '1';
-		else
-			even_enable(i) <= '0';
-		end if;
-	end process;
+	-- even_read_test:
+	-- process(rdusedw, empty)
+	-- begin
+		-- -- Means that the FIFO is FULL of data.
+		-- if (rdusedw(i*2) > CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)) and (empty(i*2) = '0') then
+			-- even_enable(i) <= '1';
+		-- else
+			-- even_enable(i) <= '0';
+		-- end if;
+	-- end process;
 	
-	odd_read_test:
-	process(rdusedw, empty)
-	begin
-		-- Means that the FIFO is FULL of data.
-		if (rdusedw((i*2)+1) > CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)) and (empty((i*2)+1) = '0') then
-			odd_enable(i) <= '1';
-		else
-			odd_enable(i) <= '0';
-		end if;
-	end process;
+	-- odd_read_test:
+	-- process(rdusedw, empty)
+	-- begin
+		-- -- Means that the FIFO is FULL of data.
+		-- if (rdusedw((i*2)+1) > CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)) and (empty((i*2)+1) = '0') then
+			-- odd_enable(i) <= '1';
+		-- else
+			-- odd_enable(i) <= '0';
+		-- end if;
+	-- end process;
 
-	--
-	-- Slots Definitions
-	--
+	-- --
+	-- -- Slots Definitions
+	-- --
 	
+	-- --
+	-- -- Slot Enable: '1' for enable.
+	-- enable_A(i)	<= '1';
+	-- -- Transfer Enable: even channel and odd channel and IDT ALMOST Full Flag must let us go. 
+	-- -- 'fifo_paf' is NOT negated because it is active low.
+	-- enable_B(i)	<= even_enable(i) and odd_enable(i) and fifo_paf(i);
+	-- -- Slot Transfer Size:
+	-- transfer(i)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	-- -- Slot Address:
+	-- address(i)	<= CONV_STD_LOGIC_VECTOR(i, NumBits(address_max));
+	-- -- Mode: '0' for non branch and '1' for branch.
+	-- mode(i)		<= '0';
+
+	-- --
+	-- -- Read Side Construct - Internal FIFOs
+	-- --
+	
+	-- -- even channels
+	-- rd(i*2)		<= db_rd(i);	-- 0 <= 0, 2 <= 1, 4 <= 2, 6 <= 3 
+	-- -- odd channels
+	-- rd((i*2)+1)	<= db_rd(i);	-- 1 <= 0, 3 <= 1, 5 <= 2, 7 <= 3 
+	
+	-- -- 32 bits construct.
+	-- idata(i)(9 downto 0)	<= q(i*2);				-- 0, 2, 4, 6  --- (1), (3), (5), (7) --- index number --- channel number		
+	-- idata(i)(15 downto 10)	<= (others => '0');
+	-- idata(i)(25 downto 16)	<= q((i*2)+1);			-- 1, 3, 5, 7  --- (2), (4), (6), (8) --- index number --- channel number	
+	-- idata(i)(31 downto 26)	<= (others => '0');
+
+	-- --
+	-- -- Write Side Construct - IDT (external) FIFOs
+	-- --
+	
+	-- -- 'fifo_wen' is active low.
+	-- fifo_wen(i)				<= not(db_wr(i));
+	-- fifo_data_bus			<= odata;
+
+-- end generate slots_construct;
+		
 	--
 	-- Slot Enable: '1' for enable.
-	enable_A(i)	<= '1';
+	enable_A(0)	<= '1';
+	enable_A(1)	<= '1';
+	enable_A(2)	<= '1';
+	enable_A(3)	<= '1';
 	-- Transfer Enable: even channel and odd channel and IDT ALMOST Full Flag must let us go. 
 	-- 'fifo_paf' is NOT negated because it is active low.
-	enable_B(i)	<= even_enable(i) and odd_enable(i) and fifo_paf(i);
+	enable_B(0)	<= fifo_paf(0);
+	enable_B(1)	<= fifo_paf(1);
+	enable_B(2)	<= fifo_paf(2);
+	enable_B(3)	<= fifo_paf(3);
 	-- Slot Transfer Size:
-	transfer(i)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(0)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(1)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(2)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(3)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
 	-- Slot Address:
-	address(i)	<= CONV_STD_LOGIC_VECTOR(i, NumBits(address_max));
+	address(0)	<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	address(1)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
+	address(2)	<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(3)	<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
 	-- Mode: '0' for non branch and '1' for branch.
-	mode(i)		<= '1';
+	mode(0)		<= '0';
+	mode(1)		<= '0';
+	mode(2)		<= '0';
+	mode(3)		<= '0';
 
-	--
-	-- Read Side Construct - Internal FIFOs
-	--
-	
-	-- even channels
-	rd(i*2)		<= db_rd(i);	-- 0 <= 0, 2 <= 1, 4 <= 2, 6 <= 3 
-	-- odd channels
-	rd((i*2)+1)	<= db_rd(i);	-- 1 <= 0, 3 <= 1, 5 <= 2, 7 <= 3 
-	
 	-- 32 bits construct.
-	idata(i)(9 downto 0)	<= q(i*2);				-- 0, 2, 4, 6  --- (1), (3), (5), (7) --- index number --- channel number		
-	idata(i)(15 downto 10)	<= (others => '0');
-	idata(i)(25 downto 16)	<= q((i*2)+1);			-- 1, 3, 5, 7  --- (2), (4), (6), (8) --- index number --- channel number	
-	idata(i)(31 downto 26)	<= (others => '0');
+	idata(0)	<= x"00020001";
+	idata(1)	<= x"00040003";
+	idata(2)	<= x"00060005";
+	idata(3)	<= x"00080007";
 
-	--
-	-- Write Side Construct - IDT (external) FIFOs
-	--
-	
 	-- 'fifo_wen' is active low.
-	fifo_wen(i)				<= not(db_wr(i));
+	fifo_wen(0)				<= not(db_wr(0));
+	fifo_wen(1)				<= not(db_wr(1));
+	fifo_wen(2)				<= not(db_wr(2));
+	fifo_wen(3)				<= not(db_wr(3));
+
 	fifo_data_bus			<= odata;
-
-end generate slots_construct;
 		
-
 end rtl;
