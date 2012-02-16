@@ -516,7 +516,7 @@ begin
 	--fifo3_ren	<= '1'; --u_fifo3_ren;
 	--fifo4_ren	<= '1'; --u_fifo4_ren;
 	
-	-- can_pgc <=  fifo1_ef;
+	can_pgc <= 'Z'; --fifo1_ef;
 	-- can_pgd <= 'Z';
 	can_pgm <= 'Z';
 
@@ -527,7 +527,7 @@ begin
 --	vme_dird	<= 'Z';
 --	vme_oed		<= 'Z';
 --	vme_data	<= (others => 'Z');
-	vme_oea		<= 'Z';
+	vme_oea		<= '0'; --'Z';
 
 
 ------------------------
@@ -592,7 +592,7 @@ begin
 	usb_Write	<= temp_wr;
 
 	test_pins:
-	can_pgc		<= not(ft_wr);
+	--can_pgc		<= not(ft_wr);
 	can_pgd		<= temp_wr;
 
 --*********************************************************************************************************	
@@ -632,11 +632,11 @@ begin
 							vme_addr			=> vme_add,
 							vme_am				=> vme_am,
 							vme_data			=> vme_data,
-							vme_xbuf_dataoe		=> vme_oed, --
-							vme_xbuf_datadir	=> vme_dird, --
+							vme_xbuf_dataoe		=> vme_oed,		--
+							vme_xbuf_datadir	=> vme_dird,	--
 							vme_lword			=> vme_lw,
-							vme_dtack			=> vme_dtack, --
-							vme_xbuf_dtackoe	=> vme_oetack, --
+							vme_dtack			=> vme_dtack,	--
+							vme_xbuf_dtackoe	=> vme_oetack,	--
 							vme_vack			=> vme_vack,
 							vme_as				=> vme_as,
 							vme_ds0				=> vme_ds0,
@@ -645,8 +645,8 @@ begin
 							vme_iack			=> vme_iack,
 							vme_iack_in			=> vme_iackin,
 							vme_iack_out		=> vme_iackout,
-							vme_irq				=> open, --vme_irq,
-							vme_berr			=> vme_berr, --
+							vme_irq				=> open,
+							vme_berr			=> vme_berr,	--
 							vme_verr			=> vme_verr,
 							vme_sysreset		=> vme_sysrst,
 							vme_sysclock		=> vme_sysclk,
@@ -772,8 +772,9 @@ begin
 	usb_readout_construct:
 	for i in 0 to (usb_channels-1) generate
 
-	a_rdf_data(i)		<= vme_data(9 downto 0);	-- ODD Channels.
-	b_rdf_data(i)		<= vme_data(25 downto 16);	-- EVEN Channels.
+	-- TESTE VME
+	--a_rdf_data(i)		<= vme_data(9 downto 0);	-- ODD Channels.
+	--b_rdf_data(i)		<= vme_data(25 downto 16);	-- EVEN Channels.
 
 	
 	idt_to_intfifo:
