@@ -68,8 +68,10 @@ architecture rtl of databuilder is
 	signal wra						: ADDRESS_T;
 
 	-- Transfer FSM
-	type	state_values is (idle, active_rden, block_transfer, last_wren, inc_slot);
-	signal	stateval, next_stateval	: state_values;
+	type		state_values is (idle, active_rden, block_transfer, last_wren, inc_slot);
+	signal		stateval, next_stateval			: state_values;
+	attribute	syn_encoding 					: string;
+	attribute	syn_encoding of state_values	: type is "safe, one-hot";
 
 	-- Transfer Counter
 	signal	t_counter_en			: std_logic := '0';

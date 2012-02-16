@@ -301,7 +301,7 @@ set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/
 set_location_assignment PIN_M1 -to spiclk
 set_location_assignment PIN_P1 -to mosi
 set_location_assignment PIN_P2 -to miso
-set_global_assignment -name RTLV_GROUP_COMB_LOGIC_IN_CLOUD OFF
+set_global_assignment -name RTLV_GROUP_COMB_LOGIC_IN_CLOUD ON
 set_global_assignment -name RTLV_SIMPLIFIED_LOGIC OFF
 set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/pld_r24/ndaq_vme/ndaq_vme.dpf"
 set_location_assignment PIN_U3 -to fifo_ef[0]
