@@ -81,11 +81,11 @@
 		 (x"00300000", x"00700000", x"09", x"0B", 3, true),  -- FIFO 3		  // USED TO u_read(2) or u_write(2)
 		 (x"00400000", x"00700000", x"09", x"0B", 3, true),  -- FIFO 4		  // USED TO u_read(3) or u_write(3)
 			
-		 (x"00500000", x"00700000", x"09", x"0B", 2, false), -- Registers	  // USED TO u_read(4) or u_write(4)
+		 (x"00500000", x"00700000", x"09", x"0B", 0, false), -- Registers	  // USED TO u_read(4) or u_write(4)
+		 (x"00600000", x"00700000", x"09", x"0B", 0, false), -- Registers	  // USED TO u_read(5) or u_write(5)
 		 --(x"00000000", x"007FFF00", x"09", x"0B", 1, true), -- Registers  // USED TO u_read(4) or u_write(4)
 																			
 		
-		 (x"00000000", x"00000000", x"09", x"0B", -1, true),  -- NOT USED 
 		 (x"00000000", x"00000000", x"09", x"0B", -1, true),  -- NOT USED 
 		 (x"00000000", x"00000000", x"09", x"0B", -1, true),  -- NOT USED 
 		 (x"00000000", x"00000000", x"09", x"0B", -1, true),  -- NOT USED 

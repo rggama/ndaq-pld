@@ -32,7 +32,7 @@ package vme_regs is
 		(x"70",	true,	true,	true,	x"00"),	--SPI 
 		(x"71",	false,	true,	true,	x"00"),	--SPI Status
 		--
-		(x"27",	true,	true,	false,	x"00"),	--R/W Test Register				
+		(x"27",	true,	true,	false,	x"87"),	--R/W Test Register				
 		(x"82",	true,	true,	false,	x"00")	--Readout Reset		
 	);
 
