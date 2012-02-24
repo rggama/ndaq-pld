@@ -404,11 +404,13 @@ architecture rtl of ndaq_vme is
 	signal tclk, clk_en			: std_logic;
 	
 	signal user_read			: std_logic_vector((NUM_USR_MAP-1) downto 0);
-	signal iuser_data_in		: std_logic_vector(31 downto 0);	-- TEST by HERMAN 29/07/10
-	signal iuser_data_out		: std_logic_vector(31 downto 0);	-- TEST by HERMAN 29/07/10
-	signal iuser_addr			: std_logic_vector(24 downto 0);	-- Added by Herman in 08/09/10
-	signal clk_wr, clk_rd		: std_logic; 						-- TEST by HERMAN 29/07/10
-	signal iuser_addr_lat		: std_logic_vector(7 downto 0);		-- Added by Herman in 08/09/10
+	signal user_write			: std_logic_vector((NUM_USR_MAP-1) downto 0);
+
+	signal user_data_in			: std_logic_vector(31 downto 0);
+	signal user_data_out		: std_logic_vector(31 downto 0);
+	signal user_addr			: std_logic_vector(24 downto 0);
+	-- signal clk_wr, clk_rd		: std_logic; 						-- TEST by HERMAN 29/07/10
+	-- signal iuser_addr_lat		: std_logic_vector(7 downto 0);		-- Added by Herman in 08/09/10
 	
 	--
 	-- FSM para condicionar o sinal user_read(0)
@@ -624,11 +626,11 @@ begin
 
 	my_vmeif:
 	vmeif port map (		
-							--testpin			=> can_pgc,
-							user_addr			=> iuser_addr,
-							user_data_in		=> iuser_data_in,
-							user_data_out		=> iuser_data_out,
+							user_addr			=> user_addr,
+							user_data_in		=> user_data_in,
+							user_data_out		=> user_data_out,
 							user_read			=> user_read,
+							user_write			=> user_write,
 							vme_addr			=> vme_add,
 							vme_am				=> vme_am,
 							vme_data			=> vme_data,
@@ -668,8 +670,8 @@ begin
 		a_wr			=> a_wr,
 		a_rd			=> a_rd,
 		
-		idata			=> reg_odata,
-		odata			=> reg_idata,
+		idata			=> reg_idata,
+		odata			=> reg_odata,
 		
 		--register's individual i/os
 		ireg			=> ireg,
@@ -680,8 +682,29 @@ begin
 		p_rd			=> p_rd
 	);
 	
-	-- Command Decoder
+	
+	-- Aproveitando o set 'a' de read/write strobes, que ja funciona pro modo USB
+	a_wr(0)	<= '0';
+	a_wr(1)	<= '0';
+	a_wr(2)	<= '0';
+	a_wr(3)	<= user_write(5);
+	a_wr(4)	<= '0';
+	a_wr(5)	<= user_write(4);	-- Teste VME.
+	a_wr(6)	<= '0';
+	
+	a_rd(0)	<= '0';
+	a_rd(1)	<= '0';
+	a_rd(2)	<= '0';
+	a_rd(3)	<= user_read(5);
+	a_rd(4)	<= '0';
+	a_rd(5)	<= user_read(4);	-- Teste VME.
+	a_rd(6)	<= '0';
 
+	reg_idata					<=	user_data_out(7 downto 0);
+	user_data_in(7 downto 0)	<=	reg_odata;
+	user_data_in(31 downto 8)	<=	(others => '0');
+	
+	-- Command Decoder
 	command_decoder:
 	vme_cmddec port map
 	(
@@ -705,12 +728,12 @@ begin
 		odata			=> ft_idata,
 
 		--register's strobes
-		reg_wr			=> a_wr,
-		reg_rd			=> a_rd,
+		reg_wr			=> open, --a_wr,
+		reg_rd			=> open, --a_rd,
 		
-		--register's strobes
-		reg_idata		=> reg_idata,
-		reg_odata		=> reg_odata
+		--register's i/os
+		reg_idata		=> (others => '0'), --reg_odata,
+		reg_odata		=> open --reg_idata
 	);
 
 --*********************************************************************************************************

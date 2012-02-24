@@ -38,6 +38,8 @@ end entity;
 architecture rtl of vme_rconst is
 
 	signal		regs	:	SYS_REGS;
+	signal 		locked	:	std_logic_vector((num_regs-1) downto 0);
+
 
 begin
 	
@@ -51,14 +53,18 @@ begin
 			if (system_regs_enum(i).writable = true) generate
 
 				regs_hold_ffs:
-				process(clk, rst, a_wr)							
+				process(clk, rst, a_wr, locked)							
 				begin
 					if (rst = '1') then
-						regs(i)	<= system_regs_enum(i).rstate;
-
+						regs(i)		<= system_regs_enum(i).rstate;
+						locked(i)	<= '0';
+						
 					elsif(rising_edge(clk)) then
-						if (a_wr(i) = '1') then
-							regs(i)	<= idata;
+						if ((a_wr(i) = '1') and (locked(i) = '0')) then	-- 'locked' ensures one write per rising edge of 'a_wr'.
+							regs(i)		<= idata;
+							locked(i)	<= '1';
+						elsif (a_wr(i) = '0') then
+							locked(i)	<= '0';
 						end if;
 
 					end if;

@@ -4,24 +4,12 @@
   </display_tree>
   <instance entity_name="sld_signaltap" is_auto_node="yes" is_expanded="true" name="my_instance" source_file="sld_signaltap.vhd">
     <node_ip_info instance_id="0" mfg_id="110" node_id="0" version="6"/>
-    <signal_set global_temp="1" is_expanded="true" name="signal_set: 2010/12/16 17:48:50  #0">
+    <signal_set global_temp="1" is_expanded="true" name="signal_set: 2012/02/24 17:46:17  #0">
       <clock name="clk50M" polarity="posedge" tap_mode="classic"/>
-      <config ram_type="M4K" reserved_data_nodes="0" reserved_storage_qualifier_nodes="0" reserved_trigger_nodes="0" sample_depth="128" trigger_in_enable="yes" trigger_in_pin="vmeif:my_vmeif|user_read[1]" trigger_out_enable="no" trigger_out_pin="auto_stp_trigger_out_0"/>
+      <config ram_type="M4K" reserved_data_nodes="0" reserved_storage_qualifier_nodes="0" reserved_trigger_nodes="0" sample_depth="128" trigger_in_enable="yes" trigger_in_node="vmeif:my_vmeif|user_write[4]" trigger_in_tap_mode="classic" trigger_out_enable="no" trigger_out_pin="auto_stp_trigger_out_0"/>
       <top_entity/>
       <signal_vec>
         <trigger_input_vec>
-          <wire name="fifo1_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo1_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo1_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo2_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo2_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo2_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo3_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo3_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo3_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo4_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo4_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo4_ren" tap_mode="classic" type="output pin"/>
           <wire name="vme_add[10]" tap_mode="classic" type="input pin"/>
           <wire name="vme_add[11]" tap_mode="classic" type="input pin"/>
           <wire name="vme_add[12]" tap_mode="classic" type="input pin"/>
@@ -97,21 +85,41 @@
           <wire name="vme_ds1" tap_mode="classic" type="input pin"/>
           <wire name="vme_dtack" tap_mode="classic" type="output pin"/>
           <wire name="vme_wr" tap_mode="classic" type="input pin"/>
-          <wire name="vmeif:my_vmeif|user_read[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[28]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[29]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[30]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[31]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_write[4]" tap_mode="classic" type="combinatorial"/>
         </trigger_input_vec>
         <data_input_vec>
-          <wire name="fifo1_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo1_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo1_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo2_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo2_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo2_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo3_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo3_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo3_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo4_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo4_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo4_ren" tap_mode="classic" type="output pin"/>
           <wire name="vme_add[10]" tap_mode="classic" type="input pin"/>
           <wire name="vme_add[11]" tap_mode="classic" type="input pin"/>
           <wire name="vme_add[12]" tap_mode="classic" type="input pin"/>
@@ -187,21 +195,41 @@
           <wire name="vme_ds1" tap_mode="classic" type="input pin"/>
           <wire name="vme_dtack" tap_mode="classic" type="output pin"/>
           <wire name="vme_wr" tap_mode="classic" type="input pin"/>
-          <wire name="vmeif:my_vmeif|user_read[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[28]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[29]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[30]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[31]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_write[4]" tap_mode="classic" type="combinatorial"/>
         </data_input_vec>
         <storage_qualifier_input_vec>
-          <wire name="fifo1_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo1_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo1_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo2_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo2_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo2_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo3_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo3_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo3_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo4_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo4_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo4_ren" tap_mode="classic" type="output pin"/>
           <wire name="vme_add[10]" tap_mode="classic" type="input pin"/>
           <wire name="vme_add[11]" tap_mode="classic" type="input pin"/>
           <wire name="vme_add[12]" tap_mode="classic" type="input pin"/>
@@ -277,7 +305,39 @@
           <wire name="vme_ds1" tap_mode="classic" type="input pin"/>
           <wire name="vme_dtack" tap_mode="classic" type="output pin"/>
           <wire name="vme_wr" tap_mode="classic" type="input pin"/>
-          <wire name="vmeif:my_vmeif|user_read[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[28]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[29]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[30]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[31]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_data_out[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="vmeif:my_vmeif|user_write[4]" tap_mode="classic" type="combinatorial"/>
         </storage_qualifier_input_vec>
       </signal_vec>
       <presentation>
@@ -363,19 +423,41 @@
           <net is_signal_inverted="no" name="vme_ds1"/>
           <net is_signal_inverted="no" name="vme_dtack"/>
           <net is_signal_inverted="no" name="vme_wr"/>
-          <net is_signal_inverted="no" name="fifo1_ef"/>
-          <net is_signal_inverted="no" name="fifo1_oe"/>
-          <net is_signal_inverted="no" name="fifo1_ren"/>
-          <net is_signal_inverted="no" name="vmeif:my_vmeif|user_read[0]"/>
-          <net is_signal_inverted="no" name="fifo2_ef"/>
-          <net is_signal_inverted="no" name="fifo2_oe"/>
-          <net is_signal_inverted="no" name="fifo2_ren"/>
-          <net is_signal_inverted="no" name="fifo3_ef"/>
-          <net is_signal_inverted="no" name="fifo3_oe"/>
-          <net is_signal_inverted="no" name="fifo3_ren"/>
-          <net is_signal_inverted="no" name="fifo4_ef"/>
-          <net is_signal_inverted="no" name="fifo4_oe"/>
-          <net is_signal_inverted="no" name="fifo4_ren"/>
+          <net is_signal_inverted="no" name="vmeif:my_vmeif|user_write[4]"/>
+          <bus is_signal_inverted="no" link="all" name="vmeif:my_vmeif|user_data_out" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[31]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[30]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[29]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[28]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[27]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[26]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[25]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[24]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[23]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[22]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[21]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[20]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[19]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[18]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[17]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[16]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[15]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[14]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[13]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[12]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[11]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[10]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[9]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[8]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[7]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[6]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[5]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[4]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[3]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[2]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[1]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[0]"/>
+          </bus>
         </data_view>
         <setup_view>
           <bus is_signal_inverted="no" link="all" name="vme_am[5..0]" order="msb_to_lsb" radix="hex" state="collapse" type="input pin">
@@ -459,22 +541,44 @@
           <net is_signal_inverted="no" name="vme_dtack"/>
           <net is_signal_inverted="no" name="vme_dird"/>
           <net is_signal_inverted="no" name="vme_wr"/>
-          <net is_signal_inverted="no" name="fifo1_ef"/>
-          <net is_signal_inverted="no" name="fifo1_oe"/>
-          <net is_signal_inverted="no" name="fifo1_ren"/>
-          <net is_signal_inverted="no" name="vmeif:my_vmeif|user_read[0]"/>
-          <net is_signal_inverted="no" name="fifo2_ef"/>
-          <net is_signal_inverted="no" name="fifo2_oe"/>
-          <net is_signal_inverted="no" name="fifo2_ren"/>
-          <net is_signal_inverted="no" name="fifo3_ef"/>
-          <net is_signal_inverted="no" name="fifo3_oe"/>
-          <net is_signal_inverted="no" name="fifo3_ren"/>
-          <net is_signal_inverted="no" name="fifo4_ef"/>
-          <net is_signal_inverted="no" name="fifo4_oe"/>
-          <net is_signal_inverted="no" name="fifo4_ren"/>
+          <net is_signal_inverted="no" name="vmeif:my_vmeif|user_write[4]"/>
+          <bus is_signal_inverted="no" link="all" name="vmeif:my_vmeif|user_data_out" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[31]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[30]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[29]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[28]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[27]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[26]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[25]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[24]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[23]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[22]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[21]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[20]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[19]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[18]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[17]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[16]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[15]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[14]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[13]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[12]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[11]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[10]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[9]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[8]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[7]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[6]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[5]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[4]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[3]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[2]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[1]"/>
+            <net is_signal_inverted="no" name="vmeif:my_vmeif|user_data_out[0]"/>
+          </bus>
         </setup_view>
       </presentation>
-      <trigger CRC="FF3EB967" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2010/12/16 17:48:50  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="32" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="rising edge" trigger_out="active high" trigger_type="circular">
+      <trigger CRC="57D20C89" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2012/02/24 17:46:17  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="32" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="rising edge" trigger_out="active high" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no" trigger_in="dont_care" trigger_out="active high"/>
         <events use_custom_flow_control="no">
           <level enabled="yes" name="condition1" type="basic"><power_up enabled="yes">
@@ -482,8 +586,8 @@
           </level>
         </events>
         <storage_qualifier_events>
-          <transitional>0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-            <pwr_up_transitional>0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</pwr_up_transitional>
+          <transitional>000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+            <pwr_up_transitional>000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</pwr_up_transitional>
           </transitional>
           <storage_qualifier_level type="basic">
             <power_up>
@@ -502,21 +606,22 @@
           </storage_qualifier_level>
         </storage_qualifier_events>
         <log>
-          <data global_temp="1" name="log: 2010/12/17 14:32:30  #0" power_up_mode="false" sample_depth="127" trigger_position="-1">01111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111011111110000000000001000000010000000000110100010000001001000000000000000001100100010</data>
-          <extradata>11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</extradata>
+          <data global_temp="1" name="log: 2012/02/24 18:28:47  #0" power_up_mode="false" sample_depth="128" trigger_position="16">111111111111111111111111111111111111111111111111111111111111111111111101111111111111111111111111111111111110111111111111111111111111111111111111111111111111111111111111111111111101111111111111111111111111111111111110111111111111111111111111111111111111111111111111111111111111111111111101111111111111111111111111111111111110111111111111111111111111111111111111111111111111111111111111111111111101111111111111111111111111111111111110111111111111111111111111111111111111111111111111111111111111111111111101111111111111111111111111111111111110111111111111111111111111111111111111111111111111111111111111111111111101111111111111111111111111111111111110111111111111111111111111111111111111111111111111111111111111111111111101111111111111111111111111111111111110111111111111111111111111111111111111111111111111111111111111111111111101111111111111111111111111111111111110111111111111111111111111111111111111111111111111111111111111111111111101111111111111111111111111111111111110111111111111111111111111111111111111111111111111111111111111111111111101111111111111111111111111111111111110111111111111111111111111111111111111111111111111111111111111111111111101111111111111111111111111111111111110000000000001010000001000000000010010011111111111111111111111111111111101110111111111111111111111111111111110000000000001010000001000000000010010011111111111111111111111111111111101110111111111111111111111111111111110000000000001010000001000000000010010001111111111111111111111111111111100010111111111111111111111111111111110000000000001010000001000000000010010001111111111111111111111111111111100010111111111111111111111111111111110000000000001010000001000000000010010000101010001001100010010000111100100010010101000100110001001000011110011000000000001010000001000000000010010000101010001001100010010000111100100000010101000100110001001000011110011000000000001010000001000000000010010000000000000000000000000000000000001100000000000000000000000000000000001111111111111111111111111111111111111111111111000010000100000100111111001101111111100001000010000010011111101111111111111111111111111111111111111111110101000011100000000100000111001111111010100001110000000010000011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010000000000100010111001111111111100001000000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100111111111111111111111111111111111111111111111000010100000000100010111001111111111100001010000000010001011100</data>
+          <extradata>1111111111111111T111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</extradata>
         </log>
       </trigger>
     </signal_set>
     <position_info>
       <single attribute="active tab" value="0"/>
-      <single attribute="data horizontal scroll position" value="0"/>
+      <single attribute="data horizontal scroll position" value="16"/>
       <single attribute="data vertical scroll position" value="0"/>
       <single attribute="setup horizontal scroll position" value="0"/>
       <single attribute="setup vertical scroll position" value="0"/>
       <single attribute="zoom level denominator" value="1"/>
-      <single attribute="zoom level numerator" value="1"/>
+      <single attribute="zoom level numerator" value="16"/>
       <single attribute="zoom offset denominator" value="1"/>
-      <single attribute="zoom offset numerator" value="130945"/>
+      <single attribute="zoom offset numerator" value="8184"/>
+      <multi attribute="timebars" size="2" value="15,19"/>
     </position_info>
   </instance>
   <mnemonics/>
@@ -1925,10 +2030,19 @@ soc=
     
     
     
+    
+    
     </embedded_sof_file>
   </embedded_sof_files>
   <global_info>
     <single attribute="active instance" value="0"/>
-    <multi attribute="column width" size="23" value="34,34,284,74,68,70,88,88,98,98,88,88,110,101,101,101,101,101,101,101,101,107,78"/>
+    <single attribute="config widget visible" value="1"/>
+    <single attribute="data log widget visible" value="1"/>
+    <single attribute="hierarchy widget visible" value="1"/>
+    <single attribute="instance widget visible" value="1"/>
+    <single attribute="jtag widget visible" value="1"/>
+    <multi attribute="column width" size="23" value="34,34,202,74,68,70,88,88,98,98,88,88,110,101,101,101,101,101,101,101,101,36,74"/>
+    <multi attribute="frame size" size="2" value="1280,968"/>
+    <multi attribute="jtag widget size" size="2" value="398,120"/>
   </global_info>
 </session>
