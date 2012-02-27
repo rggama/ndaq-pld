@@ -20,6 +20,7 @@ entity s_spi is
 		signal mosi				: in	std_logic;						-- master serial out	- slave serial in
 		signal miso				: out	std_logic := '0';				-- master serial in	- slave serial out
 		signal sclk				: in	std_logic;						-- spi clock out
+		signal cs				: in	std_logic;						-- chip select
 		
 		signal wr				: in	std_logic;						-- write strobe
 		signal rd				: in	std_logic;						-- read strobe
@@ -321,7 +322,7 @@ begin
 	end process;    
 	
 	tx_shift_register:
-	process (sclk, rst, t_cntr, txstate)      
+	process (sclk, rst, t_cntr, txstate, cs)
 	begin
 	if (rst = '1') then
 		txtmp <= x"AA"; --(others => '0');
@@ -349,17 +350,19 @@ begin
 
 	-- Transfer Counter
 	transfer_counter:
-	process(sclk, rst)
+	process(sclk, rst, cs)
 	begin
-	if (rst = '1') then
+	if ((rst = '1') or (cs = '0')) then
 		t_cntr <= x"0";
 	elsif (falling_edge(sclk)) then
 		if (cntr_end = '1') then
 			t_cntr <= x"0";
+		-- tried cs here, but did not work.
+		--elsif (cs = '1') then
 		else
 			t_cntr <= t_cntr + 1;
---		else
---			t_cntr <= t_cntr;
+		--else
+			--t_cntr <= x"0";
 		end if;
 	end if;
 	end process;	 
