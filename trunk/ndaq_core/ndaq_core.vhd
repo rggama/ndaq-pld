@@ -160,6 +160,15 @@ entity ndaq_core is
 		signal spiclk			: in	std_logic;
 		signal mosi				: in	std_logic;
 		signal miso				: out	std_logic;
+		signal cs				: in	std_logic;
+		
+		---------------
+		-- FIFO PAE --
+		---------------
+		signal fifo1_pae_o		: out	std_logic;
+		signal fifo2_pae_o		: out	std_logic;
+		signal fifo3_pae_o		: out	std_logic;
+		signal fifo4_pae_o		: out	std_logic;
 
 		--------------------
 		-- Trigger inputs --
@@ -348,6 +357,7 @@ architecture rtl of ndaq_core is
 		signal mosi				: in	std_logic;						-- master serial out	- slave serial in
 		signal miso				: out	std_logic := '0';				-- master serial in	- slave serial out
 		signal sclk				: in	std_logic;						-- spi clock out
+		signal cs				: in	std_logic;						-- chip select
 		
 		signal wr				: in	std_logic;						-- write strobe
 		signal rd				: in	std_logic;						-- read strobe
@@ -528,6 +538,11 @@ architecture rtl of ndaq_core is
 
 begin
 
+	fifo1_pae_o	<= 'Z';	--fifo1_pae;
+	fifo2_pae_o	<= 'Z'; --fifo2_pae;
+	fifo3_pae_o	<= 'Z'; --fifo3_pae;
+	fifo4_pae_o	<= 'Z'; --fifo4_pae;
+	
 	--------------------
 	-- ADCs interface --
 	--------------------
@@ -625,6 +640,7 @@ begin
 		mosi		=> mosi,		-- master serial out	- slave serial in
 		miso		=> miso,		-- master serial in		- slave serial out
 		sclk		=> spiclk,		-- spi clock out
+		cs			=> cs,			-- chip select
 		
 		wr			=> s_spi_wr,	-- write strobe
 		rd			=> s_spi_rd,	-- read strobe

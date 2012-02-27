@@ -92,6 +92,9 @@ entity ndaq_vme is
 		--signal fifo4_ef 	:in  	std_logic;
 
 		signal fifo_ef		:in		std_logic_vector(3 downto 0);
+
+		-- FIFO's programmable almost empty flag. These signals come from Core FPGA.
+		signal fifo_pae		:in		std_logic_vector(3 downto 0);
 		
 		----------------
 		-- Master SPI --
@@ -100,6 +103,7 @@ entity ndaq_vme is
 		signal spiclk		:out	std_logic;
 		signal mosi			:out	std_logic;
 		signal miso			:in		std_logic;
+		signal cs			:out	std_logic;
 		
 		-------------------
 		-- CAN interface --
@@ -184,6 +188,7 @@ architecture rtl of ndaq_vme is
 		signal mosi				: out	std_logic := '0';				-- master serial out	- slave serial in
 		signal miso				: in	std_logic;						-- master serial in	- slave serial out
 		signal sclk				: out	std_logic := '0';				-- spi clock out
+		signal cs				:out	std_logic := '0';				-- chip select
 		
 		signal wr				: in	std_logic;						-- write strobe
 		signal rd				: in	std_logic;						-- read strobe
@@ -609,6 +614,7 @@ begin
 		mosi		=> mosi,			-- master serial out	- slave serial in
 		miso		=> miso,			-- master serial in		- slave serial out
 		sclk		=> spiclk,			-- spi clock out
+		cs			=> cs,				-- chip select
 		
 		wr			=> p_wr(3),			-- write strobe
 		rd			=> p_rd(3),			-- read strobe
@@ -688,7 +694,7 @@ begin
 	a_wr(1)	<= '0';
 	a_wr(2)	<= '0';
 	a_wr(3)	<= user_write(5);
-	a_wr(4)	<= '0';
+	a_wr(4)	<= user_write(6);
 	a_wr(5)	<= user_write(4);	-- Teste VME.
 	a_wr(6)	<= '0';
 	
@@ -696,7 +702,7 @@ begin
 	a_rd(1)	<= '0';
 	a_rd(2)	<= '0';
 	a_rd(3)	<= user_read(5);
-	a_rd(4)	<= '0';
+	a_rd(4)	<= user_read(6);
 	a_rd(5)	<= user_read(4);	-- Teste VME.
 	a_rd(6)	<= '0';
 
