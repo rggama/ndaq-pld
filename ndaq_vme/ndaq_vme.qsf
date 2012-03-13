@@ -28,7 +28,7 @@ set_global_assignment -name DEVICE EP3C25F324C8
 set_global_assignment -name TOP_LEVEL_ENTITY ndaq_vme
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 8.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "15:07:41  NOVEMBER 26, 2008"
-set_global_assignment -name LAST_QUARTUS_VERSION "10.1 SP1"
+set_global_assignment -name LAST_QUARTUS_VERSION 10.0
 set_global_assignment -name USE_GENERATED_PHYSICAL_CONSTRAINTS OFF -section_id eda_blast_fpga
 set_global_assignment -name DEVICE_FILTER_PIN_COUNT 324
 set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 8
@@ -301,7 +301,7 @@ set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/
 set_location_assignment PIN_M1 -to spiclk
 set_location_assignment PIN_P1 -to mosi
 set_location_assignment PIN_P2 -to miso
-set_global_assignment -name RTLV_GROUP_COMB_LOGIC_IN_CLOUD ON
+set_global_assignment -name RTLV_GROUP_COMB_LOGIC_IN_CLOUD OFF
 set_global_assignment -name RTLV_SIMPLIFIED_LOGIC OFF
 set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/pld_r24/ndaq_vme/ndaq_vme.dpf"
 set_location_assignment PIN_U3 -to fifo_ef[0]
@@ -354,13 +354,4 @@ set_global_assignment -name VHDL_FILE ndaq_vme.vhd
 set_global_assignment -name QIP_FILE system/my_pll.qip
 set_global_assignment -name VHDL_FILE spi/m_spi.vhd
 set_global_assignment -name QIP_FILE usb_readout/readout_fifo.qip
-set_global_assignment -name ENABLE_SIGNALTAP OFF
-set_global_assignment -name USE_SIGNALTAP_FILE ndaq_vme_vmetest.stp
-set_location_assignment PIN_M2 -to cs
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to cs
-set_location_assignment PIN_T2 -to fifo_pae[0]
-set_location_assignment PIN_T1 -to fifo_pae[1]
-set_location_assignment PIN_L1 -to fifo_pae[2]
-set_location_assignment PIN_L2 -to fifo_pae[3]
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/LSD_LUC/Desktop/pld_r43/ndaq_vme/ndaq_vme.dpf"
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

@@ -20,7 +20,6 @@ entity m_spi is
 		signal mosi				: out	std_logic := '0';				-- master serial out	- slave serial in
 		signal miso				: in	std_logic;						-- master serial in	- slave serial out
 		signal sclk				: out	std_logic := '0';				-- spi clock out
-		signal cs				: out	std_logic := '0';				-- chip select
 		
 		signal wr				: in	std_logic;						-- write strobe
 		signal rd				: in	std_logic;						-- read strobe
@@ -128,7 +127,7 @@ begin
 			state	<= idle;
 			ibuf	<= x"00";
 			obuf	<= x"00";
-			cs		<= '0';
+			
 			
 		elsif (rising_edge(clk)) then
 			case state is
@@ -138,8 +137,6 @@ begin
 						state	<= tx_load;						
 						--
 						ibuf	<= idata;			-- Buffering Input Data into 'ibuf'.
-						-- chip select issue 
-						cs		<= '1';				-- chip select is registered because it is an external signal.
 						
 					else
 						state <= idle;
@@ -161,17 +158,13 @@ begin
 						state <= transfer;
 					end if;
 													
-				when rx_latch	=>					-- Future test implementation.
+				when rx_latch		=>					-- Future test implementation.
 					state	<= idle;
 					--
 					obuf	<= tmp;
-					--
-					cs		<= '0';
 					
 				when others		=>
 					state	<= idle;
-					--
-					cs		<= '0';
 
 			end case;
 		end if;

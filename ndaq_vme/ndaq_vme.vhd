@@ -92,9 +92,6 @@ entity ndaq_vme is
 		--signal fifo4_ef 	:in  	std_logic;
 
 		signal fifo_ef		:in		std_logic_vector(3 downto 0);
-
-		-- FIFO's programmable almost empty flag. These signals come from Core FPGA.
-		signal fifo_pae		:in		std_logic_vector(3 downto 0);
 		
 		----------------
 		-- Master SPI --
@@ -103,7 +100,6 @@ entity ndaq_vme is
 		signal spiclk		:out	std_logic;
 		signal mosi			:out	std_logic;
 		signal miso			:in		std_logic;
-		signal cs			:out	std_logic;
 		
 		-------------------
 		-- CAN interface --
@@ -188,7 +184,6 @@ architecture rtl of ndaq_vme is
 		signal mosi				: out	std_logic := '0';				-- master serial out	- slave serial in
 		signal miso				: in	std_logic;						-- master serial in	- slave serial out
 		signal sclk				: out	std_logic := '0';				-- spi clock out
-		signal cs				:out	std_logic := '0';				-- chip select
 		
 		signal wr				: in	std_logic;						-- write strobe
 		signal rd				: in	std_logic;						-- read strobe
@@ -409,13 +404,11 @@ architecture rtl of ndaq_vme is
 	signal tclk, clk_en			: std_logic;
 	
 	signal user_read			: std_logic_vector((NUM_USR_MAP-1) downto 0);
-	signal user_write			: std_logic_vector((NUM_USR_MAP-1) downto 0);
-
-	signal user_data_in			: std_logic_vector(31 downto 0);
-	signal user_data_out		: std_logic_vector(31 downto 0);
-	signal user_addr			: std_logic_vector(24 downto 0);
-	-- signal clk_wr, clk_rd		: std_logic; 						-- TEST by HERMAN 29/07/10
-	-- signal iuser_addr_lat		: std_logic_vector(7 downto 0);		-- Added by Herman in 08/09/10
+	signal iuser_data_in		: std_logic_vector(31 downto 0);	-- TEST by HERMAN 29/07/10
+	signal iuser_data_out		: std_logic_vector(31 downto 0);	-- TEST by HERMAN 29/07/10
+	signal iuser_addr			: std_logic_vector(24 downto 0);	-- Added by Herman in 08/09/10
+	signal clk_wr, clk_rd		: std_logic; 						-- TEST by HERMAN 29/07/10
+	signal iuser_addr_lat		: std_logic_vector(7 downto 0);		-- Added by Herman in 08/09/10
 	
 	--
 	-- FSM para condicionar o sinal user_read(0)
@@ -425,7 +418,10 @@ architecture rtl of ndaq_vme is
 	signal cstate_trig : trig;
 	signal dstate_trig : trig;
 
-	signal u_fifo_ren	: std_logic_vector(3 downto 0);
+	signal u_fifo1_ren	: std_logic;
+	signal u_fifo2_ren	: std_logic;
+	signal u_fifo3_ren	: std_logic;
+	signal u_fifo4_ren	: std_logic;
 
 	-- FT245bm_if
 	signal ft_wr	: std_logic := '1';
@@ -468,7 +464,7 @@ architecture rtl of ndaq_vme is
 	type rdf_usedw_t	is array ((usb_channels-1) downto 0) of std_logic_vector(7 downto 0);
 	
 	-- Readout Reset
-	signal rdout_rst	: std_logic := '1';
+	signal rdout_rst	: std_logic := '0';
 	
 	-- A Readout FIFO signals
 	signal a_rdf_data	: rdf_bus_t;
@@ -523,7 +519,7 @@ begin
 	--fifo3_ren	<= '1'; --u_fifo3_ren;
 	--fifo4_ren	<= '1'; --u_fifo4_ren;
 	
-	can_pgc <= 'Z'; --fifo1_ef;
+	-- can_pgc <=  fifo1_ef;
 	-- can_pgd <= 'Z';
 	can_pgm <= 'Z';
 
@@ -534,7 +530,7 @@ begin
 --	vme_dird	<= 'Z';
 --	vme_oed		<= 'Z';
 --	vme_data	<= (others => 'Z');
-	vme_oea		<= '0'; --'Z';
+	vme_oea		<= 'Z';
 
 
 ------------------------
@@ -599,7 +595,7 @@ begin
 	usb_Write	<= temp_wr;
 
 	test_pins:
-	--can_pgc		<= not(ft_wr);
+	can_pgc		<= not(ft_wr);
 	can_pgd		<= temp_wr;
 
 --*********************************************************************************************************	
@@ -614,7 +610,6 @@ begin
 		mosi		=> mosi,			-- master serial out	- slave serial in
 		miso		=> miso,			-- master serial in		- slave serial out
 		sclk		=> spiclk,			-- spi clock out
-		cs			=> cs,				-- chip select
 		
 		wr			=> p_wr(3),			-- write strobe
 		rd			=> p_rd(3),			-- read strobe
@@ -632,19 +627,19 @@ begin
 
 	my_vmeif:
 	vmeif port map (		
-							user_addr			=> user_addr,
-							user_data_in		=> user_data_in,
-							user_data_out		=> user_data_out,
+							--testpin			=> can_pgc,
+							user_addr			=> iuser_addr,
+							user_data_in		=> iuser_data_in,
+							user_data_out		=> iuser_data_out,
 							user_read			=> user_read,
-							user_write			=> user_write,
 							vme_addr			=> vme_add,
 							vme_am				=> vme_am,
 							vme_data			=> vme_data,
-							vme_xbuf_dataoe		=> vme_oed,		--
-							vme_xbuf_datadir	=> vme_dird,	--
+							vme_xbuf_dataoe		=> vme_oed, --
+							vme_xbuf_datadir	=> vme_dird, --
 							vme_lword			=> vme_lw,
-							vme_dtack			=> vme_dtack,	--
-							vme_xbuf_dtackoe	=> vme_oetack,	--
+							vme_dtack			=> vme_dtack, --
+							vme_xbuf_dtackoe	=> vme_oetack, --
 							vme_vack			=> vme_vack,
 							vme_as				=> vme_as,
 							vme_ds0				=> vme_ds0,
@@ -653,8 +648,8 @@ begin
 							vme_iack			=> vme_iack,
 							vme_iack_in			=> vme_iackin,
 							vme_iack_out		=> vme_iackout,
-							vme_irq				=> open,
-							vme_berr			=> vme_berr,	--
+							vme_irq				=> open, --vme_irq,
+							vme_berr			=> vme_berr, --
 							vme_verr			=> vme_verr,
 							vme_sysreset		=> vme_sysrst,
 							vme_sysclock		=> vme_sysclk,
@@ -676,8 +671,8 @@ begin
 		a_wr			=> a_wr,
 		a_rd			=> a_rd,
 		
-		idata			=> reg_idata,
-		odata			=> reg_odata,
+		idata			=> reg_odata,
+		odata			=> reg_idata,
 		
 		--register's individual i/os
 		ireg			=> ireg,
@@ -688,29 +683,8 @@ begin
 		p_rd			=> p_rd
 	);
 	
-	
-	-- Aproveitando o set 'a' de read/write strobes, que ja funciona pro modo USB
-	a_wr(0)	<= '0';
-	a_wr(1)	<= '0';
-	a_wr(2)	<= '0';
-	a_wr(3)	<= user_write(5);
-	a_wr(4)	<= user_write(6);
-	a_wr(5)	<= user_write(4);	-- Teste VME.
-	a_wr(6)	<= '0';
-	
-	a_rd(0)	<= '0';
-	a_rd(1)	<= '0';
-	a_rd(2)	<= '0';
-	a_rd(3)	<= user_read(5);
-	a_rd(4)	<= user_read(6);
-	a_rd(5)	<= user_read(4);	-- Teste VME.
-	a_rd(6)	<= '0';
-
-	reg_idata					<=	user_data_out(7 downto 0);
-	user_data_in(7 downto 0)	<=	reg_odata;
-	user_data_in(31 downto 8)	<=	(others => '0');
-	
 	-- Command Decoder
+
 	command_decoder:
 	vme_cmddec port map
 	(
@@ -734,37 +708,29 @@ begin
 		odata			=> ft_idata,
 
 		--register's strobes
-		reg_wr			=> open, --a_wr,
-		reg_rd			=> open, --a_rd,
+		reg_wr			=> a_wr,
+		reg_rd			=> a_rd,
 		
-		--register's i/os
-		reg_idata		=> (others => '0'), --reg_odata,
-		reg_odata		=> open --reg_idata
+		--register's strobes
+		reg_idata		=> reg_idata,
+		reg_odata		=> reg_odata
 	);
 
 --*********************************************************************************************************
 
 	--Readout Reset Assignement
-	process(pclk, mrst)
-	begin
-		if (mrst = '1') then
-			rdout_rst <= '1';
-		elsif (rising_edge(pclk)) then
-			rdout_rst <= oreg(6)(0);
-		end if;
-	end process;
-	--rdout_rst	<= oreg(6)(0);
+	rdout_rst	<= oreg(6)(0);
 
 --*********************************************************************************************************
 	
 	fifo_signals_construct:
 	for i in 0 to (usb_channels-1) generate
 	
-		--test_used:
-		--if (usb_channels > i) generate
-			fifo_ren(i)	<= u_fifo_ren(i);		--rdtemp(i);
-			fifo_oe(i)	<= not(user_read(i));	--rdtemp(i);
-		--end generate test_used;
+		test_used:
+		if (usb_channels > i) generate
+			fifo_ren(i)	<= rdtemp(i);
+			fifo_oe(i)	<= rdtemp(i);
+		end generate test_used;
 	
 	end generate fifo_signals_construct;
 	
@@ -779,7 +745,7 @@ begin
 	priarb8 port map
 	(	
 		clk					=> pclk,
-		rst					=> rdout_rst, --mrst,
+		rst					=> mrst,
 
 		enable				=> '1',
 		isidle				=> open,
@@ -801,16 +767,15 @@ begin
 	usb_readout_construct:
 	for i in 0 to (usb_channels-1) generate
 
-	-- TESTE VME
-	--a_rdf_data(i)		<= vme_data(9 downto 0);	-- ODD Channels.
-	--b_rdf_data(i)		<= vme_data(25 downto 16);	-- EVEN Channels.
+	a_rdf_data(i)		<= vme_data(9 downto 0);	-- ODD Channels.
+	b_rdf_data(i)		<= vme_data(25 downto 16);	-- EVEN Channels.
 
 	
 	idt_to_intfifo:
 	f2f_copier port map
 	(	
 		clk			=> pclk,
-		rst			=> rdout_rst, --mrst,
+		rst			=> mrst,
 	
 		enable		=> idt_en(i),	
 		isidle		=> idt_ii(i),	
@@ -866,7 +831,7 @@ begin
 	f2ft_copier port map
 	(	
 		clk			=> pclk,
-		rst			=> rdout_rst, --mrst,
+		rst			=> mrst,
 
 		-- Arbiter interface
 		enable		=> usb_rdout_en(i*2),
@@ -892,7 +857,7 @@ begin
 	f2ft_copier port map
 	(	
 		clk			=> pclk,
-		rst			=> rdout_rst, --mrst,
+		rst			=> mrst,
 
 		-- Arbiter interface
 		enable		=> usb_rdout_en((i*2)+1),
@@ -923,7 +888,7 @@ begin
 	priarb8 port map
 	(	
 		clk			=> pclk,
-		rst			=> rdout_rst, --mrst,
+		rst			=> mrst,
 
 		enable		=> main_en(0),
 		isidle		=> main_ii(0),
@@ -941,7 +906,7 @@ begin
 	priarb8 port map
 	(	
 		clk			=> pclk,
-		rst			=> rdout_rst, --mrst,
+		rst			=> mrst,
 
 		enable		=> '1',
 		isidle		=> open,
@@ -959,28 +924,28 @@ begin
 -- Preliminary FSMs for RDENs
 -- 
 
-	process (mrst,clk50m) begin
-		if (mrst = '1') then
+	process (srst,clk50m) begin
+		if (srst = '1') then
 			state_trig <= s_one;
-			u_fifo_ren(0) <= '1';
+			u_fifo1_ren <= '1';
 		elsif (clk50m'event and clk50m = '1') then
 				case state_trig is
 						
 					when s_one =>
 						if (user_read(0) = '1') then
 							state_trig <= s_two;
-							u_fifo_ren(0) <= '0';
+							u_fifo1_ren <= '0';
 						else
 							state_trig <= s_one;
-							u_fifo_ren(0) <= '1';
+							u_fifo1_ren <= '1';
 						end if;
 						
 					when s_two =>
-						u_fifo_ren(0) <= '1';
+						u_fifo1_ren <= '1';
 						state_trig <= s_three;
 						
 					when s_three =>
-						u_fifo_ren(0) <= '1';
+						u_fifo1_ren <= '1';
 						if (user_read(0) = '0') then
 							state_trig <= s_one;
 						else
@@ -988,35 +953,35 @@ begin
 						end if;
 	
 					when others =>
-						u_fifo_ren(0) <= '1';
+						u_fifo1_ren <= '1';
 						state_trig <= s_one;
 				
 				end case;
 		end if;
 	end process;
 
-	process (mrst,clk50m) begin
-		if (mrst = '1') then
+	process (srst,clk50m) begin
+		if (srst = '1') then
 			bstate_trig <= s_one;
-			u_fifo_ren(1) <= '1';
+			u_fifo2_ren <= '1';
 		elsif (clk50m'event and clk50m = '1') then
 				case bstate_trig is
 						
 					when s_one =>
 						if (user_read(1) = '1') then
 							bstate_trig <= s_two;
-							u_fifo_ren(1) <= '0';
+							u_fifo2_ren <= '0';
 						else
 							bstate_trig <= s_one;
-							u_fifo_ren(1) <= '1';
+							u_fifo2_ren <= '1';
 						end if;
 						
 					when s_two =>
-						u_fifo_ren(1) <= '1';
+						u_fifo2_ren <= '1';
 						bstate_trig <= s_three;
 						
 					when s_three =>
-						u_fifo_ren(1) <= '1';
+						u_fifo2_ren <= '1';
 						if (user_read(1) = '0') then
 							bstate_trig <= s_one;
 						else
@@ -1024,35 +989,35 @@ begin
 						end if;
 	
 					when others =>
-						u_fifo_ren(1) <= '1';
+						u_fifo2_ren <= '1';
 						bstate_trig <= s_one;
 				
 				end case;
 		end if;
 	end process;
 
-	process (mrst,clk50m) begin
-		if (mrst = '1') then
+	process (srst,clk50m) begin
+		if (srst = '1') then
 			cstate_trig <= s_one;
-			u_fifo_ren(2) <= '1';
+			u_fifo3_ren <= '1';
 		elsif (clk50m'event and clk50m = '1') then
 				case cstate_trig is
 						
 					when s_one =>
 						if (user_read(2) = '1') then
 							cstate_trig <= s_two;
-							u_fifo_ren(2) <= '0';
+							u_fifo3_ren <= '0';
 						else
 							cstate_trig <= s_one;
-							u_fifo_ren(2) <= '1';
+							u_fifo3_ren <= '1';
 						end if;
 						
 					when s_two =>
-						u_fifo_ren(2) <= '1';
+						u_fifo3_ren <= '1';
 						cstate_trig <= s_three;
 						
 					when s_three =>
-						u_fifo_ren(2) <= '1';
+						u_fifo3_ren <= '1';
 						if (user_read(2) = '0') then
 							cstate_trig <= s_one;
 						else
@@ -1060,35 +1025,35 @@ begin
 						end if;
 	
 					when others =>
-						u_fifo_ren(2) <= '1';
+						u_fifo3_ren <= '1';
 						cstate_trig <= s_one;
 				
 				end case;
 		end if;
 	end process;
 	
-	process (mrst,clk50m) begin
-		if (mrst = '1') then
+	process (srst,clk50m) begin
+		if (srst = '1') then
 			dstate_trig <= s_one;
-			u_fifo_ren(3) <= '1';
+			u_fifo4_ren <= '1';
 		elsif (clk50m'event and clk50m = '1') then
 				case dstate_trig is
 						
 					when s_one =>
 						if (user_read(3) = '1') then
 							dstate_trig <= s_two;
-							u_fifo_ren(3) <= '0';
+							u_fifo4_ren <= '0';
 						else
 							dstate_trig <= s_one;
-							u_fifo_ren(3) <= '1';
+							u_fifo4_ren <= '1';
 						end if;
 						
 					when s_two =>
-						u_fifo_ren(3) <= '1';
+						u_fifo4_ren <= '1';
 						dstate_trig <= s_three;
 						
 					when s_three =>
-						u_fifo_ren(3) <= '1';
+						u_fifo4_ren <= '1';
 						if (user_read(3) = '0') then
 							dstate_trig <= s_one;
 						else
@@ -1096,7 +1061,7 @@ begin
 						end if;
 	
 					when others =>
-						u_fifo_ren(3) <= '1';
+						u_fifo4_ren <= '1';
 						dstate_trig <= s_one;
 				
 				end case;
