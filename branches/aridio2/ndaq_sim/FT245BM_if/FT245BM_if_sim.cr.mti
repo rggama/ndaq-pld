@@ -1,0 +1,46 @@
+./FT245BM_tbench.vht {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_sim/FT245BM_if/FT245BM_tbench.vht}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity ft245bm_tbench
+-- Compiling architecture testbench of ft245bm_tbench
+
+} {} {}} ../..//ndaq_vme/FT245BM_if/FT245BM_rx.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_vme/FT245BM_if/FT245BM_rx.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity ft245bm_rx
+-- Compiling architecture rtl of ft245bm_rx
+
+} {} {}} ../..//ndaq_vme/FT245BM_if/FT245BM_if.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_vme/FT245BM_if/FT245BM_if.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity ft245bm_if
+-- Compiling architecture rtl of ft245bm_if
+
+} {} {}} ../..//ndaq_vme/FT245BM_if/FT245BM_tx.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_vme/FT245BM_if/FT245BM_tx.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity ft245bm_tx
+-- Compiling architecture rtl of ft245bm_tx
+
+} {} {}} ../../ndaq_vme/FT245BM_if/FT245BM_ab.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_vme/FT245BM_if/FT245BM_ab.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity ft245bm_ab
+-- Compiling architecture rtl of ft245bm_ab
+
+} {} {}}

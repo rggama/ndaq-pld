@@ -1,0 +1,5 @@
+pae_fifo1	T2
+pae_fifo2	T1
+pae_fifo3	L1
+pae_fifo4	L2
+
