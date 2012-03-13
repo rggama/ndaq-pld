@@ -1,489 +1,243 @@
-<session jtag_chain="USB-Blaster [USB-0]" jtag_device="@1: EP3C25/EP4CE22 (0x020F30DD)" sof_file="ndaq_vme.sof">
+<session jtag_chain="USB-Blaster [USB-1]" jtag_device="@1: EP3C25/EP4CE22 (0x020F30DD)" sof_file="ndaq_vme.sof">
   <display_tree gui_logging_enabled="0">
     <display_branch instance="my_instance" log="USE_GLOBAL_TEMP" signal_set="USE_GLOBAL_TEMP" trigger="USE_GLOBAL_TEMP"/>
   </display_tree>
   <instance entity_name="sld_signaltap" is_auto_node="yes" is_expanded="true" name="my_instance" source_file="sld_signaltap.vhd">
     <node_ip_info instance_id="0" mfg_id="110" node_id="0" version="6"/>
-    <signal_set global_temp="1" is_expanded="true" name="signal_set: 2010/12/16 17:48:50  #0">
+    <position_info>
+      <single attribute="active tab" value="0"/>
+      <single attribute="data horizontal scroll position" value="4"/>
+      <single attribute="data vertical scroll position" value="0"/>
+      <single attribute="setup horizontal scroll position" value="0"/>
+      <single attribute="setup vertical scroll position" value="0"/>
+      <single attribute="zoom level denominator" value="4"/>
+      <single attribute="zoom level numerator" value="1"/>
+      <single attribute="zoom offset denominator" value="1"/>
+      <single attribute="zoom offset numerator" value="523780"/>
+      <multi attribute="timebars" size="0" value=""/>
+    </position_info>
+    <signal_set global_temp="1" name="signal_set: 2012/03/06 15:59:10  #0">
       <clock name="clk50M" polarity="posedge" tap_mode="classic"/>
-      <config ram_type="M4K" reserved_data_nodes="0" reserved_storage_qualifier_nodes="0" reserved_trigger_nodes="0" sample_depth="128" trigger_in_enable="yes" trigger_in_pin="vmeif:my_vmeif|user_read[1]" trigger_out_enable="no" trigger_out_pin="auto_stp_trigger_out_0"/>
+      <config ram_type="M4K" reserved_data_nodes="0" reserved_storage_qualifier_nodes="0" reserved_trigger_nodes="0" sample_depth="512" trigger_in_enable="yes" trigger_in_node="readout_fifo:\usb_readout_construct:0:A_readout_fifo|rdreq" trigger_in_tap_mode="classic" trigger_out_enable="no" trigger_out_pin="auto_stp_trigger_out_0"/>
       <top_entity/>
       <signal_vec>
         <trigger_input_vec>
-          <wire name="fifo1_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo1_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo1_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo2_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo2_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo2_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo3_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo3_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo3_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo4_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo4_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo4_ren" tap_mode="classic" type="output pin"/>
-          <wire name="vme_add[10]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[11]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[12]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[13]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[14]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[15]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[16]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[17]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[18]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[19]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[1]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[20]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[21]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[22]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[23]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[24]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[25]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[26]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[27]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[28]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[29]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[2]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[30]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[31]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[3]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[4]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[5]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[6]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[7]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[8]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[9]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[0]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[1]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[2]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[3]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[4]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[5]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_as" tap_mode="classic" type="input pin"/>
-          <wire name="vme_data[0]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[10]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[11]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[12]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[13]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[14]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[15]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[16]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[17]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[18]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[19]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[1]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[20]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[21]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[22]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[23]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[24]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[25]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[26]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[27]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[28]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[29]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[2]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[30]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[31]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[3]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[4]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[5]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[6]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[7]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[8]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[9]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_dird" tap_mode="classic" type="output pin"/>
-          <wire name="vme_ds0" tap_mode="classic" type="input pin"/>
-          <wire name="vme_ds1" tap_mode="classic" type="input pin"/>
-          <wire name="vme_dtack" tap_mode="classic" type="output pin"/>
-          <wire name="vme_wr" tap_mode="classic" type="input pin"/>
-          <wire name="vmeif:my_vmeif|user_read[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="f2ft_copier:\usb_readout_construct:0:A_to_ft_copier|rd" tap_mode="classic" type="combinatorial"/>
+          <wire name="fifo_ef[0]" tap_mode="classic" type="input pin"/>
+          <wire name="fifo_oe[0]" tap_mode="classic" type="output pin"/>
+          <wire name="fifo_ren[0]" tap_mode="classic" type="output pin"/>
+          <wire name="ft_wr" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|full" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|rdreq" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|wrreq" tap_mode="classic" type="combinatorial"/>
         </trigger_input_vec>
         <data_input_vec>
-          <wire name="fifo1_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo1_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo1_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo2_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo2_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo2_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo3_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo3_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo3_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo4_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo4_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo4_ren" tap_mode="classic" type="output pin"/>
-          <wire name="vme_add[10]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[11]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[12]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[13]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[14]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[15]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[16]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[17]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[18]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[19]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[1]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[20]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[21]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[22]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[23]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[24]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[25]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[26]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[27]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[28]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[29]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[2]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[30]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[31]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[3]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[4]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[5]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[6]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[7]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[8]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[9]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[0]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[1]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[2]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[3]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[4]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[5]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_as" tap_mode="classic" type="input pin"/>
-          <wire name="vme_data[0]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[10]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[11]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[12]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[13]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[14]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[15]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[16]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[17]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[18]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[19]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[1]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[20]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[21]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[22]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[23]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[24]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[25]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[26]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[27]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[28]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[29]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[2]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[30]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[31]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[3]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[4]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[5]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[6]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[7]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[8]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[9]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_dird" tap_mode="classic" type="output pin"/>
-          <wire name="vme_ds0" tap_mode="classic" type="input pin"/>
-          <wire name="vme_ds1" tap_mode="classic" type="input pin"/>
-          <wire name="vme_dtack" tap_mode="classic" type="output pin"/>
-          <wire name="vme_wr" tap_mode="classic" type="input pin"/>
-          <wire name="vmeif:my_vmeif|user_read[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="f2ft_copier:\usb_readout_construct:0:A_to_ft_copier|rd" tap_mode="classic" type="combinatorial"/>
+          <wire name="fifo_ef[0]" tap_mode="classic" type="input pin"/>
+          <wire name="fifo_oe[0]" tap_mode="classic" type="output pin"/>
+          <wire name="fifo_ren[0]" tap_mode="classic" type="output pin"/>
+          <wire name="ft_wr" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|full" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|rdreq" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|wrreq" tap_mode="classic" type="combinatorial"/>
         </data_input_vec>
         <storage_qualifier_input_vec>
-          <wire name="fifo1_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo1_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo1_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo2_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo2_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo2_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo3_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo3_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo3_ren" tap_mode="classic" type="output pin"/>
-          <wire name="fifo4_ef" tap_mode="classic" type="input pin"/>
-          <wire name="fifo4_oe" tap_mode="classic" type="output pin"/>
-          <wire name="fifo4_ren" tap_mode="classic" type="output pin"/>
-          <wire name="vme_add[10]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[11]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[12]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[13]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[14]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[15]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[16]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[17]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[18]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[19]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[1]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[20]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[21]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[22]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[23]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[24]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[25]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[26]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[27]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[28]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[29]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[2]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[30]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[31]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[3]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[4]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[5]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[6]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[7]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[8]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_add[9]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[0]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[1]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[2]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[3]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[4]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_am[5]" tap_mode="classic" type="input pin"/>
-          <wire name="vme_as" tap_mode="classic" type="input pin"/>
-          <wire name="vme_data[0]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[10]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[11]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[12]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[13]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[14]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[15]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[16]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[17]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[18]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[19]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[1]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[20]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[21]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[22]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[23]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[24]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[25]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[26]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[27]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[28]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[29]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[2]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[30]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[31]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[3]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[4]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[5]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[6]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[7]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[8]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_data[9]" tap_mode="classic" type="bidir pin"/>
-          <wire name="vme_dird" tap_mode="classic" type="output pin"/>
-          <wire name="vme_ds0" tap_mode="classic" type="input pin"/>
-          <wire name="vme_ds1" tap_mode="classic" type="input pin"/>
-          <wire name="vme_dtack" tap_mode="classic" type="output pin"/>
-          <wire name="vme_wr" tap_mode="classic" type="input pin"/>
-          <wire name="vmeif:my_vmeif|user_read[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="f2ft_copier:\usb_readout_construct:0:A_to_ft_copier|rd" tap_mode="classic" type="combinatorial"/>
+          <wire name="fifo_ef[0]" tap_mode="classic" type="input pin"/>
+          <wire name="fifo_oe[0]" tap_mode="classic" type="output pin"/>
+          <wire name="fifo_ren[0]" tap_mode="classic" type="output pin"/>
+          <wire name="ft_wr" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|full" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|rdreq" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|wrreq" tap_mode="classic" type="combinatorial"/>
         </storage_qualifier_input_vec>
       </signal_vec>
       <presentation>
         <data_view>
-          <bus is_signal_inverted="no" link="all" name="vme_add[31..1]" order="msb_to_lsb" radix="hex" state="collapse" type="input pin">
-            <net is_signal_inverted="no" name="vme_add[31]"/>
-            <net is_signal_inverted="no" name="vme_add[30]"/>
-            <net is_signal_inverted="no" name="vme_add[29]"/>
-            <net is_signal_inverted="no" name="vme_add[28]"/>
-            <net is_signal_inverted="no" name="vme_add[27]"/>
-            <net is_signal_inverted="no" name="vme_add[26]"/>
-            <net is_signal_inverted="no" name="vme_add[25]"/>
-            <net is_signal_inverted="no" name="vme_add[24]"/>
-            <net is_signal_inverted="no" name="vme_add[23]"/>
-            <net is_signal_inverted="no" name="vme_add[22]"/>
-            <net is_signal_inverted="no" name="vme_add[21]"/>
-            <net is_signal_inverted="no" name="vme_add[20]"/>
-            <net is_signal_inverted="no" name="vme_add[19]"/>
-            <net is_signal_inverted="no" name="vme_add[18]"/>
-            <net is_signal_inverted="no" name="vme_add[17]"/>
-            <net is_signal_inverted="no" name="vme_add[16]"/>
-            <net is_signal_inverted="no" name="vme_add[15]"/>
-            <net is_signal_inverted="no" name="vme_add[14]"/>
-            <net is_signal_inverted="no" name="vme_add[13]"/>
-            <net is_signal_inverted="no" name="vme_add[12]"/>
-            <net is_signal_inverted="no" name="vme_add[11]"/>
-            <net is_signal_inverted="no" name="vme_add[10]"/>
-            <net is_signal_inverted="no" name="vme_add[9]"/>
-            <net is_signal_inverted="no" name="vme_add[8]"/>
-            <net is_signal_inverted="no" name="vme_add[7]"/>
-            <net is_signal_inverted="no" name="vme_add[6]"/>
-            <net is_signal_inverted="no" name="vme_add[5]"/>
-            <net is_signal_inverted="no" name="vme_add[4]"/>
-            <net is_signal_inverted="no" name="vme_add[3]"/>
-            <net is_signal_inverted="no" name="vme_add[2]"/>
-            <net is_signal_inverted="no" name="vme_add[1]"/>
+          <net is_signal_inverted="no" name="fifo_ef[0]"/>
+          <net is_signal_inverted="no" name="fifo_oe[0]"/>
+          <net is_signal_inverted="no" name="fifo_ren[0]"/>
+          <bus is_signal_inverted="no" link="all" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[9]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[8]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[7]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[6]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[5]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[4]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[3]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[2]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[1]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[0]"/>
           </bus>
-          <bus is_signal_inverted="no" link="all" name="vme_am[5..0]" order="msb_to_lsb" radix="hex" state="collapse" type="input pin">
-            <net is_signal_inverted="no" name="vme_am[5]"/>
-            <net is_signal_inverted="no" name="vme_am[4]"/>
-            <net is_signal_inverted="no" name="vme_am[3]"/>
-            <net is_signal_inverted="no" name="vme_am[2]"/>
-            <net is_signal_inverted="no" name="vme_am[1]"/>
-            <net is_signal_inverted="no" name="vme_am[0]"/>
+          <bus is_signal_inverted="no" link="all" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[9]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[8]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[7]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[6]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[5]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[4]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[3]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[2]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[1]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[0]"/>
           </bus>
-          <net is_signal_inverted="no" name="vme_as"/>
-          <bus is_signal_inverted="no" link="all" name="vme_data[0..31]" order="lsb_to_msb" radix="hex" state="collapse" type="bidir pin">
-            <net is_signal_inverted="no" name="vme_data[0]"/>
-            <net is_signal_inverted="no" name="vme_data[1]"/>
-            <net is_signal_inverted="no" name="vme_data[2]"/>
-            <net is_signal_inverted="no" name="vme_data[3]"/>
-            <net is_signal_inverted="no" name="vme_data[4]"/>
-            <net is_signal_inverted="no" name="vme_data[5]"/>
-            <net is_signal_inverted="no" name="vme_data[6]"/>
-            <net is_signal_inverted="no" name="vme_data[7]"/>
-            <net is_signal_inverted="no" name="vme_data[8]"/>
-            <net is_signal_inverted="no" name="vme_data[9]"/>
-            <net is_signal_inverted="no" name="vme_data[10]"/>
-            <net is_signal_inverted="no" name="vme_data[11]"/>
-            <net is_signal_inverted="no" name="vme_data[12]"/>
-            <net is_signal_inverted="no" name="vme_data[13]"/>
-            <net is_signal_inverted="no" name="vme_data[14]"/>
-            <net is_signal_inverted="no" name="vme_data[15]"/>
-            <net is_signal_inverted="no" name="vme_data[16]"/>
-            <net is_signal_inverted="no" name="vme_data[17]"/>
-            <net is_signal_inverted="no" name="vme_data[18]"/>
-            <net is_signal_inverted="no" name="vme_data[19]"/>
-            <net is_signal_inverted="no" name="vme_data[20]"/>
-            <net is_signal_inverted="no" name="vme_data[21]"/>
-            <net is_signal_inverted="no" name="vme_data[22]"/>
-            <net is_signal_inverted="no" name="vme_data[23]"/>
-            <net is_signal_inverted="no" name="vme_data[24]"/>
-            <net is_signal_inverted="no" name="vme_data[25]"/>
-            <net is_signal_inverted="no" name="vme_data[26]"/>
-            <net is_signal_inverted="no" name="vme_data[27]"/>
-            <net is_signal_inverted="no" name="vme_data[28]"/>
-            <net is_signal_inverted="no" name="vme_data[29]"/>
-            <net is_signal_inverted="no" name="vme_data[30]"/>
-            <net is_signal_inverted="no" name="vme_data[31]"/>
+          <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|full"/>
+          <bus is_signal_inverted="no" link="all" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[7]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[6]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[5]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[4]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[3]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[2]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[1]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[0]"/>
           </bus>
-          <net is_signal_inverted="no" name="vme_dird"/>
-          <net is_signal_inverted="no" name="vme_ds0"/>
-          <net is_signal_inverted="no" name="vme_ds1"/>
-          <net is_signal_inverted="no" name="vme_dtack"/>
-          <net is_signal_inverted="no" name="vme_wr"/>
-          <net is_signal_inverted="no" name="fifo1_ef"/>
-          <net is_signal_inverted="no" name="fifo1_oe"/>
-          <net is_signal_inverted="no" name="fifo1_ren"/>
-          <net is_signal_inverted="no" name="vmeif:my_vmeif|user_read[0]"/>
-          <net is_signal_inverted="no" name="fifo2_ef"/>
-          <net is_signal_inverted="no" name="fifo2_oe"/>
-          <net is_signal_inverted="no" name="fifo2_ren"/>
-          <net is_signal_inverted="no" name="fifo3_ef"/>
-          <net is_signal_inverted="no" name="fifo3_oe"/>
-          <net is_signal_inverted="no" name="fifo3_ren"/>
-          <net is_signal_inverted="no" name="fifo4_ef"/>
-          <net is_signal_inverted="no" name="fifo4_oe"/>
-          <net is_signal_inverted="no" name="fifo4_ren"/>
+          <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|rdreq"/>
+          <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|wrreq"/>
+          <net is_signal_inverted="no" name="ft_wr"/>
+          <net is_signal_inverted="no" name="f2ft_copier:\usb_readout_construct:0:A_to_ft_copier|rd"/>
         </data_view>
         <setup_view>
-          <bus is_signal_inverted="no" link="all" name="vme_am[5..0]" order="msb_to_lsb" radix="hex" state="collapse" type="input pin">
-            <net is_signal_inverted="no" name="vme_am[5]"/>
-            <net is_signal_inverted="no" name="vme_am[4]"/>
-            <net is_signal_inverted="no" name="vme_am[3]"/>
-            <net is_signal_inverted="no" name="vme_am[2]"/>
-            <net is_signal_inverted="no" name="vme_am[1]"/>
-            <net is_signal_inverted="no" name="vme_am[0]"/>
+          <net is_signal_inverted="no" name="fifo_ef[0]"/>
+          <net is_signal_inverted="no" name="fifo_oe[0]"/>
+          <net is_signal_inverted="no" name="fifo_ren[0]"/>
+          <bus is_signal_inverted="no" link="all" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[9]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[8]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[7]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[6]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[5]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[4]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[3]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[2]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[1]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|data[0]"/>
           </bus>
-          <bus is_signal_inverted="no" link="all" name="vme_add[31..1]" order="msb_to_lsb" radix="hex" state="collapse" type="input pin">
-            <net is_signal_inverted="no" name="vme_add[31]"/>
-            <net is_signal_inverted="no" name="vme_add[30]"/>
-            <net is_signal_inverted="no" name="vme_add[29]"/>
-            <net is_signal_inverted="no" name="vme_add[28]"/>
-            <net is_signal_inverted="no" name="vme_add[27]"/>
-            <net is_signal_inverted="no" name="vme_add[26]"/>
-            <net is_signal_inverted="no" name="vme_add[25]"/>
-            <net is_signal_inverted="no" name="vme_add[24]"/>
-            <net is_signal_inverted="no" name="vme_add[23]"/>
-            <net is_signal_inverted="no" name="vme_add[22]"/>
-            <net is_signal_inverted="no" name="vme_add[21]"/>
-            <net is_signal_inverted="no" name="vme_add[20]"/>
-            <net is_signal_inverted="no" name="vme_add[19]"/>
-            <net is_signal_inverted="no" name="vme_add[18]"/>
-            <net is_signal_inverted="no" name="vme_add[17]"/>
-            <net is_signal_inverted="no" name="vme_add[16]"/>
-            <net is_signal_inverted="no" name="vme_add[15]"/>
-            <net is_signal_inverted="no" name="vme_add[14]"/>
-            <net is_signal_inverted="no" name="vme_add[13]"/>
-            <net is_signal_inverted="no" name="vme_add[12]"/>
-            <net is_signal_inverted="no" name="vme_add[11]"/>
-            <net is_signal_inverted="no" name="vme_add[10]"/>
-            <net is_signal_inverted="no" name="vme_add[9]"/>
-            <net is_signal_inverted="no" name="vme_add[8]"/>
-            <net is_signal_inverted="no" name="vme_add[7]"/>
-            <net is_signal_inverted="no" name="vme_add[6]"/>
-            <net is_signal_inverted="no" name="vme_add[5]"/>
-            <net is_signal_inverted="no" name="vme_add[4]"/>
-            <net is_signal_inverted="no" name="vme_add[3]"/>
-            <net is_signal_inverted="no" name="vme_add[2]"/>
-            <net is_signal_inverted="no" name="vme_add[1]"/>
+          <bus is_signal_inverted="no" link="all" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[9]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[8]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[7]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[6]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[5]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[4]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[3]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[2]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[1]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|q[0]"/>
           </bus>
-          <bus is_signal_inverted="no" link="all" name="vme_data[0..31]" order="lsb_to_msb" radix="hex" state="collapse" type="bidir pin">
-            <net is_signal_inverted="no" name="vme_data[0]"/>
-            <net is_signal_inverted="no" name="vme_data[1]"/>
-            <net is_signal_inverted="no" name="vme_data[2]"/>
-            <net is_signal_inverted="no" name="vme_data[3]"/>
-            <net is_signal_inverted="no" name="vme_data[4]"/>
-            <net is_signal_inverted="no" name="vme_data[5]"/>
-            <net is_signal_inverted="no" name="vme_data[6]"/>
-            <net is_signal_inverted="no" name="vme_data[7]"/>
-            <net is_signal_inverted="no" name="vme_data[8]"/>
-            <net is_signal_inverted="no" name="vme_data[9]"/>
-            <net is_signal_inverted="no" name="vme_data[10]"/>
-            <net is_signal_inverted="no" name="vme_data[11]"/>
-            <net is_signal_inverted="no" name="vme_data[12]"/>
-            <net is_signal_inverted="no" name="vme_data[13]"/>
-            <net is_signal_inverted="no" name="vme_data[14]"/>
-            <net is_signal_inverted="no" name="vme_data[15]"/>
-            <net is_signal_inverted="no" name="vme_data[16]"/>
-            <net is_signal_inverted="no" name="vme_data[17]"/>
-            <net is_signal_inverted="no" name="vme_data[18]"/>
-            <net is_signal_inverted="no" name="vme_data[19]"/>
-            <net is_signal_inverted="no" name="vme_data[20]"/>
-            <net is_signal_inverted="no" name="vme_data[21]"/>
-            <net is_signal_inverted="no" name="vme_data[22]"/>
-            <net is_signal_inverted="no" name="vme_data[23]"/>
-            <net is_signal_inverted="no" name="vme_data[24]"/>
-            <net is_signal_inverted="no" name="vme_data[25]"/>
-            <net is_signal_inverted="no" name="vme_data[26]"/>
-            <net is_signal_inverted="no" name="vme_data[27]"/>
-            <net is_signal_inverted="no" name="vme_data[28]"/>
-            <net is_signal_inverted="no" name="vme_data[29]"/>
-            <net is_signal_inverted="no" name="vme_data[30]"/>
-            <net is_signal_inverted="no" name="vme_data[31]"/>
+          <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|full"/>
+          <bus is_signal_inverted="no" link="all" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[7]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[6]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[5]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[4]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[3]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[2]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[1]"/>
+            <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|usedw[0]"/>
           </bus>
-          <net is_signal_inverted="no" name="vme_as"/>
-          <net is_signal_inverted="no" name="vme_ds0"/>
-          <net is_signal_inverted="no" name="vme_ds1"/>
-          <net is_signal_inverted="no" name="vme_dtack"/>
-          <net is_signal_inverted="no" name="vme_dird"/>
-          <net is_signal_inverted="no" name="vme_wr"/>
-          <net is_signal_inverted="no" name="fifo1_ef"/>
-          <net is_signal_inverted="no" name="fifo1_oe"/>
-          <net is_signal_inverted="no" name="fifo1_ren"/>
-          <net is_signal_inverted="no" name="vmeif:my_vmeif|user_read[0]"/>
-          <net is_signal_inverted="no" name="fifo2_ef"/>
-          <net is_signal_inverted="no" name="fifo2_oe"/>
-          <net is_signal_inverted="no" name="fifo2_ren"/>
-          <net is_signal_inverted="no" name="fifo3_ef"/>
-          <net is_signal_inverted="no" name="fifo3_oe"/>
-          <net is_signal_inverted="no" name="fifo3_ren"/>
-          <net is_signal_inverted="no" name="fifo4_ef"/>
-          <net is_signal_inverted="no" name="fifo4_oe"/>
-          <net is_signal_inverted="no" name="fifo4_ren"/>
+          <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|rdreq"/>
+          <net is_signal_inverted="no" name="readout_fifo:\usb_readout_construct:0:A_readout_fifo|wrreq"/>
+          <net is_signal_inverted="no" name="ft_wr"/>
+          <net is_signal_inverted="no" name="f2ft_copier:\usb_readout_construct:0:A_to_ft_copier|rd"/>
         </setup_view>
       </presentation>
-      <trigger CRC="FF3EB967" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2010/12/16 17:48:50  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="32" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="rising edge" trigger_out="active high" trigger_type="circular">
+      <trigger CRC="EEB4DCA2" attribute_mem_mode="false" gap_record="true" global_temp="1" name="trigger: 2012/03/06 15:59:10  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="128" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="rising edge" trigger_out="active high" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no" trigger_in="dont_care" trigger_out="active high"/>
         <events use_custom_flow_control="no">
-          <level enabled="yes" name="condition1" type="basic"><power_up enabled="yes">
-            </power_up><op_node/>
+          <level enabled="yes" name="condition1" type="basic">
+            <power_up enabled="yes">
+            </power_up>
+            <op_node/>
           </level>
         </events>
         <storage_qualifier_events>
-          <transitional>0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-            <pwr_up_transitional>0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</pwr_up_transitional>
+          <transitional>000000000000000000000000000000000000
+            <pwr_up_transitional>000000000000000000000000000000000000</pwr_up_transitional>
           </transitional>
           <storage_qualifier_level type="basic">
             <power_up>
@@ -502,22 +256,11 @@
           </storage_qualifier_level>
         </storage_qualifier_events>
         <log>
-          <data global_temp="1" name="log: 2010/12/17 14:32:30  #0" power_up_mode="false" sample_depth="127" trigger_position="-1">01111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111111111111111111111111111111111111111111111111111111111111111111111111111111111011110011111111111111111111111111111111111111111111111111111111111111111111111111111111101111001111111111111111111111111111111111111111111111111111111111111111111111111111111110111100111011111110000000000001000000010000000000110100010000001001000000000000000001100100010</data>
-          <extradata>11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</extradata>
+          <data global_temp="1" name="log: 2012/03/06 16:03:27  #0" power_up_mode="false" sample_depth="512" trigger_position="64">001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100001111111111111011000110000111111100011111111111111011000110000111111100010010100011000011000110000000000011101111100011000011000110001000000010001111100011000011000110000111111100001101100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001101100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100001111100011000011000110000111111100101111100011000011000110001111111100001111100011000001000110000011111100001101100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001101100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100001111100011000001000110000011111100101111100011000001000110001011111100001111100011000011000110000101111100001101100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001101100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100001111100011000011000110000101111100101111100011000011000110001101111100001111100011000011000110000001111100001101100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001101100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100001111100011000011000110000001111100101111100011000011000110001001111100001111100011000011000110000110111100001101100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001101100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100001111100011000011000110000110111100101111100011000011000110001110111100001111100011000011000110000010111100001101100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001101100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100001111100011000011000110000010111100101111100011000011000110001010111100001111100011000001000110000100111100001101100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100001111100011000001000110000100111100</data>
+          <extradata>1111111111111111111111111111111111111111111111111111111111111111T111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</extradata>
         </log>
       </trigger>
     </signal_set>
-    <position_info>
-      <single attribute="active tab" value="0"/>
-      <single attribute="data horizontal scroll position" value="0"/>
-      <single attribute="data vertical scroll position" value="0"/>
-      <single attribute="setup horizontal scroll position" value="0"/>
-      <single attribute="setup vertical scroll position" value="0"/>
-      <single attribute="zoom level denominator" value="1"/>
-      <single attribute="zoom level numerator" value="1"/>
-      <single attribute="zoom offset denominator" value="1"/>
-      <single attribute="zoom offset numerator" value="130945"/>
-    </position_info>
   </instance>
   <mnemonics/>
   <static_plugin_mnemonics/>
@@ -1925,10 +1668,11 @@ soc=
     
     
     
+    
     </embedded_sof_file>
   </embedded_sof_files>
   <global_info>
     <single attribute="active instance" value="0"/>
-    <multi attribute="column width" size="23" value="34,34,284,74,68,70,88,88,98,98,88,88,110,101,101,101,101,101,101,101,101,107,78"/>
+    <multi attribute="column width" size="23" value="34,34,408,74,68,70,88,88,98,98,88,88,110,101,101,101,101,101,101,101,101,107,102"/>
   </global_info>
 </session>

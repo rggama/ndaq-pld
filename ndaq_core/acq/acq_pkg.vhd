@@ -22,6 +22,9 @@ package acq_pkg is
 	constant data_width					: integer	:= 10;		
 
 
+	-- Freq.
+	constant freq_width					: integer	:= 32;
+	
 	--usedw_width = (log(2) W) + 1, onde W e o tamanho maximo da POST FIFO
 	--ou quantos bits sao necessarios para representar o valor maximo de 
 	--palavras na POST FIFO. Ex: Se o max da POST FIFO = 1024 palavras
@@ -79,9 +82,11 @@ package acq_pkg is
 	--Data Types
 	subtype	DATA_T						is std_logic_vector((data_width-1) downto 0);
 	subtype	USEDW_T						is std_logic_vector((usedw_width-1) downto 0);
+	subtype	FREQ_T						is std_logic_vector((freq_width-1) downto 0);
 
 	type	F_DATA_WIDTH_T				is array ((adc_channels-1) downto 0) of DATA_T;
 	type	F_USEDW_WIDTH_T				is array ((adc_channels-1) downto 0) of USEDW_T;
+	type	FREQ_WIDTH_A				is array ((adc_channels-1) downto 0) of FREQ_T;
 	
 --*******************************************************************************************************************************
 
