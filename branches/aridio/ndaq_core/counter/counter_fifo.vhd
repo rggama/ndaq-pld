@@ -99,16 +99,16 @@ BEGIN
 	dcfifo_component : dcfifo
 	GENERIC MAP (
 		intended_device_family => "Cyclone III",
-		lpm_numwords => 64,
+		lpm_numwords => 128,
 		lpm_showahead => "OFF",
 		lpm_type => "dcfifo",
 		lpm_width => 32,
-		lpm_widthu => 6,
+		lpm_widthu => 7,
 		overflow_checking => "ON",
 		rdsync_delaypipe => 5,
 		underflow_checking => "ON",
 		use_eab => "ON",
-		write_aclr_synch => "ON",
+		write_aclr_synch => "OFF",
 		wrsync_delaypipe => 5
 	)
 	PORT MAP (
@@ -136,7 +136,7 @@ END SYN;
 -- Retrieval info: PRIVATE: AlmostFullThr NUMERIC "-1"
 -- Retrieval info: PRIVATE: CLOCKS_ARE_SYNCHRONIZED NUMERIC "0"
 -- Retrieval info: PRIVATE: Clock NUMERIC "4"
--- Retrieval info: PRIVATE: Depth NUMERIC "64"
+-- Retrieval info: PRIVATE: Depth NUMERIC "128"
 -- Retrieval info: PRIVATE: Empty NUMERIC "1"
 -- Retrieval info: PRIVATE: Full NUMERIC "1"
 -- Retrieval info: PRIVATE: INTENDED_DEVICE_FAMILY STRING "Cyclone III"
@@ -164,16 +164,16 @@ END SYN;
 -- Retrieval info: PRIVATE: wsUsedW NUMERIC "0"
 -- Retrieval info: LIBRARY: altera_mf altera_mf.altera_mf_components.all
 -- Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "Cyclone III"
--- Retrieval info: CONSTANT: LPM_NUMWORDS NUMERIC "64"
+-- Retrieval info: CONSTANT: LPM_NUMWORDS NUMERIC "128"
 -- Retrieval info: CONSTANT: LPM_SHOWAHEAD STRING "OFF"
 -- Retrieval info: CONSTANT: LPM_TYPE STRING "dcfifo"
 -- Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "32"
--- Retrieval info: CONSTANT: LPM_WIDTHU NUMERIC "6"
+-- Retrieval info: CONSTANT: LPM_WIDTHU NUMERIC "7"
 -- Retrieval info: CONSTANT: OVERFLOW_CHECKING STRING "ON"
 -- Retrieval info: CONSTANT: RDSYNC_DELAYPIPE NUMERIC "5"
 -- Retrieval info: CONSTANT: UNDERFLOW_CHECKING STRING "ON"
 -- Retrieval info: CONSTANT: USE_EAB STRING "ON"
--- Retrieval info: CONSTANT: WRITE_ACLR_SYNCH STRING "ON"
+-- Retrieval info: CONSTANT: WRITE_ACLR_SYNCH STRING "OFF"
 -- Retrieval info: CONSTANT: WRSYNC_DELAYPIPE NUMERIC "5"
 -- Retrieval info: USED_PORT: aclr 0 0 0 0 INPUT GND "aclr"
 -- Retrieval info: USED_PORT: data 0 0 32 0 INPUT NODEFVAL "data[31..0]"
@@ -197,5 +197,5 @@ END SYN;
 -- Retrieval info: GEN_FILE: TYPE_NORMAL counter_fifo.inc FALSE
 -- Retrieval info: GEN_FILE: TYPE_NORMAL counter_fifo.cmp TRUE
 -- Retrieval info: GEN_FILE: TYPE_NORMAL counter_fifo.bsf FALSE
--- Retrieval info: GEN_FILE: TYPE_NORMAL counter_fifo_inst.vhd FALSE
+-- Retrieval info: GEN_FILE: TYPE_NORMAL counter_fifo_inst.vhd TRUE
 -- Retrieval info: LIB_FILE: altera_mf

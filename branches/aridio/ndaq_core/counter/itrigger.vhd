@@ -21,13 +21,13 @@ entity itrigger is
 		signal enable				: in	std_logic;
 		signal pos_neg				: in	std_logic;								-- To set positive ('0') or negative ('1') trigger
 		signal data_in				: in	signed(data_width-1 downto 0);			-- Signal from the ADC
-		signal threshold_rise		: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
-		signal threshold_fall		: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
+		signal th1					: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
+		signal th2					: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
 		signal trigger_out			: out	std_logic;
 		-- Counter
-		signal rdclk				: in	std_logic := '0';
-		signal rden					: in	std_logic := '0';
-		signal fifo_empty			: out	std_logic := '0';
+		signal rdclk				: in	std_logic;
+		signal rden					: in	std_logic;
+		signal fifo_empty			: out	std_logic;
 		signal counter_q			: out	std_logic_vector(31 downto 0) := x"00000000";
 		-- Debug
 		signal state_out			: out	std_logic_vector(3 downto 0)
@@ -36,21 +36,19 @@ end itrigger;
 --
 architecture rtl of itrigger is
 
-	-- Old Frequency Meter implementation
-	-- constant TIME_DIV				: unsigned := x"00BEBC20";
+	constant TIME_DIV				: unsigned := x"186A0";	--x"F4240"; in microseconds.
 	
 --***********************************************************************************************
 
-	-- Timebase PLL was used for the FREQUENCY METER. 
-	-- component timebase_pll
-	-- PORT
-	-- (
-		-- areset		: IN STD_LOGIC  := '0';
-		-- inclk0		: IN STD_LOGIC  := '0';
-		-- c0			: OUT STD_LOGIC ;
-		-- locked		: OUT STD_LOGIC 
-	-- );
-	-- end component;
+	component timebase_pll
+	PORT
+	(
+		areset		: IN STD_LOGIC  := '0';
+		inclk0		: IN STD_LOGIC  := '0';
+		c0			: OUT STD_LOGIC ;
+		locked		: OUT STD_LOGIC 
+	);
+	end component;
 
 	component counter_fifo
 	PORT
@@ -69,39 +67,39 @@ architecture rtl of itrigger is
 
 --***********************************************************************************************
 	
-	signal q_data_in						: signed(data_width-1 downto 0);
-	signal r_data_in						: signed(data_width-1 downto 0);
-	signal s_data_in						: signed(data_width-1 downto 0);
+	signal s_data_in				: signed(data_width-1 downto 0);
+	signal r_data_in				: signed(data_width-1 downto 0);
 	
-	type trig 								is (s_low, s_high, s_cnt, s_wait);
-	signal current_state, next_state		: trig;
-	attribute syn_encoding 					: string;
-	attribute syn_encoding of trig			: type is "safe, one-hot";
+	type trig is (test_edge_a, test_ok, test_edge_b);
+	signal current_state, next_state:	trig;
 
-	signal i_trigger_out					: std_logic := '0';
-	signal r_trigger_out					: std_logic := '0';
-	signal i_dtrigger_out					: std_logic := '0';
-	signal r_dtrigger_out					: std_logic := '0';
-	signal l_trigger_out					: std_logic := '0';
+	signal i_trigger_out			: std_logic := '0';
+	signal r_trigger_out			: std_logic := '0';
+
+	-- signal i_count_out_HB			: std_logic_vector(7 downto 0) := x"00";
+	-- signal i_count_out_MH			: std_logic_vector(7 downto 0) := x"00";
+	-- signal i_count_out_ML			: std_logic_vector(7 downto 0) := x"00";
+	-- signal i_count_out_LB			: std_logic_vector(7 downto 0) := x"00";
 	
-	signal l_counter						: std_logic_vector(3 downto 0) := x"0";
+	signal locked					: std_logic := '0';
+	signal timebase_clk				: std_logic := '0';
+	signal timebase_div				: std_logic_vector(19 downto 0) := "00000000000000000000";
+	signal timebase_en				: std_logic := '0';
+	signal r_timebase_en			: std_logic := '0';
+	signal i_counter				: std_logic_vector(31 downto 0) := x"00000000";
+	signal counter_reg				: std_logic_vector(31 downto 0) := x"00000000";
+	signal reg_wait					: std_logic := '0';
 	
-	--signal locked							: std_logic := '0';
-	--signal timebase_clk					: std_logic := '0';
-	--signal timebase_div					: std_logic_vector(31 downto 0) := x"00000000";
-	--signal timebase_en					: std_logic;
-	--signal r_timebase_en					: std_logic := '0';
-	signal i_counter						: std_logic_vector(31 downto 0) := x"00000000";
-	--signal counter_reg					: std_logic_vector(31 downto 0);
-	--signal reg_wait						: std_logic := '0';
+	signal fifo_full				: std_logic	:= '0';
+	signal fifo_wen					: std_logic := '0';
 	
-	signal fifo_full						: std_logic	:= '0';
-	signal fifo_wen							: std_logic := '0';
+	signal r_fifo_wen				: std_logic := '0';
 	
 begin
 
 --***********************************************************************************************
 
+--
 --
 -- Data input Registers (double FF sync. chain)
 DATAIN_REGS: process(rst, clk)
@@ -117,77 +115,106 @@ end process;
 
 --
 -- Asynchronous assignments of 'next_stateval'
-NEXT_STATE_COMB: process (current_state, r_data_in, threshold_rise, threshold_fall, pos_neg)
+NEXT_STATE_COMB: process (current_state, r_data_in, th1, th2, pos_neg)
 begin
 	if (pos_neg = '0') then
 		case current_state is
-			when s_low =>
-				--if (abs(r_data_in) < threshold_rise) then	-- Wait that signal from the ADC is lower than threshold
-				if (r_data_in < threshold_rise) then	-- Wait that signal from the ADC is lower than threshold
-					next_state <= s_high;
+			-- when s_low =>
+				-- if (r_data_in < threshold_fall) then	-- Wait that signal from the ADC is lower than threshold
+					-- next_state <= s_high;
+				-- else
+					-- next_state <= s_low;
+				-- end if;
+			-- when s_high =>
+				-- if (r_data_in > threshold_rise) then	-- When signal from the ADC is higher than threshold, counter is incremented
+					-- next_state <= s_cnt;
+				-- else
+					-- next_state <= s_high;
+				-- end if;
+			-- when s_cnt =>
+				-- next_state <= s_low;
+			-- when others =>
+				-- next_state <= s_low;
+
+			-- Test RISE
+			when test_edge_a =>
+				if (r_data_in > th2) then
+					next_state <= test_ok;
 				else
-					next_state <= s_low;
+					next_state <= test_edge_a;
 				end if;
-			when s_high =>
-				--if (abs(r_data_in) > threshold_rise) then	-- When signal from the ADC is higher than threshold, counter is incremented
-				if (r_data_in > threshold_rise) then	-- When signal from the ADC is higher than threshold, counter is incremented
-					next_state <= s_cnt;
+			
+			-- Generate Trigger
+			when test_ok =>
+				next_state	<= test_edge_b;
+			
+			-- Test FALL
+			when test_edge_b =>
+				if (r_data_in < th1) then
+					next_state <= test_edge_a;
 				else
-					next_state <= s_high;
+					next_state <= test_edge_b;
 				end if;
-			when s_cnt =>
-				next_state <= s_low;
+				
 			when others =>
-				next_state <= s_low;
+				next_state <= test_edge_a;
+
 		end case;
 	else
 		case current_state is
-			when s_low =>
-				--if (abs(r_data_in) > threshold_rise) then	-- Wait that signal from the ADC is higher than threshold
-				if (r_data_in > -(threshold_rise)) then	-- Wait that signal from the ADC is higher than threshold
-					next_state <= s_high;
+			-- when s_low =>
+				-- if (r_data_in > threshold_fall) then	-- Wait that signal from the ADC is higher than threshold
+					-- next_state <= s_high;
+				-- else
+					-- next_state <= s_low;
+				-- end if;
+			-- when s_high =>
+				-- if (r_data_in < threshold_rise) then	-- When signal from the ADC is lower than threshold, counter is incremented
+					-- next_state <= s_cnt;
+				-- else
+					-- next_state <= s_high;
+				-- end if;
+			-- when s_cnt =>
+				-- next_state <= s_low;
+			-- when others =>
+				-- next_state <= s_low;
+
+			-- Test FALL
+			when test_edge_a =>
+				if (r_data_in < th2) then
+					next_state <= test_ok;
 				else
-					next_state <= s_low;
+					next_state <= test_edge_a;
 				end if;
-			when s_high =>
-				--if (abs(r_data_in) < threshold_rise) then	-- When signal from the ADC is lower than threshold, counter is incremented
-				if (r_data_in < -(threshold_rise)) then	-- When signal from the ADC is lower than threshold, counter is incremented
-					next_state <= s_cnt;
+			
+			-- Generate Trigger
+			when test_ok =>
+				next_state	<= test_edge_b;
+			
+			-- Test RISE
+			when test_edge_b =>
+				if (r_data_in > th1) then
+					next_state <= test_edge_a;
 				else
-					next_state <= s_high;
+					next_state <= test_edge_b;
 				end if;
-			when s_cnt =>
-				next_state <= s_wait; --s_low;
-			when s_wait =>
-				next_state <= s_low;
+				
 			when others =>
-				next_state <= s_low;
+				next_state <= test_edge_a;
+		
 		end case;
 	end if;
 end process;
+
 --
 -- Unregistered Combinational signals
 OUTPUT_COMB: process(next_state)
 begin
 	case next_state is
-		when s_low =>
-			i_trigger_out	<= '0';
-			i_dtrigger_out	<= '0';
-			state_out		<= x"0";
-		when s_high =>
-			i_trigger_out 	<= '0';
-			i_dtrigger_out	<= '0';
-			state_out 		<= x"1";
-		when s_cnt =>
-			i_trigger_out	<= '1';
-			i_dtrigger_out	<= '1';
-			state_out 		<= x"2";
-		when s_wait =>
-			i_trigger_out 	<= '0';
-			i_dtrigger_out	<= '1';
-			state_out 		<= x"3";
+		when test_ok =>
+			i_trigger_out <= '1';
 		when others => 
-			null;
+			i_trigger_out <= '0';
 	end case;
 end process;
 
@@ -196,12 +223,12 @@ end process;
 STATE_FLOPS: process(rst, clk)
 begin
 	if rst = '1' then
-		current_state <= s_low;
+		current_state <= test_edge_a;
 	elsif rising_edge(clk) then
 		if enable = '1' then
 			current_state <= next_state;
 		else
-			current_state <= s_low;
+			current_state <= test_edge_a;
 		end if;
 	end if;
 end process;
@@ -211,74 +238,47 @@ end process;
 OUTPUT_FLOPS: process(rst, clk)
 begin
 	if rst ='1' then
-		r_trigger_out	<= '0';
-		r_dtrigger_out	<= '0';
+		r_trigger_out <= '0';
 	elsif rising_edge(clk) then
-		r_trigger_out	<= i_trigger_out;
-		r_dtrigger_out	<= i_dtrigger_out;
+		r_trigger_out <= i_trigger_out;
 	end if;
 end process;
 
---trigger_out	<= r_dtrigger_out;	--Trigger out with DOUBLE period
-	
---
--- Long Trigger out
---
-L_TOUT: process(rst, clk)
-begin
-	if rst='1' then
-		l_trigger_out	<= '0';
-		l_counter		<= x"0";
-	elsif rising_edge(clk) then
-		if (i_trigger_out = '1') then
-			l_trigger_out	<= '1';
-		end if;
-		if ((i_trigger_out = '1') or (l_trigger_out = '1')) then
-			if (l_counter = x"7") then
-				l_counter		<= x"0";
-				l_trigger_out	<= '0';
-			else
-				l_counter		<= l_counter + 1;
-			end if;
-		end if;
-	end if;
-end process;
-
-trigger_out	<= l_trigger_out;	--Trigger out with SEVEN periods
+trigger_out	<= r_trigger_out;
 	
 --***********************************************************************************************
 
 --
 -- Timebase PLL
--- timebase_pll_inst: 
--- timebase_pll PORT MAP 
--- (
-	-- areset	=> rst,
-	-- inclk0	=> clk,
-	-- c0			=> timebase_clk,
-	-- locked	=> locked
--- );
+timebase_pll_inst: 
+timebase_pll PORT MAP 
+(
+	areset	=> rst,
+	inclk0	=> clk,
+	c0		=> timebase_clk,
+	locked	=> locked
+);
 
 --
 -- Timebase generator
--- TIMEBASE_GEN: process(rst, timebase_clk)
--- begin
-	-- if (rst = '1') then
-		-- timebase_div	<= (others => '0');
-		-- timebase_en		<= '0';		
+TIMEBASE_GEN: process(rst, timebase_clk)
+begin
+	if (rst = '1') then
+		timebase_div	<= (others => '0');
+		timebase_en		<= '0';		
 	
-	-- elsif (rising_edge(timebase_clk)) then  
-		-- if (locked = '1') then
-			-- if (timebase_div = CONV_STD_LOGIC_VECTOR(TIME_DIV, 32)) then
-				-- timebase_div	<= (others => '0');
-				-- timebase_en		<= '0';		
-			-- else
-				-- timebase_div	<= timebase_div + 1;
-				-- timebase_en		<= '1';
-			-- end if;
-		-- end if;
-	-- end if;
--- end process;
+	elsif (rising_edge(timebase_clk)) then  
+		if (locked = '1') then
+			if (timebase_div = CONV_STD_LOGIC_VECTOR(TIME_DIV, 20)) then
+				timebase_div	<= (others => '0');
+				timebase_en		<= '0';		
+			else
+				timebase_div	<= timebase_div + 1;
+				timebase_en		<= '1';
+			end if;
+		end if;
+	end if;
+end process;
 
 --
 -- Counter itself
@@ -286,57 +286,42 @@ COUNTER: process(rst, clk) --, next_state, timebase_en
 begin
 	if (rst = '1') then
 		i_counter		<= (others => '0');
-		--r_timebase_en	<= '0';
+		r_timebase_en	<= '0';
 		
 	elsif (rising_edge(clk)) then  
---		if (locked = '1') then
---			if (r_timebase_en = '0') then
---				i_counter	<= (others => '0');
---			
---			elsif ((r_trigger_out = '1') and (r_timebase_en = '1')) then --(next_state = s_cnt) and 
---				i_counter	<= i_counter + 1;
---		
---			end if;			
---		end if;
-
-
-		--if (locked = '1') then
-			--if (r_timebase_en = '0') then
-				--i_counter	<= (others => '0');
+		if (locked = '1') then
+			if (r_timebase_en = '0') then
+				i_counter	<= (others => '0');
 			
-			if (r_trigger_out = '1') then
+			elsif ((r_trigger_out = '1') and (r_timebase_en = '1')) then --(next_state = s_cnt) and 
 				i_counter	<= i_counter + 1;
 		
 			end if;			
-
-		--end if;
-
-		--r_timebase_en		<= timebase_en;		
+		end if;
+		r_timebase_en		<= timebase_en;		
 	end if;
 end process;
 
 --
--- Needed for the Freq. Meter implementation.
---
--- -- Counter Register
--- COUNTER_REGISTER: process(rst, clk)
--- begin
-	-- if (rst ='1') then
-		-- counter_reg <= (others => '0');
-		-- reg_wait		<= '0';
-	-- elsif (rising_edge(clk)) then
+-- Counter Register
+COUNTER_REGISTER: process(rst, clk)
+begin
+	if (rst ='1') then
+		counter_reg <= (others => '0');
+		reg_wait		<= '0';
+	elsif (rising_edge(clk)) then
 
-		-- if ((r_timebase_en = '0') and (reg_wait = '0')) then
-			-- counter_reg <= i_counter;
-			-- reg_wait		<= '1';
-		-- end if;
+		if ((r_timebase_en = '0') and (reg_wait = '0')) then
+			counter_reg <= i_counter;
+			reg_wait		<= '1';
+		end if;
 		
-		-- if (r_timebase_en = '1') then
-			-- reg_wait		<= '0';
-		-- end if;
+		if (r_timebase_en = '1') then
+			reg_wait		<= '0';
+		end if;
 
-	-- end if;
--- end process;
+	end if;
+end process;
 
 --***********************************************************************************************
 
@@ -346,15 +331,17 @@ REGISTER_COPIER: process(rst, clk)
 begin
 	if (rst ='1') then
 		fifo_wen	<= '0';
+		r_fifo_wen	<= '0';
 		
 	elsif (rising_edge(clk)) then
 
-		--if ((r_timebase_en = '0') and (reg_wait = '0') and (fifo_full = '0')) then
-		if (fifo_full = '0') then
+		if ((r_timebase_en = '0') and (reg_wait = '0') and (fifo_full = '0')) then
 			fifo_wen	<= '1';
 		else
 			fifo_wen	<= '0';
 		end if;
+		
+		r_fifo_wen	<= fifo_wen;
 		
 	end if;
 end process;
@@ -364,15 +351,14 @@ end process;
 READOUT_FIFO : counter_fifo PORT MAP 
 (
 	aclr	 	=> rst,
-	data	 	=> i_counter, --counter_reg,
-	--data		=> x"AA55",
+	data	 	=> counter_reg,
 	rdclk	 	=> rdclk,
 	rdreq	 	=> rden,
-	wrclk	 	=> clk,
-	wrreq	 	=> fifo_wen,
+	wrclk	 	=> clk, --fifo_wen, --not(r_timebase_en),
+	wrreq	 	=> r_fifo_wen,
 	q	 		=> counter_q,
-	rdempty	=> fifo_empty,
-	wrfull	=> fifo_full
+	rdempty		=> fifo_empty,
+	wrfull		=> fifo_full
 );
 
 end rtl;

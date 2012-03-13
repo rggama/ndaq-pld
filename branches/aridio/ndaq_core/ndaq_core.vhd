@@ -283,13 +283,13 @@ architecture rtl of ndaq_core is
 		signal enable			: in	std_logic;
 		signal pos_neg			: in	std_logic;								-- To set positive ('0') or negative ('1') trigger
 		signal data_in			: in	signed(data_width-1 downto 0);			-- Signal from the ADC
-		signal threshold_rise	: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
-		signal threshold_fall	: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
+		signal th1				: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
+		signal th2				: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
 		signal trigger_out		: out	std_logic;
 		-- Counter
-		signal rdclk			: in	std_logic := '0';
-		signal rden				: in	std_logic := '0';
-		signal fifo_empty		: out	std_logic := '0';
+		signal rdclk			: in	std_logic;
+		signal rden				: in	std_logic;
+		signal fifo_empty		: out	std_logic;
 		signal counter_q		: out	std_logic_vector(31 downto 0) := x"00000000";
 		-- Debug
 		signal state_out		: out	std_logic_vector(3 downto 0)
@@ -502,7 +502,8 @@ architecture rtl of ndaq_core is
 	signal reg_idata	: std_logic_vector(7 downto 0);
 	signal reg_odata	: std_logic_vector(7 downto 0);
 	
-	signal thtemp		: DATA_T;
+	signal thtemp1		: DATA_T;
+	signal thtemp2		: DATA_T;
 
 	--
 	--signal temp						: std_logic;	
@@ -522,6 +523,11 @@ architecture rtl of ndaq_core is
 	signal counter_rd				: std_logic;
 	signal counter_t				: std_logic;
 
+	-- Internal Trigger Freq. Meter
+	signal freq_rd					: std_logic_vector((adc_channels-1) downto 0);
+	signal freq_empty				: std_logic_vector((adc_channels-1) downto 0);
+	signal freq_q					: FREQ_WIDTH_A;
+	
 	
 ------------------------------------------
 ------------------------------------------
@@ -826,30 +832,7 @@ begin
 			trig_out	=> c_trigger_c(i)
 		);
 
-		-- Gera Trigger Interno e conta a quantidade de triggers
-		thtemp(9 downto 8) <= "00";
-		thtemp(7 downto 0) <= oreg(5);
 		
-		internal_trigger:
-		itrigger port map
-		(	
-			rst					=> acq_rst(i),
-			clk					=> clk(i),
-			-- Trigger
-			enable				=> '1',
-			pos_neg				=> '1',								--'0' for pos, '1' for neg.
-			data_in				=> MY_CONV_SIGNED(data(i)),
-			threshold_rise		=> CONV_SIGNED(T_RISE, data_width), --MY_CONV_SIGNED(thtemp),
-			threshold_fall		=> CONV_SIGNED(T_FALL, data_width), --MY_CONV_SIGNED(thtemp),
-			trigger_out			=> int_trigger(i),
-			-- Counter
-			rdclk				=> fclk,
-			rden				=> '0',
-			fifo_empty			=> open,
-			counter_q			=> open,
-			-- Debug
-			state_out			=> open
-		);	
 
 		-- Controla a escrita nas POST FIFOs a partir de um 'trigger' condicionado
 		stream_IN:
@@ -881,6 +864,12 @@ begin
 		);
 
 		
+		-- Gera Trigger Interno e conta a quantidade de triggers
+		thtemp1(9 downto 8) <= oreg(6)(1 downto 0);	-- high Th 1 reg
+		thtemp1(7 downto 0) <= oreg(5);				-- low Th 1 reg
+		thtemp2(9 downto 8) <= oreg(8)(1 downto 0);	-- high Th 2 reg
+		thtemp2(7 downto 0) <= oreg(7);				-- low Th 2 reg
+
 		-- Modulo de FIFO: PRE+POST
 		fifo_module:
 		dcfifom port map
@@ -903,6 +892,27 @@ begin
 		);
 	
 	end generate adc_data_acq_construct;
+
+	internal_trigger:
+	itrigger port map
+	(	
+		rst					=> acq_rst(0),
+		clk					=> clk(0),
+		-- Trigger
+		enable				=> '1',
+		pos_neg				=> oreg(9)(0),				--'0' for RISING EDGE, '1' for FALLING EDGE.
+		data_in				=> MY_CONV_SIGNED(data(0)),
+		th1					=> MY_CONV_SIGNED(thtemp1),	--CONV_SIGNED(T_RISE, data_width),
+		th2					=> MY_CONV_SIGNED(thtemp2),	--CONV_SIGNED(T_FALL, data_width),
+		trigger_out			=> int_trigger(0),
+		-- Counter
+		rdclk				=> dclk, --fclk,
+		rden				=> freq_rd(0),
+		fifo_empty			=> freq_empty(0),
+		counter_q			=> freq_q(0),
+		-- Debug
+		state_out			=> open
+	);	
 
 -- ************************************ IDT COPIER ********************************
 
@@ -997,20 +1007,102 @@ begin
 	);
 
 slots_construct:
-for i in 0 to (slots - 1) generate
+for i in 0 to 3 generate --(slots - 1)
 	
 	--
 	-- Internal FIFOs enough data test
 	--
 	
+	-- even_read_test:
+	-- process(rdusedw, empty)
+	-- begin
+		-- -- Means that the FIFO is FULL of data.
+		-- if (rdusedw(i*2) > CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)) and (empty(i*2) = '0') then
+			-- even_enable(i) <= '1';
+		-- else
+			-- even_enable(i) <= '0';
+		-- end if;
+	-- end process;
+	
+	-- odd_read_test:
+	-- process(rdusedw, empty)
+	-- begin
+		-- -- Means that the FIFO is FULL of data.
+		-- if (rdusedw((i*2)+1) > CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)) and (empty((i*2)+1) = '0') then
+			-- odd_enable(i) <= '1';
+		-- else
+			-- odd_enable(i) <= '0';
+		-- end if;
+	-- end process;
+
+	--
+	-- Slots Definitions
+	--
+	
+	-- --
+	-- -- Slot Enable: '1' for enable.
+	-- enable_A(i)	<= '0';
+	-- -- Transfer Enable: even channel and odd channel and IDT ALMOST Full Flag must let us go. 
+	-- -- 'fifo_paf' is NOT negated because it is active low.
+	-- enable_B(i)	<= even_enable(i) and odd_enable(i) and fifo_paf(i);
+	-- -- Slot Transfer Size:
+	-- transfer(i)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	-- -- Slot Address:
+	-- address(i)	<= CONV_STD_LOGIC_VECTOR(i, NumBits(address_max));
+	-- -- Mode: '0' for non branch and '1' for branch.
+	-- mode(i)		<= '1';
+
+	-- --
+	-- -- Read Side Construct - Internal FIFOs
+	-- --
+	
+	-- -- even channels
+	-- rd(i*2)		<= db_rd(i);	-- 0 <= 0, 2 <= 1, 4 <= 2, 6 <= 3 
+	-- -- odd channels
+	-- rd((i*2)+1)	<= db_rd(i);	-- 1 <= 0, 3 <= 1, 5 <= 2, 7 <= 3 
+	
+	-- -- 32 bits construct.
+	-- idata(i)(9 downto 0)	<= q(i*2);				-- 0, 2, 4, 6  --- (1), (3), (5), (7) --- index number --- channel number		
+	-- idata(i)(15 downto 10)	<= (others => '0');
+	-- idata(i)(25 downto 16)	<= q((i*2)+1);			-- 1, 3, 5, 7  --- (2), (4), (6), (8) --- index number --- channel number	
+	-- idata(i)(31 downto 26)	<= (others => '0');
+
+	--
+	-- Write Side Construct - IDT (external) FIFOs
+	--
+	
+	-- 'fifo_wen' is active low.
+	 fifo_wen(i)			<= not(db_wr(i));
+	 fifo_data_bus			<= odata;
+
+ end generate slots_construct;
+		
+	--
+	-- Slot Enable: '1' for enable.
+	enable_A(1)	<= oreg(10)(0);
+	-- Transfer Enable:
+	enable_B(1)	<= not(freq_empty(0));
+	-- Slot Transfer Size:
+	transfer(1)	<= CONV_STD_LOGIC_VECTOR(x"01", NumBits(transfer_max));
+	-- Slot Address:
+	address(1)	<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	-- Mode: '0' for non branch and '1' for branch.
+	mode(1)		<= '0';
+	--
+	freq_rd(0)	<= db_rd(1);
+	--
+	idata(1)	<= freq_q(0);
+	
+	
+	-----------------------------------------------------------------------------------------------------------------------
 	even_read_test:
 	process(rdusedw, empty)
 	begin
 		-- Means that the FIFO is FULL of data.
-		if (rdusedw(i*2) > CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)) and (empty(i*2) = '0') then
-			even_enable(i) <= '1';
+		if (rdusedw(0) > CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)) and (empty(0) = '0') then
+			even_enable(0) <= '1';
 		else
-			even_enable(i) <= '0';
+			even_enable(0) <= '0';
 		end if;
 	end process;
 	
@@ -1018,10 +1110,10 @@ for i in 0 to (slots - 1) generate
 	process(rdusedw, empty)
 	begin
 		-- Means that the FIFO is FULL of data.
-		if (rdusedw((i*2)+1) > CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)) and (empty((i*2)+1) = '0') then
-			odd_enable(i) <= '1';
+		if (rdusedw(1) > CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)) and (empty(1) = '0') then
+			odd_enable(0) <= '1';
 		else
-			odd_enable(i) <= '0';
+			odd_enable(0) <= '0';
 		end if;
 	end process;
 
@@ -1031,41 +1123,30 @@ for i in 0 to (slots - 1) generate
 	
 	--
 	-- Slot Enable: '1' for enable.
-	enable_A(i)	<= '1';
+	enable_A(0)	<= not(oreg(10)(0));
 	-- Transfer Enable: even channel and odd channel and IDT ALMOST Full Flag must let us go. 
 	-- 'fifo_paf' is NOT negated because it is active low.
-	enable_B(i)	<= even_enable(i) and odd_enable(i) and fifo_paf(i);
+	enable_B(0)	<= even_enable(0) and odd_enable(0) and fifo_paf(0);
 	-- Slot Transfer Size:
-	transfer(i)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(0)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
 	-- Slot Address:
-	address(i)	<= CONV_STD_LOGIC_VECTOR(i, NumBits(address_max));
+	address(0)	<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
 	-- Mode: '0' for non branch and '1' for branch.
-	mode(i)		<= '1';
+	mode(0)		<= '0';
 
 	--
 	-- Read Side Construct - Internal FIFOs
 	--
 	
 	-- even channels
-	rd(i*2)		<= db_rd(i);	-- 0 <= 0, 2 <= 1, 4 <= 2, 6 <= 3 
+	rd(0)	<= db_rd(0);	-- 0 <= 0
 	-- odd channels
-	rd((i*2)+1)	<= db_rd(i);	-- 1 <= 0, 3 <= 1, 5 <= 2, 7 <= 3 
+	rd(1)	<= db_rd(0);	-- 1 <= 0
 	
 	-- 32 bits construct.
-	idata(i)(9 downto 0)	<= q(i*2);				-- 0, 2, 4, 6  --- (1), (3), (5), (7) --- index number --- channel number		
-	idata(i)(15 downto 10)	<= (others => '0');
-	idata(i)(25 downto 16)	<= q((i*2)+1);			-- 1, 3, 5, 7  --- (2), (4), (6), (8) --- index number --- channel number	
-	idata(i)(31 downto 26)	<= (others => '0');
-
-	--
-	-- Write Side Construct - IDT (external) FIFOs
-	--
+	idata(0)(9 downto 0)	<= q(0);				
+	idata(0)(15 downto 10)	<= (others => '0');
+	idata(0)(25 downto 16)	<= q(1);				
+	idata(0)(31 downto 26)	<= (others => '0');
 	
-	-- 'fifo_wen' is active low.
-	fifo_wen(i)				<= not(db_wr(i));
-	fifo_data_bus			<= odata;
-
-end generate slots_construct;
-		
-
 end rtl;

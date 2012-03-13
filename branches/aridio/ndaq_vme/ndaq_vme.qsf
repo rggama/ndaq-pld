@@ -354,4 +354,103 @@ set_global_assignment -name VHDL_FILE ndaq_vme.vhd
 set_global_assignment -name QIP_FILE system/my_pll.qip
 set_global_assignment -name VHDL_FILE spi/m_spi.vhd
 set_global_assignment -name QIP_FILE usb_readout/readout_fifo.qip
+set_global_assignment -name ENABLE_SIGNALTAP ON
+set_global_assignment -name USE_SIGNALTAP_FILE ndaq_vme_vmetest.stp
+set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id my_instance
+set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to clk50M -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_INFO=805334528" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_POWER_UP_TRIGGER=0" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_INVERSION_MASK_LENGTH=0" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=512" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ATTRIBUTE_MEM_MODE=OFF" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_FLOW_USE_GENERATED=0" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_BITS=11" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_BUFFER_FULL_STOP=1" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_CURRENT_RESOURCE_WIDTH=1" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL=1" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=512" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_IN_ENABLED=1" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=basic,1," -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "f2ft_copier:\\usb_readout_construct:0:A_to_ft_copier|rd" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to fifo_ef[0] -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to fifo_oe[0] -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to fifo_ren[0] -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "f2ft_copier:\\usb_readout_construct:0:A_to_ft_copier|rd" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to fifo_ef[0] -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to fifo_oe[0] -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to fifo_ren[0] -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to ft_wr -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[0]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[1]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[2]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[3]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[4]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[5]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[6]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[7]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[8]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[9]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|full" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[0]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[1]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[2]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[19] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[3]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[20] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[4]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[21] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[5]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[22] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[6]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[23] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[7]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[24] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[8]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[25] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[9]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[26] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|rdreq" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[27] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|usedw[0]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[28] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|usedw[1]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[29] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|usedw[2]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[30] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|usedw[3]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[31] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|usedw[4]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[32] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|usedw[5]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[33] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|usedw[6]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[34] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|usedw[7]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[35] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|wrreq" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to ft_wr -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[0]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[1]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[2]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[3]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[4]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[5]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[6]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[7]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[8]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|data[9]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|full" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[0]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[1]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[2]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[19] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[3]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[20] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[4]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[21] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[5]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[22] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[6]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[23] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[7]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[24] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[8]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[25] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|q[9]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[26] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|rdreq" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[27] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|usedw[0]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[28] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|usedw[1]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[29] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|usedw[2]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[30] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|usedw[3]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[31] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|usedw[4]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[32] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|usedw[5]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[33] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|usedw[6]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[34] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|usedw[7]" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[35] -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|wrreq" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=36" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=36" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=131" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=61108" -section_id my_instance
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT trigger_in -to "readout_fifo:\\usb_readout_construct:0:A_readout_fifo|rdreq" -section_id my_instance
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=56482" -section_id my_instance
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
