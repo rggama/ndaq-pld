@@ -1,0 +1,326 @@
+../../ndaq_vme/FT245BM_if/FT245BM_tx.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/FT245BM_if/FT245BM_tx.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity ft245bm_tx
+-- Compiling architecture rtl of ft245bm_tx
+
+} {} {}} ../../ndaq_core/acq/prefifo.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/prefifo.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity prefifo
+-- Compiling architecture syn of prefifo
+
+} {} {}} ../../ndaq_core/acq/itrigger.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/itrigger.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_signed
+-- Loading package std_logic_unsigned
+-- Loading package acq_pkg
+-- Loading package core_regs
+-- Compiling entity itrigger
+-- Compiling architecture rtl of itrigger
+
+} {} {}} ../../ndaq_core/acq/acq_pkg.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/acq_pkg.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling package acq_pkg
+-- Compiling package body acq_pkg
+-- Loading package acq_pkg
+
+} {} {}} ../../ndaq_vme/usb_readout/readout_fifo.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/usb_readout/readout_fifo.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity readout_fifo
+-- Compiling architecture syn of readout_fifo
+
+} {} {}} ../../ndaq_core/system/core_clkman.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/system/core_clkman.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity core_clkman
+-- Compiling architecture rtl of core_clkman
+
+} {} {}} ../../ndaq_vme/system/vme_regs.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/system/vme_regs.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling package vme_regs
+-- Compiling package body vme_regs
+-- Loading package vme_regs
+
+} {} {}} ../../ndaq_vme/system/vme_rconst.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/system/vme_rconst.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package numeric_std
+-- Loading package vme_regs
+-- Compiling entity vme_rconst
+-- Compiling architecture rtl of vme_rconst
+
+} {} {}} ../../ndaq_core/acq/writefifo.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/writefifo.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Loading package acq_pkg
+-- Compiling entity writefifo
+-- Compiling architecture rtl of writefifo
+
+} {} {}} ../../ndaq_core/system/core_cmddec.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/system/core_cmddec.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package core_regs
+-- Loading package numeric_std
+-- Compiling entity core_cmddec
+-- Compiling architecture rtl of core_cmddec
+
+} {} {}} ../../ndaq_vme/vme_if/vmeif_usr.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/vme_if/vmeif_usr.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package numeric_std
+-- Loading package vmeif_pkg
+-- Compiling package vmeif_usr
+-- Compiling package body vmeif_usr
+-- Loading package vmeif_usr
+
+} {} {}} ../../ndaq_core/system/core_pll.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/system/core_pll.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity core_pll
+-- Compiling architecture syn of core_pll
+
+} {} {}} ./usbcmds_pkg.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_sim/whole/usbcmds_pkg.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling package usbcmds_pkg
+-- Compiling package body usbcmds_pkg
+-- Loading package usbcmds_pkg
+
+} {} {}} ../../ndaq_vme/swc/swc.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/swc/swc.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity swc
+-- Compiling architecture rtl of swc
+
+} {} {}} ../../ndaq_vme/system/my_pll.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/system/my_pll.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity my_pll
+-- Compiling architecture syn of my_pll
+
+} {} {}} ../../ndaq_core/acq/idtfifo_ctr.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/idtfifo_ctr.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Loading package acq_pkg
+-- Compiling entity idtfifo_ctr
+-- Compiling architecture one_idtfifo_ctr of idtfifo_ctr
+
+} {} {}} ../../ndaq_vme/system/clkman.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/system/clkman.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity clkman
+-- Compiling architecture rtl of clkman
+
+} {} {}} ../../ndaq_core/acq/tpulse.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/tpulse.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity tpulse
+-- Compiling architecture rtl of tpulse
+
+} {} {}} ../../ndaq_core/spi/s_spi.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/spi/s_spi.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity s_spi
+-- Compiling architecture rtl of s_spi
+
+} {} {}} ../../ndaq_vme/system/vme_cmddec.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/system/vme_cmddec.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package vme_regs
+-- Loading package numeric_std
+-- Compiling entity vme_cmddec
+-- Compiling architecture rtl of vme_cmddec
+
+} {} {}} ../../ndaq_vme/usb_readout/f2f_copier.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/usb_readout/f2f_copier.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity f2f_copier
+-- Compiling architecture rtl of f2f_copier
+
+} {} {}} ../../ndaq_vme/spi/m_spi.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/spi/m_spi.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity m_spi
+-- Compiling architecture rtl of m_spi
+
+} {} {}} ../../ndaq_vme/FT245BM_if/FT245BM_if.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/FT245BM_if/FT245BM_if.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity ft245bm_if
+-- Compiling architecture rtl of ft245bm_if
+
+} {} {}} ../../ndaq_vme/system/priarb8.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/system/priarb8.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity priarb8
+-- Compiling architecture rtl of priarb8
+
+} {} {}} ./ndaq_sim_tbench.vht {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_sim/whole/ndaq_sim_tbench.vht}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Loading package usbcmds_pkg
+-- Compiling entity ndaq_sim_tbench
+-- Compiling architecture testbench of ndaq_sim_tbench
+
+} {} {}} ../../ndaq_vme/vme_if/vmeif.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/vme_if/vmeif.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package numeric_std
+-- Loading package vmeif_pkg
+-- Loading package vmeif_usr
+-- Compiling entity vmeif
+-- Compiling architecture vmeif_one of vmeif
+
+} {} {}} ../../ndaq_core/acq/fifos.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/fifos.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Loading package acq_pkg
+-- Compiling entity dcfifom
+-- Compiling architecture rtl of dcfifom
+
+} {} {}} ../../ndaq_core/acq/idtfifo_top.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/idtfifo_top.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Loading package acq_pkg
+-- Compiling entity idtfifo_top
+-- Compiling architecture one_idtfifo_top of idtfifo_top
+
+} {} {}} ../../ndaq_vme/vme_if/vmeif_pkg.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/vme_if/vmeif_pkg.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package numeric_std
+-- Compiling package vmeif_pkg
+-- Compiling package body vmeif_pkg
+-- Loading package vmeif_pkg
+
+} {} {}} ../../ndaq_core/ndaq_core.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/ndaq_core.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Loading package acq_pkg
+-- Loading package core_regs
+-- Compiling entity ndaq_core
+-- Compiling architecture rtl of ndaq_core
+
+} {} {}} ../../ndaq_vme/FT245BM_if/FT245BM_rx.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/FT245BM_if/FT245BM_rx.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity ft245bm_rx
+-- Compiling architecture rtl of ft245bm_rx
+
+} {} {}} ../../ndaq_core/system/core_regs.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/system/core_regs.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling package core_regs
+-- Compiling package body core_regs
+-- Loading package core_regs
+
+} {} {}} ../../ndaq_core/system/core_rconst.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/system/core_rconst.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package numeric_std
+-- Loading package core_regs
+-- Compiling entity core_rconst
+-- Compiling architecture rtl of core_rconst
+
+} {} {}} ./board_level/idt_fifo.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_sim/whole/board_level/idt_fifo.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity idt_fifo
+-- Compiling architecture syn of idt_fifo
+
+} {} {}} ../../ndaq_vme/FT245BM_if/FT245BM_ab.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/FT245BM_if/FT245BM_ab.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity ft245bm_ab
+-- Compiling architecture rtl of ft245bm_ab
+
+} {} {}} ../../ndaq_core/acq/postfifo.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/postfifo.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Compiling entity postfifo
+-- Compiling architecture syn of postfifo
+
+} {} {}} ../../ndaq_vme/system/reset.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/system/reset.vhd}
+Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+-- Loading package standard
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_unsigned
+-- Compiling entity rstgen
+-- Compiling architecture rtl of rstgen
+
+} {} {}}
