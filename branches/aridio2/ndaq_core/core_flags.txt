@@ -1,5 +1,0 @@
-pae_fifo1	B17
-pae_fifo2	C17
-pae_fifo3	A20
-pae_fifo4	B20
-
