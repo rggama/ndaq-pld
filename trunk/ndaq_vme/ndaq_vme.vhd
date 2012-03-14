@@ -695,7 +695,7 @@ begin
 	a_wr(2)	<= '0';
 	a_wr(3)	<= user_write(5);
 	a_wr(4)	<= user_write(6);
-	a_wr(5)	<= user_write(4);	-- Teste VME.
+	a_wr(5)	<= user_write(4);	
 	a_wr(6)	<= '0';
 	
 	a_rd(0)	<= '0';
@@ -703,13 +703,19 @@ begin
 	a_rd(2)	<= '0';
 	a_rd(3)	<= user_read(5);
 	a_rd(4)	<= user_read(6);
-	a_rd(5)	<= user_read(4);	-- Teste VME.
+	a_rd(5)	<= user_read(4);	
 	a_rd(6)	<= '0';
 
 	reg_idata					<=	user_data_out(7 downto 0);
 	user_data_in(7 downto 0)	<=	reg_odata;
 	user_data_in(31 downto 8)	<=	(others => '0');
 	
+	ireg(5)(0)			<= fifo_pae(0);
+	ireg(5)(1)			<= fifo_pae(1);
+	ireg(5)(2)			<= fifo_pae(2);
+	ireg(5)(3)			<= fifo_pae(3);
+	ireg(5)(7 downto 4)	<= (others => '0');
+
 	-- Command Decoder
 	command_decoder:
 	vme_cmddec port map

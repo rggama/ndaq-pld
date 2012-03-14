@@ -29,12 +29,13 @@
 
 library ieee;
 library work;
-LIBRARY altera_mf; 
+--LIBRARY altera_mf; 
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
-use work.all;
-USE altera_mf.altera_mf_components.all;   
+--USE altera_mf.altera_mf_components.all;   
+
+use work.tdc_pkg.all;
 
 entity tdc is
 	port
@@ -74,7 +75,7 @@ entity tdc is
 		signal start_conf		: in	std_logic	-- Start the configuration machine (active high pulse with 2-periods width)
 		--signal wr_tdc			: in	std_logic;	-- Controlado pelo TDC INIT -- Select READ ('0') OR WRITE ('1') operation in the TDC
 		--signal enable_tdc	 	: in	std_logic;	-- NAO UTILIZADO -- Enable TDC readout operation
-		--signal start_in		 	: in 	std_logic	-- At NDAQ: FPGA Core pin V5 ('trigger_a')
+		--signal start_in	 	: in 	std_logic	-- At NDAQ: FPGA Core pin V5 ('trigger_a')
 	);
 end tdc;
 

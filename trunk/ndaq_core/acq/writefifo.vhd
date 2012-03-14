@@ -165,15 +165,17 @@ begin
 		end case;
 	end process;
 	
+	acqin	<= i_acqin;	
+	
 	output_register:
 	process (clk, rst)
 	begin
 		if (rst = '1') then
 			wr		<= '0';
-			acqin	<= '0';
+			--acqin	<= '0';
 		elsif (rising_edge(clk)) then
 			wr		<= i_wr;
-			acqin	<= i_acqin;
+			--acqin	<= i_acqin;
 		end if;
 	end process;
 
