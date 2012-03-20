@@ -23,7 +23,7 @@ package tdc_pkg is
 	--
 	--Data Types
 	--
-	
+	subtype CTDC_T	is std_logic_vector(7 downto 0);
 	subtype	OTDC_T	is std_logic_vector(25 downto 0);
 	type	OTDC_A	is array (7 downto 0) of OTDC_T;
 

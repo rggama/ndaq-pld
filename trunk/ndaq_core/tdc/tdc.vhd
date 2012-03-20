@@ -63,19 +63,12 @@ entity tdc is
 		-----------------
 		-- TDC control --
 		-----------------
+		signal start_conf		: in	std_logic;	-- Start the configuration machine (active high pulse with 2-periods width)
 		signal conf_done		: out	std_logic;
-		signal rd_en		 	: in	std_logic_vector(3 downto 0);	-- Read enable to read TDC 8-bit bus data
-		signal en_read		 	: in	std_logic;	-- Read enable to read TDC
-		signal tdc_out_HB	 	: out	std_logic_vector(7 downto 0); 	-- TDC Data Bus (HIGHEST Byte)
-		signal tdc_out_MH	 	: out	std_logic_vector(7 downto 0); 	-- TDC Data Bus (MEDIUM HIGH Byte)
-		signal tdc_out_ML	 	: out	std_logic_vector(7 downto 0); 	-- TDC Data Bus (MEDIUM LOW Byte)
-		signal tdc_out_LB	 	: out	std_logic_vector(7 downto 0); 	-- TDC Data Bus (HIGHEST Byte)		
 		signal otdc_data		: out	std_logic_vector(27 downto 0);
-		signal data_valid		: out 	std_logic;
-		signal start_conf		: in	std_logic	-- Start the configuration machine (active high pulse with 2-periods width)
-		--signal wr_tdc			: in	std_logic;	-- Controlado pelo TDC INIT -- Select READ ('0') OR WRITE ('1') operation in the TDC
-		--signal enable_tdc	 	: in	std_logic;	-- NAO UTILIZADO -- Enable TDC readout operation
-		--signal start_in	 	: in 	std_logic	-- At NDAQ: FPGA Core pin V5 ('trigger_a')
+		signal channel_ef		: out	CTDC_T;
+		signal channel_rd		: in	CTDC_T;
+		signal channel_out		: out	OTDC_A
 	);
 end tdc;
 
@@ -86,19 +79,20 @@ architecture one_tdc of tdc is
 	---------------------------------
 	component tdcconfig
 	port
-	( 	rst				: in  std_logic;
-		clk				: in  std_logic;
-		start_conf		: in  std_logic;
+	( 	rst				: in  	std_logic;
+		clk				: in  	std_logic;
+		start_conf		: in	std_logic;
 		conf_done		: out	std_logic;
 		conf_select		: out	std_logic;
 		iotdc_data	 	: inout std_logic_vector(27 downto 0);
 		otdc_stopdis	: out	std_logic_vector(1 to 4);
-		otdc_wrn		: out  std_logic;
+		otdc_wrn		: out  	std_logic;
 		otdc_csn	 	: out	std_logic;
-		otdc_puresn	 	: out  std_logic;
-		tdc_oen		 	: out  std_logic;
-		otdc_adr		: out  std_logic_vector(3 downto 0);
-		itdc_irflag	 	: in   std_logic);
+		otdc_puresn	 	: out  	std_logic;
+		tdc_oen		 	: out  	std_logic;
+		otdc_adr		: out  	std_logic_vector(3 downto 0);
+		itdc_irflag	 	: in   	std_logic
+	);
 	end component;
 	
 	---------------------------
@@ -106,24 +100,25 @@ architecture one_tdc of tdc is
 	---------------------------	
 	component tdcread
 	port
-	(	rst			: in 		std_logic;
-		clk			: in 		std_logic;
-		enable_read	: in 		std_logic;
-		data_valid	: buffer 	std_logic;
-		itdc_data	: in	 	std_logic_vector(27 downto 0);
-		otdc_data	: out	 	std_logic_vector(27 downto 0);
-		otdc_csn	: out	 	std_logic;
-		otdc_rdn	: out	 	std_logic;	
-		otdc_adr	: out  	std_logic_vector(3 downto 0);
-		otdc_alutr	: out  	std_logic;
-		itdc_irflag	: in   	std_logic;
-		itdc_ef1	: in   	std_logic;
-		itdc_ef2 	: in   	std_logic;
-		tdc_out_HB	: out  	std_logic_vector(7 downto 0);
-		tdc_out_MH	: out  	std_logic_vector(7 downto 0);
-		tdc_out_ML	: out  	std_logic_vector(7 downto 0);
-		tdc_out_LB	: out  	std_logic_vector(7 downto 0);
-		rd_en		: in 	 	std_logic_vector(3 downto 0));
+	(	
+		-- General control signals
+		signal rst			: in	std_logic;
+		signal clk			: in	std_logic;	-- 40MHz clock
+		-- TDC inputs/outputs
+		signal itdc_data	: in	std_logic_vector(27 downto 0);
+		signal otdc_data	: out	std_logic_vector(27 downto 0);
+		signal otdc_csn	 	: out	std_logic;		-- TDC Chip Select
+		signal otdc_rdn		: out	std_logic;		-- TDC Read strobe
+		signal otdc_adr		: out	std_logic_vector(3 downto 0); -- TDC Address
+		signal otdc_alutr	: out	std_logic;
+		signal itdc_irflag	: in	std_logic;	-- TDC Interrupt flag (active high)
+		signal itdc_ef1		: in	std_logic;	-- TDC FIFO-1 Empty flag (active high)
+		signal itdc_ef2 	: in	std_logic;	-- TDC FIFO-2 Empty flag (active high)
+		-- Readout FIFOs
+		signal channel_ef	: out	CTDC_T;
+		signal channel_rd	: in	CTDC_T;
+		signal channel_out	: out	OTDC_A
+	);
 	end component;
 
 	-----------------
@@ -173,8 +168,7 @@ begin
 	TDC_READ: tdcread port map (
 		rst				=> rst,
 		clk				=> clk,
-		enable_read		=> en_read,
-		data_valid		=> data_valid,
+		
 		itdc_data		=> iotdc_data,
 		otdc_data		=> otdc_data,
 		otdc_csn		=> tdcCSN_read,
@@ -184,11 +178,10 @@ begin
 		itdc_irflag		=> itdc_irflag,
 		itdc_ef1		=> itdc_ef1, 
 		itdc_ef2 		=> itdc_ef2,
-		tdc_out_HB		=> tdc_out_HB,
-		tdc_out_MH		=> tdc_out_MH,
-		tdc_out_ML		=> tdc_out_ML,
-		tdc_out_LB		=> tdc_out_LB,
-		rd_en			=> rd_en
+		
+		channel_ef		=> channel_ef,
+		channel_rd		=> channel_rd,
+		channel_out		=> channel_out
 	);
 
 

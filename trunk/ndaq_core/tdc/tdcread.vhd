@@ -1,17 +1,6 @@
---------------------------------------------------------------------------------------
---	Centro Brasileiro de Pesquisas Fisicas - CBPF
---	Ministério da Ciência e Tecnologia - MCT
---	Rua Dr. Xavier Sigaud 150, Urca
 --
---	Autor: Herman Lima Jr
---	Diretorio: D:/Projetos/Neutrinos/QuartusII/angratdc
 --
---	Rio de Janeiro, 8 de Fevereiro de 2011.
---
---	Notas:
---  18/02/11_1:  Implementei o mesmo mecanismo de latch e leitura em barramento de
---				 8 bits usado no projeto 'counter.vhd', diretorio Monrat.
---------------------------------------------------------------------------------------
+
 library ieee;
 library work;
 use ieee.std_logic_1164.all;
@@ -24,58 +13,80 @@ use work.tdc_pkg.all;
 entity tdcread is
 	port
 	(
-	-- General control signals
-	signal rst			: in	std_logic;
-	signal clk			: in	std_logic;	-- 40MHz clock
-	signal enable_read	: in	std_logic;	-- Enable the readout machine (active high level)
-	signal data_valid	: out	std_logic;	-- Indicates valid data can be read
-	-- TDC inputs/outputs
-	signal itdc_data	: in	std_logic_vector(27 downto 0);
-	signal otdc_data	: out	std_logic_vector(27 downto 0);
-	signal otdc_csn	 	: out	std_logic;		-- TDC Chip Select
-	signal otdc_rdn		: out	std_logic;		-- TDC Read strobe
-	signal otdc_adr		: out	std_logic_vector(3 downto 0); -- TDC Address
-	signal otdc_alutr	: out	std_logic;
-	signal itdc_irflag	: in	std_logic;	-- TDC Interrupt flag (active high)
-	signal itdc_ef1		: in	std_logic;	-- TDC FIFO-1 Empty flag (active high)
-	signal itdc_ef2 	: in	std_logic;	-- TDC FIFO-2 Empty flag (active high)
-	signal channel_out	: out	OTDC_A;
-	-- signal tdc_out_HB	: out	std_logic_vector(7 downto 0); 	-- TDC Data Bus (HIGHEST Byte)
-	-- signal tdc_out_MH	: out	std_logic_vector(7 downto 0); 	-- TDC Data Bus (MEDIUM HIGH Byte)
-	-- signal tdc_out_ML	: out	std_logic_vector(7 downto 0); 	-- TDC Data Bus (MEDIUM LOW Byte)
-	-- signal tdc_out_LB	: out	std_logic_vector(7 downto 0); 	-- TDC Data Bus (HIGHEST Byte)
-	-- signal rd_en			: in	std_logic_vector(3 downto 0)		-- Read enable to read TDC data
+		-- General control signals
+		signal rst			: in	std_logic;
+		signal clk			: in	std_logic;	-- 40MHz clock
+		-- TDC inputs/outputs
+		signal itdc_data	: in	std_logic_vector(27 downto 0);
+		signal otdc_data	: out	std_logic_vector(27 downto 0);
+		signal otdc_csn	 	: out	std_logic;		-- TDC Chip Select
+		signal otdc_rdn		: out	std_logic;		-- TDC Read strobe
+		signal otdc_adr		: out	std_logic_vector(3 downto 0); -- TDC Address
+		signal otdc_alutr	: out	std_logic;
+		signal itdc_irflag	: in	std_logic;	-- TDC Interrupt flag (active high)
+		signal itdc_ef1		: in	std_logic;	-- TDC FIFO-1 Empty flag (active high)
+		signal itdc_ef2 	: in	std_logic;	-- TDC FIFO-2 Empty flag (active high)
+		-- Readout FIFOs
+		signal channel_ef	: out	CTDC_T;
+		signal channel_rd	: in	CTDC_T;
+		signal channel_out	: out	OTDC_A
 	);
 end tdcread;
---
-architecture one_tdcread of tdcread is
 
+--
+
+architecture rtl of tdcread is
+	
+	-- Constants
 	constant REG8  : std_logic_vector(3 downto 0) := "1000";		-- TDC FIFO 1 Address
 	constant REG9  : std_logic_vector(3 downto 0) := "1001";		-- TDC FIFO 2 Address
+
+	-- Components
+	component tdcfifo
+	port
+	(
+		aclr		: IN STD_LOGIC ;
+		clock		: IN STD_LOGIC ;
+		data		: IN STD_LOGIC_VECTOR (25 DOWNTO 0);
+		rdreq		: IN STD_LOGIC ;
+		wrreq		: IN STD_LOGIC ;
+		empty		: OUT STD_LOGIC ;
+		full		: OUT STD_LOGIC ;
+		q			: OUT STD_LOGIC_VECTOR (25 DOWNTO 0)
+	);
+	end component;
 	
+
+	-- Signals
 	type sm_tdc is (sIdle, sTestEFs, sSelectFIFO, sCSN, sRDdown, sRDup, sReadDone);
 	signal sm_TDCx : sm_tdc;
 	attribute syn_encoding : string;
 	attribute syn_encoding of sm_tdc : type is "safe";
-	
-	signal tdc_addr			: std_logic_vector(3 downto 0);
-	
-	-- signal i_tdc_out_HB		: std_logic_vector(7 downto 0);	-- Internal TDC 8-bit data bus (HIGHEST Byte)
-	-- signal i_tdc_out_MH		: std_logic_vector(7 downto 0);	-- Internal TDC 8-bit data bus (MEDIUM HIGH Byte)
-	-- signal i_tdc_out_ML		: std_logic_vector(7 downto 0);	-- Internal TDC 8-bit data bus (MEDIUM LOW Byte)
-	-- signal i_tdc_out_LB		: std_logic_vector(7 downto 0);	-- Internal TDC 8-bit data bus (LOWEST Byte)
-	
+
+	signal enable_read		: std_logic := '0';
+	signal tdc_addr			: std_logic_vector(3 downto 0);	
 	signal selected_fifo	: std_logic := '0';
+	signal fifo2_issue		: std_logic := '0';
 	signal i_data_valid		: std_logic := '0';
 	signal TDC_Data			: std_logic_vector(27 downto 0);
 	signal channel_sel		: std_logic_vector(2 downto 0) := "000";
-	signal channel_en		: std_logic_vector(7 downto 0) := x"00";
+	signal channel_wr		: CTDC_T := x"00";
+	signal channel_ff		: CTDC_T := x"00";
 	
 	
+--
+--
+begin	
+
+	enable_read	<=	not(channel_ff(0) or channel_ff(1) or
+						channel_ff(2) or channel_ff(3) or
+						channel_ff(4) or channel_ff(5) or
+						channel_ff(6) or channel_ff(7));
+
 	----------------------
 	-- TDC data readout --
 	----------------------
-	process (rst, clk, enable_read) begin
+	process (rst, clk, enable_read, fifo2_issue) begin
 		if (rst = '1') then
 			otdc_ADR <= "0000";
 			otdc_CSN <= '1';
@@ -85,6 +96,7 @@ architecture one_tdcread of tdcread is
 			tdc_addr <= REG8;
 			sm_TDCx <= sIdle;
 			otdc_alutr <= '0';
+			fifo2_issue	<= '0';
 		elsif (clk'event and clk = '1') then
 			case sm_TDCx is
 				when sIdle =>
@@ -95,10 +107,15 @@ architecture one_tdcread of tdcread is
 					i_data_valid <= '0';
 					otdc_alutr <= '0';
 					selected_fifo <= '0';
-					if enable_read = '0' then	
+					-- if enable_read = '0' then	
+						-- sm_TDCx <= sTestEFs;
+					-- else
+						-- sm_TDCx <= sm_TDCx;
+					-- end if;
+					if enable_read = '1' then	
 						sm_TDCx <= sTestEFs;
 					else
-						sm_TDCx <= sm_TDCx;
+						sm_TDCx <= sIdle;
 					end if;
 				
 				when sTestEFs =>
@@ -116,7 +133,8 @@ architecture one_tdcread of tdcread is
 							sm_TDCx <= sSelectFIFO;
 						end if;
 					else
-						sm_TDCx <= sIdle;
+						--sm_TDCx <= sIdle;
+						sm_TDCx <= sTestEFs;
 					end if;
 					
 				when sSelectFIFO =>
@@ -126,12 +144,21 @@ architecture one_tdcread of tdcread is
 					--otdc_Data <= (others => 'Z');
 					i_data_valid <= '0';
 					otdc_alutr <= '0';
-					if itdc_ef1 = '0' then
+					--both fifos have data: read fifo1 and issue a fifo2 read for the next cycle.
+					if itdc_ef1 = '0' and itdc_ef2 = '0' and fifo2_issue = '0' then
 						tdc_addr <= REG8;
 						selected_fifo <= '0';
-					elsif itdc_ef2 = '0' then
+						fifo2_issue	<= '1';
+					--fifo2 have data or fifo2 read issued: read fifo2.
+					elsif itdc_ef2 = '0' or fifo2_issue = '1' then
 						tdc_addr <= REG9;
-						selected_fifo <= '1';	
+						selected_fifo <= '1';
+						fifo2_issue	<= '0';
+					--fifo1 have data: read fifo 1.
+					elsif itdc_ef1 = '0' then
+						tdc_addr <= REG8;
+						selected_fifo <= '0';
+						fifo2_issue	<= '0';
 					else
 						null;
 					end if;
@@ -171,11 +198,11 @@ architecture one_tdcread of tdcread is
 					--oTDC_Data <= iTDC_Data;
 					i_data_valid <= '1';				-- Data strobe indicating valid data
 					otdc_alutr <= '0';
-					if enable_read = '1' then
+					--if enable_read = '1' then
 						sm_TDCx <= sIdle;
-					else
-						sm_TDCx <= sm_TDCx;
-					end if;
+					--else
+						--sm_TDCx <= sm_TDCx;
+					--end if;
 				
 				when others =>
 					oTDC_ADR <= (others => 'Z');
@@ -189,8 +216,6 @@ architecture one_tdcread of tdcread is
 		end if;
 	end process;
 	
-	data_valid	<= i_data_valid;
-	
 	------------------------------
 	-- TDC data input buffering --
 	------------------------------
@@ -200,7 +225,6 @@ architecture one_tdcread of tdcread is
 			TDC_Data <= (others => '0');
 		elsif rising_edge(clk) then
 			TDC_Data <= iTDC_Data;
-			end if;
 		end if;
 	end process;
 
@@ -212,9 +236,9 @@ architecture one_tdcread of tdcread is
 	-- Channel Selector Demux
 	process(channel_sel, i_data_valid)
 	begin
-		channel_en <= (others => '0');
+		channel_wr <= (others => '0');
 		if (i_data_valid = '1') then
-			channel_en(conv_integer(channel_sel))	<= '1';
+			channel_wr(conv_integer(channel_sel))	<= '1';
 		end if;
 	end process;
 
@@ -225,7 +249,7 @@ architecture one_tdcread of tdcread is
 			otdc_Data <= (others => '0');
 		elsif rising_edge(clk) then
 			if (i_data_valid = '1') then
-				otdc_Data <= "000" & selected_fifo & TDC_Data;
+				otdc_Data <= TDC_Data;
 			end if;
 		end if;
 	end process;
@@ -233,58 +257,20 @@ architecture one_tdcread of tdcread is
 	-- Separated channel buffers
 	channel_out_construct:
 	for i in 0 to 7 generate
-		channel_buffer:
-		process(rst, clk)
-		begin
-			if (rst = '1') then
-				channel_out(i)	<=	(others => '0');
-			elsif (rising_edge(clk)) then
-				if (channel_en(i) = '1') then
-					channel_out(i)	<= TDC_Data(25 downto 0);
-				end if;
-			end if;
-		end process;
+		readout_fifo:
+		tdcfifo port map
+		(
+			aclr		=> rst,
+			clock		=> clk,
+			data		=> TDC_Data(25 downto 0),
+			rdreq		=> channel_rd(i),
+			wrreq		=> channel_wr(i),
+			empty		=> channel_ef(i),
+			full		=> channel_ff(i),
+			q			=> channel_out(i)
+		);
 	end generate channel_out_construct;
 
-	-- ------------------------------------
-	-- -- Reading the 8-bit TDC data bus --
-	-- ------------------------------------
-	-- process(rst, clk, rd_en)
-	-- begin
-		-- if rst ='1' then
-			-- tdc_out_HB <= (others => 'Z');
-			-- tdc_out_MH <= (others => 'Z');
-			-- tdc_out_ML <= (others => 'Z');
-			-- tdc_out_LB <= (others => 'Z');
-		-- elsif rising_edge(clk) then
-			-- case rd_en is
-				-- when "1000" =>
-					-- tdc_out_HB <= i_tdc_out_HB;
-					-- tdc_out_MH <= (others => 'Z');
-					-- tdc_out_ML <= (others => 'Z');
-					-- tdc_out_LB <= (others => 'Z');				
-				-- when "0100" =>
-					-- tdc_out_HB <= (others => 'Z');
-					-- tdc_out_MH <= i_tdc_out_MH;
-					-- tdc_out_ML <= (others => 'Z');
-					-- tdc_out_LB <= (others => 'Z');
-				-- when "0010" =>
-					-- tdc_out_HB <= (others => 'Z');
-					-- tdc_out_MH <= (others => 'Z');
-					-- tdc_out_ML <= i_tdc_out_ML;
-					-- tdc_out_LB <= (others => 'Z');				
-				-- when "0001" =>
-					-- tdc_out_HB <= (others => 'Z');
-					-- tdc_out_MH <= (others => 'Z');
-					-- tdc_out_ML <= (others => 'Z');
-					-- tdc_out_LB <= i_tdc_out_LB;	
-				-- when others =>
-					-- tdc_out_HB <= (others => 'Z');
-					-- tdc_out_MH <= (others => 'Z');
-					-- tdc_out_ML <= (others => 'Z');
-					-- tdc_out_LB <= (others => 'Z');
-			-- end case;
-		-- end if;
-	-- end process;
 --		
-end one_tdcread;
+
+end rtl;
