@@ -45,10 +45,11 @@ use ieee.std_logic_unsigned.all;	-- Synopsys extension to std_logic_arith to han
 --use ieee.std_logic_signed.all;	-- Synopsys extension to std_logic_arith to handle std_logic_vector as signed integers (used together with std_logic_unsigned is ambiguous).
 --use ieee.numeric_std.all;		-- altenative to std_logic_arith, used for maths too (will conflict with std_logic_arith if 'signed' is used in interfaces).
 
-use work.functions_pkg.all;
+use work.functions_pkg.all;			-- Misc. functions
 use work.acq_pkg.all;				-- ACQ definitions
+use work.tdc_pkg.all;				-- TDC definitions
 use work.core_regs.all;				-- Registers handling definitions
-use work.databuilder_pkg.all;
+use work.databuilder_pkg.all;		-- Data Builder definitions
 
 
 entity ndaq_core is 
@@ -81,11 +82,11 @@ entity ndaq_core is
 		-- TDC interface --
 		-------------------
 		signal tdc_data			: inout	std_logic_vector(27 downto 0); --***WATCH OUT***
-		signal tdc_stop_dis		: out		std_logic_vector(1 to 4);
-		signal tdc_start_dis 	: out		std_logic;
-		signal tdc_wrn		 	: out		std_logic;
-		signal tdc_rdn		 	: out		std_logic;
-		signal tdc_csn		 	: out		std_logic;
+		signal tdc_stop_dis		: out	std_logic_vector(1 to 4);
+		signal tdc_start_dis 	: out	std_logic;
+		signal tdc_wrn		 	: out	std_logic;
+		signal tdc_rdn		 	: out	std_logic;
+		signal tdc_csn		 	: out	std_logic;
 		signal tdc_alutr	 	: out  	std_logic;
 		signal tdc_puresn	 	: out  	std_logic;
 		signal tdc_oen		 	: out  	std_logic;
@@ -284,6 +285,7 @@ architecture rtl of ndaq_core is
 	);
 	end component;
 
+	--
 	component itrigger 
 	port
 	(	signal rst				: in	std_logic;
@@ -305,6 +307,42 @@ architecture rtl of ndaq_core is
 	);	
 	end component;
 	
+	-- TDC Interface
+	component tdc
+	port
+	(	
+		signal rst				: in 		std_logic;
+		signal clk				: in 		std_logic;	-- 40MHz clock
+		
+		-------------------
+		-- TDC interface --
+		-------------------
+		signal iotdc_data		: inout	std_logic_vector(27 downto 0);
+		signal otdc_stopdis	 	: out	std_logic_vector(1 to 4);
+		signal tdc_start_dis 	: out	std_logic;
+		signal otdc_rdn		 	: out	std_logic;
+		signal otdc_wrn		 	: out  	std_logic;
+		signal otdc_csn	 	 	: out	std_logic;
+		signal otdc_alutr	 	: out  	std_logic;
+		signal otdc_puresn	 	: out  	std_logic;
+		signal tdc_oen		 	: out  	std_logic;
+		signal otdc_adr		 	: out  	std_logic_vector(3 downto 0);
+		signal itdc_irflag	 	: in   	std_logic;
+		signal itdc_ef2		 	: in   	std_logic;
+		signal itdc_ef1		 	: in   	std_logic;
+
+		-----------------
+		-- TDC control --
+		-----------------
+		signal conf_done		: out	std_logic;
+		signal start_conf		: in	std_logic;
+		signal otdc_data		: out	std_logic_vector(27 downto 0);
+		signal channel_ef		: out	CTDC_T;
+		signal channel_rd		: in	CTDC_T;
+		signal channel_out		: out	OTDC_A
+	);	
+	end component;
+
 	-- Data Builder
 	component databuilder
 	port
@@ -478,6 +516,11 @@ architecture rtl of ndaq_core is
 	signal rdusedw					: F_USEDW_WIDTH_T; -- FIFOs USED WORDS bus vector sync'ed to read clock
 	signal wrusedw					: F_USEDW_WIDTH_T; -- FIFOs USED WORDS bus vector sync'ed to write clock
 
+	-- TDC
+	signal	tdc_ef					: CTDC_T;
+	signal	tdc_rd					: CTDC_T;
+	signal	tdc_q					: OTDC_A;
+
 	-- Data Builder
 	signal	enable_A				: SLOTS_T;
 	signal	enable_B				: SLOTS_T;
@@ -559,15 +602,15 @@ begin
 	-------------------
 	-- TDC interface --
 	-------------------
-	tdc_stop_dis	<= (others => 'Z');
-	tdc_start_dis	<= 'Z';
-	tdc_wrn		 	<= 'Z';
-	tdc_rdn			<= 'Z';
-	tdc_csn			<= 'Z';
-	tdc_alutr		<= 'Z';
-	tdc_puresn		<= 'Z';
-	tdc_oen			<= 'Z';
-	tdc_adr			<= (others => 'Z');
+	-- tdc_stop_dis	<= (others => 'Z');
+	-- tdc_start_dis	<= 'Z';
+	-- tdc_wrn		 	<= 'Z';
+	-- tdc_rdn			<= 'Z';
+	-- tdc_csn			<= 'Z';
+	-- tdc_alutr		<= 'Z';
+	-- tdc_puresn		<= 'Z';
+	-- tdc_oen			<= 'Z';
+	-- tdc_adr			<= (others => 'Z');
 
 	----------------------
 	-- FIFO's interface --
@@ -918,88 +961,64 @@ begin
 	
 	end generate adc_data_acq_construct;
 
--- ************************************ IDT COPIER ********************************
+	
+-- ************************************ TDC ***********************************
 
-	-- Copia das FIFOs internas para as IDT FIFOs
-	-- idt_writer:
-	-- idtfifo_top port map
-	-- (	-- CONTROL/STATUS signals
-		-- rst					=> rst,
-		-- clk					=> dclk,						-- Read clock das FIFOs internas		
-		-- start_transfer		=> '1',
-		-- enable_fifo			=> "1111",						-- A copia para as 4 FIFOs esta habilitada "1111";
-
-		-- idt_full(1)			=> fifo1_paf, --fifo1_ff,		-- Nao da pra usar a full flag para fazer uma copia em bloco.
-		-- idt_full(2)			=> fifo2_paf,				 	-- Agora a programmable almost full flag esta sendo usada
-		-- idt_full(3)			=> fifo3_paf,					-- E esta configurada para ficar ativa quando a FIFO tiver apenas
-		-- idt_full(4)			=> fifo4_paf,					-- 255 palavras livres. Como se quer copiar 128 palavras, devera 
-															-- -- funcionar.
-																	
-		-- idt_wren(1)			=> fifo1_wen,
-		-- idt_wren(2)			=> fifo2_wen,
-		-- idt_wren(3)			=> fifo3_wen,
-		-- idt_wren(4)			=> fifo4_wen,
-
-		-- idt_data			=> fifo_data_bus,
+	tdc_top:
+	tdc	port map
+	(	
+		rst				=> rst,
+		clk				=> dclk,
 		
-		-- fifo_used_A			=> rdusedw(0),					-- Mudar para barramento no futuro
-		-- fifo_used_B			=> rdusedw(1),
-		-- fifo_used_C			=> rdusedw(2),
-		-- fifo_used_D			=> rdusedw(3),
-		-- fifo_used_E			=> rdusedw(4),
-		-- fifo_used_F			=> rdusedw(5),
-		-- fifo_used_G			=> rdusedw(6),
-		-- fifo_used_H			=> rdusedw(7),
+		-------------------
+		-- TDC interface --
+		-------------------
+		iotdc_data		=> tdc_data,
+		otdc_stopdis	=> tdc_stop_dis,
+		tdc_start_dis 	=> tdc_start_dis,
+		otdc_rdn		=> tdc_rdn,
+		otdc_wrn		=> tdc_wrn,
+		otdc_csn	 	=> tdc_csn,
+		otdc_alutr	 	=> tdc_alutr,
+		otdc_puresn	 	=> tdc_puresn,
+		tdc_oen		 	=> tdc_oen,
+		otdc_adr		=> tdc_adr,
+		itdc_irflag	 	=> tdc_irflag,
+		itdc_ef2		=> tdc_ef2,
+		itdc_ef1		=> tdc_ef1,
 
-		-- fifo_empty(1)		=> empty(0),
-		-- fifo_empty(2)		=> empty(1),
-		-- fifo_empty(3)		=> empty(2),
-		-- fifo_empty(4)		=> empty(3),
-		-- fifo_empty(5)		=> empty(4),
-		-- fifo_empty(6)		=> empty(5),
-		-- fifo_empty(7)		=> empty(6),
-		-- fifo_empty(8)		=> empty(7),
+		-----------------
+		-- TDC control --
+		-----------------
+		start_conf		=> oreg(6)(0),			-- Start the configuration machine (active high pulse with 2-periods width)
+		conf_done		=> open,		
+		otdc_data		=> open,
+		channel_ef		=> tdc_ef,
+		channel_rd		=> tdc_rd,
+		channel_out		=> tdc_q
+	);
 
-		-- fifo_rden(1)		=> rd(0),						-- Mudar para barramento quando possivel
-		-- fifo_rden(2)		=> rd(1),
-		-- fifo_rden(3)		=> rd(2),
-		-- fifo_rden(4)		=> rd(3),
-		-- fifo_rden(5)		=> rd(4),
-		-- fifo_rden(6)		=> rd(5),
-		-- fifo_rden(7)		=> rd(6),
-		-- fifo_rden(8)		=> rd(7),
-		
-		-- fifo_qA   			=> q(0),
-		-- fifo_qB				=> q(1),
-		-- fifo_qC				=> q(2),
-		-- fifo_qD				=> q(3),
-		-- fifo_qE				=> q(4),
-		-- fifo_qF				=> q(5),
-		-- fifo_qG				=> q(6),
-		-- fifo_qH				=> q(7)
-		
-	-- );
 
 -- ******************************* DATA BUILDER *******************************
 
-	datab_counter_construct:
-	for i in 0 to 7 generate
+	-- datab_counter_construct:
+	-- for i in 0 to 7 generate
 
-		datab_test_counter:
-		process (dclk, rst)
-		begin
-			if (rst = '1') then
-				dbcounter(i)	<= (others => '0');
-			elsif (rising_edge(dclk)) then
-				if (dbcounter_rd(i) = '1') then
-					dbcounter(i)	<= dbcounter(i) + 1;
-				else
-					dbcounter(i)	<= (others => '0');
-				end if;
-			end if;
-		end process;
+		-- datab_test_counter:
+		-- process (dclk, rst)
+		-- begin
+			-- if (rst = '1') then
+				-- dbcounter(i)	<= (others => '0');
+			-- elsif (rising_edge(dclk)) then
+				-- if (dbcounter_rd(i) = '1') then
+					-- dbcounter(i)	<= dbcounter(i) + 1;
+				-- else
+					-- dbcounter(i)	<= (others => '0');
+				-- end if;
+			-- end if;
+		-- end process;
 
-	end generate datab_counter_construct;
+	-- end generate datab_counter_construct;
 
 --
 -- Data Builder Slots Construct
@@ -1069,7 +1088,8 @@ for i in 0 to (slots - 1) generate
 	enable_B(i)	<= even_enable(i) and odd_enable(i) and fifo_paf(i);
 	--enable_B(i)	<= fifo_paf(i);
 	-- Slot Transfer Size:
-	transfer(i)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	--transfer(i)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(i)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	-- Slot Address:
 	address(i)	<= CONV_STD_LOGIC_VECTOR(i, NumBits(address_max));
 	-- Mode: '0' for non branch and '1' for branch.
@@ -1079,21 +1099,29 @@ for i in 0 to (slots - 1) generate
 	-- Read Side Construct - Internal FIFOs
 	--
 	
-	-- even channels
-	rd(i*2)		<= db_rd(i);	-- 0 <= 0, 2 <= 1, 4 <= 2, 6 <= 3 
-	-- -- odd channels
-	rd((i*2)+1)	<= db_rd(i);	-- 1 <= 0, 3 <= 1, 5 <= 2, 7 <= 3 
+	-- -- even channels
+	-- rd(i*2)		<= db_rd(i);	-- 0 <= 0, 2 <= 1, 4 <= 2, 6 <= 3 
+	-- -- -- odd channels
+	-- rd((i*2)+1)	<= db_rd(i);	-- 1 <= 0, 3 <= 1, 5 <= 2, 7 <= 3 
 
-	dbcounter_rd(i*2)		<= db_rd(i);	-- 0 <= 0, 2 <= 1, 4 <= 2, 6 <= 3 
-	-- odd channels
-	dbcounter_rd((i*2)+1)	<= db_rd(i);	-- 1 <= 0, 3 <= 1, 5 <= 2, 7 <= 3 
+	-- even channels
+	tdc_rd(i*2)		<= db_rd(i);	-- 0 <= 0, 2 <= 1, 4 <= 2, 6 <= 3 
+	-- -- odd channels
+	tdc_rd((i*2)+1)	<= db_rd(i);	-- 1 <= 0, 3 <= 1, 5 <= 2, 7 <= 3 
+
+	-- dbcounter_rd(i*2)		<= db_rd(i);	-- 0 <= 0, 2 <= 1, 4 <= 2, 6 <= 3 
+	-- -- odd channels
+	-- dbcounter_rd((i*2)+1)	<= db_rd(i);	-- 1 <= 0, 3 <= 1, 5 <= 2, 7 <= 3 
+
+	-- -- -- 32 bits construct.
+	-- idata(i)(9 downto 0)	<= q(i*2);				-- 0, 2, 4, 6  --- (1), (3), (5), (7) --- index number --- channel number		
+	-- idata(i)(15 downto 10)	<= (others => '0');
+	-- idata(i)(25 downto 16)	<= q((i*2)+1);			-- 1, 3, 5, 7  --- (2), (4), (6), (8) --- index number --- channel number	
+	-- idata(i)(31 downto 26)	<= (others => '0');
 
 	-- -- 32 bits construct.
-	idata(i)(9 downto 0)	<= q(i*2);				-- 0, 2, 4, 6  --- (1), (3), (5), (7) --- index number --- channel number		
-	idata(i)(15 downto 10)	<= (others => '0');
-	idata(i)(25 downto 16)	<= q((i*2)+1);			-- 1, 3, 5, 7  --- (2), (4), (6), (8) --- index number --- channel number	
-	idata(i)(31 downto 26)	<= (others => '0');
-
+	idata(i)	<= tdc_q((i*2)+1)(15 downto 0) & tdc_q(i*2)(15 downto 0);
+	
 	-- 32 bits construct.
 	-- idata(0)	<= x"00" & dbcounter(1) & x"00" & dbcounter(0);
 	-- idata(1)	<= x"00" & dbcounter(3) & x"00" & dbcounter(2);
@@ -1123,10 +1151,10 @@ end generate slots_construct;
 	-- enable_B(2)	<= fifo_paf(2);
 	-- enable_B(3)	<= fifo_paf(3);
 	-- -- Slot Transfer Size:
-	-- transfer(0)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
-	-- transfer(1)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
-	-- transfer(2)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
-	-- transfer(3)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	-- transfer(0)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	-- transfer(1)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	-- transfer(2)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	-- transfer(3)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	-- -- Slot Address:
 	-- address(0)	<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
 	-- address(1)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
@@ -1138,11 +1166,21 @@ end generate slots_construct;
 	-- mode(2)		<= '0';
 	-- mode(3)		<= '0';
 
+	-- --
+	-- tdc_fifo_rd(0)	<= db_rd(0);
+	-- tdc_fifo_rd(1)	<= db_rd(0);
+	-- tdc_fifo_rd(2)	<= db_rd(1);
+	-- tdc_fifo_rd(3)	<= db_rd(1);
+	-- tdc_fifo_rd(4)	<= db_rd(2);
+	-- tdc_fifo_rd(5)	<= db_rd(2);
+	-- tdc_fifo_rd(6)	<= db_rd(3);
+	-- tdc_fifo_rd(7)	<= db_rd(3);
+
 	-- -- 32 bits construct.
-	-- idata(0)	<= x"00020001";
-	-- idata(1)	<= x"00040003";
-	-- idata(2)	<= x"00060005";
-	-- idata(3)	<= x"00080007";
+	-- idata(0)	<= tdc_fifo_q(1)(15 downto 0) & tdc_fifo_q(0)(15 downto 0);
+	-- idata(1)	<= tdc_fifo_q(3)(15 downto 0) & tdc_fifo_q(2)(15 downto 0);
+	-- idata(2)	<= tdc_fifo_q(5)(15 downto 0) & tdc_fifo_q(4)(15 downto 0);
+	-- idata(3)	<= tdc_fifo_q(7)(15 downto 0) & tdc_fifo_q(6)(15 downto 0);
 
 	-- -- 'fifo_wen' is active low.
 	-- fifo_wen(0)				<= not(db_wr(0));
