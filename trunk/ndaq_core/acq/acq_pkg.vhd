@@ -38,7 +38,7 @@ package acq_pkg is
 	--Evento = 512 palavras, 4096 ns
 	--EVENT_SIZE = (M - 1), onde M = tamanho do evento ou quantidade de palavras
 	--que devem ser gravadas por 'trigger'. [EM PALAVRAS DE FIFO]
-	constant	EVENT_SIZE				: unsigned	:= x"7F";	
+	constant	EVENT_SIZE				: unsigned	:= x"1D";	
 																			
 	constant 	t						: unsigned 	:= x"00";
 	

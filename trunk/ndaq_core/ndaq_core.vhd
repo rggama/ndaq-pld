@@ -311,8 +311,9 @@ architecture rtl of ndaq_core is
 	component tdc
 	port
 	(	
-		signal rst				: in 		std_logic;
-		signal clk				: in 		std_logic;	-- 40MHz clock
+		signal rst				: in 	std_logic;
+		signal clk				: in 	std_logic;	-- 40MHz clock
+		signal dclk				: in	std_logic;
 		
 		-------------------
 		-- TDC interface --
@@ -537,8 +538,8 @@ architecture rtl of ndaq_core is
 	signal	odata					: ODATA_T;
 
 	--
-	signal even_enable				: SLOTS_T;
-	signal odd_enable				: SLOTS_T;
+	signal even_enable				: std_logic_vector(3 downto 0); --SLOTS_T;
+	signal odd_enable				: std_logic_vector(3 downto 0); --SLOTS_T;
 
 	
 	-- Command Decoder / Registers Test
@@ -572,13 +573,6 @@ architecture rtl of ndaq_core is
 	--	Test Counter
 	signal counter					: F_DATA_WIDTH_T;
 	--signal counter_t				: std_logic_vector((adc_channels-1) downto 0);
-
-	--	Data Builder Test Counter
-	subtype	DBW_T					is std_logic_vector(7 downto 0);
-	type	DBW_A					is array (7 downto 0) of DBW_T;
-
-	signal dbcounter				: DBW_A;
-	signal dbcounter_rd				: DBW_T;
 	
 ------------------------------------------
 ------------------------------------------
@@ -699,27 +693,7 @@ begin
 		odata		=> s_spi_odata		-- data output parallel bus	
 	);
 
--- ****************************** LOOPBACK TEST ********************************
-
-	-- Slave SPI Loopback
-	-- s_spi_idata	<= s_spi_odata;
-
-	-- s_spi_loopback:
-	-- swc port map
-	-- (	
-		-- clk			=> pclk,
-		-- rst			=> rst,
-		
-		-- --flags
-		-- dwait			=> s_spi_dwait,	--to
-		-- dataa			=> s_spi_dataa,	--from
-
-		-- --strobes
-		-- wr				=> s_spi_wr,	--to
-		-- rd				=> s_spi_rd		--from
-	-- );
-
-
+	
 -- ******************************* CMDDEC-REGS *********************************
 	
 	-- *** ESCREVER/LER em registrador so funciona no modo USB. Ainda depende de
@@ -812,14 +786,14 @@ begin
 	clk(6)		<= adc78_dco;
 	clk(7)		<= not(adc78_dco);
 
-	data(0)		<= counter(0); --"00" & x"01"; --adc12_data;
-	data(1)		<= counter(1); --"00" & x"02"; --adc12_data;
-	data(2)		<= counter(2); --"00" & x"03"; --adc34_data;
-	data(3)		<= counter(3); --"00" & x"04"; --adc34_data;
-	data(4)		<= counter(4); --"00" & x"05"; --adc56_data;
-	data(5)		<= counter(5); --"00" & x"06"; --adc56_data;
-	data(6)		<= counter(6); --"00" & x"07"; --adc78_data;
-	data(7)		<= counter(7); --"00" & x"08"; --adc78_data;
+	data(0)		<= adc12_data; --counter(0);
+	data(1)		<= adc12_data; --counter(1);
+	data(2)		<= adc34_data; --counter(2;
+	data(3)		<= adc34_data; --counter(3);
+	data(4)		<= adc56_data; --counter(4);
+	data(5)		<= adc56_data; --counter(5);
+	data(6)		<= adc78_data; --counter(6);
+	data(7)		<= adc78_data; --counter(7);
 	
 	wf_en(0)	<= '1';
 	wf_en(1)	<= '1';
@@ -968,7 +942,8 @@ begin
 	tdc	port map
 	(	
 		rst				=> rst,
-		clk				=> dclk,
+		clk				=> pclk,
+		dclk			=> dclk,
 		
 		-------------------
 		-- TDC interface --
@@ -991,7 +966,7 @@ begin
 		-- TDC control --
 		-----------------
 		start_conf		=> oreg(6)(0),			-- Start the configuration machine (active high pulse with 2-periods width)
-		conf_done		=> open,		
+		conf_done		=> ireg(7)(0),		
 		otdc_data		=> open,
 		channel_ef		=> tdc_ef,
 		channel_rd		=> tdc_rd,
@@ -1000,29 +975,6 @@ begin
 
 
 -- ******************************* DATA BUILDER *******************************
-
-	-- datab_counter_construct:
-	-- for i in 0 to 7 generate
-
-		-- datab_test_counter:
-		-- process (dclk, rst)
-		-- begin
-			-- if (rst = '1') then
-				-- dbcounter(i)	<= (others => '0');
-			-- elsif (rising_edge(dclk)) then
-				-- if (dbcounter_rd(i) = '1') then
-					-- dbcounter(i)	<= dbcounter(i) + 1;
-				-- else
-					-- dbcounter(i)	<= (others => '0');
-				-- end if;
-			-- end if;
-		-- end process;
-
-	-- end generate datab_counter_construct;
-
---
--- Data Builder Slots Construct
---
 
 	data_builder: 
 	databuilder port map 
@@ -1047,8 +999,9 @@ begin
 		odata						=> odata
 	);
 
-slots_construct:
-for i in 0 to (slots - 1) generate
+		
+adc_flags_construct:
+for i in 0 to 3 generate
 	
 	--
 	-- Internal FIFOs enough data test
@@ -1075,119 +1028,141 @@ for i in 0 to (slots - 1) generate
 			odd_enable(i) <= '0';
 		end if;
 	end process;
-
-	--
-	-- Slots Definitions
-	--
 	
+end generate adc_flags_construct;
+
+--
+-- Data Builder Slots Construct
+--
+
 	--
 	-- Slot Enable: '1' for enable.
-	enable_A(i)	<= '1';
+	enable_A(0)	<= '1';
+	enable_A(1)	<= '1';
+	enable_A(2)	<= '1';
+	enable_A(3)	<= '1';
+	enable_A(4)	<= '1';
+	enable_A(5)	<= '1';
+	enable_A(6)	<= '1';
+	enable_A(7)	<= '1';
+	enable_A(8)	<= '1';
+	enable_A(9)	<= '1';
+	enable_A(10)<= '1';
+	enable_A(11)<= '1';
+
 	-- Transfer Enable: even channel and odd channel and IDT ALMOST Full Flag must let us go. 
 	-- 'fifo_paf' is NOT negated because it is active low.
-	enable_B(i)	<= even_enable(i) and odd_enable(i) and fifo_paf(i);
-	--enable_B(i)	<= fifo_paf(i);
+	enable_B(0)	<= fifo_paf(0) and even_enable(0) and odd_enable(0);
+	enable_B(1)	<= fifo_paf(0) and even_enable(0) and odd_enable(0);
+	enable_B(2)	<= fifo_paf(0);
+
+	enable_B(3)	<= fifo_paf(1) and even_enable(1) and odd_enable(1);
+	enable_B(4)	<= fifo_paf(1) and even_enable(1) and odd_enable(1);
+	enable_B(5)	<= fifo_paf(1);
+
+	enable_B(6)	<= fifo_paf(2) and even_enable(2) and odd_enable(2);
+	enable_B(7)	<= fifo_paf(2) and even_enable(2) and odd_enable(2);
+	enable_B(8)	<= fifo_paf(2);
+
+	enable_B(9)	<= fifo_paf(3) and even_enable(3) and odd_enable(3);
+	enable_B(10)<= fifo_paf(3) and even_enable(3) and odd_enable(3); 
+	enable_B(11)<= fifo_paf(3);
+
 	-- Slot Transfer Size:
-	--transfer(i)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
-	transfer(i)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(0)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(1)	<= CONV_STD_LOGIC_VECTOR(29, NumBits(transfer_max));
+	transfer(2)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+
+	transfer(3)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(4)	<= CONV_STD_LOGIC_VECTOR(29, NumBits(transfer_max));
+	transfer(5)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+
+	transfer(6)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(7)	<= CONV_STD_LOGIC_VECTOR(29, NumBits(transfer_max));
+	transfer(8)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+
+	transfer(9)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(10)<= CONV_STD_LOGIC_VECTOR(29, NumBits(transfer_max));
+	transfer(11)<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+
 	-- Slot Address:
-	address(i)	<= CONV_STD_LOGIC_VECTOR(i, NumBits(address_max));
+	address(0)	<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	address(1)	<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	address(2)	<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+
+	address(3)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
+	address(4)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
+	address(5)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
+
+	address(6)	<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(7)	<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(8)	<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+
+	address(9)	<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(10)	<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(11)	<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+
+	-- 32 bits construct.	
+	idata(0)	<= x"AA55AA55";											--01 palavra
+	idata(1)	<= "000000" & q(1) & "000000" & q(0);					--30 palavras
+	idata(2)	<= tdc_q(4)(15 downto 0) & tdc_q(0)(15 downto 0);		--01 palavra
+
+	idata(3)	<= x"AA55AA55";											--01 palavra
+	idata(4)	<= "000000" & q(3) & "000000" & q(2);					--30 palavras
+	idata(5)	<= tdc_q(5)(15 downto 0) & tdc_q(1)(15 downto 0);		--01 palavra
+
+	idata(6)	<= x"AA55AA55";											--01 palavra
+	idata(7)	<= "000000" & q(5) & "000000" & q(4);					--30 palavras
+	idata(8)	<= tdc_q(6)(15 downto 0) & tdc_q(2)(15 downto 0);		--01 palavra
+
+	idata(9)	<= x"AA55AA55";											--01 palavra	
+	idata(10)	<= "000000" & q(7) & "000000" & q(6);					--30 palavras
+	idata(11)	<= tdc_q(7)(15 downto 0) & tdc_q(3)(15 downto 0);		--01 palavra
+
 	-- Mode: '0' for non branch and '1' for branch.
-	mode(i)		<= '0';
+	mode(0)		<= '0';
+	mode(1)		<= '0';
+	mode(2)		<= '0';
+	mode(3)		<= '0';
+	mode(4)		<= '0';
+	mode(5)		<= '0';
+	mode(6)		<= '0';
+	mode(7)		<= '0';
+	mode(8)		<= '0';
+	mode(9)		<= '0';
+	mode(10)	<= '0';
+	mode(11)	<= '0';
 
-	--
-	-- Read Side Construct - Internal FIFOs
-	--
+	--*******************************************************************************
 	
-	-- -- even channels
-	-- rd(i*2)		<= db_rd(i);	-- 0 <= 0, 2 <= 1, 4 <= 2, 6 <= 3 
-	-- -- -- odd channels
-	-- rd((i*2)+1)	<= db_rd(i);	-- 1 <= 0, 3 <= 1, 5 <= 2, 7 <= 3 
+	rd(0)		<= db_rd(1);
+	rd(1)		<= db_rd(1);
+	tdc_rd(0)	<= db_rd(2);
+	tdc_rd(4)	<= db_rd(2);
 
-	-- even channels
-	tdc_rd(i*2)		<= db_rd(i);	-- 0 <= 0, 2 <= 1, 4 <= 2, 6 <= 3 
-	-- -- odd channels
-	tdc_rd((i*2)+1)	<= db_rd(i);	-- 1 <= 0, 3 <= 1, 5 <= 2, 7 <= 3 
+	rd(2)		<= db_rd(4);
+	rd(3)		<= db_rd(4);
+	tdc_rd(1)	<= db_rd(5);
+	tdc_rd(5)	<= db_rd(5);
 
-	-- dbcounter_rd(i*2)		<= db_rd(i);	-- 0 <= 0, 2 <= 1, 4 <= 2, 6 <= 3 
-	-- -- odd channels
-	-- dbcounter_rd((i*2)+1)	<= db_rd(i);	-- 1 <= 0, 3 <= 1, 5 <= 2, 7 <= 3 
+	rd(4)		<= db_rd(7);
+	rd(5)		<= db_rd(7);	
+	tdc_rd(2)	<= db_rd(8);
+	tdc_rd(6)	<= db_rd(8);
 
-	-- -- -- 32 bits construct.
-	-- idata(i)(9 downto 0)	<= q(i*2);				-- 0, 2, 4, 6  --- (1), (3), (5), (7) --- index number --- channel number		
-	-- idata(i)(15 downto 10)	<= (others => '0');
-	-- idata(i)(25 downto 16)	<= q((i*2)+1);			-- 1, 3, 5, 7  --- (2), (4), (6), (8) --- index number --- channel number	
-	-- idata(i)(31 downto 26)	<= (others => '0');
+	rd(6)		<= db_rd(10);
+	rd(7)		<= db_rd(10);
+	tdc_rd(3)	<= db_rd(11);
+	tdc_rd(7)	<= db_rd(11);
 
-	-- -- 32 bits construct.
-	idata(i)	<= tdc_q((i*2)+1)(15 downto 0) & tdc_q(i*2)(15 downto 0);
-	
-	-- 32 bits construct.
-	-- idata(0)	<= x"00" & dbcounter(1) & x"00" & dbcounter(0);
-	-- idata(1)	<= x"00" & dbcounter(3) & x"00" & dbcounter(2);
-	-- idata(2)	<= x"00" & dbcounter(5) & x"00" & dbcounter(4);
-	-- idata(3)	<= x"00" & dbcounter(7) & x"00" & dbcounter(6);
+	--*******************************************************************************
 
-	--
-	-- Write Side Construct - IDT (external) FIFOs
-	--
-	
 	-- 'fifo_wen' is active low.
-	fifo_wen(i)				<= not(db_wr(i));
+	fifo_wen(0)				<= not(db_wr(0));
+	fifo_wen(1)				<= not(db_wr(1));
+	fifo_wen(2)				<= not(db_wr(2));
+	fifo_wen(3)				<= not(db_wr(3));
+
 	fifo_data_bus			<= odata;
-
-end generate slots_construct;
-		
-	-- --
-	-- -- Slot Enable: '1' for enable.
-	-- enable_A(0)	<= '1';
-	-- enable_A(1)	<= '1';
-	-- enable_A(2)	<= '1';
-	-- enable_A(3)	<= '1';
-	-- -- Transfer Enable: even channel and odd channel and IDT ALMOST Full Flag must let us go. 
-	-- -- 'fifo_paf' is NOT negated because it is active low.
-	-- enable_B(0)	<= fifo_paf(0);
-	-- enable_B(1)	<= fifo_paf(1);
-	-- enable_B(2)	<= fifo_paf(2);
-	-- enable_B(3)	<= fifo_paf(3);
-	-- -- Slot Transfer Size:
-	-- transfer(0)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	-- transfer(1)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	-- transfer(2)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	-- transfer(3)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	-- -- Slot Address:
-	-- address(0)	<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
-	-- address(1)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
-	-- address(2)	<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
-	-- address(3)	<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
-	-- -- Mode: '0' for non branch and '1' for branch.
-	-- mode(0)		<= '0';
-	-- mode(1)		<= '0';
-	-- mode(2)		<= '0';
-	-- mode(3)		<= '0';
-
-	-- --
-	-- tdc_fifo_rd(0)	<= db_rd(0);
-	-- tdc_fifo_rd(1)	<= db_rd(0);
-	-- tdc_fifo_rd(2)	<= db_rd(1);
-	-- tdc_fifo_rd(3)	<= db_rd(1);
-	-- tdc_fifo_rd(4)	<= db_rd(2);
-	-- tdc_fifo_rd(5)	<= db_rd(2);
-	-- tdc_fifo_rd(6)	<= db_rd(3);
-	-- tdc_fifo_rd(7)	<= db_rd(3);
-
-	-- -- 32 bits construct.
-	-- idata(0)	<= tdc_fifo_q(1)(15 downto 0) & tdc_fifo_q(0)(15 downto 0);
-	-- idata(1)	<= tdc_fifo_q(3)(15 downto 0) & tdc_fifo_q(2)(15 downto 0);
-	-- idata(2)	<= tdc_fifo_q(5)(15 downto 0) & tdc_fifo_q(4)(15 downto 0);
-	-- idata(3)	<= tdc_fifo_q(7)(15 downto 0) & tdc_fifo_q(6)(15 downto 0);
-
-	-- -- 'fifo_wen' is active low.
-	-- fifo_wen(0)				<= not(db_wr(0));
-	-- fifo_wen(1)				<= not(db_wr(1));
-	-- fifo_wen(2)				<= not(db_wr(2));
-	-- fifo_wen(3)				<= not(db_wr(3));
-
-	-- fifo_data_bus			<= odata;
 		
 end rtl;

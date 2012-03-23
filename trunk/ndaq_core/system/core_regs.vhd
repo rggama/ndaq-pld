@@ -8,7 +8,7 @@ use ieee.std_logic_1164.all;
 package core_regs is
 
 	-- total system registers
-	constant num_regs			: integer := 8;
+	constant num_regs			: integer := 9;
 
 	type	SYS_REGS_STRUCT		is record
 			addr				: std_logic_vector(7 downto 0);
@@ -31,9 +31,10 @@ package core_regs is
 		(x"89",	true,	true,	false,	x"00"),	-- 03 -FIFO Reset
 		(x"91",	true,	true,	false,	x"00"),	-- 04 -ACQ Enable
 		(x"77",	true,	true,	false,	x"55"),	-- 05 -Th
-		(x"50",	true,	true,	false,	x"55"),	-- 06 -TDC
+		(x"50",	true,	true,	false,	x"00"),	-- 06 -TDC
+		(x"51",	true,	true,	true,	x"00"),	-- 07 -TDC
 		--
-		(x"27",	true,	true,	false,	x"00")	-- 07 -R/W Test Register
+		(x"27",	true,	true,	false,	x"00")	-- 08 -R/W Test Register
 		
 	);
 

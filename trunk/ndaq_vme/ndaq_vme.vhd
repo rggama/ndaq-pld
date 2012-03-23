@@ -453,11 +453,6 @@ architecture rtl of ndaq_vme is
 	signal spi_status	: std_logic_vector(7 downto 0);
 
 	--
-
-	--Temp for tests
-	signal temp_wr				: std_logic;
-	
-	--
 	-- USB Readout Channels
 	--
 	constant	usb_channels :	integer := 4;
@@ -523,8 +518,8 @@ begin
 	--fifo3_ren	<= '1'; --u_fifo3_ren;
 	--fifo4_ren	<= '1'; --u_fifo4_ren;
 	
-	can_pgc <= 'Z'; --fifo1_ef;
-	-- can_pgd <= 'Z';
+	can_pgc <= stsclk;
+	can_pgd <= 'Z';
 	can_pgm <= 'Z';
 
 --	vme_berr		<= 'Z';
@@ -591,16 +586,11 @@ begin
 		-- ftdi bus
 		f_txf			=> usb_TXE,
 		f_rxf			=> usb_RXF,
-		f_wr			=> temp_wr, --usb_Write,
+		f_wr			=> usb_Write,
 		f_rd			=> usb_Read,
 		f_iodata		=> usb_Data
 	);
 
-	usb_Write	<= temp_wr;
-
-	test_pins:
-	--can_pgc		<= not(ft_wr);
-	can_pgd		<= temp_wr;
 
 --*********************************************************************************************************	
 
@@ -714,7 +704,8 @@ begin
 	ireg(5)(1)			<= fifo_pae(1);
 	ireg(5)(2)			<= fifo_pae(2);
 	ireg(5)(3)			<= fifo_pae(3);
-	ireg(5)(7 downto 4)	<= (others => '0');
+	ireg(5)(6 downto 4)	<= (others => '0');
+	ireg(5)(7)			<= stsclk;
 
 	-- Command Decoder
 	command_decoder:

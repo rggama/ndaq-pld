@@ -63,7 +63,7 @@ architecture one_tdcconfig of tdcconfig is
 	constant VALOR_REG4  : std_logic_vector(27 downto 0) := x"60000C7";
 	constant VALOR_REG5  : std_logic_vector(27 downto 0) := x"0E00000"; --x"0E001E0"; -- MASTER RESET por ALUTRIGGER
 	constant VALOR_REG6  : std_logic_vector(27 downto 0) := x"0000000";
-	constant VALOR_REG7  : std_logic_vector(27 downto 0) := x"0141F4A"; --0141fb4 MTIMER = 1us, --x"0281FB4"; --Res 82.3045ps
+	constant VALOR_REG7  : std_logic_vector(27 downto 0) := x"0281FB4"; --Res 82.3045psx --0141fb4 MTIMER = 1us, --"0141F4A";--114ps by LF
 	constant VALOR_REG11 : std_logic_vector(27 downto 0) := x"7FF0000"; --x"4000000";
 	constant VALOR_REG12 : std_logic_vector(27 downto 0) := x"2000000"; --x"2000000";
 	constant VALOR_REG14 : std_logic_vector(27 downto 0) := x"0000000";
