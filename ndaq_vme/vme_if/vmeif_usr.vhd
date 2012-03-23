@@ -76,10 +76,10 @@
 
 --    base address, window size (mask), AM_SGL,AM_BLT,DTACK (positive number means number of BCs to generate DTACK)
 
-		((x"00100000", x"00700000", x"09", x"0B", 3, true),  -- FIFO 1		  // USED TO u_read(0) or u_write(0)
-		 (x"00200000", x"00700000", x"09", x"0B", 3, true),  -- FIFO 2		  // USED TO u_read(1) or u_write(1)
-		 (x"00300000", x"00700000", x"09", x"0B", 3, true),  -- FIFO 3		  // USED TO u_read(2) or u_write(2)
-		 (x"00400000", x"00700000", x"09", x"0B", 3, true),  -- FIFO 4		  // USED TO u_read(3) or u_write(3)
+		((x"00100000", x"00700000", x"09", x"0B", 0, true),  -- FIFO 1		  // USED TO u_read(0) or u_write(0)
+		 (x"00200000", x"00700000", x"09", x"0B", 0, true),  -- FIFO 2		  // USED TO u_read(1) or u_write(1)
+		 (x"00300000", x"00700000", x"09", x"0B", 0, true),  -- FIFO 3		  // USED TO u_read(2) or u_write(2)
+		 (x"00400000", x"00700000", x"09", x"0B", 0, true),  -- FIFO 4		  // USED TO u_read(3) or u_write(3)
 			
 		 (x"00500000", x"00700000", x"09", x"0B", 0, false), -- FIFO Flags	  // USED TO u_read(4) or u_write(4)
 

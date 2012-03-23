@@ -42,6 +42,7 @@ entity tdc is
 	(	
 		signal rst				: in 		std_logic;
 		signal clk				: in 		std_logic;	-- 40MHz clock
+		signal dclk				: in	std_logic;
 		
 		-------------------
 		-- TDC interface --
@@ -104,6 +105,7 @@ architecture one_tdc of tdc is
 		-- General control signals
 		signal rst			: in	std_logic;
 		signal clk			: in	std_logic;	-- 40MHz clock
+		signal dclk			: in	std_logic;	
 		-- TDC inputs/outputs
 		signal itdc_data	: in	std_logic_vector(27 downto 0);
 		signal otdc_data	: out	std_logic_vector(27 downto 0);
@@ -135,7 +137,7 @@ begin
 	
 	-----------------------------------------
 	-- TDC: control and buses multiplexing --
-	-----------------------------------------
+	-----------------------------------------	
 	otdc_csn	<= tdcCSN_read when conf_select = '0' else
 				 tdcCSN_conf;
 	otdc_adr 	<= tdcADR_read when conf_select = '0' else
@@ -168,8 +170,9 @@ begin
 	TDC_READ: tdcread port map (
 		rst				=> rst,
 		clk				=> clk,
+		dclk			=> dclk,
 		
-		itdc_data		=> iotdc_data,
+		itdc_data		=> iotdc_data, --"00" & "00" & x"000007",
 		otdc_data		=> otdc_data,
 		otdc_csn		=> tdcCSN_read,
 		otdc_rdn		=> otdc_rdn,	

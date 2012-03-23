@@ -16,6 +16,8 @@ entity tdcread is
 		-- General control signals
 		signal rst			: in	std_logic;
 		signal clk			: in	std_logic;	-- 40MHz clock
+		signal dclk			: in	std_logic;
+		
 		-- TDC inputs/outputs
 		signal itdc_data	: in	std_logic_vector(27 downto 0);
 		signal otdc_data	: out	std_logic_vector(27 downto 0);
@@ -45,14 +47,15 @@ architecture rtl of tdcread is
 	component tdcfifo
 	port
 	(
-		aclr		: IN STD_LOGIC ;
-		clock		: IN STD_LOGIC ;
+		aclr		: IN STD_LOGIC  := '0';
 		data		: IN STD_LOGIC_VECTOR (25 DOWNTO 0);
+		rdclk		: IN STD_LOGIC ;
 		rdreq		: IN STD_LOGIC ;
+		wrclk		: IN STD_LOGIC ;
 		wrreq		: IN STD_LOGIC ;
-		empty		: OUT STD_LOGIC ;
-		full		: OUT STD_LOGIC ;
-		q			: OUT STD_LOGIC_VECTOR (25 DOWNTO 0)
+		q			: OUT STD_LOGIC_VECTOR (25 DOWNTO 0);
+		rdempty		: OUT STD_LOGIC ;
+		wrfull		: OUT STD_LOGIC 
 	);
 	end component;
 	
@@ -73,16 +76,19 @@ architecture rtl of tdcread is
 	signal channel_wr		: CTDC_T := x"00";
 	signal channel_ff		: CTDC_T := x"00";
 	
+	signal i_data_valid2	: std_logic := '0';
 	
 --
 --
 begin	
 
-	enable_read	<=	not(channel_ff(0) or channel_ff(1) or
-						channel_ff(2) or channel_ff(3) or
-						channel_ff(4) or channel_ff(5) or
-						channel_ff(6) or channel_ff(7));
+	-- enable_read	<=	not(channel_ff(0) or channel_ff(1) or
+						-- channel_ff(2) or channel_ff(3) or
+						-- channel_ff(4) or channel_ff(5) or
+						-- channel_ff(6) or channel_ff(7));
 
+	enable_read	<= '1';
+	
 	----------------------
 	-- TDC data readout --
 	----------------------
@@ -126,8 +132,8 @@ begin
 					i_data_valid <= '0';
 					if (itdc_ef1 = '0' or itdc_ef2 = '0') then
 						if itdc_irflag = '1' then
-							otdc_alutr <= '1'; 	-- TDC reset, keeping the contents of the configuration registers								
-							sm_TDCx <= sIdle;
+							 otdc_alutr <= '1'; 	-- TDC reset, keeping the contents of the configuration registers								
+							 sm_TDCx <= sIdle;
 						else
 							otdc_alutr <= '0';
 							sm_TDCx <= sSelectFIFO;
@@ -187,7 +193,7 @@ begin
 					oTDC_CSN <= '1';
 					oTDC_RDN <= '1';
 					--oTDC_Data <= iTDC_Data;				-- Data capture
-					i_data_valid <= '0';
+					i_data_valid <= '1';
 					sm_TDCx <= sReadDone;
 					otdc_alutr <= '0';
 				
@@ -196,7 +202,7 @@ begin
 					oTDC_CSN <= '1';
 					oTDC_RDN <= '1';
 					--oTDC_Data <= iTDC_Data;
-					i_data_valid <= '1';				-- Data strobe indicating valid data
+					i_data_valid <= '0';				-- Data strobe indicating valid data
 					otdc_alutr <= '0';
 					--if enable_read = '1' then
 						sm_TDCx <= sIdle;
@@ -232,7 +238,7 @@ begin
 	-- TDC data channel selector and output buffers --
 	--------------------------------------------------
 	channel_sel	<= selected_fifo & TDC_Data(27 downto 26);
-
+		
 	-- Channel Selector Demux
 	process(channel_sel, i_data_valid)
 	begin
@@ -241,7 +247,7 @@ begin
 			channel_wr(conv_integer(channel_sel))	<= '1';
 		end if;
 	end process;
-
+	
 	-- otdc_Data Output Buffer
 	process(rst, clk, i_data_valid)
 	begin
@@ -261,12 +267,13 @@ begin
 		tdcfifo port map
 		(
 			aclr		=> rst,
-			clock		=> clk,
+			wrclk		=> clk,
+			rdclk		=> dclk,
 			data		=> TDC_Data(25 downto 0),
-			rdreq		=> channel_rd(i),
 			wrreq		=> channel_wr(i),
-			empty		=> channel_ef(i),
-			full		=> channel_ff(i),
+			rdreq		=> channel_rd(i),
+			wrfull		=> channel_ff(i),
+			rdempty		=> channel_ef(i),
 			q			=> channel_out(i)
 		);
 	end generate channel_out_construct;
