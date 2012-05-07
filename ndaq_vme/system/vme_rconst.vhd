@@ -17,11 +17,12 @@ entity vme_rconst is
 		signal a_wr				: in	std_logic_vector((num_regs-1) downto 0);
 		signal a_rd				: in	std_logic_vector((num_regs-1) downto 0);
 
-		--signal b_wr				: in	std_logic_vector((num_regs-1) downto 0);
-		--signal b_rd				: in	std_logic_vector((num_regs-1) downto 0);
+		signal b_wr				: in	std_logic_vector((num_regs-1) downto 0);
+		signal b_rd				: in	std_logic_vector((num_regs-1) downto 0);
 
 		--common i/o
-		signal idata			: in	std_logic_vector(7 downto 0);
+		signal a_idata			: in	std_logic_vector(7 downto 0);
+		signal b_idata			: in	std_logic_vector(7 downto 0);
 		signal odata			: out	std_logic_vector(7 downto 0);
 
 		--register's individual i/os
@@ -53,7 +54,7 @@ begin
 			if (system_regs_enum(i).writable = true) generate
 
 				regs_hold_ffs:
-				process(clk, rst, a_wr, locked)							
+				process(clk, rst)							
 				begin
 					if (rst = '1') then
 						regs(i)		<= system_regs_enum(i).rstate;
@@ -61,9 +62,12 @@ begin
 						
 					elsif(rising_edge(clk)) then
 						if ((a_wr(i) = '1') and (locked(i) = '0')) then	-- 'locked' ensures one write per rising edge of 'a_wr'.
-							regs(i)		<= idata;
+							regs(i)		<= a_idata;
 							locked(i)	<= '1';
-						elsif (a_wr(i) = '0') then
+						elsif ((b_wr(i) = '1') and (locked(i) = '0')) then	-- 'locked' ensures one write per rising edge of 'a_wr'.
+							regs(i)		<= b_idata;
+							locked(i)	<= '1';
+						elsif ((a_wr(i) = '0') and (b_wr(i) = '0')) then
 							locked(i)	<= '0';
 						end if;
 
@@ -75,9 +79,9 @@ begin
 			if (system_regs_enum(i).readable = true) generate
 
 				regs_tri_st_ops:
-				process(a_rd(i), regs(i))
+				process(a_rd(i), b_rd(i), regs(i))
 				begin
-					if (a_rd(i) = '1') then
+					if ((a_rd(i) xor b_rd(i)) = '1') then
 						odata	<= regs(i);
 					else
 						odata	<= (others => 'Z');
@@ -101,10 +105,10 @@ begin
 			if (system_regs_enum(i).writable = true) generate
 				
 				input_to_peripheral:
-				oreg(i)	<= idata;
+				oreg(i)	<= a_idata when (a_wr(i) = '1') else b_idata;
 				
 				wr_stb_to_periph:
-				p_wr(i)	<= not(a_wr(i));	--periphereal's wr strobe is inverted
+				p_wr(i)	<= a_wr(i) xnor b_wr(i);	--periphereal's wr strobe is inverted
 				
 			end generate p_test_writable;
 			
@@ -112,12 +116,12 @@ begin
 			if (system_regs_enum(i).readable = true) generate
 
 				rd_stb_to_periph:
-				p_rd(i)	<= not(a_rd(i));	--peripheral's rd strobe is inverted
+				p_rd(i)	<= a_wr(i) xnor b_wr(i);	--peripheral's rd strobe is inverted
 				
 				periph_tri_st_ops:
-				process(a_rd(i), ireg(i))
+				process(a_rd(i), b_rd(i), ireg(i))
 				begin
-					if (a_rd(i) = '1') then
+					if ((a_rd(i) xor b_rd(i)) = '1') then
 						odata	<= ireg(i);
 					else
 						odata	<= (others => 'Z');
