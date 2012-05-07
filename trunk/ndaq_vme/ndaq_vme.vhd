@@ -261,11 +261,12 @@ architecture rtl of ndaq_vme is
 		signal a_wr				: in	std_logic_vector((num_regs-1) downto 0);
 		signal a_rd				: in	std_logic_vector((num_regs-1) downto 0);
 
-		--signal b_wr			: in	std_logic_vector((num_regs-1) downto 0);
-		--signal b_rd			: in	std_logic_vector((num_regs-1) downto 0);
+		signal b_wr				: in	std_logic_vector((num_regs-1) downto 0);
+		signal b_rd				: in	std_logic_vector((num_regs-1) downto 0);
 
 		--common i/o
-		signal idata			: in	std_logic_vector(7 downto 0);
+		signal a_idata			: in	std_logic_vector(7 downto 0);
+		signal b_idata			: in	std_logic_vector(7 downto 0);
 		signal odata			: out	std_logic_vector(7 downto 0);
 
 		--register's individual i/os
@@ -418,7 +419,7 @@ architecture rtl of ndaq_vme is
 	-- signal iuser_addr_lat		: std_logic_vector(7 downto 0);		-- Added by Herman in 08/09/10
 	
 	--
-	-- FSM para condicionar o sinal user_read(0)
+	-- FSM para condicionar os sinais user_read(0), user_read(1), user_read(3) e user_read(4). 
 	type trig is (s_one, s_two, s_three);
 	signal state_trig  : trig;
 	signal bstate_trig : trig;
@@ -436,10 +437,12 @@ architecture rtl of ndaq_vme is
 	signal ft_dwait	: std_logic := '0';
 	signal ft_dataa	: std_logic := '0';
 			
-	-- Command Decoder / Registers Test
-	--register's strobes
+	-- Command Decoder / Registers
 	signal a_wr			: std_logic_vector((num_regs-1) downto 0);
 	signal a_rd			: std_logic_vector((num_regs-1) downto 0);
+
+	signal b_wr			: std_logic_vector((num_regs-1) downto 0);
+	signal b_rd			: std_logic_vector((num_regs-1) downto 0);
 	
 	signal p_wr			: std_logic_vector((num_regs-1) downto 0);
 	signal p_rd			: std_logic_vector((num_regs-1) downto 0);
@@ -447,7 +450,8 @@ architecture rtl of ndaq_vme is
 	signal ireg			: SYS_REGS;
 	signal oreg			: SYS_REGS;
 
-	signal reg_idata	: std_logic_vector(7 downto 0);
+	signal a_reg_idata	: std_logic_vector(7 downto 0);
+	signal b_reg_idata	: std_logic_vector(7 downto 0);
 	signal reg_odata	: std_logic_vector(7 downto 0);
 
 	signal spi_status	: std_logic_vector(7 downto 0);
@@ -489,7 +493,7 @@ architecture rtl of ndaq_vme is
 	signal idt_en		: std_logic_vector(7 downto 0) := x"00";
 	signal idt_ii		: std_logic_vector(7 downto 0) := x"FF";
 	
-	signal control : std_logic_vector(3 downto 0) := x"0";
+	signal control 		: std_logic_vector(3 downto 0) := x"0";
 
 	--USB Readout Arbiter
 	signal usb_rdout_en	: std_logic_vector(7 downto 0) := x"00";
@@ -650,7 +654,7 @@ begin
 							vme_sysclock		=> vme_sysclk,
 							vme_ga				=> vme_ga,
 							vme_gap				=> vme_gap,
-							clock_40mhz			=> clk50M
+							clock_40mhz			=> pclk
 					);
 
 							
@@ -666,7 +670,12 @@ begin
 		a_wr			=> a_wr,
 		a_rd			=> a_rd,
 		
-		idata			=> reg_idata,
+		--register's strobes
+		b_wr			=> b_wr,
+		b_rd			=> b_rd,
+
+		a_idata			=> a_reg_idata,
+		b_idata			=> b_reg_idata,
 		odata			=> reg_odata,
 		
 		--register's individual i/os
@@ -677,26 +686,25 @@ begin
 		p_wr			=> p_wr,
 		p_rd			=> p_rd
 	);
-	
-	
-	-- Aproveitando o set 'a' de read/write strobes, que ja funciona pro modo USB
-	a_wr(0)	<= '0';
-	a_wr(1)	<= '0';
-	a_wr(2)	<= '0';
-	a_wr(3)	<= user_write(5);
-	a_wr(4)	<= user_write(6);
-	a_wr(5)	<= user_write(4);	
-	a_wr(6)	<= '0';
-	
-	a_rd(0)	<= '0';
-	a_rd(1)	<= '0';
-	a_rd(2)	<= '0';
-	a_rd(3)	<= user_read(5);
-	a_rd(4)	<= user_read(6);
-	a_rd(5)	<= user_read(4);	
-	a_rd(6)	<= '0';
 
-	reg_idata					<=	user_data_out(7 downto 0);
+	-- VME Registers Assignments.	
+	b_wr(0)	<= '0';
+	b_wr(1)	<= '0';
+	b_wr(2)	<= '0';
+	b_wr(3)	<= user_write(5);
+	b_wr(4)	<= user_write(6);
+	b_wr(5)	<= user_write(4);	
+	b_wr(6)	<= '0';
+	
+	b_rd(0)	<= '0';
+	b_rd(1)	<= '0';
+	b_rd(2)	<= '0';
+	b_rd(3)	<= user_read(5);
+	b_rd(4)	<= user_read(6);
+	b_rd(5)	<= user_read(4);	
+	b_rd(6)	<= '0';
+
+	b_reg_idata					<=	user_data_out(7 downto 0);
 	user_data_in(7 downto 0)	<=	reg_odata;
 	user_data_in(31 downto 8)	<=	(others => '0');
 	
@@ -707,7 +715,7 @@ begin
 	ireg(5)(6 downto 4)	<= (others => '0');
 	ireg(5)(7)			<= stsclk;
 
-	-- Command Decoder
+	-- USB Command Decoder
 	command_decoder:
 	vme_cmddec port map
 	(
@@ -731,12 +739,12 @@ begin
 		odata			=> ft_idata,
 
 		--register's strobes
-		reg_wr			=> open, --a_wr,
-		reg_rd			=> open, --a_rd,
+		reg_wr			=> a_wr,
+		reg_rd			=> a_rd,
 		
 		--register's i/os
-		reg_idata		=> (others => '0'), --reg_odata,
-		reg_odata		=> open --reg_idata
+		reg_idata		=> reg_odata,
+		reg_odata		=> a_reg_idata
 	);
 
 --*********************************************************************************************************
@@ -750,18 +758,14 @@ begin
 			rdout_rst <= oreg(6)(0);
 		end if;
 	end process;
-	--rdout_rst	<= oreg(6)(0);
 
 --*********************************************************************************************************
 	
 	fifo_signals_construct:
 	for i in 0 to (usb_channels-1) generate
 	
-		--test_used:
-		--if (usb_channels > i) generate
-			fifo_ren(i)	<= u_fifo_ren(i);		--rdtemp(i);
-			fifo_oe(i)	<= not(user_read(i));	--rdtemp(i);
-		--end generate test_used;
+		fifo_ren(i)	<= 	rdtemp(i) xnor u_fifo_ren(i);
+		fifo_oe(i)	<= 	rdtemp(i) xnor not(user_read(i));
 	
 	end generate fifo_signals_construct;
 	
@@ -798,9 +802,9 @@ begin
 	usb_readout_construct:
 	for i in 0 to (usb_channels-1) generate
 
-	-- TESTE VME
-	--a_rdf_data(i)		<= vme_data(9 downto 0);	-- ODD Channels.
-	--b_rdf_data(i)		<= vme_data(25 downto 16);	-- EVEN Channels.
+	--Data Bus from external FIFOs to internal FIFOs.
+	a_rdf_data(i)		<= vme_data(9 downto 0);	-- ODD Channels.
+	b_rdf_data(i)		<= vme_data(25 downto 16);	-- EVEN Channels.
 
 	
 	idt_to_intfifo:
@@ -956,11 +960,11 @@ begin
 -- Preliminary FSMs for RDENs
 -- 
 
-	process (mrst,clk50m) begin
+	process (mrst,pclk) begin
 		if (mrst = '1') then
 			state_trig <= s_one;
 			u_fifo_ren(0) <= '1';
-		elsif (clk50m'event and clk50m = '1') then
+		elsif (pclk'event and pclk = '1') then
 				case state_trig is
 						
 					when s_one =>
@@ -992,11 +996,11 @@ begin
 		end if;
 	end process;
 
-	process (mrst,clk50m) begin
+	process (mrst,pclk) begin
 		if (mrst = '1') then
 			bstate_trig <= s_one;
 			u_fifo_ren(1) <= '1';
-		elsif (clk50m'event and clk50m = '1') then
+		elsif (pclk'event and pclk = '1') then
 				case bstate_trig is
 						
 					when s_one =>
@@ -1028,11 +1032,11 @@ begin
 		end if;
 	end process;
 
-	process (mrst,clk50m) begin
+	process (mrst,pclk) begin
 		if (mrst = '1') then
 			cstate_trig <= s_one;
 			u_fifo_ren(2) <= '1';
-		elsif (clk50m'event and clk50m = '1') then
+		elsif (pclk'event and pclk = '1') then
 				case cstate_trig is
 						
 					when s_one =>
@@ -1064,11 +1068,11 @@ begin
 		end if;
 	end process;
 	
-	process (mrst,clk50m) begin
+	process (mrst,pclk) begin
 		if (mrst = '1') then
 			dstate_trig <= s_one;
 			u_fifo_ren(3) <= '1';
-		elsif (clk50m'event and clk50m = '1') then
+		elsif (pclk'event and pclk = '1') then
 				case dstate_trig is
 						
 					when s_one =>
