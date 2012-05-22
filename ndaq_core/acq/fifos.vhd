@@ -105,7 +105,7 @@ begin
 	postfifo port map
 	(
 		aclr	 	=> rst,
-		data	 	=> data_r, --dbus,
+		data	 	=> dbus,
 		rdclk	 	=> rdclk,
 		rdreq	 	=> rd,
 		wrclk	 	=> wrclk,

@@ -1037,18 +1037,21 @@ end generate adc_flags_construct;
 
 	--
 	-- Slot Enable: '1' for enable.
-	enable_A(0)	<= '1';
-	enable_A(1)	<= '1';
-	enable_A(2)	<= '1';
-	enable_A(3)	<= '1';
+	enable_A(0)	<= '0';					-- Header
+	enable_A(1)	<= '1';					-- ADC
+	enable_A(2)	<= '0';					-- TDC
+
+	enable_A(3)	<= '0';
 	enable_A(4)	<= '1';
-	enable_A(5)	<= '1';
-	enable_A(6)	<= '1';
+	enable_A(5)	<= '0';
+
+	enable_A(6)	<= '0';
 	enable_A(7)	<= '1';
-	enable_A(8)	<= '1';
-	enable_A(9)	<= '1';
+	enable_A(8)	<= '0';
+
+	enable_A(9)	<= '0';
 	enable_A(10)<= '1';
-	enable_A(11)<= '1';
+	enable_A(11)<= '0';
 
 	-- Transfer Enable: even channel and odd channel and IDT ALMOST Full Flag must let us go. 
 	-- 'fifo_paf' is NOT negated because it is active low.
@@ -1070,19 +1073,19 @@ end generate adc_flags_construct;
 
 	-- Slot Transfer Size:
 	transfer(0)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(1)	<= CONV_STD_LOGIC_VECTOR(29, NumBits(transfer_max));
+	transfer(1)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
 	transfer(2)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 
 	transfer(3)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(4)	<= CONV_STD_LOGIC_VECTOR(29, NumBits(transfer_max));
+	transfer(4)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
 	transfer(5)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 
 	transfer(6)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(7)	<= CONV_STD_LOGIC_VECTOR(29, NumBits(transfer_max));
+	transfer(7)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
 	transfer(8)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 
 	transfer(9)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(10)<= CONV_STD_LOGIC_VECTOR(29, NumBits(transfer_max));
+	transfer(10)<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
 	transfer(11)<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 
 	-- Slot Address:
@@ -1123,12 +1126,15 @@ end generate adc_flags_construct;
 	mode(0)		<= '0';
 	mode(1)		<= '0';
 	mode(2)		<= '0';
+	
 	mode(3)		<= '0';
 	mode(4)		<= '0';
 	mode(5)		<= '0';
+	
 	mode(6)		<= '0';
 	mode(7)		<= '0';
 	mode(8)		<= '0';
+	
 	mode(9)		<= '0';
 	mode(10)	<= '0';
 	mode(11)	<= '0';
