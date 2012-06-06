@@ -46,9 +46,10 @@ use ieee.std_logic_unsigned.all;	-- Synopsys extension to std_logic_arith to han
 --use ieee.numeric_std.all;		-- altenative to std_logic_arith, used for maths too (will conflict with std_logic_arith if 'signed' is used in interfaces).
 
 use work.functions_pkg.all;			-- Misc. functions
+use work.core_regs.all;				-- Registers handling definitions
 use work.acq_pkg.all;				-- ACQ definitions
 use work.tdc_pkg.all;				-- TDC definitions
-use work.core_regs.all;				-- Registers handling definitions
+use work.tcounter_pkg.all;			-- Trigger Counter definitions
 use work.databuilder_pkg.all;		-- Data Builder definitions
 
 
@@ -122,10 +123,12 @@ entity ndaq_core is
 		signal fifo3_ff			: in   	std_logic;
 		signal fifo4_ff			: in   	std_logic;
 		
-		signal fifo1_ef			: in   	std_logic;	-- EMPTY flag
-		signal fifo2_ef			: in   	std_logic;
-		signal fifo3_ef			: in   	std_logic;
-		signal fifo4_ef			: in   	std_logic;
+		-- signal fifo1_ef			: in   	std_logic;	-- EMPTY flag
+		-- signal fifo2_ef			: in   	std_logic;
+		-- signal fifo3_ef			: in   	std_logic;
+		-- signal fifo4_ef			: in   	std_logic;
+		
+		signal fifo_ef			: in	std_logic_vector(3 downto 0);
 		
 		signal fifo1_hf			: in   	std_logic;	-- HALF-FULL flag
 		signal fifo2_hf			: in   	std_logic;
@@ -177,24 +180,19 @@ entity ndaq_core is
 		signal trigger_a		: in	std_logic;	
 		signal trigger_b		: in	std_logic;
 		signal trigger_c		: in	std_logic
-		
-		-----------------------
-		-- Temporary signals --
-		-----------------------
-		--signal mux_sel		: in		std_logic_vector(2 downto 0)
 	);
 		
 end ndaq_core;
 
 architecture rtl of ndaq_core is
 
-	
 ------------------------------
 --**************************--
 --******* COMPONENTS *******--
 --**************************--
 ------------------------------
 
+	--
 	-- Clock Manager
 	component core_clkman
 	port
@@ -210,6 +208,7 @@ architecture rtl of ndaq_core is
 	);
 	end component;
 	
+	--
 	-- Reset Generator
 	component rstgen
 	port
@@ -222,29 +221,74 @@ architecture rtl of ndaq_core is
 	);
 	end component;
 
-	-- FIFO Memory Module (1 channel - 1 pre and 1 post)
-	component dcfifom
+	--
+	-- External Trigger Pulse Conditioner
+	component tpulse
 	port
 	(	
-		signal wrclk			: in 	std_logic; -- write clock
-		signal rdclk			: in 	std_logic; -- read clock
-		signal rst				: in 	std_logic; -- async reset
-		
-		signal wr				: in 	std_logic;
-		signal d				: in	DATA_T;
-		
-		signal rd				: in	std_logic;	
-		signal q				: out	DATA_T;
-		
-		signal f				: out	std_logic;	--full flag
-		signal e				: out	std_logic;	--empty flag
-
-		signal rdusedw			: out	USEDW_T;	-- used words sync'ed to read clock
-		signal wrusedw			: out	USEDW_T	-- used words sync'ed to write clock
+		signal rst			  	: in	std_logic;
+		signal clk				: in	std_logic;
+		signal enable		  	: in	std_logic;		
+		signal trig_in		  	: in	std_logic;
+		signal trig_out     	: out	std_logic
 	);
 	end component;
 
-	-- FIFO Writer
+	--
+	--	Internal Discriminator/Trigger Generator
+	component itrigger 
+	port
+	(	
+		signal rst				: in	std_logic;
+		signal clk				: in	std_logic;
+		-- Trigger
+		signal enable			: in	std_logic;
+		signal pos_neg			: in	std_logic;								-- To set positive ('0') or negative ('1') trigger
+		signal data_in			: in	signed(data_width-1 downto 0);			-- Signal from the ADC
+		signal th1				: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
+		signal th2				: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
+		signal trigger_out		: out	std_logic
+	);	
+	end component;
+	
+	--
+	-- Timebase Generator and Timebase Counter
+	component timebase
+	port
+	(	
+		signal rst					: in	std_logic;
+		signal clk					: in	std_logic;
+		-- Timebase Generator
+		signal timebase_out			: out	std_logic;
+		-- Timebase Counter
+		signal srst					: in	std_logic;
+		signal rdclk				: in	std_logic;
+		signal rden					: in	std_logic;
+		signal fifo_empty			: out	std_logic;
+		signal counter_q			: out	std_logic_vector(31 downto 0) := x"00000000"
+	);	
+	end component;	
+
+	--
+	-- Trigger Counter
+	component tcounter
+	port
+	(	
+		signal rst					: in	std_logic;
+		signal clk					: in	std_logic;
+		-- Counter
+		signal trigger_in			: in	std_logic;
+		signal srst					: in	std_logic;
+		--
+		signal rdclk				: in	std_logic;
+		signal rden					: in	std_logic;
+		signal fifo_empty			: out	std_logic;
+		signal counter_q			: out	TCOUNTER_DATA_T := x"00000000"
+	);	
+	end component;
+
+	--
+	-- ADC FIFO Writer
 	component writefifo
 	port
 	(	
@@ -273,40 +317,30 @@ architecture rtl of ndaq_core is
 	);
 	end component;
 
-	-- External Trigger Pulse Conditioner
-	component tpulse
+	--
+	-- ADC FIFO Memory Module (1 channel - 1 pre and 1 post)
+	component dcfifom
 	port
 	(	
-		signal rst			  	: in	std_logic;
-		signal clk				: in	std_logic;
-		signal enable		  	: in	std_logic;		
-		signal trig_in		  	: in	std_logic;
-		signal trig_out     	: out	std_logic
+		signal wrclk			: in 	std_logic; -- write clock
+		signal rdclk			: in 	std_logic; -- read clock
+		signal rst				: in 	std_logic; -- async reset
+		
+		signal wr				: in 	std_logic;
+		signal d				: in	DATA_T;
+		
+		signal rd				: in	std_logic;	
+		signal q				: out	DATA_T;
+		
+		signal f				: out	std_logic;	--full flag
+		signal e				: out	std_logic;	--empty flag
+
+		signal rdusedw			: out	USEDW_T;	-- used words sync'ed to read clock
+		signal wrusedw			: out	USEDW_T	-- used words sync'ed to write clock
 	);
 	end component;
 
 	--
-	component itrigger 
-	port
-	(	signal rst				: in	std_logic;
-		signal clk				: in	std_logic;
-		-- Trigger
-		signal enable			: in	std_logic;
-		signal pos_neg			: in	std_logic;								-- To set positive ('0') or negative ('1') trigger
-		signal data_in			: in	signed(data_width-1 downto 0);			-- Signal from the ADC
-		signal threshold_rise	: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
-		signal threshold_fall	: in	signed(data_width-1 downto 0);			-- Signal from 'Threshold' register
-		signal trigger_out		: out	std_logic;
-		-- Counter
-		signal rdclk			: in	std_logic := '0';
-		signal rden				: in	std_logic := '0';
-		signal fifo_empty		: out	std_logic := '0';
-		signal counter_q		: out	std_logic_vector(31 downto 0) := x"00000000";
-		-- Debug
-		signal state_out		: out	std_logic_vector(3 downto 0)
-	);	
-	end component;
-	
 	-- TDC Interface
 	component tdc
 	port
@@ -344,6 +378,7 @@ architecture rtl of ndaq_core is
 	);	
 	end component;
 
+	--
 	-- Data Builder
 	component databuilder
 	port
@@ -351,6 +386,9 @@ architecture rtl of ndaq_core is
 		--
 		rst							: in	std_logic;
 		clk							: in	std_logic;		 
+
+		--
+		enable						: in	std_logic;
 
 		--
 		enable_A					: in	SLOTS_T;
@@ -368,24 +406,8 @@ architecture rtl of ndaq_core is
 		odata						: out	ODATA_T
 	);
 	end component;
-	
-	-- Synchronous Word Copier
-	component swc
-	port
-	(	
-		signal clk				: in 	std_logic; -- sync if
-		signal rst				: in	std_logic; -- async if
-		
-		--flags
-		signal dwait			: in	std_logic;
-		signal dataa			: in	std_logic;
 
-		--strobes
-		signal wr				: out 	std_logic := '1';
-		signal rd				: out 	std_logic := '1'
-	);
-	end component;
-
+	--
 	-- Slave SPI
 	component s_spi
 	port
@@ -408,7 +430,8 @@ architecture rtl of ndaq_core is
 		signal odata			: out	std_logic_vector(7 downto 0)	-- data output parallel bus	
 	);
 	end component;
-	
+
+	--
 	-- Registers
 	component core_rconst
 	port
@@ -437,6 +460,7 @@ architecture rtl of ndaq_core is
 	);
 	end component;
 	
+	--
 	-- Command Decoder
 	component core_cmddec
 	port
@@ -479,23 +503,29 @@ architecture rtl of ndaq_core is
 	
 	--
 	
-	--
+	-- Reset
 	signal rst						: std_logic;
 	signal idt_rst					: std_logic;
 	
-	--
+	-- ADC 
 	signal adcpwdn					: std_logic_vector(3 downto 0);
 
 	signal adc_dco					: std_logic_vector(3 downto 0);
 	signal nadc_dco					: std_logic_vector(3 downto 0);
 	signal acq_enable				: std_logic;
 	
-	--
+	-- Clocks
 	signal pclk						: std_logic;
 	signal dclk						: std_logic;
 	signal fclk						: std_logic;
-
-	--
+	
+	-- Timebase
+	signal time_rd					: std_logic_vector(3 downto 0);
+	signal time_rd_comb				: std_logic;
+	signal time_ef					: std_logic;
+	signal time_q					: std_logic_vector(31 downto 0);
+	
+	-- ACQ: ADC
 	signal acq_rst					: std_logic_vector((adc_channels-1) downto 0);	
 	signal clk						: std_logic_vector((adc_channels-1) downto 0);
 	signal rd						: std_logic_vector((adc_channels-1) downto 0);
@@ -505,6 +535,8 @@ architecture rtl of ndaq_core is
 	signal c_trigger_a				: std_logic_vector((adc_channels-1) downto 0);
 	signal c_trigger_b				: std_logic_vector((adc_channels-1) downto 0);
 	signal c_trigger_c				: std_logic_vector((adc_channels-1) downto 0);
+	signal thtemp1					: DATA_T;
+	signal thtemp2					: DATA_T;
 	signal int_trigger				: std_logic_vector((adc_channels-1) downto 0);
 	signal acqin					: std_logic_vector((adc_channels-1) downto 0);
 	signal wf_en					: std_logic_vector((adc_channels-1) downto 0);
@@ -517,11 +549,16 @@ architecture rtl of ndaq_core is
 	signal rdusedw					: F_USEDW_WIDTH_T; -- FIFOs USED WORDS bus vector sync'ed to read clock
 	signal wrusedw					: F_USEDW_WIDTH_T; -- FIFOs USED WORDS bus vector sync'ed to write clock
 
-	-- TDC
+	-- ACQ: TDC
 	signal	tdc_ef					: CTDC_T;
 	signal	tdc_rd					: CTDC_T;
 	signal	tdc_q					: OTDC_A;
 
+	-- ACQ: Trigger Counter
+	signal tcounter_rd				: std_logic_vector((tcounter_channels-1) downto 0);
+	signal tcounter_ef				: std_logic_vector((tcounter_channels-1) downto 0);
+	signal tcounter_q				: TCOUNTER_DATA_A;
+	
 	-- Data Builder
 	signal	enable_A				: SLOTS_T;
 	signal	enable_B				: SLOTS_T;
@@ -556,11 +593,6 @@ architecture rtl of ndaq_core is
 	signal reg_idata	: std_logic_vector(7 downto 0);
 	signal reg_odata	: std_logic_vector(7 downto 0);
 	
-	signal thtemp		: DATA_T;
-
-	--
-	--signal temp						: std_logic;	
-
 	-- Slave SPI Test
 	signal s_spi_wr					: std_logic := '1';
 	signal s_spi_rd					: std_logic := '1';
@@ -592,20 +624,6 @@ begin
 	adc56_pwdn <= not(ADC56_PWR);
 	adc78_pwdn <= not(ADC78_PWR);
 
-
-	-------------------
-	-- TDC interface --
-	-------------------
-	-- tdc_stop_dis	<= (others => 'Z');
-	-- tdc_start_dis	<= 'Z';
-	-- tdc_wrn		 	<= 'Z';
-	-- tdc_rdn			<= 'Z';
-	-- tdc_csn			<= 'Z';
-	-- tdc_alutr		<= 'Z';
-	-- tdc_puresn		<= 'Z';
-	-- tdc_oen			<= 'Z';
-	-- tdc_adr			<= (others => 'Z');
-
 	----------------------
 	-- FIFO's interface --
 	----------------------
@@ -619,7 +637,6 @@ begin
 	fifo_fs0	<= '1';			--high for m = 255 -- See IDT FIFO1s manual.
 	fifo_fs1	<= '1';			--high for m = 255 -- See IDT FIFO1s manual.
 	fifo_ld		<= '1';			--high during reset for m = 255 -- See IDT FIFO's manual.
-
 	
 	--------------------
 	-- SRAM interface --
@@ -630,7 +647,6 @@ begin
 	sram_oe		<= '1';
 	sram_cs		<= '1';
 	
-
 ------------------------
 --********************--
 --******* MAPS *******--
@@ -668,37 +684,32 @@ begin
 
 	
 -- ************************************ SLAVE SPI ******************************
-	-- *** Utilizado para configuracao de registradores que ainda so funciona no
-	-- *** modo USB
 
 	Slave_SPI: 
 	s_spi
 	port map
 	(	
-		clk			=> pclk,		-- sytem clock
-		rst			=> rst,			-- asynchronous reset
+		clk			=> pclk,			-- sytem clock
+		rst			=> rst,				-- asynchronous reset
 		
-		mosi		=> mosi,		-- master serial out	- slave serial in
-		miso		=> miso,		-- master serial in		- slave serial out
-		sclk		=> spiclk,		-- spi clock out
-		cs			=> cs,			-- chip select
+		mosi		=> mosi,			-- master serial out	- slave serial in
+		miso		=> miso,			-- master serial in		- slave serial out
+		sclk		=> spiclk,			-- spi clock out
+		cs			=> cs,				-- chip select
 		
-		wr			=> s_spi_wr,	-- write strobe
-		rd			=> s_spi_rd,	-- read strobe
+		wr			=> s_spi_wr,		-- write strobe
+		rd			=> s_spi_rd,		-- read strobe
 		
-		dwait		=> s_spi_dwait,	-- busy flag
-		dataa		=> s_spi_dataa,	-- data avaiable flag
+		dwait		=> s_spi_dwait,		-- busy flag
+		dataa		=> s_spi_dataa,		-- data avaiable flag
 		
-		idata		=> s_spi_idata,	-- data input parallel bus
+		idata		=> s_spi_idata,		-- data input parallel bus
 		odata		=> s_spi_odata		-- data output parallel bus	
 	);
 
 	
 -- ******************************* CMDDEC-REGS *********************************
 	
-	-- *** ESCREVER/LER em registrador so funciona no modo USB. Ainda depende de
-	-- *** testes e progressos no FPGA VME.
-
 	registers:
 	core_rconst port map
 	(
@@ -775,6 +786,27 @@ begin
 
 	end generate test_counter_construct;
 	
+-- ********************************** TIMEBASE ********************************
+	
+	--
+	-- Timebase Counter Read Enable Logic
+	time_rd_comb	<= time_rd(0) or time_rd(1) or time_rd(2) or time_rd(3);
+	
+	timebase_gen:
+	timebase port map
+	(	
+		rst					=> rst,
+		clk					=> clkcore,
+		-- Timebase Generator
+		timebase_out		=> open,
+		-- Timebase Counter
+		srst				=> oreg(3)(0),
+		rdclk				=> dclk,
+		rden				=> time_rd_comb,
+		fifo_empty			=> time_ef,
+		counter_q			=> time_q
+	);	
+
 -- ******************************* ACQ - CHANNELS *****************************
 
 	clk(0)		<= adc12_dco;
@@ -786,15 +818,24 @@ begin
 	clk(6)		<= adc78_dco;
 	clk(7)		<= not(adc78_dco);
 
-	data(0)		<= adc12_data; --counter(0);
-	data(1)		<= adc12_data; --counter(1);
-	data(2)		<= adc34_data; --counter(2;
-	data(3)		<= adc34_data; --counter(3);
-	data(4)		<= adc56_data; --counter(4);
-	data(5)		<= adc56_data; --counter(5);
-	data(6)		<= adc78_data; --counter(6);
-	data(7)		<= adc78_data; --counter(7);
+	data(0)		<= adc12_data;
+	data(1)		<= adc12_data;
+	data(2)		<= adc34_data;
+	data(3)		<= adc34_data;
+	data(4)		<= adc56_data;
+	data(5)		<= adc56_data;
+	data(6)		<= adc78_data;
+	data(7)		<= adc78_data;
 	
+	-- data(0)		<= counter(0);
+	-- data(1)		<= counter(1);
+	-- data(2)		<= counter(2);
+	-- data(3)		<= counter(3);
+	-- data(4)		<= counter(4);
+	-- data(5)		<= counter(5);
+	-- data(6)		<= counter(6);
+	-- data(7)		<= counter(7);
+
 	wf_en(0)	<= '1';
 	wf_en(1)	<= '1';
 	wf_en(2)	<= '1'; --acqin(0);	-- 0 and 2 interleaved mode.
@@ -856,11 +897,14 @@ begin
 			trig_in		=> trigger_c,
 			trig_out	=> c_trigger_c(i)
 		);
-
-		-- Gera Trigger Interno e conta a quantidade de triggers
-		thtemp(9 downto 8) <= "00";
-		thtemp(7 downto 0) <= oreg(5);
 		
+		--
+		--
+		thtemp1(9 downto 8) <= oreg(6)(1 downto 0);	-- high Th 1 reg
+		thtemp1(7 downto 0) <= oreg(5);				-- low Th 1 reg
+		thtemp2(9 downto 8) <= oreg(8)(1 downto 0);	-- high Th 2 reg
+		thtemp2(7 downto 0) <= oreg(7);				-- low Th 2 reg
+
 		internal_trigger:
 		itrigger port map
 		(	
@@ -868,20 +912,28 @@ begin
 			clk					=> clk(i),
 			-- Trigger
 			enable				=> '1',
-			pos_neg				=> '1',								--'0' for pos, '1' for neg.
+			pos_neg				=> oreg(9)(0),				--'0' for RISING EDGE, '1' for FALLING EDGE.
 			data_in				=> MY_CONV_SIGNED(data(i)),
-			threshold_rise		=> CONV_SIGNED(T_RISE, data_width), --MY_CONV_SIGNED(thtemp),
-			threshold_fall		=> CONV_SIGNED(T_FALL, data_width), --MY_CONV_SIGNED(thtemp),
-			trigger_out			=> int_trigger(i),
-			-- Counter
-			rdclk				=> fclk,
-			rden				=> '0',
-			fifo_empty			=> open,
-			counter_q			=> open,
-			-- Debug
-			state_out			=> open
+			th1					=> MY_CONV_SIGNED(thtemp1),	--CONV_SIGNED(T_RISE, data_width),
+			th2					=> MY_CONV_SIGNED(thtemp2),	--CONV_SIGNED(T_FALL, data_width),
+			trigger_out			=> int_trigger(i)
 		);	
-
+		
+		trigger_counter:
+		tcounter port map
+		(	
+			rst					=> acq_rst(i),
+			clk					=> clk(i),
+			-- Counter
+			trigger_in			=> int_trigger(i),
+			srst				=> oreg(3)(0),
+			--
+			rdclk				=> dclk,
+			rden				=> tcounter_rd(i),
+			fifo_empty			=> tcounter_ef(i),
+			counter_q			=> tcounter_q(i)
+		);	
+		
 		-- Controla a escrita nas POST FIFOs a partir de um 'trigger' condicionado
 		stream_IN:
 		writefifo port map
@@ -900,7 +952,7 @@ begin
 			trig2		=> c_trigger_c(i),
 
 			-- conditioned trigger input, active when 'tmode = '1''
-			trig3		=> int_trigger(0),
+			trig3		=> int_trigger(0),								-- *** Improve: MULTIPLEX THE 8 INTERNAL TRIGGERS! ***
 			
 			wr			=> wr(i),
 				
@@ -965,8 +1017,8 @@ begin
 		-----------------
 		-- TDC control --
 		-----------------
-		start_conf		=> oreg(6)(0),			-- Start the configuration machine (active high pulse with 2-periods width)
-		conf_done		=> ireg(7)(0),		
+		start_conf		=> oreg(10)(0),			-- Start the configuration machine (active high pulse with 2-periods width)
+		conf_done		=> ireg(11)(0),		
 		otdc_data		=> open,
 		channel_ef		=> tdc_ef,
 		channel_rd		=> tdc_rd,
@@ -980,9 +1032,12 @@ begin
 	databuilder port map 
 	(
 		--
-		rst							=> rst,
+		rst							=> idt_rst,
 		clk							=> dclk,
-
+		
+		--
+		enable						=> oreg(1)(0),
+		
 		--
 		enable_A					=> enable_A,
 		enable_B					=> enable_B,
@@ -1006,7 +1061,6 @@ for i in 0 to 3 generate
 	--
 	-- Internal FIFOs enough data test
 	--
-	
 	even_read_test:
 	process(rdusedw, empty)
 	begin
@@ -1037,129 +1091,225 @@ end generate adc_flags_construct;
 
 	--
 	-- Slot Enable: '1' for enable.
-	enable_A(0)	<= '0';					-- Header
-	enable_A(1)	<= '1';					-- ADC
-	enable_A(2)	<= '0';					-- TDC
+	enable_A(0)		<= '0';					-- Header
+	enable_A(1)		<= '1';					-- Timestamp
+	enable_A(2)		<= '0';					-- ADC
+	enable_A(3)		<= '0';					-- TDC
+	enable_A(4)		<= '1';					-- Trigger Counter
+	enable_A(5)		<= '1';					-- Trigger Counter
 
-	enable_A(3)	<= '0';
-	enable_A(4)	<= '1';
-	enable_A(5)	<= '0';
+	enable_A(6)		<= '0';
+	enable_A(7)		<= '1';
+	enable_A(8)		<= '0';
+	enable_A(9)		<= '0';
+	enable_A(10)	<= '1';
+	enable_A(11)	<= '1';
 
-	enable_A(6)	<= '0';
-	enable_A(7)	<= '1';
-	enable_A(8)	<= '0';
+	enable_A(12)	<= '0';
+	enable_A(13)	<= '1';
+	enable_A(14)	<= '0';
+	enable_A(15)	<= '0';
+	enable_A(16)	<= '1';
+	enable_A(17)	<= '1';
 
-	enable_A(9)	<= '0';
-	enable_A(10)<= '1';
-	enable_A(11)<= '0';
+	enable_A(18)	<= '0';
+	enable_A(19)	<= '1';
+	enable_A(20)	<= '0';
+	enable_A(21)	<= '0';
+	enable_A(22)	<= '1';
+	enable_A(23)	<= '1';
 
 	-- Transfer Enable: even channel and odd channel and IDT ALMOST Full Flag must let us go. 
 	-- 'fifo_paf' is NOT negated because it is active low.
-	enable_B(0)	<= fifo_paf(0) and even_enable(0) and odd_enable(0);
-	enable_B(1)	<= fifo_paf(0) and even_enable(0) and odd_enable(0);
-	enable_B(2)	<= fifo_paf(0);
+	enable_B(0)		<= fifo_paf(0) and even_enable(0) and odd_enable(0);
+	enable_B(1)		<= fifo_paf(0) and not(time_ef);
+	enable_B(2)		<= fifo_paf(0) and even_enable(0) and odd_enable(0);
+	enable_B(3)		<= fifo_paf(0);
+	enable_B(4)		<= fifo_paf(0) and not(tcounter_ef(0));
+	enable_B(5)		<= fifo_paf(0) and not(tcounter_ef(1));
 
-	enable_B(3)	<= fifo_paf(1) and even_enable(1) and odd_enable(1);
-	enable_B(4)	<= fifo_paf(1) and even_enable(1) and odd_enable(1);
-	enable_B(5)	<= fifo_paf(1);
+	enable_B(6)		<= fifo_paf(1) and even_enable(1) and odd_enable(1);
+	enable_B(7)		<= fifo_paf(1) and not(time_ef);
+	enable_B(8)		<= fifo_paf(1) and even_enable(1) and odd_enable(1);
+	enable_B(9)		<= fifo_paf(1);
+	enable_B(10)	<= fifo_paf(1) and not(tcounter_ef(2));
+	enable_B(11)	<= fifo_paf(1) and not(tcounter_ef(3));
 
-	enable_B(6)	<= fifo_paf(2) and even_enable(2) and odd_enable(2);
-	enable_B(7)	<= fifo_paf(2) and even_enable(2) and odd_enable(2);
-	enable_B(8)	<= fifo_paf(2);
+	enable_B(12)	<= fifo_paf(2) and even_enable(2) and odd_enable(2);
+	enable_B(13)	<= fifo_paf(2) and not(time_ef);
+	enable_B(14)	<= fifo_paf(2) and even_enable(2) and odd_enable(2);
+	enable_B(15)	<= fifo_paf(2);
+	enable_B(16)	<= fifo_paf(2) and not(tcounter_ef(4));
+	enable_B(17)	<= fifo_paf(2) and not(tcounter_ef(5));
 
-	enable_B(9)	<= fifo_paf(3) and even_enable(3) and odd_enable(3);
-	enable_B(10)<= fifo_paf(3) and even_enable(3) and odd_enable(3); 
-	enable_B(11)<= fifo_paf(3);
+	enable_B(18)	<= fifo_paf(3) and even_enable(3) and odd_enable(3);
+	enable_B(19)	<= fifo_paf(3) and not(time_ef);
+	enable_B(20)	<= fifo_paf(3) and even_enable(3) and odd_enable(3); 
+	enable_B(21)	<= fifo_paf(3);
+	enable_B(22)	<= fifo_paf(3) and not(tcounter_ef(6));
+	enable_B(23)	<= fifo_paf(3) and not(tcounter_ef(7));
 
 	-- Slot Transfer Size:
-	transfer(0)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(1)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
-	transfer(2)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(0)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(1)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(2)		<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(3)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(4)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(5)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 
-	transfer(3)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(4)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
-	transfer(5)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(6)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(7)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(8)		<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(9)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(10)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(11)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 
-	transfer(6)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(7)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
-	transfer(8)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(12)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(13)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(14)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(15)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(16)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(17)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 
-	transfer(9)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(10)<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
-	transfer(11)<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(18)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(19)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(20)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(21)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(22)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(23)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 
 	-- Slot Address:
-	address(0)	<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
-	address(1)	<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
-	address(2)	<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	address(0)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	address(1)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	address(2)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	address(3)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	address(4)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	address(5)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
 
-	address(3)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
-	address(4)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
-	address(5)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
+	address(6)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
+	address(7)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
+	address(8)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
+	address(9)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
+	address(10)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
+	address(11)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
 
-	address(6)	<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
-	address(7)	<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
-	address(8)	<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(12)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(13)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(14)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(15)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(16)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(17)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
 
-	address(9)	<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
-	address(10)	<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
-	address(11)	<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(18)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(19)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(20)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(21)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(22)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(23)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
 
 	-- 32 bits construct.	
-	idata(0)	<= x"AA55AA55";											--01 palavra
-	idata(1)	<= "000000" & q(1) & "000000" & q(0);					--30 palavras
-	idata(2)	<= tdc_q(4)(15 downto 0) & tdc_q(0)(15 downto 0);		--01 palavra
+	idata(0)		<= x"AA55AA55";											--001 palavra
+	idata(1)		<= time_q;												--001 palavra
+	idata(2)		<= x"0" & "00" & q(1) & x"0" & "00" & q(0);				--128 palavras
+	--idata(1)		<= x"2" & "00" & q(1) & x"1" & "00" & q(0);				
+	--idata(1)		<= x"2000" & x"1000";
+	idata(3)		<= tdc_q(4)(15 downto 0) & tdc_q(0)(15 downto 0);		--001 palavra
+	idata(4)		<= tcounter_q(0);										--001 palavra
+	idata(5)		<= tcounter_q(1);										--001 palavra
 
-	idata(3)	<= x"AA55AA55";											--01 palavra
-	idata(4)	<= "000000" & q(3) & "000000" & q(2);					--30 palavras
-	idata(5)	<= tdc_q(5)(15 downto 0) & tdc_q(1)(15 downto 0);		--01 palavra
+	idata(6)		<= x"AA55AA55";											--001 palavra
+	idata(7)		<= time_q;												--001 palavra
+	idata(8)		<= x"0" & "00" & q(3) & x"0" & "00" & q(2);				--128 palavras
+	--idata(6)		<= x"4" & "00" & q(3) & x"3" & "00" & q(2);			
+	--idata(6)		<= x"4000" & x"3000";
+	idata(9)		<= tdc_q(5)(15 downto 0) & tdc_q(1)(15 downto 0);		--001 palavra
+	idata(10)		<= tcounter_q(2);										--001 palavra
+	idata(11)		<= tcounter_q(3);										--001 palavra
 
-	idata(6)	<= x"AA55AA55";											--01 palavra
-	idata(7)	<= "000000" & q(5) & "000000" & q(4);					--30 palavras
-	idata(8)	<= tdc_q(6)(15 downto 0) & tdc_q(2)(15 downto 0);		--01 palavra
+	idata(12)		<= x"AA55AA55";											--001 palavra
+	idata(13)		<= time_q;												--001 palavra
+	idata(14)		<= x"0" & "00" & q(5) & x"0" & "00" & q(4);				--128 palavras
+	--idata(11)		<= x"6" & "00" & q(5) & x"5" & "00" & q(4);				
+	--idata(11)		<= x"6000" & x"5000";
+	idata(15)		<= tdc_q(6)(15 downto 0) & tdc_q(2)(15 downto 0);		--001 palavra
+	idata(16)		<= tcounter_q(4);										--001 palavra
+	idata(17)		<= tcounter_q(5);										--001 palavra
 
-	idata(9)	<= x"AA55AA55";											--01 palavra	
-	idata(10)	<= "000000" & q(7) & "000000" & q(6);					--30 palavras
-	idata(11)	<= tdc_q(7)(15 downto 0) & tdc_q(3)(15 downto 0);		--01 palavra
+	idata(18)		<= x"AA55AA55";											--001 palavra	
+	idata(19)		<= time_q;												--001 palavra
+	idata(20)		<= x"0" & "00" & q(7) & x"0" & "00" & q(6);				--128 palavras
+	--idata(16)		<= x"8" & "00" & q(7) & x"7" & "00" & q(6);				
+	--idata(16)		<= x"8000" & x"7000";
+	idata(21)		<= tdc_q(7)(15 downto 0) & tdc_q(3)(15 downto 0);		--001 palavra
+	idata(22)		<= tcounter_q(6);										--001 palavra
+	idata(23)		<= tcounter_q(7);										--001 palavra
 
 	-- Mode: '0' for non branch and '1' for branch.
-	mode(0)		<= '0';
-	mode(1)		<= '0';
-	mode(2)		<= '0';
+	mode(0)			<= '0';
+	mode(1)			<= '0';
+	mode(2)			<= '0';
+	mode(3)			<= '0';
+	mode(4)			<= '0';
+	mode(5)			<= '0';
 	
-	mode(3)		<= '0';
-	mode(4)		<= '0';
-	mode(5)		<= '0';
+	mode(6)			<= '0';
+	mode(7)			<= '0';
+	mode(8)			<= '0';
+	mode(9)			<= '0';
+	mode(10)		<= '0';
+	mode(11)		<= '0';
 	
-	mode(6)		<= '0';
-	mode(7)		<= '0';
-	mode(8)		<= '0';
+	mode(12)		<= '0';
+	mode(13)		<= '0';
+	mode(14)		<= '0';
+	mode(15)		<= '0';
+	mode(16)		<= '0';
+	mode(17)		<= '0';
 	
-	mode(9)		<= '0';
-	mode(10)	<= '0';
-	mode(11)	<= '0';
+	mode(18)		<= '0';
+	mode(19)		<= '0';
+	mode(20)		<= '0';
+	mode(21)		<= '0';
+	mode(22)		<= '0';
+	mode(23)		<= '0';
 
 	--*******************************************************************************
 	
-	rd(0)		<= db_rd(1);
-	rd(1)		<= db_rd(1);
-	tdc_rd(0)	<= db_rd(2);
-	tdc_rd(4)	<= db_rd(2);
+	-- Header		<= db_rd(0);
+	time_rd(0)		<= db_rd(1);
+	rd(0)			<= db_rd(2);
+	rd(1)			<= db_rd(2);
+	tdc_rd(0)		<= db_rd(3);
+	tdc_rd(4)		<= db_rd(3);
+	tcounter_rd(0)	<= db_rd(4);
+	tcounter_rd(1)	<= db_rd(5);
 
-	rd(2)		<= db_rd(4);
-	rd(3)		<= db_rd(4);
-	tdc_rd(1)	<= db_rd(5);
-	tdc_rd(5)	<= db_rd(5);
+	-- Header		<= db_rd(6);
+	time_rd(1)		<= db_rd(7);
+	rd(2)			<= db_rd(8);
+	rd(3)			<= db_rd(8);
+	tdc_rd(1)		<= db_rd(9);
+	tdc_rd(5)		<= db_rd(9);
+	tcounter_rd(2)	<= db_rd(10);
+	tcounter_rd(3)	<= db_rd(11);
 
-	rd(4)		<= db_rd(7);
-	rd(5)		<= db_rd(7);	
-	tdc_rd(2)	<= db_rd(8);
-	tdc_rd(6)	<= db_rd(8);
-
-	rd(6)		<= db_rd(10);
-	rd(7)		<= db_rd(10);
-	tdc_rd(3)	<= db_rd(11);
-	tdc_rd(7)	<= db_rd(11);
+	-- Header		<= db_rd(12);
+	time_rd(2)		<= db_rd(13);
+	rd(4)			<= db_rd(14);
+	rd(5)			<= db_rd(14);	
+	tdc_rd(2)		<= db_rd(15);
+	tdc_rd(6)		<= db_rd(15);
+	tcounter_rd(4)	<= db_rd(16);
+	tcounter_rd(5)	<= db_rd(17);
+	
+	-- Header		<= db_rd(18);
+	time_rd(3)		<= db_rd(19);
+	rd(6)			<= db_rd(20);
+	rd(7)			<= db_rd(20);
+	tdc_rd(3)		<= db_rd(21);
+	tdc_rd(7)		<= db_rd(21);
+	tcounter_rd(6)	<= db_rd(22);
+	tcounter_rd(7)	<= db_rd(23);
 
 	--*******************************************************************************
 

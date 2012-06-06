@@ -12,6 +12,9 @@ use work.vmeif_pkg.all;
 use work.vmeif_usr.all;
 use work.vme_regs.all;
 
+use work.functions_pkg.all;			-- Misc. functions
+use work.databuilder_pkg.all;		-- Data Builder definitions
+
 entity ndaq_vme is 
 	port
 	(	
@@ -312,6 +315,54 @@ architecture rtl of ndaq_vme is
 	);
 	end component;
 	
+	-- Data Builder
+	component databuilder
+	port
+	(	
+		--
+		rst							: in	std_logic;
+		clk							: in	std_logic;		 
+
+		--
+		enable						: in	std_logic;
+
+		--
+		enable_A					: in	SLOTS_T;
+		enable_B					: in	SLOTS_T;
+		transfer					: in	TRANSFER_A;
+		address						: in	ADDRESS_A;
+		mode						: in	SLOTS_T;
+		
+		--
+		rd							: out	SLOTS_T;
+		idata						: in	IDATA_A;
+		
+		--
+		wr							: out	ADDRESS_T;
+		odata						: out	ODATA_T
+	);
+	end component;
+
+	-- Internal USB mode readout FIFO
+	component readout_fifo
+	PORT
+	(
+		aclr		: IN STD_LOGIC ;
+		data		: IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+		rdclk		: IN STD_LOGIC ;
+		rdreq		: IN STD_LOGIC ;
+		wrclk		: IN STD_LOGIC ;
+		wrreq		: IN STD_LOGIC ;
+		q			: OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+		rdfull		: OUT STD_LOGIC ;
+		rdempty		: OUT STD_LOGIC ;
+		rdusedw		: OUT STD_LOGIC_VECTOR (9 DOWNTO 0);
+		wrfull		: OUT STD_LOGIC ;
+		wrempty		: OUT STD_LOGIC ;
+		wrusedw		: OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
+	);
+	end component;
+
 	-- FIFO to FT245BM interface copier
 	component f2ft_copier is
 	port
@@ -325,9 +376,9 @@ architecture rtl of ndaq_vme is
 	
 		-- FIFO interface
 		signal ef				: in	std_logic;
-		signal usedw			: in	std_logic_vector(7 downto 0);
+		signal usedw			: in	std_logic_vector(9 downto 0);
 		signal rd				: out	std_logic;	
-		signal q				: in	std_logic_vector(9 downto 0);
+		signal q				: in	std_logic_vector(7 downto 0);
 				
 		-- FT245BM interface
 		signal dwait 			: in	std_logic;
@@ -336,68 +387,10 @@ architecture rtl of ndaq_vme is
 		
 		-- Parameters		
 		signal rmin				: in 	std_logic_vector(7 downto 0);
-		signal esize			: in	std_logic_vector(7 downto 0)
+		signal esize			: in	std_logic_vector(8 downto 0)
 	);
 	end component;
 
-	-- Internal USB mode readout FIFO
-	component readout_fifo
-	PORT
-	(
-		aclr		: IN STD_LOGIC ;
-		clock		: IN STD_LOGIC ;
-		data		: IN STD_LOGIC_VECTOR (9 DOWNTO 0);
-		rdreq		: IN STD_LOGIC ;
-		wrreq		: IN STD_LOGIC ;
-		empty		: OUT STD_LOGIC ;
-		full		: OUT STD_LOGIC ;
-		q			: OUT STD_LOGIC_VECTOR (9 DOWNTO 0);
-		usedw		: OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
-	);
-	end component;
-
-	-- IDT FIFO to Internal FIFO copier
-	component f2f_copier
-	port
-	(	
-		signal clk				: in 	std_logic; -- sync if
-		signal rst				: in 	std_logic; -- async if
-	
-		signal enable			: in	std_logic; -- arbiter if
-		signal isidle			: out	std_logic; -- arbiter if
-
-		signal s_ef				: in	std_logic;
-		signal s_rd				: out	std_logic;	
-		
-		signal ena				: in	std_logic;
-		signal enb				: in	std_logic;
-		
-		signal a_ff				: in	std_logic;
-		signal a_wr				: out	std_logic;		
-
-		signal b_ff				: in	std_logic;
-		signal b_wr				: out	std_logic;		
-		
-		signal esize			: in	std_logic_vector(7 downto 0)
-	);
-	end component;
-	
-	component priarb8
-	port
-	(	
-		signal clk				: in 	std_logic; -- sync if
-		signal rst				: in 	std_logic; -- async if
-
-		signal enable			: in	std_logic; -- arbiter if
-		signal isidle			: out	std_logic; -- arbiter if
-
-		signal en	 			: out	std_logic_vector(7 downto 0) := x"00";
-
-		signal ii				: in	std_logic_vector(7 downto 0);
-
-		signal control        	: in	std_logic_vector(7 downto 0)
-	);
-	end component;
 	
 ---------------------------
 --***********************--
@@ -461,67 +454,39 @@ architecture rtl of ndaq_vme is
 	--
 	constant	usb_channels :	integer := 4;
 	constant	EVENT_SIZE   : unsigned	:= x"7F";		
+
+	-- USB Readout Reset
+	signal rdout_rst		: std_logic;
+
+	-- Data Builder
+	signal	enable_A		: SLOTS_T;
+	signal	enable_B		: SLOTS_T;
+	signal	transfer		: TRANSFER_A;
+	signal	address			: ADDRESS_A;
+	signal	mode			: SLOTS_T;
 	
 	--
-	type rdf_bus_t		is array ((usb_channels-1) downto 0) of std_logic_vector(9 downto 0);
-	type rdf_usedw_t	is array ((usb_channels-1) downto 0) of std_logic_vector(7 downto 0);
+	signal	db_rd			: SLOTS_T;
+	signal  db_idata		: IDATA_A;
 	
-	-- Readout Reset
-	signal rdout_rst	: std_logic := '1';
-	
-	-- A Readout FIFO signals
-	signal a_rdf_data	: rdf_bus_t;
-	signal a_rdf_q		: rdf_bus_t;
-	signal a_rdf_wr		: std_logic_vector((usb_channels-1) downto 0);
-	signal a_rdf_ff		: std_logic_vector((usb_channels-1) downto 0);
-	signal a_rdf_rd		: std_logic_vector((usb_channels-1) downto 0);
-	signal a_rdf_ef		: std_logic_vector((usb_channels-1) downto 0);
-	signal a_rdf_usedw	: rdf_usedw_t;
-
-	-- B Readout FIFO signals
-	signal b_rdf_data	: rdf_bus_t;
-	signal b_rdf_q		: rdf_bus_t;
-	signal b_rdf_wr		: std_logic_vector((usb_channels-1) downto 0);
-	signal b_rdf_ff		: std_logic_vector((usb_channels-1) downto 0);
-	signal b_rdf_rd		: std_logic_vector((usb_channels-1) downto 0);
-	signal b_rdf_ef		: std_logic_vector((usb_channels-1) downto 0);
-	signal b_rdf_usedw	: rdf_usedw_t;
-
 	--
-
-	--IDT Arbiter
-	signal idt_en		: std_logic_vector(7 downto 0) := x"00";
-	signal idt_ii		: std_logic_vector(7 downto 0) := x"FF";
+	signal	db_wr			: ADDRESS_T;
+	signal	db_odata		: ODATA_T;
 	
-	signal control 		: std_logic_vector(3 downto 0) := x"0";
-
-	--USB Readout Arbiter
-	signal usb_rdout_en	: std_logic_vector(7 downto 0) := x"00";
-	signal usb_rdout_ii	: std_logic_vector(7 downto 0) := x"FF";
-
-	--Main Arbiter
-	signal main_en		: std_logic_vector(7 downto 0) := x"00";
-	signal main_ii		: std_logic_vector(7 downto 0) := x"FF";
-
-	-- Read enable, Output enable and Flag signals for IDT FIFOs
-	signal rdtemp		: std_logic_vector((usb_channels-1) downto 0);
+	-- USB Readout FIFO
+	signal usb_fifo_rd		: std_logic;
+	signal usb_fifo_q		: std_logic_vector(7 downto 0);
+	signal usb_fifo_rdempty	: std_logic;
+	signal usb_fifo_wrempty	: std_logic;
+	signal usb_fifo_wrusedw	: std_logic_vector(7 downto 0);
+	signal usb_fifo_rdusedw	: std_logic_vector(9 downto 0);
 	
 ------------------------------------------
 ------------------------------------------
 
 
 begin
-	
-	--fifo1_oe	<= '1'; --not(u_read0);
-	--fifo2_oe	<= '1'; --not(u_read1);
-	--fifo3_oe	<= '1'; --not(u_read2);
-	--fifo4_oe	<= '1'; --not(u_read3);
-	
-	--fifo1_ren	<= '1'; --u_fifo1_ren;
-	--fifo2_ren	<= '1'; --u_fifo2_ren;
-	--fifo3_ren	<= '1'; --u_fifo3_ren;
-	--fifo4_ren	<= '1'; --u_fifo4_ren;
-	
+		
 	can_pgc <= stsclk;
 	can_pgd <= 'Z';
 	can_pgm <= 'Z';
@@ -687,7 +652,15 @@ begin
 		p_rd			=> p_rd
 	);
 
-	-- VME Registers Assignments.	
+	-- Status Register assignements
+	ireg(5)(0)			<= fifo_pae(0);
+	ireg(5)(1)			<= fifo_pae(1);
+	ireg(5)(2)			<= fifo_pae(2);
+	ireg(5)(3)			<= fifo_pae(3);
+	ireg(5)(6 downto 4)	<= (others => '0');
+	ireg(5)(7)			<= stsclk;
+
+	-- VME Registers Assignments.	*** MUST MAKE THAT AUTOMATIC ! ***
 	b_wr(0)	<= '0';
 	b_wr(1)	<= '0';
 	b_wr(2)	<= '0';
@@ -695,6 +668,7 @@ begin
 	b_wr(4)	<= user_write(6);
 	b_wr(5)	<= user_write(4);	
 	b_wr(6)	<= '0';
+	b_wr(7)	<= user_write(7);
 	
 	b_rd(0)	<= '0';
 	b_rd(1)	<= '0';
@@ -703,17 +677,16 @@ begin
 	b_rd(4)	<= user_read(6);
 	b_rd(5)	<= user_read(4);	
 	b_rd(6)	<= '0';
-
+	b_rd(7) <= user_read(7);
+		
+	-- VME Interface Data Output to Registers Data Input:
 	b_reg_idata					<=	user_data_out(7 downto 0);
-	user_data_in(7 downto 0)	<=	reg_odata;
-	user_data_in(31 downto 8)	<=	(others => '0');
 	
-	ireg(5)(0)			<= fifo_pae(0);
-	ireg(5)(1)			<= fifo_pae(1);
-	ireg(5)(2)			<= fifo_pae(2);
-	ireg(5)(3)			<= fifo_pae(3);
-	ireg(5)(6 downto 4)	<= (others => '0');
-	ireg(5)(7)			<= stsclk;
+	-- Registers Data Output to VME Interface Data Input:
+	user_data_in(7 downto 0)	<=	reg_odata;
+	user_data_in(31 downto 8)	<=	(others => '0');	
+
+--*****************************************************************************
 
 	-- USB Command Decoder
 	command_decoder:
@@ -723,8 +696,8 @@ begin
 		rst				=> mrst,
 		
 		--arbiter
-		enable			=> main_en(7),
-		isidle			=> main_ii(7),
+		enable			=> oreg(1)(7), -- Command Response Enable - 0x80 @ 0x80.
+		isidle			=> open,
 		
 		--flags
 		dwait			=> ft_dwait,
@@ -764,196 +737,124 @@ begin
 	fifo_signals_construct:
 	for i in 0 to (usb_channels-1) generate
 	
-		fifo_ren(i)	<= 	rdtemp(i) xnor u_fifo_ren(i);
-		fifo_oe(i)	<= 	rdtemp(i) xnor not(user_read(i));
+		fifo_ren(i)	<= 	not(db_rd(i)) xnor u_fifo_ren(i);
+		fifo_oe(i)	<= 	not(db_rd(i)) xnor not(user_read(i));
 	
 	end generate fifo_signals_construct;
 	
 --*********************************************************************************************************
-
-	control(0)			<= (oreg(2)(0) or oreg(2)(1));  --Channel 1 or Channel 2 must read IDT FIFO 1. 
-	control(1)			<= (oreg(2)(2) or oreg(2)(3));  --Channel 3 or Channel 4 must read IDT FIFO 2. 
-	control(2)			<= (oreg(2)(4) or oreg(2)(5));  --Channel 5 or Channel 6 must read IDT FIFO 3.
-	control(3)			<= (oreg(2)(6) or oreg(2)(7));  --Channel 7 or Channel 8 must read IDT FIFO 4.
 	
-	idt_arbiter:
-	priarb8 port map
-	(	
-		clk					=> pclk,
-		rst					=> rdout_rst, --mrst,
-
-		enable				=> '1',
-		isidle				=> open,
-
-		en	 				=> idt_en,
-
-		ii					=> idt_ii,
-
-		control(0)			=> control(0),
-		control(1)			=> control(1),
-		control(2)			=> control(2),
-		control(3)			=> control(3),
+	data_builder: 
+	databuilder port map 
+	(
+		--
+		rst							=> rdout_rst, --mrst,
+		clk							=> pclk,
 		
-		control(7 downto 4) => (others => '0')
+		--
+		enable						=> oreg(1)(0),	-- Readout Enable.
+		
+		--
+		enable_A					=> enable_A,
+		enable_B					=> enable_B,
+		transfer					=> transfer,
+		address						=> address,
+		mode						=> mode,
+		
+		--
+		rd							=> db_rd,
+		idata						=> db_idata,
+		
+		--
+		wr							=> db_wr,
+		odata						=> db_odata
 	);
+
+--
+-- Data Builder Slots Construct
+--
+
+	db_idata(0)		<= vme_data; --x"2000" & x"1000";
+	db_idata(1)		<= vme_data; --x"4000" & x"3000";
+	db_idata(2)		<= vme_data; --x"6000" & x"5000";
+	db_idata(3)		<= vme_data; --x"8000" & x"7000";
+	
+	enable_A(0)		<= oreg(2)(0);	--Slot Enable.
+	enable_A(1)		<= oreg(2)(1);
+	enable_A(2)		<= oreg(2)(2);
+	enable_A(3)		<= oreg(2)(3);
+	
+	enable_B(0)		<= fifo_pae(0) and usb_fifo_wrempty;
+	enable_B(1)		<= fifo_pae(1) and usb_fifo_wrempty;
+	enable_B(2)		<= fifo_pae(2) and usb_fifo_wrempty;
+	enable_B(3)		<= fifo_pae(3) and usb_fifo_wrempty;
+
+	transfer(0)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(transfer_max)); -- 3*32bits words	= 12 bytes
+	transfer(1)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(transfer_max)); -- 3*32bits words	= 12 bytes
+	transfer(2)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(transfer_max));	-- 3*32bits words	= 12 bytes
+	transfer(3)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(transfer_max));	-- 3*32bits words	= 12 bytes
+																		-- (+)Total			= 48 bytes
+	address(0)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	address(1)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	address(2)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	address(3)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	
+	mode(0)			<= '0';
+	mode(1)			<= '0';
+	mode(2)			<= '0';
+	mode(3)			<= '0';
 	
 --*********************************************************************************************************
-	
-	usb_readout_construct:
-	for i in 0 to (usb_channels-1) generate
 
-	--Data Bus from external FIFOs to internal FIFOs.
-	a_rdf_data(i)		<= vme_data(9 downto 0);	-- ODD Channels.
-	b_rdf_data(i)		<= vme_data(25 downto 16);	-- EVEN Channels.
-
-	
-	idt_to_intfifo:
-	f2f_copier port map
-	(	
-		clk			=> pclk,
-		rst			=> rdout_rst, --mrst,
-	
-		enable		=> idt_en(i),	
-		isidle		=> idt_ii(i),	
-
-		--source
-		s_ef		=> fifo_ef(i),	--IDT NOT EMPTY.
-		s_rd		=> rdtemp(i),
-
-		-- Dest Enable
-		ena			=>	oreg(2)(i*2),		--enable for Channels: 1,3,5 and 7.	
-		enb			=>	oreg(2)((i*2)+1),	--enable for Channels: 2,4,6 and 8.
-
-		--A Dest
-		a_ff		=> a_rdf_ff(i),	--FULL FLAG
-		a_wr		=> a_rdf_wr(i),
-		
-		--B Dest
-		b_ff		=> b_rdf_ff(i),	--FULL FLAG
-		b_wr		=> b_rdf_wr(i),
-
-		esize		=> CONV_STD_LOGIC_VECTOR(EVENT_SIZE, 8)		--127		
-	);
-
-	A_readout_fifo:
+	--
+	usb_readout_fifo:
 	readout_fifo port map
 	(
 		aclr		=> rdout_rst, --mrst,
-		clock		=> pclk,
-		data		=> a_rdf_data(i),
-		rdreq		=> a_rdf_rd(i),
-		wrreq		=> a_rdf_wr(i),
-		empty		=> a_rdf_ef(i),
-		full		=> a_rdf_ff(i),
-		q			=> a_rdf_q(i),
-		usedw		=> a_rdf_usedw(i)
+		wrclk		=> pclk,
+		rdclk		=> pclk,
+		data		=> db_odata,
+		rdreq		=> usb_fifo_rd,
+		wrreq		=> db_wr(0),
+		wrempty		=> usb_fifo_wrempty,
+		wrfull		=> open,
+		rdempty		=> usb_fifo_rdempty,
+		rdfull		=> open,
+		q			=> usb_fifo_q,
+		wrusedw		=> usb_fifo_wrusedw,
+		rdusedw		=> usb_fifo_rdusedw
 	);
 
-	B_readout_fifo:
-	readout_fifo port map
-	(
-		aclr		=> rdout_rst, --mrst,
-		clock		=> pclk,
-		data		=> b_rdf_data(i),
-		rdreq		=> b_rdf_rd(i),
-		wrreq		=> b_rdf_wr(i),
-		empty		=> b_rdf_ef(i),
-		full		=> b_rdf_ff(i),
-		q			=> b_rdf_q(i),
-		usedw		=> b_rdf_usedw(i)
-	);
-
-	A_to_ft_copier:
+	--
+	f_to_ft_copier:
 	f2ft_copier port map
 	(	
 		clk			=> pclk,
 		rst			=> rdout_rst, --mrst,
 
 		-- Arbiter interface
-		enable		=> usb_rdout_en(i*2),
-		isidle		=> usb_rdout_ii(i*2),
-	
-		-- FIFO interface
-		ef			=> a_rdf_ef(i),
-		usedw		=> a_rdf_usedw(i),
-		rd			=> a_rdf_rd(i),
-		q			=> a_rdf_q(i),
-		
-		-- FT245BM interface
-		dwait 		=> ft_dwait,
-		wr			=> ft_wr,
-		odata       => ft_idata,
-		
-		-- Parameters		
-		rmin		=> CONV_STD_LOGIC_VECTOR(EVENT_SIZE, 8),
-		esize		=> CONV_STD_LOGIC_VECTOR(EVENT_SIZE, 8)		--127
-	);
-
-	B_to_ft_copier:
-	f2ft_copier port map
-	(	
-		clk			=> pclk,
-		rst			=> rdout_rst, --mrst,
-
-		-- Arbiter interface
-		enable		=> usb_rdout_en((i*2)+1),
-		isidle		=> usb_rdout_ii((i*2)+1),
-	
-		-- FIFO interface
-		ef			=> b_rdf_ef(i),
-		usedw		=> b_rdf_usedw(i),
-		rd			=> b_rdf_rd(i),
-		q			=> b_rdf_q(i),
-		
-		-- FT245BM interface
-		dwait 		=> ft_dwait,
-		wr			=> ft_wr,
-		odata       => ft_idata,
-		
-		-- Parameters		
-		rmin		=> CONV_STD_LOGIC_VECTOR(EVENT_SIZE, 8),
-		esize		=> CONV_STD_LOGIC_VECTOR(EVENT_SIZE, 8)		--127
-	);
-
-	end generate usb_readout_construct;
-
-	
---*********************************************************************************************************
-
-	usb_readout_arbiter:
-	priarb8 port map
-	(	
-		clk			=> pclk,
-		rst			=> rdout_rst, --mrst,
-
-		enable		=> main_en(0),
-		isidle		=> main_ii(0),
-
-		en	 		=> usb_rdout_en,
-
-		ii			=> usb_rdout_ii,
-
-		control     => oreg(2)
-	);
-
---*********************************************************************************************************
-
-	main_arbiter:
-	priarb8 port map
-	(	
-		clk			=> pclk,
-		rst			=> rdout_rst, --mrst,
-
-		enable		=> '1',
+		enable		=> not(oreg(1)(7)),  --NOT Command Response Enable.
 		isidle		=> open,
-
-		en	 		=> main_en,
-
-		ii			=> main_ii,
-
-		control     => oreg(1)
+	
+		-- FIFO interface
+		ef			=> usb_fifo_rdempty,
+		usedw		=> usb_fifo_rdusedw,
+		rd			=> usb_fifo_rd,
+		q			=> usb_fifo_q,
+		
+		-- FT245BM interface
+		dwait 		=> ft_dwait,
+		wr			=> ft_wr,
+		odata       => ft_idata,
+		
+		-- Parameters		
+		rmin		=> CONV_STD_LOGIC_VECTOR(0, 8),
+		esize		=> CONV_STD_LOGIC_VECTOR(11 , 9)		--127
 	);
 
+
+--*********************************************************************************************************
+--
 --*********************************************************************************************************
 
 --
