@@ -8,7 +8,7 @@ use ieee.std_logic_1164.all;
 package vme_regs is
 
 	-- total system registers
-	constant num_regs			: integer := 7;
+	constant num_regs			: integer := 8;
 
 	type	SYS_REGS_STRUCT		is record
 			addr				: std_logic_vector(7 downto 0);
@@ -25,15 +25,16 @@ package vme_regs is
 	--(addr, writable, readable, peripheral, reset state)
 	constant system_regs_enum	: SYS_REGS_VECTOR :=
 	(
-		(x"AA",	true,	true,	false,	x"00"),	--Reset
-		(x"80",	true,	true,	false,	x"00"),	--Control
-		(x"81",	true,	true,	false,	x"00"),	--Readout		
+		(x"AA",	true,	true,	false,	x"00"),	-- 00 - Reset 	-	-	-	-	-	Not assigned to VME.
+		(x"80",	true,	true,	false,	x"80"),	-- 01 - USB	Control	-	-	-	-	Not assigned to VME.
+		(x"81",	true,	true,	false,	x"00"),	-- 02 - USB Readout	-	-	-	-	Not assigned to VME.
 		--
-		(x"70",	true,	true,	true,	x"00"),	--SPI 
-		(x"71",	false,	true,	true,	x"00"),	--SPI Status
+		(x"70",	true,	true,	true,	x"00"),	-- 03 - SPI 	-	-	-	-	-	VME: Base+0x600000.
+		(x"71",	false,	true,	true,	x"00"),	-- 04 - SPI Status	-	-	-	-	VME: Base+0x700000.
 		--
-		(x"27",	true,	true,	true,	x"00"),	--R/W Test Register				
-		(x"82",	true,	true,	false,	x"00")	--Readout Reset		
+		(x"27",	true,	true,	true,	x"00"),	-- 05 - Status Register	-	-	-	VME: Base+0x500000.			
+		(x"82",	true,	true,	false,	x"00"),	-- 06 - USB Readout Reset	-	-	Not assigned to VME.
+		(x"33",	true,	true,	false,	x"00")	-- 07 - R/W Test Register	-	-	VME: Base+0x800000.
 	);
 
 -------------------------------------------------------------------------------

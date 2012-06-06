@@ -331,12 +331,22 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_ren[0]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spiclk
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to miso
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to mosi
+set_global_assignment -name ENABLE_SIGNALTAP OFF
+set_global_assignment -name USE_SIGNALTAP_FILE ndaq_vme_vmetest.stp
+set_location_assignment PIN_M2 -to cs
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to cs
+set_location_assignment PIN_T2 -to fifo_pae[0]
+set_location_assignment PIN_T1 -to fifo_pae[1]
+set_location_assignment PIN_L1 -to fifo_pae[2]
+set_location_assignment PIN_L2 -to fifo_pae[3]
+set_global_assignment -name MISC_FILE "C:/Documents and Settings/LSD_LUC/Desktop/pld_r43/ndaq_vme/ndaq_vme.dpf"
+set_global_assignment -name VHDL_FILE ../ndaq_core/acq/functions_pkg.vhd
+set_global_assignment -name VHDL_FILE usb_readout/databuilder.vhd
+set_global_assignment -name VHDL_FILE usb_readout/databuilder_pkg.vhd
 set_global_assignment -name VHDL_FILE system/vme_cmddec.vhd
 set_global_assignment -name VHDL_FILE system/vme_rconst.vhd
 set_global_assignment -name VHDL_FILE system/vme_regs.vhd
-set_global_assignment -name VHDL_FILE system/priarb8.vhd
 set_global_assignment -name VHDL_FILE usb_readout/f2ft_copier.vhd
-set_global_assignment -name VHDL_FILE usb_readout/f2f_copier.vhd
 set_global_assignment -name VHDL_FILE swc/swc.vhd
 set_global_assignment -name VHDL_FILE FT245BM_if/FT245BM_tx.vhd
 set_global_assignment -name VHDL_FILE FT245BM_if/FT245BM_rx.vhd
@@ -354,13 +364,4 @@ set_global_assignment -name VHDL_FILE ndaq_vme.vhd
 set_global_assignment -name QIP_FILE system/my_pll.qip
 set_global_assignment -name VHDL_FILE spi/m_spi.vhd
 set_global_assignment -name QIP_FILE usb_readout/readout_fifo.qip
-set_global_assignment -name ENABLE_SIGNALTAP OFF
-set_global_assignment -name USE_SIGNALTAP_FILE ndaq_vme_vmetest.stp
-set_location_assignment PIN_M2 -to cs
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to cs
-set_location_assignment PIN_T2 -to fifo_pae[0]
-set_location_assignment PIN_T1 -to fifo_pae[1]
-set_location_assignment PIN_L1 -to fifo_pae[2]
-set_location_assignment PIN_L2 -to fifo_pae[3]
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/LSD_LUC/Desktop/pld_r43/ndaq_vme/ndaq_vme.dpf"
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

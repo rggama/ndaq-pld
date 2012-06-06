@@ -27,9 +27,9 @@ entity f2ft_copier is
 	
 		-- FIFO interface
 		signal ef				: in	std_logic;
-		signal usedw			: in	std_logic_vector(7 downto 0);
+		signal usedw			: in	std_logic_vector(9 downto 0);
 		signal rd				: out	std_logic;	
-		signal q				: in	std_logic_vector(9 downto 0);
+		signal q				: in	std_logic_vector(7 downto 0);
 				
 		-- FT245BM interface
 		signal dwait 			: in	std_logic;
@@ -38,7 +38,7 @@ entity f2ft_copier is
 		
 		-- Parameters		
 		signal rmin				: in 	std_logic_vector(7 downto 0);
-		signal esize			: in	std_logic_vector(7 downto 0)
+		signal esize			: in	std_logic_vector(8 downto 0)
 	);
 end f2ft_copier;
 
@@ -86,7 +86,7 @@ architecture rtl of f2ft_copier is
 	signal i_isidle		: std_logic := '1';
 	signal i_odata		: std_logic_vector(7 downto 0) := x"00";
 	signal oe			: std_logic := '0';
-	signal mode			: std_logic	:= '0';
+	signal mode			: std_logic	:= '1';
 	
 --
 
@@ -105,7 +105,7 @@ begin
 				
 				when idle	=>
 					if ((enable = '1') and (dwait = '0')  
-						and (ef = '0') and ((usedw > x"7F") or (usedw = x"00"))) then
+						and (ef = '0') and ((usedw > esize) or (usedw = x"00"))) then
 						state	<= read_st;
 					else
 						state	<= idle;
@@ -179,7 +179,7 @@ begin
 	end process;
 
 	odata_assignment:
-	tmp <= q(9 downto 0);
+	tmp <= q & "00";
 
 	transfer_fsm_ops:
 	process (state, tmp)
