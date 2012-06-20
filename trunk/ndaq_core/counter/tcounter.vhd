@@ -19,6 +19,7 @@ entity tcounter is
 		signal clk					: in	std_logic;
 		-- Counter
 		signal trigger_in			: in	std_logic;
+		signal enable				: in	std_logic;
 		signal srst					: in	std_logic;
 		--
 		signal rdclk				: in	std_logic;
@@ -47,6 +48,7 @@ architecture rtl of tcounter is
 
 --***********************************************************************************************
 	
+	signal r_srst					: std_logic := '0';
 	signal i_counter				: TCOUNTER_DATA_T := x"00000000";
 	signal counter_reg				: TCOUNTER_DATA_T := x"00000000";
 	
@@ -66,13 +68,17 @@ COUNTER: process(rst, clk)
 begin
 	if (rst = '1') then
 		i_counter		<= (others => '0');
-		
+		--
+		r_srst			<= '0';
 	elsif (rising_edge(clk)) then  
+		--
+		r_srst	<= srst;
+		
 		-- Synchronous Reset
-		if (srst = '1') then
+		if (r_srst = '1') then
 			i_counter	<= (others => '0');
 		
-		elsif (trigger_in = '1') then
+		elsif ((enable = '1') and (trigger_in = '1')) then
 			i_counter	<= i_counter + 1;
 	
 		end if;			

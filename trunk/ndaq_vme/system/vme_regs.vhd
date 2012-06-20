@@ -8,7 +8,7 @@ use ieee.std_logic_1164.all;
 package vme_regs is
 
 	-- total system registers
-	constant num_regs			: integer := 8;
+	constant num_regs			: integer := 9;
 
 	type	SYS_REGS_STRUCT		is record
 			addr				: std_logic_vector(7 downto 0);
@@ -34,7 +34,9 @@ package vme_regs is
 		--
 		(x"27",	true,	true,	true,	x"00"),	-- 05 - Status Register	-	-	-	VME: Base+0x500000.			
 		(x"82",	true,	true,	false,	x"00"),	-- 06 - USB Readout Reset	-	-	Not assigned to VME.
-		(x"33",	true,	true,	false,	x"00")	-- 07 - R/W Test Register	-	-	VME: Base+0x800000.
+		(x"33",	true,	true,	false,	x"00"),	-- 07 - R/W Test Register	-	-	VME: Base+0x800000.
+		(x"83",	true,	true,	false,	x"00")	-- 08 - Data Builder Block Size	-	Not assigned to VME.
+		
 	);
 
 -------------------------------------------------------------------------------

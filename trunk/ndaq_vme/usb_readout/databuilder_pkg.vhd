@@ -22,7 +22,7 @@ package databuilder_pkg is
 	constant slots			: integer	:= 4;
 	
 	--
-	constant transfer_max	: integer	:= 130;
+	constant transfer_max	: integer	:= 255;
 	
 	--
 	constant address_max	: integer	:= 1;

@@ -19,6 +19,7 @@ entity timebase is
 		-- Timebase Generator
 		signal timebase_out			: out	std_logic;
 		-- Timebase Counter
+		signal enable				: in	std_logic;
 		signal srst					: in	std_logic;
 		signal rdclk				: in	std_logic;
 		signal rden					: in	std_logic;
@@ -67,6 +68,7 @@ architecture rtl of timebase is
 	signal timebase_en				: std_logic := '0';
 	signal r_timebase_en			: std_logic := '0';
 	signal timebase_cntr			: std_logic_vector(31 downto 0) := x"00000000";
+	signal r_srst					: std_logic := '0';
 	signal r_timebase_cntr			: std_logic_vector(31 downto 0) := x"00000000";
 	signal reg_wait					: std_logic := '0';
 	
@@ -141,13 +143,18 @@ begin
 		timebase_cntr	<= (others => '0');
 		reg_wait		<= '0';
 		r_timebase_cntr	<= (others => '0');
+		--
+		r_srst			<= '0';
 		
 	elsif (rising_edge(clk)) then
-
+		
+		--	
+		r_srst	<= srst;
+		
 		--
-		if (srst = '1') then
+		if (r_srst = '1') then
 			timebase_cntr <= (others => '0');
-		elsif ((r_timebase_en = '1') and (reg_wait = '0')) then
+		elsif ((enable = '1') and (r_timebase_en = '1') and (reg_wait = '0')) then
 			timebase_cntr	<= timebase_cntr + 1;
 		end if;
 		

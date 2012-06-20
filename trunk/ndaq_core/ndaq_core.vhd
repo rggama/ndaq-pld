@@ -261,6 +261,7 @@ architecture rtl of ndaq_core is
 		-- Timebase Generator
 		signal timebase_out			: out	std_logic;
 		-- Timebase Counter
+		signal enable				: in	std_logic;
 		signal srst					: in	std_logic;
 		signal rdclk				: in	std_logic;
 		signal rden					: in	std_logic;
@@ -278,6 +279,7 @@ architecture rtl of ndaq_core is
 		signal clk					: in	std_logic;
 		-- Counter
 		signal trigger_in			: in	std_logic;
+		signal enable				: in	std_logic;
 		signal srst					: in	std_logic;
 		--
 		signal rdclk				: in	std_logic;
@@ -505,7 +507,6 @@ architecture rtl of ndaq_core is
 	
 	-- Reset
 	signal rst						: std_logic;
-	signal idt_rst					: std_logic;
 	
 	-- ADC 
 	signal adcpwdn					: std_logic_vector(3 downto 0);
@@ -526,7 +527,12 @@ architecture rtl of ndaq_core is
 	signal time_q					: std_logic_vector(31 downto 0);
 	
 	-- ACQ: ADC
-	signal acq_rst					: std_logic_vector((adc_channels-1) downto 0);	
+	signal timebase_en				: std_logic;
+	signal counter_en				: std_logic;
+	signal etrigger_en				: std_logic;
+	signal itrigger_en				: std_logic;
+	signal acq_en					: std_logic;
+	signal acq_rst					: std_logic;	
 	signal clk						: std_logic_vector((adc_channels-1) downto 0);
 	signal rd						: std_logic_vector((adc_channels-1) downto 0);
 	signal wr						: std_logic_vector((adc_channels-1) downto 0);
@@ -539,8 +545,7 @@ architecture rtl of ndaq_core is
 	signal thtemp2					: DATA_T;
 	signal int_trigger				: std_logic_vector((adc_channels-1) downto 0);
 	signal acqin					: std_logic_vector((adc_channels-1) downto 0);
-	signal wf_en					: std_logic_vector((adc_channels-1) downto 0);
-
+	signal usedw_event_size			: USEDW_T;
 
 	signal data						: F_DATA_WIDTH_T;	-- FIFOs input DATA bus vector
 	signal q						: F_DATA_WIDTH_T;	-- FIFOs output DATA  bus vector 
@@ -629,14 +634,14 @@ begin
 	----------------------
 	fifo_wck	<= fclk;
 	
-	fifo_mrs	<= not(idt_rst);
+	fifo_mrs	<= not(acq_rst);	-- Same as ACQ Reset. IDT FIFO's reset signal is active low.
 	fifo_prs	<= '1';
 	fifo_rt		<= '1';
 
 	-- IDT FIFO: Configuracao da Programmable Almost Full Flag durante o RESET. 
-	fifo_fs0	<= '1';			--high for m = 255 -- See IDT FIFO1s manual.
-	fifo_fs1	<= '1';			--high for m = 255 -- See IDT FIFO1s manual.
-	fifo_ld		<= '1';			--high during reset for m = 255 -- See IDT FIFO's manual.
+	fifo_fs0	<= '1';				--high for m = 255 -- See IDT FIFO1s manual.
+	fifo_fs1	<= '1';				--high for m = 255 -- See IDT FIFO1s manual.
+	fifo_ld		<= '1';				--high during reset for m = 255 -- See IDT FIFO's manual.
 	
 	--------------------
 	-- SRAM interface --
@@ -679,9 +684,6 @@ begin
 		rst				=> rst
 	);
 	
-
-	idt_rst				<= oreg(3)(0);							
-
 	
 -- ************************************ SLAVE SPI ******************************
 
@@ -786,8 +788,21 @@ begin
 
 	end generate test_counter_construct;
 	
--- ********************************** TIMEBASE ********************************
 	
+-- ******************************* ACQ - CHANNELS *****************************
+
+	--
+	-- Enables
+	timebase_en		<= oreg(4)(0);
+	counter_en		<= oreg(4)(1);
+	etrigger_en		<= oreg(4)(2);
+	itrigger_en		<= oreg(4)(3);
+	acq_en			<= oreg(4)(4);
+	
+	--
+	-- ACQ Reset
+	acq_rst			<= oreg(3)(0);
+
 	--
 	-- Timebase Counter Read Enable Logic
 	time_rd_comb	<= time_rd(0) or time_rd(1) or time_rd(2) or time_rd(3);
@@ -800,6 +815,7 @@ begin
 		-- Timebase Generator
 		timebase_out		=> open,
 		-- Timebase Counter
+		enable				=> timebase_en,
 		srst				=> oreg(3)(0),
 		rdclk				=> dclk,
 		rden				=> time_rd_comb,
@@ -807,7 +823,6 @@ begin
 		counter_q			=> time_q
 	);	
 
--- ******************************* ACQ - CHANNELS *****************************
 
 	clk(0)		<= adc12_dco;
 	clk(1)		<= not(adc12_dco);
@@ -836,42 +851,21 @@ begin
 	-- data(6)		<= counter(6);
 	-- data(7)		<= counter(7);
 
-	wf_en(0)	<= '1';
-	wf_en(1)	<= '1';
-	wf_en(2)	<= '1'; --acqin(0);	-- 0 and 2 interleaved mode.
-	wf_en(3)	<= '1';
-	wf_en(4)	<= '1';
-	wf_en(5)	<= '1';
-	wf_en(6)	<= '1';
-	wf_en(7)	<= '1';
+	--
+	-- Event Size to be compared with FIFO's used words. 
+	usedw_event_size <= "0000" & oreg(12)(6 downto 0);
 
-	acq_enable	<= oreg(4)(0);			--Nao e usado no teste VME porque registradores 
-										--nao sao escritos
-										
 	-- Constroi os 8 canais de aquisicao
 	adc_data_acq_construct:
 	for i in 0 to (adc_channels-1) generate
-
-		acq_rst(i)	<= oreg(3)(0);
 		
-		-- Gera reset automatico para a Aquisicao.
-		acq_rst_gen:
-		rstgen port map
-		(	
-			clk				=> clk(i),
-		
-			reset			=> x"00",
-		
-			rst				=> open --acq_rst(i)
-		);
-
 		-- Condiciona trigger da entrada 'A'
 		a_etrigger_cond:
 		tpulse port map
 		(	
-			rst			=> acq_rst(i),
+			rst			=> acq_rst,
 			clk			=> clk(i),
-			enable		=> '1', 			--Sempre ligado para o teste VME  --acq_enable,
+			enable		=> etrigger_en,
 			trig_in		=> trigger_a,
 			trig_out	=> c_trigger_a(i)
 		);
@@ -880,9 +874,9 @@ begin
 		b_etrigger_cond:
 		tpulse port map
 		(	
-			rst			=> acq_rst(i),
+			rst			=> acq_rst,
 			clk			=> clk(i),
-			enable		=> '1', 			--Sempre ligado para o teste VME  --acq_enable,
+			enable		=> etrigger_en,
 			trig_in		=> trigger_b,
 			trig_out	=> c_trigger_b(i)
 		);
@@ -891,9 +885,9 @@ begin
 		c_etrigger_cond:
 		tpulse port map
 		(	
-			rst			=> acq_rst(i),
+			rst			=> acq_rst,
 			clk			=> clk(i),
-			enable		=> '1', 			--Sempre ligado para o teste VME  --acq_enable,
+			enable		=> etrigger_en,
 			trig_in		=> trigger_c,
 			trig_out	=> c_trigger_c(i)
 		);
@@ -908,10 +902,10 @@ begin
 		internal_trigger:
 		itrigger port map
 		(	
-			rst					=> acq_rst(i),
+			rst					=> acq_rst,
 			clk					=> clk(i),
 			-- Trigger
-			enable				=> '1',
+			enable				=> itrigger_en,
 			pos_neg				=> oreg(9)(0),				--'0' for RISING EDGE, '1' for FALLING EDGE.
 			data_in				=> MY_CONV_SIGNED(data(i)),
 			th1					=> MY_CONV_SIGNED(thtemp1),	--CONV_SIGNED(T_RISE, data_width),
@@ -922,11 +916,12 @@ begin
 		trigger_counter:
 		tcounter port map
 		(	
-			rst					=> acq_rst(i),
+			rst					=> acq_rst,
 			clk					=> clk(i),
 			-- Counter
 			trigger_in			=> int_trigger(i),
-			srst				=> oreg(3)(0),
+			enable				=> counter_en,
+			srst				=> acq_rst,
 			--
 			rdclk				=> dclk,
 			rden				=> tcounter_rd(i),
@@ -939,9 +934,9 @@ begin
 		writefifo port map
 		(	
 			clk			=> clk(i),
-			rst			=> acq_rst(i),
+			rst			=> acq_rst,
 		
-			enable		=> wf_en(i),
+			enable		=> acq_en,
 			acqin		=> acqin(i),
 			
 			tmode		=> oreg(4)(7),	-- '0' for External, '1' for Internal
@@ -960,7 +955,7 @@ begin
 			full		=> full(i),
 		
 			wmax		=> CONV_STD_LOGIC_VECTOR(MAX_WORDS, usedw_width),
-			esize		=> CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)
+			esize		=> usedw_event_size --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)
 		);
 
 		
@@ -970,7 +965,7 @@ begin
 		(	
 			wrclk		=> clk(i),
 			rdclk		=> dclk,
-			rst			=> acq_rst(i),
+			rst			=> acq_rst,
 		
 			wr			=> wr(i),
 			d			=> data(i),
@@ -1032,7 +1027,7 @@ begin
 	databuilder port map 
 	(
 		--
-		rst							=> idt_rst,
+		rst							=> acq_rst,
 		clk							=> dclk,
 		
 		--
@@ -1061,11 +1056,13 @@ for i in 0 to 3 generate
 	--
 	-- Internal FIFOs enough data test
 	--
+	--
+	
 	even_read_test:
-	process(rdusedw, empty)
+	process(rdusedw, usedw_event_size, empty)
 	begin
 		-- Means that the FIFO is FULL of data.
-		if (rdusedw(i*2) > CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)) and (empty(i*2) = '0') then
+		if (rdusedw(i*2) > usedw_event_size) and (empty(i*2) = '0') then
 			even_enable(i) <= '1';
 		else
 			even_enable(i) <= '0';
@@ -1073,10 +1070,10 @@ for i in 0 to 3 generate
 	end process;
 	
 	odd_read_test:
-	process(rdusedw, empty)
+	process(rdusedw, usedw_event_size, empty)
 	begin
 		-- Means that the FIFO is FULL of data.
-		if (rdusedw((i*2)+1) > CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)) and (empty((i*2)+1) = '0') then
+		if (rdusedw((i*2)+1) > usedw_event_size) and (empty((i*2)+1) = '0') then
 			odd_enable(i) <= '1';
 		else
 			odd_enable(i) <= '0';
@@ -1091,33 +1088,33 @@ end generate adc_flags_construct;
 
 	--
 	-- Slot Enable: '1' for enable.
-	enable_A(0)		<= '0';					-- Header
-	enable_A(1)		<= '1';					-- Timestamp
-	enable_A(2)		<= '0';					-- ADC
-	enable_A(3)		<= '0';					-- TDC
-	enable_A(4)		<= '1';					-- Trigger Counter
-	enable_A(5)		<= '1';					-- Trigger Counter
+	enable_A(0)		<= oreg(1)(1); --'0';					-- Header
+	enable_A(1)		<= oreg(1)(2); --'1';					-- Timestamp
+	enable_A(2)		<= oreg(1)(3); --'0';					-- ADC
+	enable_A(3)		<= oreg(1)(4); --'0';					-- TDC
+	enable_A(4)		<= oreg(1)(5); --'1';					-- Trigger Counter
+	enable_A(5)		<= oreg(1)(6); --'1';					-- Trigger Counter
 
-	enable_A(6)		<= '0';
-	enable_A(7)		<= '1';
-	enable_A(8)		<= '0';
-	enable_A(9)		<= '0';
-	enable_A(10)	<= '1';
-	enable_A(11)	<= '1';
+	enable_A(6)		<= oreg(1)(1); --'0';
+	enable_A(7)		<= oreg(1)(2); --'1';
+	enable_A(8)		<= oreg(1)(3); --'0';
+	enable_A(9)		<= oreg(1)(4); --'0';
+	enable_A(10)	<= oreg(1)(5); --'1';
+	enable_A(11)	<= oreg(1)(6); --'1';
 
-	enable_A(12)	<= '0';
-	enable_A(13)	<= '1';
-	enable_A(14)	<= '0';
-	enable_A(15)	<= '0';
-	enable_A(16)	<= '1';
-	enable_A(17)	<= '1';
+	enable_A(12)	<= oreg(1)(1); --'0';
+	enable_A(13)	<= oreg(1)(2); --'1';
+	enable_A(14)	<= oreg(1)(3); --'0';
+	enable_A(15)	<= oreg(1)(4); --'0';
+	enable_A(16)	<= oreg(1)(5); --'1';
+	enable_A(17)	<= oreg(1)(6); --'1';
 
-	enable_A(18)	<= '0';
-	enable_A(19)	<= '1';
-	enable_A(20)	<= '0';
-	enable_A(21)	<= '0';
-	enable_A(22)	<= '1';
-	enable_A(23)	<= '1';
+	enable_A(18)	<= oreg(1)(1); --'0';
+	enable_A(19)	<= oreg(1)(2); --'1';
+	enable_A(20)	<= oreg(1)(3); --'0';
+	enable_A(21)	<= oreg(1)(4); --'0';
+	enable_A(22)	<= oreg(1)(5); --'1';
+	enable_A(23)	<= oreg(1)(6); --'1';
 
 	-- Transfer Enable: even channel and odd channel and IDT ALMOST Full Flag must let us go. 
 	-- 'fifo_paf' is NOT negated because it is active low.
@@ -1152,28 +1149,28 @@ end generate adc_flags_construct;
 	-- Slot Transfer Size:
 	transfer(0)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(1)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(2)		<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(2)		<= oreg(12)(6 downto 0); --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
 	transfer(3)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(4)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(5)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 
 	transfer(6)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(7)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(8)		<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(8)		<= oreg(12)(6 downto 0); --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
 	transfer(9)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(10)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(11)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 
 	transfer(12)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(13)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(14)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(14)	<= oreg(12)(6 downto 0); --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
 	transfer(15)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(16)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(17)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 
 	transfer(18)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(19)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(20)	<= CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(20)	<= oreg(12)(6 downto 0); --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
 	transfer(21)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(22)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(23)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));

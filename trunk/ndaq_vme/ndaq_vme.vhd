@@ -113,8 +113,15 @@ entity ndaq_vme is
 		-------------------
 		signal can_pgc	 	 :out  	std_logic;
 		signal can_pgd	 	 :out  	std_logic;
-		signal can_pgm	 	 :out  	std_logic);
-				
+		signal can_pgm	 	 :out  	std_logic;
+		
+		-----------------
+		-- Test Points --
+		-----------------
+		
+		signal t1_a			:out	std_logic;
+		signal t1_b			:out	std_logic
+	);
 end ndaq_vme;
 
 architecture rtl of ndaq_vme is
@@ -383,11 +390,7 @@ architecture rtl of ndaq_vme is
 		-- FT245BM interface
 		signal dwait 			: in	std_logic;
 		signal wr				: out	std_logic;
-		signal odata        	: out	std_logic_vector(7 downto 0);
-		
-		-- Parameters		
-		signal rmin				: in 	std_logic_vector(7 downto 0);
-		signal esize			: in	std_logic_vector(8 downto 0)
+		signal odata        	: out	std_logic_vector(7 downto 0)
 	);
 	end component;
 
@@ -486,7 +489,11 @@ architecture rtl of ndaq_vme is
 
 
 begin
-		
+	
+	-- Test Points
+	t1_a	<= pclk;
+	t1_b	<= sclk;
+	
 	can_pgc <= stsclk;
 	can_pgd <= 'Z';
 	can_pgm <= 'Z';
@@ -789,11 +796,11 @@ begin
 	enable_B(2)		<= fifo_pae(2) and usb_fifo_wrempty;
 	enable_B(3)		<= fifo_pae(3) and usb_fifo_wrempty;
 
-	transfer(0)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(transfer_max)); -- 3*32bits words	= 12 bytes
-	transfer(1)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(transfer_max)); -- 3*32bits words	= 12 bytes
-	transfer(2)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(transfer_max));	-- 3*32bits words	= 12 bytes
-	transfer(3)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(transfer_max));	-- 3*32bits words	= 12 bytes
-																		-- (+)Total			= 48 bytes
+	transfer(0)		<= oreg(8); --CONV_STD_LOGIC_VECTOR(127, NumBits(transfer_max)); 	-- 3*32bits words	= 12 bytes
+	transfer(1)		<= oreg(8); --CONV_STD_LOGIC_VECTOR(127, NumBits(transfer_max)); 	-- 3*32bits words	= 12 bytes
+	transfer(2)		<= oreg(8); --CONV_STD_LOGIC_VECTOR(127, NumBits(transfer_max));	-- 3*32bits words	= 12 bytes
+	transfer(3)		<= oreg(8); --CONV_STD_LOGIC_VECTOR(127, NumBits(transfer_max));	-- 3*32bits words	= 12 bytes
+																						-- (+)Total			= 48 bytes
 	address(0)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
 	address(1)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
 	address(2)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
@@ -845,11 +852,7 @@ begin
 		-- FT245BM interface
 		dwait 		=> ft_dwait,
 		wr			=> ft_wr,
-		odata       => ft_idata,
-		
-		-- Parameters		
-		rmin		=> CONV_STD_LOGIC_VECTOR(0, 8),
-		esize		=> CONV_STD_LOGIC_VECTOR(11 , 9)		--127
+		odata       => ft_idata
 	);
 
 
