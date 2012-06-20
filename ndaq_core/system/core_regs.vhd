@@ -8,7 +8,7 @@ use ieee.std_logic_1164.all;
 package core_regs is
 
 	-- total system registers
-	constant num_regs			: integer := 13;
+	constant num_regs			: integer := 14;
 
 	type	SYS_REGS_STRUCT		is record
 			addr				: std_logic_vector(7 downto 0);
@@ -25,20 +25,21 @@ package core_regs is
 	--(addr, writable, readable, peripheral, reset state)
 	constant system_regs_enum	: SYS_REGS_VECTOR :=
 	(
-		(x"AA",	true,	true,	false,	x"00"),	-- 00 - Reset
+		(x"AA",	true,	true,	false,	x"00"),	-- 00 - Reset.
 		(x"80",	true,	true,	false,	x"00"),	-- 01 - Readout Enable: Controls DataBuilder's enable.
-		(x"87",	true,	true,	false,	x"00"),	-- 02 - ADC Pwdn
-		(x"89",	true,	true,	false,	x"00"),	-- 03 - FIFO Reset
-		(x"91",	true,	true,	false,	x"00"),	-- 04 - ACQ Enable
-		(x"77",	true,	true,	false,	x"00"),	-- 05 - Th 1L
-		(x"78",	true,	true,	false,	x"00"),	-- 06 - Th 1H
-		(x"79",	true,	true,	false,	x"9C"),	-- 07 - Th 2L 
-		(x"7A",	true,	true,	false,	x"03"),	-- 08 - Th 2H
-		(x"7B",	true,	true,	false,	x"00"),	-- 09 - Trigger Slope: Falling/Rising
-		(x"50",	true,	true,	false,	x"00"),	-- 10 - TDC
-		(x"51",	true,	true,	true,	x"00"),	-- 11 - TDC
+		(x"87",	true,	true,	false,	x"00"),	-- 02 - ADC Pwdn.
+		(x"89",	true,	true,	false,	x"00"),	-- 03 - ACQ Reset (Also Internal/External FIFOs Reset).
+		(x"91",	true,	true,	false,	x"00"),	-- 04 - Enables.
+		(x"77",	true,	true,	false,	x"00"),	-- 05 - Th 1L.
+		(x"78",	true,	true,	false,	x"00"),	-- 06 - Th 1H.
+		(x"79",	true,	true,	false,	x"9C"),	-- 07 - Th 2L.
+		(x"7A",	true,	true,	false,	x"03"),	-- 08 - Th 2H.
+		(x"7B",	true,	true,	false,	x"00"),	-- 09 - Trigger Slope: Falling/Rising.
+		(x"50",	true,	true,	false,	x"00"),	-- 10 - TDC.
+		(x"51",	true,	true,	true,	x"00"),	-- 11 - TDC.
+		(x"81",	true,	true,	false,	x"1D"),	-- 12 - Event Size.
 		--
-		(x"27",	true,	true,	false,	x"00")	-- 12 - R/W Test Register		
+		(x"27",	true,	true,	false,	x"00")	-- 13 - R/W Test Register.
 	);
 
 -------------------------------------------------------------------------------
