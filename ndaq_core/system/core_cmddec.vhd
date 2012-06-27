@@ -83,7 +83,8 @@ architecture rtl of core_cmddec is
 	-- FSMs
 
 	-- Command Decoder finite state machine
-	type cmddec_st_type		is (idle, get_cmd, addr_ph1, addr_ph2, data_ph1, data_ph2, access_reg, read_wait); 
+	type cmddec_st_type		is (idle, get_cmd, addr, data, access_reg, read_wait); 
+	--type cmddec_st_type		is (idle, get_cmd, addr_ph1, addr_ph2, data_ph1, data_ph2, access_reg, read_wait); 
 
 	-- Response finite state machine
 	type response_st_type	is (idle, write_resp, read_resp, read_wait, latch_data, write_st); 
@@ -179,7 +180,7 @@ begin
 					rw_flag	<= '1';				-- rw_flag is '1' for WRITE
 					--
 					if (cmd_wr = '0') then
-						cmddec_st	<= addr_ph1;
+						cmddec_st	<= addr; --addr_ph1;
 						--
 						cmd_tmp		<= idata;
 					else
@@ -190,7 +191,7 @@ begin
 					rw_flag	<= '0';				-- rw_flag is '0' for READ
 					--
 					if (cmd_wr = '0') then
-						cmddec_st	<= addr_ph1;
+						cmddec_st	<= addr; --addr_ph1;
 						--
 						cmd_tmp		<= idata;
 					else
@@ -201,75 +202,79 @@ begin
 					cmddec_st	<= idle;
 				end if;
 								
-			when addr_ph1	=>
-				if (cmd_tmp(7 downto 4) = PH1_TOKEN) then
+			-- when addr_ph1	=>
+				-- if (cmd_tmp(7 downto 4) = PH1_TOKEN) then
 					
-					addr_reg(3 downto 0)	<= cmd_tmp(3 downto 0);		-- addr ls nibble.
-					--
-					if (cmd_wr = '0') then
-						cmddec_st	<= addr_ph2;
-						--
-						cmd_tmp		<= idata;
-					else
-						cmddec_st	<= addr_ph1;
-					end if;
+					-- addr_reg(3 downto 0)	<= cmd_tmp(3 downto 0);		-- addr ls nibble.
+					-- --
+					-- if (cmd_wr = '0') then
+						-- cmddec_st	<= addr_ph2;
+						-- --
+						-- cmd_tmp		<= idata;
+					-- else
+						-- cmddec_st	<= addr_ph1;
+					-- end if;
 
-				else
-					cmddec_st	<= idle;
-				end if;
+				-- else
+					-- cmddec_st	<= idle;
+				-- end if;
 
-			when addr_ph2	=>
-				if (cmd_tmp(7 downto 4) = PH2_TOKEN) then
+			--when addr_ph2	=>
+			when addr	=>
+				--if (cmd_tmp(7 downto 4) = PH2_TOKEN) then
 					
-					addr_reg(7 downto 4)	<= cmd_tmp(3 downto 0);		-- addr ms nibble.
+					addr_reg	<= cmd_tmp;		-- addr.
+					--addr_reg(7 downto 4)	<= cmd_tmp(3 downto 0);		-- addr ms nibble.
 					--
 					if (rw_flag = '1') then								-- If write, branch to 'access reg'.
 						if (cmd_wr = '0') then
 						
-							cmddec_st	<= data_ph1;
+							cmddec_st	<= data; --data_ph1;
 							--
 							cmd_tmp		<= idata;
 						else
-							cmddec_st	<= addr_ph2;
+							cmddec_st	<= addr; --addr_ph2;
 						end if;
 					
 					else
 						cmddec_st	<= access_reg;
 					end if;
 					
-				else
-					cmddec_st	<= idle;
-				end if;
+				--else
+					--cmddec_st	<= idle;
+				--end if;
 
-			when data_ph1	=>
-				if (cmd_tmp(7 downto 4) = PH1_TOKEN) then
+			-- when data_ph1	=>
+				-- if (cmd_tmp(7 downto 4) = PH1_TOKEN) then
 					
-					data_reg(3 downto 0)	<= cmd_tmp(3 downto 0);		-- data ls nibble.
-					--
-					if (cmd_wr = '0') then
-						cmddec_st	<= data_ph2;
-						--
-						cmd_tmp		<= idata;
-					else
-						cmddec_st	<= data_ph1;
-					end if;
+					-- data_reg(3 downto 0)	<= cmd_tmp(3 downto 0);		-- data ls nibble.
+					-- --
+					-- if (cmd_wr = '0') then
+						-- cmddec_st	<= data_ph2;
+						-- --
+						-- cmd_tmp		<= idata;
+					-- else
+						-- cmddec_st	<= data_ph1;
+					-- end if;
 
-				else
-					cmddec_st	<= idle;
-				end if;
+				-- else
+					-- cmddec_st	<= idle;
+				-- end if;
 
 			-- This state CAN NOT receive data. Thus, 'dwait' must be '1'.
-			when data_ph2	=>
-				if (cmd_tmp(7 downto 4) = PH2_TOKEN) then
+			--when data_ph2	=>
+			when data	=>
+				--if (cmd_tmp(7 downto 4) = PH2_TOKEN) then
 					
-					data_reg(7 downto 4)	<= cmd_tmp(3 downto 0);		-- data ms nibble.
+					data_reg	<= cmd_tmp;		-- data.
+					--data_reg(7 downto 4)	<= cmd_tmp(3 downto 0);		-- data ms nibble.
 					--
 					
 					cmddec_st	<= access_reg;
 
-				else
-					cmddec_st	<= idle;
-				end if;
+				--else
+					--cmddec_st	<= idle;
+				--end if;
 
 			-- This state CAN NOT receive data. Thus, 'dwait' must be '1'.
 			when access_reg	=>
@@ -298,7 +303,8 @@ begin
 		-- when addr_ph1		=>
 		-- when data_ph1		=>
 
-		when addr_ph2		=>		
+		--when addr_ph2		=>		
+		when addr		=>		
 			if (rw_flag = '0') then		-- If read, stop accepting data.
 				cmd_dwait	<= '1';
 			else
@@ -310,7 +316,8 @@ begin
 			response_wr	<= '0';
 			response_rd	<= '0';
 			
-		when data_ph2	=>
+		--when data_ph2	=>
+		when data		=>
 			cmd_dwait	<= '1';
 			wr_stb		<= '0';
 			rd_stb		<= '0';
@@ -364,7 +371,6 @@ begin
 end process;
 
 --*****************************************************************************
-
 	
 addr_decoder:
 for i in 0 to (num_regs - 1) generate
@@ -386,22 +392,7 @@ for i in 0 to (num_regs - 1) generate
 	end process;
 	
 end generate addr_decoder;
-	
-	--begin
-	
-	--for i in 0 to (num_regs - 1) loop
-
-	-- case (addr_reg) is		
-		-- when system_regs_enum(0).addr	=> reg_wr_temp <= "001"; --STD_LOGIC_VECTOR(TO_UNSIGNED(2**1, num_regs));	
-		-- when system_regs_enum(1).addr	=> reg_wr_temp <= "010"; --STD_LOGIC_VECTOR(TO_UNSIGNED(2**1, num_regs));	
-		-- when system_regs_enum(2).addr	=> reg_wr_temp <= "100"; --STD_LOGIC_VECTOR(TO_UNSIGNED(2**1, num_regs));	
-		-- when others						=> reg_wr_temp <= "000"; --STD_LOGIC_VECTOR(TO_UNSIGNED(0	, num_regs));
-	-- end case;
-	
-	--end loop;
-	
-	--end process;
-	
+		
 --*****************************************************************************
 
 reg_data_output:
