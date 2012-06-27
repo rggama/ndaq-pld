@@ -1119,32 +1119,32 @@ end generate adc_flags_construct;
 	-- Transfer Enable: even channel and odd channel and IDT ALMOST Full Flag must let us go. 
 	-- 'fifo_paf' is NOT negated because it is active low.
 	enable_B(0)		<= fifo_paf(0) and even_enable(0) and odd_enable(0);
-	enable_B(1)		<= fifo_paf(0) and not(time_ef);
+	enable_B(1)		<= fifo_paf(0); --and not(time_ef);
 	enable_B(2)		<= fifo_paf(0) and even_enable(0) and odd_enable(0);
 	enable_B(3)		<= fifo_paf(0);
-	enable_B(4)		<= fifo_paf(0) and not(tcounter_ef(0));
-	enable_B(5)		<= fifo_paf(0) and not(tcounter_ef(1));
+	enable_B(4)		<= fifo_paf(0); -- and not(tcounter_ef(0));
+	enable_B(5)		<= fifo_paf(0); -- and not(tcounter_ef(1));
 
 	enable_B(6)		<= fifo_paf(1) and even_enable(1) and odd_enable(1);
-	enable_B(7)		<= fifo_paf(1) and not(time_ef);
+	enable_B(7)		<= fifo_paf(1); -- and not(time_ef);
 	enable_B(8)		<= fifo_paf(1) and even_enable(1) and odd_enable(1);
 	enable_B(9)		<= fifo_paf(1);
-	enable_B(10)	<= fifo_paf(1) and not(tcounter_ef(2));
-	enable_B(11)	<= fifo_paf(1) and not(tcounter_ef(3));
+	enable_B(10)	<= fifo_paf(1); -- and not(tcounter_ef(2));
+	enable_B(11)	<= fifo_paf(1); -- and not(tcounter_ef(3));
 
 	enable_B(12)	<= fifo_paf(2) and even_enable(2) and odd_enable(2);
-	enable_B(13)	<= fifo_paf(2) and not(time_ef);
+	enable_B(13)	<= fifo_paf(2); -- and not(time_ef);
 	enable_B(14)	<= fifo_paf(2) and even_enable(2) and odd_enable(2);
 	enable_B(15)	<= fifo_paf(2);
-	enable_B(16)	<= fifo_paf(2) and not(tcounter_ef(4));
-	enable_B(17)	<= fifo_paf(2) and not(tcounter_ef(5));
+	enable_B(16)	<= fifo_paf(2); -- and not(tcounter_ef(4));
+	enable_B(17)	<= fifo_paf(2); -- and not(tcounter_ef(5));
 
 	enable_B(18)	<= fifo_paf(3) and even_enable(3) and odd_enable(3);
-	enable_B(19)	<= fifo_paf(3) and not(time_ef);
+	enable_B(19)	<= fifo_paf(3); -- and not(time_ef);
 	enable_B(20)	<= fifo_paf(3) and even_enable(3) and odd_enable(3); 
 	enable_B(21)	<= fifo_paf(3);
-	enable_B(22)	<= fifo_paf(3) and not(tcounter_ef(6));
-	enable_B(23)	<= fifo_paf(3) and not(tcounter_ef(7));
+	enable_B(22)	<= fifo_paf(3); -- and not(tcounter_ef(6));
+	enable_B(23)	<= fifo_paf(3); -- and not(tcounter_ef(7));
 
 	-- Slot Transfer Size:
 	transfer(0)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
