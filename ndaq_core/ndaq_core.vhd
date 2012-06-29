@@ -810,13 +810,13 @@ begin
 	timebase_gen:
 	timebase port map
 	(	
-		rst					=> rst,
+		rst					=> acq_rst,
 		clk					=> clkcore,
 		-- Timebase Generator
 		timebase_out		=> open,
 		-- Timebase Counter
 		enable				=> timebase_en,
-		srst				=> oreg(3)(0),
+		srst				=> acq_rst,
 		rdclk				=> dclk,
 		rden				=> time_rd_comb,
 		fifo_empty			=> time_ef,
