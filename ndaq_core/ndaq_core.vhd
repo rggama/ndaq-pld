@@ -544,6 +544,7 @@ architecture rtl of ndaq_core is
 	signal thtemp1					: DATA_T;
 	signal thtemp2					: DATA_T;
 	signal int_trigger				: std_logic_vector((adc_channels-1) downto 0);
+	signal itrigger_sel				: std_logic;
 	signal acqin					: std_logic_vector((adc_channels-1) downto 0);
 	signal usedw_event_size			: USEDW_T;
 
@@ -768,7 +769,10 @@ begin
 	);
 
 -- ******************************* TEST COUNTER ********************************
-	
+
+	--
+	-- Works ONLY for external trigger A!
+	--
 	test_counter_construct:
 	for i in 0 to (adc_channels-1) generate
 
@@ -793,11 +797,11 @@ begin
 
 	--
 	-- Enables
-	timebase_en		<= oreg(4)(0);
-	counter_en		<= oreg(4)(1);
-	etrigger_en		<= oreg(4)(2);
-	itrigger_en		<= oreg(4)(3);
-	acq_en			<= oreg(4)(4);
+	timebase_en		<= oreg(1)(0);
+	counter_en		<= oreg(1)(1);
+	etrigger_en		<= oreg(1)(2);
+	itrigger_en		<= oreg(1)(3);
+	acq_en			<= oreg(1)(4);
 	
 	--
 	-- ACQ Reset
@@ -807,6 +811,8 @@ begin
 	-- Timebase Counter Read Enable Logic
 	time_rd_comb	<= time_rd(0) or time_rd(1) or time_rd(2) or time_rd(3);
 	
+	--
+	-- Timebase Generator
 	timebase_gen:
 	timebase port map
 	(	
@@ -823,7 +829,8 @@ begin
 		counter_q			=> time_q
 	);	
 
-
+	--
+	-- ADC DCOs (Data Clock Outputs) assignements.
 	clk(0)		<= adc12_dco;
 	clk(1)		<= not(adc12_dco);
 	clk(2)		<= adc34_dco;
@@ -833,6 +840,8 @@ begin
 	clk(6)		<= adc78_dco;
 	clk(7)		<= not(adc78_dco);
 
+	--
+	-- ADC Data Bus assignements.
 	data(0)		<= adc12_data;
 	data(1)		<= adc12_data;
 	data(2)		<= adc34_data;
@@ -842,6 +851,8 @@ begin
 	data(6)		<= adc78_data;
 	data(7)		<= adc78_data;
 	
+	--
+	-- Test Counter Data Bus assignements.
 	-- data(0)		<= counter(0);
 	-- data(1)		<= counter(1);
 	-- data(2)		<= counter(2);
@@ -852,9 +863,13 @@ begin
 	-- data(7)		<= counter(7);
 
 	--
-	-- Event Size to be compared with FIFO's used words. 
+	-- Event Size (to be compared with FIFO's used words). 
 	usedw_event_size <= "0000" & oreg(12)(6 downto 0);
 
+	--
+	-- Internal Trigger Output Selector (8 to 1 mux)
+	itrigger_selector: itrigger_sel	<= int_trigger(conv_integer(oreg(18)(2 downto 0)));
+	
 	-- Constroi os 8 canais de aquisicao
 	adc_data_acq_construct:
 	for i in 0 to (adc_channels-1) generate
@@ -893,12 +908,14 @@ begin
 		);
 		
 		--
-		--
+		-- Constructing the 10 bits Threshold registers.
 		thtemp1(9 downto 8) <= oreg(6)(1 downto 0);	-- high Th 1 reg
 		thtemp1(7 downto 0) <= oreg(5);				-- low Th 1 reg
 		thtemp2(9 downto 8) <= oreg(8)(1 downto 0);	-- high Th 2 reg
 		thtemp2(7 downto 0) <= oreg(7);				-- low Th 2 reg
 
+		--
+		-- Internal Trigger Generator
 		internal_trigger:
 		itrigger port map
 		(	
@@ -913,6 +930,8 @@ begin
 			trigger_out			=> int_trigger(i)
 		);	
 		
+		--
+		-- Internal Trigger Counter
 		trigger_counter:
 		tcounter port map
 		(	
@@ -929,6 +948,7 @@ begin
 			counter_q			=> tcounter_q(i)
 		);	
 		
+		--
 		-- Controla a escrita nas POST FIFOs a partir de um 'trigger' condicionado
 		stream_IN:
 		writefifo port map
@@ -947,7 +967,7 @@ begin
 			trig2		=> c_trigger_c(i),
 
 			-- conditioned trigger input, active when 'tmode = '1''
-			trig3		=> int_trigger(0),								-- *** Improve: MULTIPLEX THE 8 INTERNAL TRIGGERS! ***
+			trig3		=> itrigger_sel,
 			
 			wr			=> wr(i),
 				
@@ -958,7 +978,7 @@ begin
 			esize		=> usedw_event_size --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)
 		);
 
-		
+		--
 		-- Modulo de FIFO: PRE+POST
 		fifo_module:
 		dcfifom port map
@@ -985,6 +1005,8 @@ begin
 	
 -- ************************************ TDC ***********************************
 
+	--
+	-- TDC Interface
 	tdc_top:
 	tdc	port map
 	(	
@@ -1023,6 +1045,8 @@ begin
 
 -- ******************************* DATA BUILDER *******************************
 
+	--
+	-- Core Databuilder
 	data_builder: 
 	databuilder port map 
 	(
@@ -1031,7 +1055,7 @@ begin
 		clk							=> dclk,
 		
 		--
-		enable						=> oreg(1)(0),
+		enable						=> oreg(13)(0),
 		
 		--
 		enable_A					=> enable_A,
@@ -1049,72 +1073,74 @@ begin
 		odata						=> odata
 	);
 
+	
+	--
+	-- ADC's FIFOs FLAGS Comb logic construct
+	adc_flags_construct:
+	for i in 0 to 3 generate
 		
-adc_flags_construct:
-for i in 0 to 3 generate
-	
-	--
-	-- Internal FIFOs enough data test
-	--
-	--
-	
-	even_read_test:
-	process(rdusedw, usedw_event_size, empty)
-	begin
-		-- Means that the FIFO is FULL of data.
-		if (rdusedw(i*2) > usedw_event_size) and (empty(i*2) = '0') then
-			even_enable(i) <= '1';
-		else
-			even_enable(i) <= '0';
-		end if;
-	end process;
-	
-	odd_read_test:
-	process(rdusedw, usedw_event_size, empty)
-	begin
-		-- Means that the FIFO is FULL of data.
-		if (rdusedw((i*2)+1) > usedw_event_size) and (empty((i*2)+1) = '0') then
-			odd_enable(i) <= '1';
-		else
-			odd_enable(i) <= '0';
-		end if;
-	end process;
-	
-end generate adc_flags_construct;
+		--
+		-- Even Internal FIFO enough data test
+		even_read_test:
+		process(rdusedw, usedw_event_size, empty)
+		begin
+			-- Means that the FIFO is FULL of data.
+			if (rdusedw(i*2) > usedw_event_size) and (empty(i*2) = '0') then
+				even_enable(i) <= '1';
+			else
+				even_enable(i) <= '0';
+			end if;
+		end process;
+		
+		--
+		-- Odd Internal FIFO enough data test
+		odd_read_test:
+		process(rdusedw, usedw_event_size, empty)
+		begin
+			-- Means that the FIFO is FULL of data.
+			if (rdusedw((i*2)+1) > usedw_event_size) and (empty((i*2)+1) = '0') then
+				odd_enable(i) <= '1';
+			else
+				odd_enable(i) <= '0';
+			end if;
+		end process;
+		
+	end generate adc_flags_construct;
 
---
--- Data Builder Slots Construct
---
+	
+	--
+	-- Data Builder Slots Construct
+	--
 
 	--
 	-- Slot Enable: '1' for enable.
-	enable_A(0)		<= oreg(1)(1); --'0';					-- Header
-	enable_A(1)		<= oreg(1)(2); --'1';					-- Timestamp
-	enable_A(2)		<= oreg(1)(3); --'0';					-- ADC
-	enable_A(3)		<= oreg(1)(4); --'0';					-- TDC
-	enable_A(4)		<= oreg(1)(5); --'1';					-- Trigger Counter
-	enable_A(5)		<= oreg(1)(6); --'1';					-- Trigger Counter
+	enable_A(0)		<= oreg(14)(0); --'0';					-- Header
+	enable_A(1)		<= oreg(14)(1); --'1';					-- Timestamp
+	enable_A(2)		<= oreg(14)(2); --'0';					-- ADC
+	enable_A(3)		<= oreg(14)(3); --'0';					-- TDC
+	enable_A(4)		<= oreg(14)(4); --'1';					-- Trigger Counter
+	enable_A(5)		<= oreg(14)(5); --'1';					-- Trigger Counter
 
-	enable_A(6)		<= oreg(1)(1); --'0';
-	enable_A(7)		<= oreg(1)(2); --'1';
-	enable_A(8)		<= oreg(1)(3); --'0';
-	enable_A(9)		<= oreg(1)(4); --'0';
-	enable_A(10)	<= oreg(1)(5); --'1';
-	enable_A(11)	<= oreg(1)(6); --'1';
+	enable_A(6)		<= oreg(15)(0); --'0';
+	enable_A(7)		<= oreg(15)(1); --'1';
+	enable_A(8)		<= oreg(15)(2); --'0';
+	enable_A(9)		<= oreg(15)(3); --'0';
+	enable_A(10)	<= oreg(15)(4); --'1';
+	enable_A(11)	<= oreg(15)(5); --'1';
 
-	enable_A(12)	<= oreg(1)(1); --'0';
-	enable_A(13)	<= oreg(1)(2); --'1';
-	enable_A(14)	<= oreg(1)(3); --'0';
-	enable_A(15)	<= oreg(1)(4); --'0';
-	enable_A(16)	<= oreg(1)(5); --'1';
-	enable_A(17)	<= oreg(1)(6); --'1';
+	enable_A(12)	<= oreg(16)(0); --'0';
+	enable_A(13)	<= oreg(16)(1); --'1';
+	enable_A(14)	<= oreg(16)(2); --'0';
+	enable_A(15)	<= oreg(16)(3); --'0';
+	enable_A(16)	<= oreg(16)(4); --'1';
+	enable_A(17)	<= oreg(16)(5); --'1';
 
-	enable_A(18)	<= oreg(1)(1); --'0';
-	enable_A(19)	<= oreg(1)(2); --'1';
-	enable_A(20)	<= oreg(1)(3); --'0';
-	enable_A(21)	<= oreg(1)(4); --'0';
-	enable_A(22)	<= oreg(1)(5); --'1';
-	enable_A(23)	<= oreg(1)(6); --'1';
+	enable_A(18)	<= oreg(17)(0); --'0';
+	enable_A(19)	<= oreg(17)(1); --'1';
+	enable_A(20)	<= oreg(17)(2); --'0';
+	enable_A(21)	<= oreg(17)(3); --'0';
+	enable_A(22)	<= oreg(17)(4); --'1';
+	enable_A(23)	<= oreg(17)(5); --'1';
 
 	-- Transfer Enable: even channel and odd channel and IDT ALMOST Full Flag must let us go. 
 	-- 'fifo_paf' is NOT negated because it is active low.
