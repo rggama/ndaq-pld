@@ -8,7 +8,7 @@ use ieee.std_logic_1164.all;
 package core_regs is
 
 	-- total system registers
-	constant num_regs			: integer := 14;
+	constant num_regs			: integer := 20;
 
 	type	SYS_REGS_STRUCT		is record
 			addr				: std_logic_vector(7 downto 0);
@@ -26,10 +26,10 @@ package core_regs is
 	constant system_regs_enum	: SYS_REGS_VECTOR :=
 	(
 		(x"AA",	true,	true,	false,	x"00"),	-- 00 - Reset.
-		(x"80",	true,	true,	false,	x"00"),	-- 01 - Readout Enable: Controls DataBuilder's enable.
+		(x"80",	true,	true,	false,	x"00"),	-- 01 - ACQ Enables. 
 		(x"87",	true,	true,	false,	x"00"),	-- 02 - ADC Pwdn.
 		(x"89",	true,	true,	false,	x"00"),	-- 03 - ACQ Reset (Also Internal/External FIFOs Reset).
-		(x"91",	true,	true,	false,	x"00"),	-- 04 - Enables.
+		(x"71",	true,	true,	false,	x"00"),	-- 04 - Trigger Configuration.
 		(x"77",	true,	true,	false,	x"00"),	-- 05 - Th 1L.
 		(x"78",	true,	true,	false,	x"00"),	-- 06 - Th 1H.
 		(x"79",	true,	true,	false,	x"9C"),	-- 07 - Th 2L.
@@ -38,8 +38,14 @@ package core_regs is
 		(x"50",	true,	true,	false,	x"00"),	-- 10 - TDC.
 		(x"51",	true,	true,	true,	x"00"),	-- 11 - TDC.
 		(x"81",	true,	true,	false,	x"1D"),	-- 12 - Event Size.
+		(x"40",	true,	true,	false,	x"00"),	-- 13 - DataBuilder's enable.
+		(x"41",	true,	true,	false,	x"00"),	-- 14 - DataBuilder's FIFO 1 Block Configuration.
+		(x"42",	true,	true,	false,	x"00"),	-- 15 - DataBuilder's FIFO 2 Block Configuration.
+		(x"43",	true,	true,	false,	x"00"),	-- 16 - DataBuilder's FIFO 3 Block Configuration.
+		(x"44",	true,	true,	false,	x"00"),	-- 17 - DataBuilder's FIFO 4 Block Configuration.
+		(x"70",	true,	true,	false,	x"00"),	-- 18 - Internal Trigger Output Selector.
 		--
-		(x"27",	true,	true,	false,	x"00")	-- 13 - R/W Test Register.
+		(x"27",	true,	true,	false,	x"00")	-- 19 - R/W Test Register.
 	);
 
 -------------------------------------------------------------------------------
