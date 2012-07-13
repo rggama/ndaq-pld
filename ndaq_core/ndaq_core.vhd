@@ -279,6 +279,7 @@ architecture rtl of ndaq_core is
 		signal clk					: in	std_logic;
 		-- Counter
 		signal trigger_in			: in	std_logic;
+		signal timebase_en			: in	std_logic;
 		signal enable				: in	std_logic;
 		signal srst					: in	std_logic;
 		--
@@ -525,6 +526,7 @@ architecture rtl of ndaq_core is
 	signal time_rd_comb				: std_logic;
 	signal time_ef					: std_logic;
 	signal time_q					: std_logic_vector(31 downto 0);
+	signal timebase_out				: std_logic;
 	
 	-- ACQ: ADC
 	signal timebase_en				: std_logic;
@@ -819,7 +821,7 @@ begin
 		rst					=> acq_rst,
 		clk					=> clkcore,
 		-- Timebase Generator
-		timebase_out		=> open,
+		timebase_out		=> timebase_out,
 		-- Timebase Counter
 		enable				=> timebase_en,
 		srst				=> acq_rst,
@@ -939,6 +941,7 @@ begin
 			clk					=> clk(i),
 			-- Counter
 			trigger_in			=> int_trigger(i),
+			timebase_en			=> timebase_out,
 			enable				=> counter_en,
 			srst				=> acq_rst,
 			--
