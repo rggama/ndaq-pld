@@ -76,7 +76,7 @@ architecture rtl of timebase is
 	signal fifo_wen					: std_logic := '0';
 	
 	signal r_fifo_wen				: std_logic := '0';
-
+	
 --***********************************************************************************************
 	
 begin
@@ -183,7 +183,8 @@ begin
 		
 	elsif (rising_edge(clk)) then
 
-		if ((r_timebase_en = '0') and (reg_wait = '0') and (fifo_full = '0')) then
+		--if ((r_timebase_en = '0') and (reg_wait = '0') and (fifo_full = '0')) then
+		if ((r_timebase_en = '1') and (reg_wait = '0') and (fifo_full = '0')) then
 			fifo_wen	<= '1';
 		else
 			fifo_wen	<= '0';
@@ -208,5 +209,8 @@ READOUT_FIFO : counter_fifo PORT MAP
 	rdempty		=> fifo_empty,
 	wrfull		=> fifo_full
 );
+
+--
+--
 
 end rtl;

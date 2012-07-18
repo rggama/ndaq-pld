@@ -58,7 +58,7 @@ architecture rtl of tcounter is
 	signal fifo_wen					: std_logic := '0';
 	
 	signal r_fifo_wen				: std_logic := '0';
-
+	
 --
 --
 	
@@ -89,6 +89,27 @@ begin
 	end if;
 end process;
 
+-- --
+-- -- Counter Register
+-- COUNTER_REGISTER: process(rst, clk)
+-- begin
+	-- if (rst ='1') then
+		-- counter_reg <= (others => '0');
+		-- reg_wait		<= '0';
+	-- elsif (rising_edge(clk)) then
+
+		-- if ((timebase_en = '0') and (reg_wait = '0')) then
+			-- counter_reg		<= i_counter;
+			-- reg_wait		<= '1';
+		-- end if;
+		
+		-- if (timebase_en = '1') then
+			-- reg_wait		<= '0';
+		-- end if;
+
+	-- end if;
+-- end process;
+
 --
 -- Counter Register
 COUNTER_REGISTER: process(rst, clk)
@@ -98,14 +119,15 @@ begin
 		reg_wait		<= '0';
 	elsif (rising_edge(clk)) then
 
-		if ((timebase_en = '0') and (reg_wait = '0')) then
-			counter_reg		<= i_counter;
-			reg_wait		<= '1';
-		end if;
-		
+		--
 		if (timebase_en = '1') then
+			reg_wait		<= '1';
+		else
 			reg_wait		<= '0';
 		end if;
+		
+		--
+		counter_reg		<= i_counter;
 
 	end if;
 end process;
@@ -122,7 +144,8 @@ begin
 		
 	elsif (rising_edge(clk)) then
 
-		if ((timebase_en = '0') and (reg_wait = '0') and (fifo_full = '0')) then
+		--if ((timebase_en = '0') and (reg_wait = '0') and (fifo_full = '0')) then
+		if ((timebase_en = '1') and (reg_wait = '0') and (fifo_full = '0')) then
 			fifo_wen	<= '1';
 		else
 			fifo_wen	<= '0';
