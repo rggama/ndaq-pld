@@ -389,20 +389,21 @@ architecture rtl of ndaq_core is
 		--
 		rst							: in	std_logic;
 		clk							: in	std_logic;		 
-
+		
 		--
 		enable						: in	std_logic;
-
+		
 		--
 		enable_A					: in	SLOTS_T;
 		enable_B					: in	SLOTS_T;
 		transfer					: in	TRANSFER_A;
 		address						: in	ADDRESS_A;
-		mode						: in	SLOTS_T;
+		mode						: in	MODE_A;
 		
 		--
 		rd							: out	SLOTS_T;
 		idata						: in	IDATA_A;
+		ctval						: in	IDATA_A;
 		
 		--
 		wr							: out	ADDRESS_T;
@@ -572,11 +573,12 @@ architecture rtl of ndaq_core is
 	signal	enable_B				: SLOTS_T;
 	signal	transfer				: TRANSFER_A;
 	signal	address					: ADDRESS_A;
-	signal	mode					: SLOTS_T;
+	signal	mode					: MODE_A;
 	
 	--
 	signal	db_rd					: SLOTS_T;
 	signal  idata					: IDATA_A;
+	signal  ctval					: IDATA_A;
 	
 	--
 	signal	db_wr					: ADDRESS_T;
@@ -669,8 +671,8 @@ begin
 		iclk				=> clkcore, 
 		
 		pclk				=> pclk, -- @ 40 MHz - 0 deg.
-		nclk				=> dclk, -- @ 30 Mhz - 0 deg.
-		mclk				=> fclk, -- @ 30 MHz - 90 deg.
+		nclk				=> dclk, -- @ 30 MHz - 0 deg.
+		mclk				=> fclk, -- @ 30 MHz - 180 deg.
 		sclk				=> open, -- @ 60 MHz - 0 deg.
 		clk_enable			=> open,
 		tclk				=> open
@@ -1070,6 +1072,7 @@ begin
 		--
 		rd							=> db_rd,
 		idata						=> idata,
+		ctval						=> ctval,
 		
 		--
 		wr							=> db_wr,
@@ -1148,32 +1151,32 @@ begin
 	-- Transfer Enable: even channel and odd channel and IDT ALMOST Full Flag must let us go. 
 	-- 'fifo_paf' is NOT negated because it is active low.
 	enable_B(0)		<= fifo_paf(0) and even_enable(0) and odd_enable(0);
-	enable_B(1)		<= fifo_paf(0); --and not(time_ef);
+	enable_B(1)		<= fifo_paf(0) and not(time_ef);
 	enable_B(2)		<= fifo_paf(0) and even_enable(0) and odd_enable(0);
 	enable_B(3)		<= fifo_paf(0);
-	enable_B(4)		<= fifo_paf(0); -- and not(tcounter_ef(0));
-	enable_B(5)		<= fifo_paf(0); -- and not(tcounter_ef(1));
+	enable_B(4)		<= fifo_paf(0) and not(tcounter_ef(0));
+	enable_B(5)		<= fifo_paf(0) and not(tcounter_ef(1));
 
 	enable_B(6)		<= fifo_paf(1) and even_enable(1) and odd_enable(1);
-	enable_B(7)		<= fifo_paf(1); -- and not(time_ef);
+	enable_B(7)		<= fifo_paf(1) and not(time_ef);
 	enable_B(8)		<= fifo_paf(1) and even_enable(1) and odd_enable(1);
 	enable_B(9)		<= fifo_paf(1);
-	enable_B(10)	<= fifo_paf(1); -- and not(tcounter_ef(2));
-	enable_B(11)	<= fifo_paf(1); -- and not(tcounter_ef(3));
+	enable_B(10)	<= fifo_paf(1) and not(tcounter_ef(2));
+	enable_B(11)	<= fifo_paf(1) and not(tcounter_ef(3));
 
 	enable_B(12)	<= fifo_paf(2) and even_enable(2) and odd_enable(2);
-	enable_B(13)	<= fifo_paf(2); -- and not(time_ef);
+	enable_B(13)	<= fifo_paf(2) and not(time_ef);
 	enable_B(14)	<= fifo_paf(2) and even_enable(2) and odd_enable(2);
 	enable_B(15)	<= fifo_paf(2);
-	enable_B(16)	<= fifo_paf(2); -- and not(tcounter_ef(4));
-	enable_B(17)	<= fifo_paf(2); -- and not(tcounter_ef(5));
+	enable_B(16)	<= fifo_paf(2) and not(tcounter_ef(4));
+	enable_B(17)	<= fifo_paf(2) and not(tcounter_ef(5));
 
 	enable_B(18)	<= fifo_paf(3) and even_enable(3) and odd_enable(3);
-	enable_B(19)	<= fifo_paf(3); -- and not(time_ef);
+	enable_B(19)	<= fifo_paf(3) and not(time_ef);
 	enable_B(20)	<= fifo_paf(3) and even_enable(3) and odd_enable(3); 
 	enable_B(21)	<= fifo_paf(3);
-	enable_B(22)	<= fifo_paf(3); -- and not(tcounter_ef(6));
-	enable_B(23)	<= fifo_paf(3); -- and not(tcounter_ef(7));
+	enable_B(22)	<= fifo_paf(3) and not(tcounter_ef(6));
+	enable_B(23)	<= fifo_paf(3) and not(tcounter_ef(7));
 
 	-- Slot Transfer Size:
 	transfer(0)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
@@ -1270,35 +1273,64 @@ begin
 	idata(22)		<= tcounter_q(6);										--001 palavra
 	idata(23)		<= tcounter_q(7);										--001 palavra
 
-	-- Mode: '0' for non branch and '1' for branch.
-	mode(0)			<= '0';
-	mode(1)			<= '0';
-	mode(2)			<= '0';
-	mode(3)			<= '0';
-	mode(4)			<= '0';
-	mode(5)			<= '0';
+	-- Mode: '00' for non branch and '01' for branch and '10' for constant value.
+	mode(0)			<= "00";
+	mode(1)			<= "10";
+	mode(2)			<= "00";
+	mode(3)			<= "00";
+	mode(4)			<= "10";
+	mode(5)			<= "10";
 	
-	mode(6)			<= '0';
-	mode(7)			<= '0';
-	mode(8)			<= '0';
-	mode(9)			<= '0';
-	mode(10)		<= '0';
-	mode(11)		<= '0';
+	mode(6)			<= "00";
+	mode(7)			<= "10";
+	mode(8)			<= "00";
+	mode(9)			<= "00";
+	mode(10)		<= "10";
+	mode(11)		<= "10";
 	
-	mode(12)		<= '0';
-	mode(13)		<= '0';
-	mode(14)		<= '0';
-	mode(15)		<= '0';
-	mode(16)		<= '0';
-	mode(17)		<= '0';
+	mode(12)		<= "00";
+	mode(13)		<= "10";
+	mode(14)		<= "00";
+	mode(15)		<= "00";
+	mode(16)		<= "10";
+	mode(17)		<= "10";
 	
-	mode(18)		<= '0';
-	mode(19)		<= '0';
-	mode(20)		<= '0';
-	mode(21)		<= '0';
-	mode(22)		<= '0';
-	mode(23)		<= '0';
+	mode(18)		<= "00";
+	mode(19)		<= "10";
+	mode(20)		<= "00";
+	mode(21)		<= "00";
+	mode(22)		<= "10";
+	mode(23)		<= "10";
 
+	-- Constant Value definitions.
+	ctval(0)		<= x"FFFFFFFF";
+	ctval(1)		<= x"FFFFFFFF";
+	ctval(2)		<= x"FFFFFFFF";
+	ctval(3)		<= x"FFFFFFFF";
+	ctval(4)		<= x"FFFFFFFF";
+	ctval(5)		<= x"FFFFFFFF";
+
+	ctval(6)		<= x"FFFFFFFF";
+	ctval(7)		<= x"FFFFFFFF";
+	ctval(8)		<= x"FFFFFFFF";
+	ctval(9)		<= x"FFFFFFFF";
+	ctval(10)		<= x"FFFFFFFF";
+	ctval(11)		<= x"FFFFFFFF";
+
+	ctval(12)		<= x"FFFFFFFF";
+	ctval(13)		<= x"FFFFFFFF";
+	ctval(14)		<= x"FFFFFFFF";
+	ctval(15)		<= x"FFFFFFFF";
+	ctval(16)		<= x"FFFFFFFF";
+	ctval(17)		<= x"FFFFFFFF";
+
+	ctval(18)		<= x"FFFFFFFF";
+	ctval(19)		<= x"FFFFFFFF";
+	ctval(20)		<= x"FFFFFFFF";
+	ctval(21)		<= x"FFFFFFFF";
+	ctval(22)		<= x"FFFFFFFF";
+	ctval(23)		<= x"FFFFFFFF";
+	
 	--*******************************************************************************
 	
 	-- Header		<= db_rd(0);

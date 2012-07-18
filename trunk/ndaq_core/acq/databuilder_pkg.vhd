@@ -32,6 +32,9 @@ package databuilder_pkg is
 	
 	--
 	constant out_width		: integer	:= 32;
+	
+	--
+	constant total_modes	: integer := 3;
 		
 --*******************************************************************************************************************************
 
@@ -46,10 +49,13 @@ package databuilder_pkg is
 	subtype	ADDRESS_REG_T			is std_logic_vector((Numbits(address_max)-1) downto 0);
 	subtype	IDATA_T					is std_logic_vector((in_width-1) downto 0);
 	subtype	ODATA_T					is std_logic_vector((out_width-1) downto 0);
+	subtype MODE_T					is std_logic_vector((Numbits(total_modes)-1) downto 0);
 	
 	type	TRANSFER_A				is array ((slots-1) downto 0) of TRANSFER_REG_T;
 	type	IDATA_A					is array ((slots-1) downto 0) of IDATA_T;
 	type	ADDRESS_A				is array ((slots-1) downto 0) of ADDRESS_REG_T;
+	type	MODE_A					is array ((slots-1) downto 0) of MODE_T;
+	
 	
 --*******************************************************************************************************************************
 	

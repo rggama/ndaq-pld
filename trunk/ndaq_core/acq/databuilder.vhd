@@ -27,11 +27,12 @@ port(
 		enable_B					: in	SLOTS_T;
 		transfer					: in	TRANSFER_A;
 		address						: in	ADDRESS_A;
-		mode						: in	SLOTS_T;
+		mode						: in	MODE_A;
 		
 		--
 		rd							: out	SLOTS_T;
 		idata						: in	IDATA_A;
+		ctval						: in	IDATA_A;
 		
 		--
 		wr							: out	ADDRESS_T;
@@ -50,6 +51,8 @@ architecture rtl of databuilder is
 	
 	-- Idata Bus
 	signal idata_bus				: IDATA_T;
+	-- Ctval Bus
+	signal ctval_bus				: IDATA_T;
 	-- Enable A 
 	signal en_a						: std_logic := '0';
 	-- Enable B 
@@ -59,7 +62,7 @@ architecture rtl of databuilder is
 	-- Address Bus
 	signal addr_bus					: ADDRESS_REG_T;
 	-- Mode Selector 
-	signal mode_sel					: std_logic := '0';
+	signal mode_sel					: MODE_T;
 	
 	-- Read Strobe
 	signal rds						: std_logic := '0';
@@ -80,6 +83,9 @@ architecture rtl of databuilder is
 	signal	t_counter_en			: std_logic := '0';
 	signal	t_counter_cl			: std_logic := '0';
 	signal	t_counter				: TRANSFER_REG_T;
+	
+	-- Constant Value Enable Register
+	signal ctval_en					: std_logic := '0';
 
 --
 
@@ -126,6 +132,10 @@ address_mux: addr_bus	<= address(conv_integer(s_counter));
 -- Mode Mux
 mode_mux: mode_sel		<=	mode(conv_integer(s_counter));
 
+-- Ctval Mux
+ctval_mux: ctval_bus	<=	ctval(conv_integer(s_counter));
+
+
 --
 -- Transfer FSM
 --
@@ -141,15 +151,22 @@ begin
 				-- If the slot is disabled, increment the slot counter and start again.
 				if (en_a = '0') then
 					next_stateval <= inc_slot;
-				-- If enable_A and enable_B are asserted, start transfer.
-				elsif ((en_a = '1') and (en_b = '1')) then
+				-- else if the slot is enabled...
+				else 
+					if (mode_sel = "00) then
+				
 					next_stateval <= active_rden;
-				-- Else, keep waiting.
+				-- Else, do what 'mode' determines.
 				else
-					if (mode_sel = '0') then
+				--elsif (en_a = '1') then
+					if (mode_sel = "00") then			-- Non Branch mode.
 						next_stateval <= idle;
-					else
+					elsif (mode_sel = "01") then		-- Branch mode.
 						next_stateval <= inc_slot;
+					elsif (mode_sel = "10") then		-- Constant Value mode.
+						next_stateval <= active_rden;
+					else
+						next_stateval <= idle;
 					end if;
 				end if;
 			else
@@ -362,6 +379,25 @@ begin
 end process;
 
 --
+-- Constant Value Enable
+--
+
+--
+-- 
+process(clk, rst)
+begin
+	if (rst = '1') then
+		ctval_en <= '0';
+	elsif (rising_edge(clk)) then
+		if (mode_sel = "10") then
+			ctval_en <= '1';
+		else
+			ctval_en <= '0';
+		end if;
+	end if;
+end process;
+
+--
 -- Output Registers
 --
 
@@ -376,7 +412,13 @@ begin
 	elsif (rising_edge(clk)) then
 		rd		<= rda;
 		wr		<= wra;
-		odata	<= idata_bus;
+		
+		if (ctval_en = '1') then
+			odata <= ctval_bus;
+		else
+			odata <= idata_bus;
+		end if;
+		
 	end if;
 end process;
 
