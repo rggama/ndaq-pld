@@ -1,5 +1,5 @@
-./databuilder_tbench.vht {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r40/ndaq_sim/databuilder/databuilder_tbench.vht}
-Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+./databuilder_tbench.vht {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/USB/pld_64/ndaq_sim/databuilder/databuilder_tbench.vht}
+Model Technology ModelSim ALTERA vcom 6.6c Compiler 2010.08 Aug 24 2010
 -- Loading package standard
 -- Loading package std_logic_1164
 -- Loading package std_logic_arith
@@ -10,39 +10,15 @@ Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
 -- Compiling entity databuilder_tbench
 -- Compiling architecture testbench of databuilder_tbench
 
-} {} {}} ../../ndaq_core/acq/databuilder.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r40/ndaq_core/acq/databuilder.vhd}
-Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
--- Loading package standard
--- Loading package std_logic_1164
--- Loading package std_logic_arith
--- Loading package std_logic_unsigned
--- Loading package math_real
--- Loading package functions_pkg
--- Loading package databuilder_pkg
--- Compiling entity databuilder
--- Compiling architecture rtl of databuilder
-
-} {} {}} ./fifos/test_fifo.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r40/ndaq_sim/databuilder/fifos/test_fifo.vhd}
-Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+} {} {}} ./fifos/test_fifo.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/USB/pld_64/ndaq_sim/databuilder/fifos/test_fifo.vhd}
+Model Technology ModelSim ALTERA vcom 6.6c Compiler 2010.08 Aug 24 2010
 -- Loading package standard
 -- Loading package std_logic_1164
 -- Compiling entity test_fifo
 -- Compiling architecture syn of test_fifo
 
-} {} {}} ../../ndaq_core/acq/databuilder_pkg.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r40/ndaq_core/acq/databuilder_pkg.vhd}
-Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
--- Loading package standard
--- Loading package std_logic_1164
--- Loading package std_logic_arith
--- Loading package std_logic_unsigned
--- Loading package math_real
--- Loading package functions_pkg
--- Compiling package databuilder_pkg
--- Compiling package body databuilder_pkg
--- Loading package databuilder_pkg
-
-} {} {}} ../../ndaq_core/acq/functions_pkg.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/pld_r40/ndaq_core/acq/functions_pkg.vhd}
-Model Technology ModelSim ALTERA vcom 6.5e Compiler 2010.02 Feb 27 2010
+} {} {}} ../../ndaq_core/acq/functions_pkg.vhd {1 {vcom -work work -2002 -explicit {C:/Documents and Settings/Rafael/Desktop/USB/pld_64/ndaq_core/acq/functions_pkg.vhd}
+Model Technology ModelSim ALTERA vcom 6.6c Compiler 2010.08 Aug 24 2010
 -- Loading package standard
 -- Loading package std_logic_1164
 -- Loading package std_logic_arith

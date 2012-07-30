@@ -25,6 +25,7 @@ port(
 		--
 		enable_A					: in	SLOTS_T;
 		enable_B					: in	SLOTS_T;
+		enable_C					: in	SLOTS_T;
 		transfer					: in	TRANSFER_A;
 		address						: in	ADDRESS_A;
 		mode						: in	MODE_A;
@@ -57,6 +58,8 @@ architecture rtl of databuilder is
 	signal en_a						: std_logic := '0';
 	-- Enable B 
 	signal en_b						: std_logic := '0';
+	-- Enable B 
+	signal en_c						: std_logic := '0';
 	-- Transfer Size 
 	signal t_size					: TRANSFER_REG_T;
 	-- Address Bus
@@ -74,7 +77,7 @@ architecture rtl of databuilder is
 	signal wra						: ADDRESS_T;
 
 	-- Transfer FSM
-	type		state_values is (idle, active_rden, block_transfer, last_wren, inc_slot);
+	type		state_values is (idle, active_rden, ctval_rden, block_transfer, ctval_bt, last_wren, ctval_wren, inc_slot);
 	signal		stateval, next_stateval			: state_values;
 	attribute	syn_encoding 					: string;
 	attribute	syn_encoding of state_values	: type is "safe, one-hot";
@@ -86,6 +89,7 @@ architecture rtl of databuilder is
 	
 	-- Constant Value Enable Register
 	signal ctval_en					: std_logic := '0';
+	signal kctval_en				: std_logic := '0';
 
 --
 
@@ -120,8 +124,11 @@ idata_mux: idata_bus	<=	idata(conv_integer(s_counter));
 -- Enable A Mux
 enable_a_mux: en_a		<= enable_A(conv_integer(s_counter));
 
--- Enable A Mux
+-- Enable B Mux
 enable_b_mux: en_b		<= enable_B(conv_integer(s_counter));
+
+-- Enable B Mux
+enable_c_mux: en_c		<= enable_C(conv_integer(s_counter));
 
 -- Transfer Size Mux
 transfer_mux: t_size	<= transfer(conv_integer(s_counter));
@@ -143,7 +150,7 @@ ctval_mux: ctval_bus	<=	ctval(conv_integer(s_counter));
 --
 -- Asynchronous assignments of 'next_stateval'
 next_state_comb:
-process(stateval, enable, en_a, en_b, mode_sel, t_counter, t_size)
+process(stateval, enable, en_a, en_b, en_c, mode_sel, t_counter, t_size)
 begin
 	case stateval is			
 		when idle =>			
@@ -151,23 +158,22 @@ begin
 				-- If the slot is disabled, increment the slot counter and start again.
 				if (en_a = '0') then
 					next_stateval <= inc_slot;
-				-- else if the slot is enabled...
-				else 
-					if (mode_sel = "00) then
-				
+				-- If enable_A and enable_B and enable_C are asserted, start transfer.
+				elsif ((en_a = '1') and (en_b = '1') and (en_c = '1')) then
 					next_stateval <= active_rden;
-				-- Else, do what 'mode' determines.
-				else
-				--elsif (en_a = '1') then
-					if (mode_sel = "00") then			-- Non Branch mode.
+				-- Else if enable_A and enable_C are asserted, do what mode says...
+				elsif ((en_a = '1') and (en_c = '1')) then
+					if (mode_sel = "00") then		-- Non Branch mode.
 						next_stateval <= idle;
-					elsif (mode_sel = "01") then		-- Branch mode.
+					elsif (mode_sel = "01") then	-- Branch mode.
 						next_stateval <= inc_slot;
-					elsif (mode_sel = "10") then		-- Constant Value mode.
-						next_stateval <= active_rden;
+					elsif (mode_sel = "10") then	-- Constant Value mode.
+						next_stateval <= ctval_rden;
 					else
 						next_stateval <= idle;
 					end if;
+				else
+					next_stateval <= idle;
 				end if;
 			else
 				next_stateval <= idle;
@@ -182,7 +188,17 @@ begin
 			else
 				next_stateval <= block_transfer;
 			end if;
-		
+
+		when ctval_rden =>
+			if(t_size < 1) then
+			  report "Transfer Size MUST be greater than ZERO!" severity error;
+			end if;			
+			if (t_size = 1) then
+				next_stateval <= ctval_wren;
+			else
+				next_stateval <= ctval_bt;
+			end if;
+
 		when block_transfer =>
 			-- If transfer counter has reached transfer size, finish transferring.
 			if (t_counter = t_size) then
@@ -192,9 +208,21 @@ begin
 				next_stateval <= block_transfer;
 			end if;
 
+		when ctval_bt =>
+			-- If transfer counter has reached transfer size, finish transferring.
+			if (t_counter = t_size) then
+				next_stateval <= ctval_wren;
+			-- Else, keep transferring.
+			else
+				next_stateval <= ctval_bt;
+			end if;
+
 		when last_wren =>						
 			next_stateval <= idle;
 				
+		when ctval_wren =>						
+			next_stateval <= idle;
+
 		when inc_slot =>						
 			next_stateval <= idle;
 
@@ -217,6 +245,8 @@ begin
 		t_counter_cl	<= '0';
 		--
 		wrs				<= '0';		-- Write must be delayed by one clock cycle, as data is registered too.
+		--
+		ctval_en		<= '0';
 
 	elsif (rising_edge(clk)) then
 		case (next_stateval) is
@@ -228,6 +258,8 @@ begin
 				t_counter_cl	<= '0';
 				--
 				wrs				<= '0';
+				--
+				ctval_en		<= '0';
 
 			when active_rden =>
 				--
@@ -238,6 +270,17 @@ begin
 				--
 				wrs				<= '0';
 
+			when ctval_rden =>
+				--
+				s_counter_en	<= '0';
+				s_counter_cl	<= '0';
+				t_counter_en	<= '1';
+				t_counter_cl	<= '0';
+				--
+				wrs				<= '0';
+				--
+				ctval_en		<= '1';
+
 			when block_transfer =>
 				--
 				s_counter_en	<= '0';
@@ -246,6 +289,17 @@ begin
 				t_counter_cl	<= '0';
 				--
 				wrs				<= '1';
+
+			when ctval_bt =>
+				--
+				s_counter_en	<= '0';
+				s_counter_cl	<= '0';
+				t_counter_en	<= '1';
+				t_counter_cl	<= '0';
+				--
+				wrs				<= '1';
+				--
+				ctval_en		<= '1';
 
 			when last_wren =>
 				-- Slot Counter Clear Logic
@@ -260,6 +314,22 @@ begin
 				t_counter_cl	<= '1';
 				--
 				wrs				<= '1';
+			
+			when ctval_wren =>
+				-- Slot Counter Clear Logic
+				if (s_counter = CONV_STD_LOGIC_VECTOR((slots-1), NumBits(slots))) then
+					s_counter_cl	<= '1';
+				else
+					s_counter_cl	<= '0';
+				end if;
+				--
+				s_counter_en	<= '1';
+				t_counter_en	<= '0';
+				t_counter_cl	<= '1';
+				--
+				wrs				<= '1';
+				--
+				ctval_en		<= '1';
 
 			when inc_slot =>
 				-- Slot Counter Clear Logic
@@ -283,6 +353,8 @@ begin
 				t_counter_cl	<= '0';
 				--
 				wrs				<= '0';
+				--
+				ctval_en		<= '0';
 
 		end case;
 	end if;
@@ -297,33 +369,40 @@ begin
 		when idle =>
 			--
 			rds				<= '0';
-			--wrs				<= '0';
 
 		when active_rden =>
 			--
 			rds				<= '1';
-			--wrs				<= '0';
+
+		-- when ctval_rden =>
+			-- --
+			-- rds				<= '1';	-- read strobe is not enabled during constant value mode.
 
 		when block_transfer =>
 			--
 			rds				<= '1';
-			--wrs				<= '1';
+
+		-- when ctval_bt =>
+			-- --
+			-- rds				<= '1';	-- read strobe is not enabled during constant value mode.
 
 		when last_wren =>
 			--
 			rds				<= '0';
-			--wrs				<= '1';
+
+		-- when ctval_wren =>
+			-- --
+			-- rds				<= '0';
 
 		when inc_slot =>
 			--
 			rds				<= '0';
-			--wrs				<= '0';
 
 		when others	=>
 			--
 			rds				<= '0';
-			--wrs				<= '0';
-	end case;
+
+		end case;
 end process;
 
 --
@@ -379,25 +458,6 @@ begin
 end process;
 
 --
--- Constant Value Enable
---
-
---
--- 
-process(clk, rst)
-begin
-	if (rst = '1') then
-		ctval_en <= '0';
-	elsif (rising_edge(clk)) then
-		if (mode_sel = "10") then
-			ctval_en <= '1';
-		else
-			ctval_en <= '0';
-		end if;
-	end if;
-end process;
-
---
 -- Output Registers
 --
 
@@ -413,7 +473,7 @@ begin
 		rd		<= rda;
 		wr		<= wra;
 		
-		if (ctval_en = '1') then
+		if (ctval_en = '1')  then
 			odata <= ctval_bus;
 		else
 			odata <= idata_bus;

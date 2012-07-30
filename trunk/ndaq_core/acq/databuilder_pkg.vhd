@@ -21,6 +21,9 @@ package databuilder_pkg is
 	--
 	constant slots			: integer	:= 24;
 	
+	-- For Simulation
+	--constant slots			: integer	:= 4;
+	
 	--
 	constant transfer_max	: integer	:= 128;
 	

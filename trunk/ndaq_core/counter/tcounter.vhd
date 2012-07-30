@@ -23,6 +23,8 @@ entity tcounter is
 		signal enable				: in	std_logic;
 		signal srst					: in	std_logic;
 		--
+		signal fifowen_in			: in	std_logic;
+		--
 		signal rdclk				: in	std_logic;
 		signal rden					: in	std_logic;
 		signal fifo_empty			: out	std_logic;
@@ -59,6 +61,9 @@ architecture rtl of tcounter is
 	
 	signal r_fifo_wen				: std_logic := '0';
 	
+	signal r_timebase_en			: std_logic := '0';
+	signal s_timebase_en			: std_logic := '0';
+	
 --
 --
 	
@@ -74,15 +79,21 @@ begin
 		i_counter		<= (others => '0');
 		--
 		r_srst			<= '0';
+		r_timebase_en	<= '0';
+		s_timebase_en	<= '0';
+		
 	elsif (rising_edge(clk)) then  
 		--
 		r_srst	<= srst;
+		--
+		r_timebase_en <= timebase_en;
+		s_timebase_en <= r_timebase_en;
 		
 		-- Synchronous Reset
 		if (r_srst = '1') then
 			i_counter	<= (others => '0');
 		
-		elsif ((enable = '1') and (trigger_in = '1') and (timebase_en = '1')) then
+		elsif ((enable = '1') and (trigger_in = '1') and (s_timebase_en = '1')) then
 			i_counter	<= i_counter + 1;
 	
 		end if;			
@@ -120,7 +131,7 @@ begin
 	elsif (rising_edge(clk)) then
 
 		--
-		if (timebase_en = '1') then
+		if (s_timebase_en = '1') then
 			reg_wait		<= '1';
 		else
 			reg_wait		<= '0';
@@ -145,7 +156,7 @@ begin
 	elsif (rising_edge(clk)) then
 
 		--if ((timebase_en = '0') and (reg_wait = '0') and (fifo_full = '0')) then
-		if ((timebase_en = '1') and (reg_wait = '0') and (fifo_full = '0')) then
+		if ((s_timebase_en = '1') and (reg_wait = '0') and (fifo_full = '0')) then
 			fifo_wen	<= '1';
 		else
 			fifo_wen	<= '0';
@@ -165,7 +176,7 @@ READOUT_FIFO : counter_fifo PORT MAP
 	rdclk	 	=> rdclk,
 	rdreq	 	=> rden,
 	wrclk	 	=> clk,
-	wrreq	 	=> r_fifo_wen,
+	wrreq	 	=> r_fifo_wen, --fifowen_in,
 	q	 		=> counter_q,
 	rdempty		=> fifo_empty,
 	wrfull		=> fifo_full
