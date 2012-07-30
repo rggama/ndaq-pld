@@ -18,6 +18,7 @@ entity timebase is
 		signal clk					: in	std_logic;
 		-- Timebase Generator
 		signal timebase_out			: out	std_logic;
+		signal fifowen_out			: out	std_logic;
 		-- Timebase Counter
 		signal enable				: in	std_logic;
 		signal srst					: in	std_logic;
@@ -133,7 +134,8 @@ end process;
 
 --
 -- Timebase Output
-timebase_out	<= r_timebase_en;
+--timebase_out	<= r_timebase_en;
+timebase_out	<= timebase_en;
 
 --
 -- Timebase Counter
@@ -194,6 +196,10 @@ begin
 		
 	end if;
 end process;
+
+--
+--
+fifowen_out	<= r_fifo_wen;
 
 --
 --Readout FIFO

@@ -260,6 +260,7 @@ architecture rtl of ndaq_core is
 		signal clk					: in	std_logic;
 		-- Timebase Generator
 		signal timebase_out			: out	std_logic;
+		signal fifowen_out			: out	std_logic;
 		-- Timebase Counter
 		signal enable				: in	std_logic;
 		signal srst					: in	std_logic;
@@ -282,6 +283,8 @@ architecture rtl of ndaq_core is
 		signal timebase_en			: in	std_logic;
 		signal enable				: in	std_logic;
 		signal srst					: in	std_logic;
+		--
+		signal fifowen_in			: in	std_logic;
 		--
 		signal rdclk				: in	std_logic;
 		signal rden					: in	std_logic;
@@ -396,6 +399,7 @@ architecture rtl of ndaq_core is
 		--
 		enable_A					: in	SLOTS_T;
 		enable_B					: in	SLOTS_T;
+		enable_C					: in	SLOTS_T;
 		transfer					: in	TRANSFER_A;
 		address						: in	ADDRESS_A;
 		mode						: in	MODE_A;
@@ -528,6 +532,7 @@ architecture rtl of ndaq_core is
 	signal time_ef					: std_logic;
 	signal time_q					: std_logic_vector(31 downto 0);
 	signal timebase_out				: std_logic;
+	signal fifowen_wire				: std_logic;
 	
 	-- ACQ: ADC
 	signal timebase_en				: std_logic;
@@ -571,6 +576,7 @@ architecture rtl of ndaq_core is
 	-- Data Builder
 	signal	enable_A				: SLOTS_T;
 	signal	enable_B				: SLOTS_T;
+	signal	enable_C				: SLOTS_T;
 	signal	transfer				: TRANSFER_A;
 	signal	address					: ADDRESS_A;
 	signal	mode					: MODE_A;
@@ -824,6 +830,7 @@ begin
 		clk					=> clkcore,
 		-- Timebase Generator
 		timebase_out		=> timebase_out,
+		fifowen_out			=> fifowen_wire,
 		-- Timebase Counter
 		enable				=> timebase_en,
 		srst				=> acq_rst,
@@ -947,6 +954,8 @@ begin
 			enable				=> counter_en,
 			srst				=> acq_rst,
 			--
+			fifowen_in			=> fifowen_wire,
+			--
 			rdclk				=> dclk,
 			rden				=> tcounter_rd(i),
 			fifo_empty			=> tcounter_ef(i),
@@ -1065,6 +1074,7 @@ begin
 		--
 		enable_A					=> enable_A,
 		enable_B					=> enable_B,
+		enable_C					=> enable_C,
 		transfer					=> transfer,
 		address						=> address,
 		mode						=> mode,
@@ -1148,35 +1158,68 @@ begin
 	enable_A(22)	<= oreg(17)(4); --'1';
 	enable_A(23)	<= oreg(17)(5); --'1';
 
-	-- Transfer Enable: even channel and odd channel and IDT ALMOST Full Flag must let us go. 
-	-- 'fifo_paf' is NOT negated because it is active low.
-	enable_B(0)		<= fifo_paf(0) and even_enable(0) and odd_enable(0);
-	enable_B(1)		<= fifo_paf(0) and not(time_ef);
-	enable_B(2)		<= fifo_paf(0) and even_enable(0) and odd_enable(0);
-	enable_B(3)		<= fifo_paf(0);
-	enable_B(4)		<= fifo_paf(0) and not(tcounter_ef(0));
-	enable_B(5)		<= fifo_paf(0) and not(tcounter_ef(1));
+	--
+	-- Transfer Enable: 
+	-- even channel and odd channel let us go for Header and ADC. 
+	-- timestamp NOT empty let us go.
+	-- tdc NOT empty let us go.
+	-- tcounter NOT empty let us go.
+	enable_B(0)		<= even_enable(0) and odd_enable(0);
+	enable_B(1)		<= not(time_ef);
+	enable_B(2)		<= even_enable(0) and odd_enable(0);
+	enable_B(3)		<= not(tdc_ef(0)) and not(tdc_ef(1));
+	enable_B(4)		<= not(tcounter_ef(0));
+	enable_B(5)		<= not(tcounter_ef(1));
 
-	enable_B(6)		<= fifo_paf(1) and even_enable(1) and odd_enable(1);
-	enable_B(7)		<= fifo_paf(1) and not(time_ef);
-	enable_B(8)		<= fifo_paf(1) and even_enable(1) and odd_enable(1);
-	enable_B(9)		<= fifo_paf(1);
-	enable_B(10)	<= fifo_paf(1) and not(tcounter_ef(2));
-	enable_B(11)	<= fifo_paf(1) and not(tcounter_ef(3));
+	enable_B(6)		<= even_enable(1) and odd_enable(1);
+	enable_B(7)		<= not(time_ef);
+	enable_B(8)		<= even_enable(1) and odd_enable(1);
+	enable_B(9)		<= not(tdc_ef(2)) and not(tdc_ef(3));
+	enable_B(10)	<= not(tcounter_ef(2));
+	enable_B(11)	<= not(tcounter_ef(3));
 
-	enable_B(12)	<= fifo_paf(2) and even_enable(2) and odd_enable(2);
-	enable_B(13)	<= fifo_paf(2) and not(time_ef);
-	enable_B(14)	<= fifo_paf(2) and even_enable(2) and odd_enable(2);
-	enable_B(15)	<= fifo_paf(2);
-	enable_B(16)	<= fifo_paf(2) and not(tcounter_ef(4));
-	enable_B(17)	<= fifo_paf(2) and not(tcounter_ef(5));
+	enable_B(12)	<= even_enable(2) and odd_enable(2);
+	enable_B(13)	<= not(time_ef);
+	enable_B(14)	<= even_enable(2) and odd_enable(2);
+	enable_B(15)	<= not(tdc_ef(4)) and not(tdc_ef(5));
+	enable_B(16)	<= not(tcounter_ef(4));
+	enable_B(17)	<= not(tcounter_ef(5));
 
-	enable_B(18)	<= fifo_paf(3) and even_enable(3) and odd_enable(3);
-	enable_B(19)	<= fifo_paf(3) and not(time_ef);
-	enable_B(20)	<= fifo_paf(3) and even_enable(3) and odd_enable(3); 
-	enable_B(21)	<= fifo_paf(3);
-	enable_B(22)	<= fifo_paf(3) and not(tcounter_ef(6));
-	enable_B(23)	<= fifo_paf(3) and not(tcounter_ef(7));
+	enable_B(18)	<= even_enable(3) and odd_enable(3);
+	enable_B(19)	<= not(time_ef);
+	enable_B(20)	<= even_enable(3) and odd_enable(3); 
+	enable_B(21)	<= not(tdc_ef(6)) and not(tdc_ef(7));
+	enable_B(22)	<= not(tcounter_ef(6));
+	enable_B(23)	<= not(tcounter_ef(7));
+
+	-- Destination Enable: 'fifo_paf' is NOT negated because it is active low.
+	enable_C(0)		<= fifo_paf(0);
+	enable_C(1)		<= fifo_paf(0);
+	enable_C(2)		<= fifo_paf(0);
+	enable_C(3)		<= fifo_paf(0);
+	enable_C(4)		<= fifo_paf(0);
+	enable_C(5)		<= fifo_paf(0);
+
+	enable_C(6)		<= fifo_paf(1);
+	enable_C(7)		<= fifo_paf(1);
+	enable_C(8)		<= fifo_paf(1);
+	enable_C(9)		<= fifo_paf(1);
+	enable_C(10)	<= fifo_paf(1);
+	enable_C(11)	<= fifo_paf(1);
+
+	enable_C(12)	<= fifo_paf(2);
+	enable_C(13)	<= fifo_paf(2);
+	enable_C(14)	<= fifo_paf(2);
+	enable_C(15)	<= fifo_paf(2);
+	enable_C(16)	<= fifo_paf(2);
+	enable_C(17)	<= fifo_paf(2);
+
+	enable_C(18)	<= fifo_paf(3);
+	enable_C(19)	<= fifo_paf(3);
+	enable_C(20)	<= fifo_paf(3);
+	enable_C(21)	<= fifo_paf(3);
+	enable_C(22)	<= fifo_paf(3);
+	enable_C(23)	<= fifo_paf(3);
 
 	-- Slot Transfer Size:
 	transfer(0)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
@@ -1240,8 +1283,6 @@ begin
 	idata(0)		<= x"AA55AA55";											--001 palavra
 	idata(1)		<= time_q;												--001 palavra
 	idata(2)		<= x"0" & "00" & q(1) & x"0" & "00" & q(0);				--128 palavras
-	--idata(1)		<= x"2" & "00" & q(1) & x"1" & "00" & q(0);				
-	--idata(1)		<= x"2000" & x"1000";
 	idata(3)		<= tdc_q(4)(15 downto 0) & tdc_q(0)(15 downto 0);		--001 palavra
 	idata(4)		<= tcounter_q(0);										--001 palavra
 	idata(5)		<= tcounter_q(1);										--001 palavra
@@ -1249,8 +1290,6 @@ begin
 	idata(6)		<= x"AA55AA55";											--001 palavra
 	idata(7)		<= time_q;												--001 palavra
 	idata(8)		<= x"0" & "00" & q(3) & x"0" & "00" & q(2);				--128 palavras
-	--idata(6)		<= x"4" & "00" & q(3) & x"3" & "00" & q(2);			
-	--idata(6)		<= x"4000" & x"3000";
 	idata(9)		<= tdc_q(5)(15 downto 0) & tdc_q(1)(15 downto 0);		--001 palavra
 	idata(10)		<= tcounter_q(2);										--001 palavra
 	idata(11)		<= tcounter_q(3);										--001 palavra
@@ -1258,8 +1297,6 @@ begin
 	idata(12)		<= x"AA55AA55";											--001 palavra
 	idata(13)		<= time_q;												--001 palavra
 	idata(14)		<= x"0" & "00" & q(5) & x"0" & "00" & q(4);				--128 palavras
-	--idata(11)		<= x"6" & "00" & q(5) & x"5" & "00" & q(4);				
-	--idata(11)		<= x"6000" & x"5000";
 	idata(15)		<= tdc_q(6)(15 downto 0) & tdc_q(2)(15 downto 0);		--001 palavra
 	idata(16)		<= tcounter_q(4);										--001 palavra
 	idata(17)		<= tcounter_q(5);										--001 palavra
@@ -1267,38 +1304,36 @@ begin
 	idata(18)		<= x"AA55AA55";											--001 palavra	
 	idata(19)		<= time_q;												--001 palavra
 	idata(20)		<= x"0" & "00" & q(7) & x"0" & "00" & q(6);				--128 palavras
-	--idata(16)		<= x"8" & "00" & q(7) & x"7" & "00" & q(6);				
-	--idata(16)		<= x"8000" & x"7000";
 	idata(21)		<= tdc_q(7)(15 downto 0) & tdc_q(3)(15 downto 0);		--001 palavra
 	idata(22)		<= tcounter_q(6);										--001 palavra
 	idata(23)		<= tcounter_q(7);										--001 palavra
 
 	-- Mode: '00' for non branch and '01' for branch and '10' for constant value.
 	mode(0)			<= "00";
-	mode(1)			<= "10";
+	mode(1)			<= "00";
 	mode(2)			<= "00";
-	mode(3)			<= "00";
+	mode(3)			<= "10";
 	mode(4)			<= "10";
 	mode(5)			<= "10";
 	
 	mode(6)			<= "00";
-	mode(7)			<= "10";
+	mode(7)			<= "00";
 	mode(8)			<= "00";
-	mode(9)			<= "00";
+	mode(9)			<= "10";
 	mode(10)		<= "10";
 	mode(11)		<= "10";
 	
 	mode(12)		<= "00";
-	mode(13)		<= "10";
+	mode(13)		<= "00";
 	mode(14)		<= "00";
-	mode(15)		<= "00";
+	mode(15)		<= "10";
 	mode(16)		<= "10";
 	mode(17)		<= "10";
 	
 	mode(18)		<= "00";
-	mode(19)		<= "10";
+	mode(19)		<= "00";
 	mode(20)		<= "00";
-	mode(21)		<= "00";
+	mode(21)		<= "10";
 	mode(22)		<= "10";
 	mode(23)		<= "10";
 

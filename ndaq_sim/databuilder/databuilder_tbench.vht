@@ -31,15 +31,20 @@ architecture testbench of databuilder_tbench is
 		clk							: in	std_logic;		 
 
 		--
+		enable						: in	std_logic;
+
+		--
 		enable_A					: in	SLOTS_T;
 		enable_B					: in	SLOTS_T;
+		enable_C					: in	SLOTS_T;		
 		transfer					: in	TRANSFER_A;
 		address						: in	ADDRESS_A;
-		mode						: in	SLOTS_T;
+		mode						: in	MODE_A;
 		
 		--
 		rd							: out	SLOTS_T;
 		idata						: in	IDATA_A;
+		ctval						: in	IDATA_A;
 		
 		--
 		wr							: out	ADDRESS_T;
@@ -72,6 +77,7 @@ architecture testbench of databuilder_tbench is
 --
 	--
 	signal	rst				: std_logic := '0';
+	signal	clk_in			: std_logic := '0';
 	signal	clk				: std_logic := '0';
 	signal	clkwr			: std_logic := '0';
 	signal	clkrd			: std_logic := '0';
@@ -79,13 +85,15 @@ architecture testbench of databuilder_tbench is
 	--
 	signal	enable_A		: SLOTS_T;
 	signal	enable_B		: SLOTS_T;
+	signal	enable_C		: SLOTS_T;
 	signal	transfer		: TRANSFER_A;
 	signal	address			: ADDRESS_A;
-	signal	mode			: SLOTS_T;
+	signal	mode			: MODE_A;
 	
 	--
 	signal	rd				: SLOTS_T;
 	signal  idata			: IDATA_A;
+	signal  ctval			: IDATA_A;
 	
 	--
 	signal	wr				: ADDRESS_T;
@@ -137,8 +145,12 @@ begin
 		clk							=> clk,
 
 		--
+		enable						=> '1',
+		
+		--
 		enable_A					=> enable_A,
 		enable_B					=> enable_B,
+		enable_C					=> enable_C,
 		transfer					=> transfer,
 		address						=> address,
 		mode						=> mode,
@@ -146,6 +158,7 @@ begin
 		--
 		rd							=> rd,
 		idata						=> idata,
+		ctval						=> ctval,
 		
 		--
 		wr							=> wr,
@@ -163,7 +176,7 @@ for i in 0 to (INP - 1) generate
 		data		=> inp_data(i),
 		rdclk		=> clk,
 		rdreq		=> inp_rd(i),
-		wrclk		=> clk,
+		wrclk		=> clk_in,
 		wrreq		=> inp_wr(i),
 		q			=> inp_q(i),
 		rdempty		=> inp_rdempty(i),
@@ -207,11 +220,11 @@ inp_data_construct:
 for i in 0 to (INP - 1) generate
 		
 	input_counter:
-	process(clk, rst)
+	process(clk_in, rst)
 	begin
 		if (rst = '1') then
-			inp_counter(i) <= (others => '1');
-		elsif (rising_edge(clk)) then
+			inp_counter(i) <= (others => '0');
+		elsif (rising_edge(clk_in)) then
 			if (inp_counter_en(i) = '1') then
 				inp_counter(i) <= inp_counter(i) + 1;
 			end if;
@@ -228,6 +241,11 @@ end generate inp_data_construct;
 -- Data Builder Slots Construct
 --
 
+	enable_A(0)	<= '1';
+	enable_A(1)	<= '1';
+	enable_A(2)	<= '1';
+	enable_A(3)	<= '1';
+
 slots_construct:
 for i in 0 to (slots - 1) generate
 
@@ -242,12 +260,12 @@ for i in 0 to (slots - 1) generate
 		end if;
 	end process;
 	
-	enable_A(i)	<= '1';
-	--enable_B(i)	<= inp_rdfull(i) and oup_wrempty(i/2);
-	enable_B(i)	<= inp_enable(i) and oup_wrempty(i/2);
+	enable_B(i)	<= inp_rdfull(i);
+	--enable_B(i)	<= not(inp_rdempty(i));
+	enable_C(i) <= oup_wrempty(i);
 	transfer(i)	<= CONV_STD_LOGIC_VECTOR(TRANSFER_SIZE, NumBits(transfer_max));
-	address(i)	<= CONV_STD_LOGIC_VECTOR((i/2), NumBits(address_max));
-	mode(i)		<= '0';
+	address(i)	<= CONV_STD_LOGIC_VECTOR((i), NumBits(address_max));
+	mode(i)		<= "10";
 		
 end generate slots_construct;
 
@@ -260,6 +278,7 @@ for i in 0 to (slots - 1) generate
 
 	inp_rd(i)	<= rd(i);
 	idata(i)	<= inp_q(i);
+	ctval(i)	<= x"FFFFFFFF";
 	
 end generate read_side_construct;
 
@@ -279,6 +298,18 @@ end generate write_side_construct;
 --	
 -- Stimulus!
 --
+
+-- clk @ 50 MHz
+clkin_gen: process
+begin
+loop
+	clk_in	<= '0';
+	wait for 500 ns;
+	clk_in	<= '1';
+	wait for 500 ns;
+	-- if (now >= 1000000 ps) then wait; end if;
+end loop;
+end process clkin_gen;
 
 -- clk @ 50 MHz
 clkvme_gen: process
