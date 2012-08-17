@@ -8,7 +8,7 @@ use ieee.std_logic_1164.all;
 package core_regs is
 
 	-- total system registers
-	constant num_regs			: integer := 20;
+	constant num_regs			: integer := 21;
 
 	type	SYS_REGS_STRUCT		is record
 			addr				: std_logic_vector(7 downto 0);
@@ -45,7 +45,8 @@ package core_regs is
 		(x"44",	true,	true,	false,	x"00"),	-- 17 - DataBuilder's FIFO 4 Block Configuration.
 		(x"70",	true,	true,	false,	x"00"),	-- 18 - Internal Trigger Output Selector.
 		--
-		(x"27",	true,	true,	false,	x"00")	-- 19 - R/W Test Register.
+		(x"27",	true,	true,	false,	x"00"),	-- 19 - R/W Test Register.
+		(x"28",	true,	true,	false,	x"43")	-- 20 - Firmware Version.
 	);
 
 -------------------------------------------------------------------------------
