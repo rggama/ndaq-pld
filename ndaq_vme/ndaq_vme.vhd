@@ -668,23 +668,29 @@ begin
 	ireg(5)(7)			<= stsclk;
 
 	-- VME Registers Assignments.	*** MUST MAKE THAT AUTOMATIC ! ***
-	b_wr(0)	<= '0';
-	b_wr(1)	<= '0';
-	b_wr(2)	<= '0';
-	b_wr(3)	<= user_write(5);
-	b_wr(4)	<= user_write(6);
-	b_wr(5)	<= user_write(4);	
-	b_wr(6)	<= '0';
-	b_wr(7)	<= user_write(7);
+	b_wr(0)		<= user_write(9);
+	b_wr(1)		<= '0';
+	b_wr(2)		<= '0';
+	b_wr(3)		<= user_write(5);
+	b_wr(4)		<= user_write(6);
+	b_wr(5)		<= user_write(4);	
+	b_wr(6)		<= '0';
+	b_wr(7)		<= user_write(7);
+	b_wr(8)		<= '0';
+	b_wr(9)		<= user_write(8);
+	b_wr(10)	<= user_write(10);
 	
-	b_rd(0)	<= '0';
-	b_rd(1)	<= '0';
-	b_rd(2)	<= '0';
-	b_rd(3)	<= user_read(5);
-	b_rd(4)	<= user_read(6);
-	b_rd(5)	<= user_read(4);	
-	b_rd(6)	<= '0';
-	b_rd(7) <= user_read(7);
+	b_rd(0)		<= user_read(9);
+	b_rd(1)		<= '0';
+	b_rd(2)		<= '0';
+	b_rd(3)		<= user_read(5);
+	b_rd(4)		<= user_read(6);
+	b_rd(5)		<= user_read(4);	
+	b_rd(6)		<= '0';
+	b_rd(7) 	<= user_read(7);
+	b_rd(8) 	<= '0';
+	b_rd(9) 	<= user_read(8);
+	b_rd(10) 	<= user_read(10);
 		
 	-- VME Interface Data Output to Registers Data Input:
 	b_reg_idata					<=	user_data_out(7 downto 0);
