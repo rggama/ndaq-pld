@@ -78,16 +78,53 @@ architecture rtl of tdcread is
 	
 	signal i_data_valid2	: std_logic := '0';
 	
+	signal stdc_ef1 		: std_logic := '1';
+	signal stdc_ef2 		: std_logic := '1';
+	signal stdc_irflag 		: std_logic := '0';
+	
+	signal rtdc_ef1 		: std_logic := '1';
+	signal rtdc_ef2 		: std_logic := '1';
+	signal rtdc_irflag 		: std_logic := '0';
+	
 --
 --
 begin	
-
+	--------------------------------------------------
+	-- Read Enable Based on Readout FIFOs Full Flag --
+	--------------------------------------------------
+	
+	
 	-- enable_read	<=	not(channel_ff(0) or channel_ff(1) or
 						-- channel_ff(2) or channel_ff(3) or
 						-- channel_ff(4) or channel_ff(5) or
 						-- channel_ff(6) or channel_ff(7));
 
 	enable_read	<= '1';
+
+	----------------------------------------------
+	-- Registering ef1, ef2 and irflag - 2 chains.
+	----------------------------------------------
+	process(rst, clk)
+	begin
+		if (rst = '1') then
+			stdc_ef1	<= '1';
+			stdc_ef2	<= '1';
+			stdc_irflag	<= '0';
+			--
+			rtdc_ef1	<= '1';
+			rtdc_ef2	<= '1';
+			rtdc_irflag	<= '0';
+		elsif (rising_edge(clk)) then
+			stdc_ef1	<= itdc_ef1;
+			stdc_ef2	<= itdc_ef2;
+			stdc_irflag	<= itdc_irflag;
+			--
+			rtdc_ef1	<= stdc_ef1;
+			rtdc_ef2	<= stdc_ef2;
+			rtdc_irflag	<= stdc_irflag;
+		end if;
+	end process;
+	
 	
 	----------------------
 	-- TDC data readout --
@@ -130,8 +167,8 @@ begin
 					otdc_RDN <= '1';
 					--otdc_Data <= (others => 'Z');
 					i_data_valid <= '0';
-					if (itdc_ef1 = '0' or itdc_ef2 = '0') then
-						if itdc_irflag = '1' then
+					if (rtdc_ef1 = '0' or rtdc_ef2 = '0') then
+						if rtdc_irflag = '1' then
 							 otdc_alutr <= '1'; 	-- TDC reset, keeping the contents of the configuration registers								
 							 sm_TDCx <= sIdle;
 						else
@@ -151,17 +188,17 @@ begin
 					i_data_valid <= '0';
 					otdc_alutr <= '0';
 					--both fifos have data: read fifo1 and issue a fifo2 read for the next cycle.
-					if itdc_ef1 = '0' and itdc_ef2 = '0' and fifo2_issue = '0' then
+					if rtdc_ef1 = '0' and rtdc_ef2 = '0' and fifo2_issue = '0' then
 						tdc_addr <= REG8;
 						selected_fifo <= '0';
 						fifo2_issue	<= '1';
 					--fifo2 have data or fifo2 read issued: read fifo2.
-					elsif itdc_ef2 = '0' or fifo2_issue = '1' then
+					elsif rtdc_ef2 = '0' or fifo2_issue = '1' then
 						tdc_addr <= REG9;
 						selected_fifo <= '1';
 						fifo2_issue	<= '0';
 					--fifo1 have data: read fifo 1.
-					elsif itdc_ef1 = '0' then
+					elsif rtdc_ef1 = '0' then
 						tdc_addr <= REG8;
 						selected_fifo <= '0';
 						fifo2_issue	<= '0';
@@ -222,9 +259,9 @@ begin
 		end if;
 	end process;
 	
-	------------------------------
-	-- TDC data input buffering --
-	------------------------------
+	-----------------------------------------------------------------------------------------
+	-- TDC data input buffering  (1 Chain. Change to 2 chains if there is data instability --
+	-----------------------------------------------------------------------------------------
 	process(rst, clk)
 	begin
 		if (rst = '1') then

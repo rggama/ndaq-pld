@@ -19,7 +19,7 @@ package databuilder_pkg is
 	--
 	
 	--
-	constant slots			: integer	:= 24;
+	constant slots			: integer	:= 28;
 	
 	-- For Simulation
 	--constant slots			: integer	:= 4;
