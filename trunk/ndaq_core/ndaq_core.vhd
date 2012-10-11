@@ -1049,7 +1049,7 @@ begin
 		-- TDC control --
 		-----------------
 		start_conf		=> oreg(10)(0),			-- Start the configuration machine (active high pulse with 2-periods width)
-		conf_done		=> ireg(11)(0),		
+		--conf_done		=> ireg(11)(0),			-- TEMPORARIO BY HERMAN		
 		otdc_data		=> open,
 		channel_ef		=> tdc_ef,
 		channel_rd		=> tdc_rd,
@@ -1134,29 +1134,35 @@ begin
 	enable_A(1)		<= oreg(14)(1); --'1';					-- Timestamp
 	enable_A(2)		<= oreg(14)(2); --'0';					-- ADC
 	enable_A(3)		<= oreg(14)(3); --'0';					-- TDC
-	enable_A(4)		<= oreg(14)(4); --'1';					-- Trigger Counter
-	enable_A(5)		<= oreg(14)(5); --'1';					-- Trigger Counter
+	enable_A(4)		<= oreg(14)(3); --'0';					-- TDC
+	enable_A(5)		<= oreg(14)(4); --'1';					-- Trigger Counter
+	enable_A(6)		<= oreg(14)(5); --'1';					-- Trigger Counter
 
-	enable_A(6)		<= oreg(15)(0); --'0';
-	enable_A(7)		<= oreg(15)(1); --'1';
-	enable_A(8)		<= oreg(15)(2); --'0';
-	enable_A(9)		<= oreg(15)(3); --'0';
-	enable_A(10)	<= oreg(15)(4); --'1';
-	enable_A(11)	<= oreg(15)(5); --'1';
+	enable_A(7)		<= oreg(15)(0); --'0';
+	enable_A(8)		<= oreg(15)(1); --'1';
+	enable_A(9)		<= oreg(15)(2); --'0';
+	enable_A(10)	<= oreg(15)(3); --'0';
+	enable_A(11)	<= oreg(15)(3); --'0';
+	enable_A(12)	<= oreg(15)(4); --'1';
+	enable_A(13)	<= oreg(15)(5); --'1';
 
-	enable_A(12)	<= oreg(16)(0); --'0';
-	enable_A(13)	<= oreg(16)(1); --'1';
-	enable_A(14)	<= oreg(16)(2); --'0';
-	enable_A(15)	<= oreg(16)(3); --'0';
-	enable_A(16)	<= oreg(16)(4); --'1';
-	enable_A(17)	<= oreg(16)(5); --'1';
+	enable_A(14)	<= oreg(16)(0); --'0';
+	enable_A(15)	<= oreg(16)(1); --'1';
+	enable_A(16)	<= oreg(16)(2); --'0';
+	enable_A(17)	<= oreg(16)(3); --'0';
+	enable_A(18)	<= oreg(16)(3); --'0';
+	enable_A(19)	<= oreg(16)(4); --'1';
+	enable_A(20)	<= oreg(16)(5); --'1';
 
-	enable_A(18)	<= oreg(17)(0); --'0';
-	enable_A(19)	<= oreg(17)(1); --'1';
-	enable_A(20)	<= oreg(17)(2); --'0';
-	enable_A(21)	<= oreg(17)(3); --'0';
-	enable_A(22)	<= oreg(17)(4); --'1';
-	enable_A(23)	<= oreg(17)(5); --'1';
+	enable_A(21)	<= oreg(17)(0); --'0';
+	enable_A(22)	<= oreg(17)(1); --'1';
+	enable_A(23)	<= oreg(17)(2); --'0';
+	enable_A(24)	<= oreg(17)(3); --'0';
+	enable_A(25)	<= oreg(17)(3); --'0';
+	enable_A(26)	<= oreg(17)(4); --'1';
+	enable_A(27)	<= oreg(17)(5); --'1';
+	
+	ireg(11)(0) <= tdc_ef1;  -- TEMPORARIO BY HERMAN EM 21/09/12
 
 	--
 	-- Transfer Enable: 
@@ -1167,30 +1173,34 @@ begin
 	enable_B(0)		<= even_enable(0) and odd_enable(0);
 	enable_B(1)		<= not(time_ef);
 	enable_B(2)		<= even_enable(0) and odd_enable(0);
-	enable_B(3)		<= not(tdc_ef(0)) and not(tdc_ef(1));
-	enable_B(4)		<= not(tcounter_ef(0));
-	enable_B(5)		<= not(tcounter_ef(1));
+	enable_B(3)		<= not(tdc_ef(0));
+	enable_B(4)		<= not(tdc_ef(4));
+	enable_B(5)		<= not(tcounter_ef(0));
+	enable_B(6)		<= not(tcounter_ef(1));
 
-	enable_B(6)		<= even_enable(1) and odd_enable(1);
-	enable_B(7)		<= not(time_ef);
-	enable_B(8)		<= even_enable(1) and odd_enable(1);
-	enable_B(9)		<= not(tdc_ef(2)) and not(tdc_ef(3));
-	enable_B(10)	<= not(tcounter_ef(2));
-	enable_B(11)	<= not(tcounter_ef(3));
+	enable_B(7)		<= even_enable(1) and odd_enable(1);
+	enable_B(8)		<= not(time_ef);
+	enable_B(9)		<= even_enable(1) and odd_enable(1);
+	enable_B(10)	<= not(tdc_ef(1));
+	enable_B(11)	<= not(tdc_ef(5));
+	enable_B(12)	<= not(tcounter_ef(2));
+	enable_B(13)	<= not(tcounter_ef(3));
 
-	enable_B(12)	<= even_enable(2) and odd_enable(2);
-	enable_B(13)	<= not(time_ef);
 	enable_B(14)	<= even_enable(2) and odd_enable(2);
-	enable_B(15)	<= not(tdc_ef(4)) and not(tdc_ef(5));
-	enable_B(16)	<= not(tcounter_ef(4));
-	enable_B(17)	<= not(tcounter_ef(5));
+	enable_B(15)	<= not(time_ef);
+	enable_B(16)	<= even_enable(2) and odd_enable(2);
+	enable_B(17)	<= not(tdc_ef(2));
+	enable_B(18)	<= not(tdc_ef(6));
+	enable_B(19)	<= not(tcounter_ef(4));
+	enable_B(20)	<= not(tcounter_ef(5));
 
-	enable_B(18)	<= even_enable(3) and odd_enable(3);
-	enable_B(19)	<= not(time_ef);
-	enable_B(20)	<= even_enable(3) and odd_enable(3); 
-	enable_B(21)	<= not(tdc_ef(6)) and not(tdc_ef(7));
-	enable_B(22)	<= not(tcounter_ef(6));
-	enable_B(23)	<= not(tcounter_ef(7));
+	enable_B(21)	<= even_enable(3) and odd_enable(3);
+	enable_B(22)	<= not(time_ef);
+	enable_B(23)	<= even_enable(3) and odd_enable(3); 
+	enable_B(24)	<= not(tdc_ef(3));
+	enable_B(25)	<= not(tdc_ef(7));
+	enable_B(26)	<= not(tcounter_ef(6));
+	enable_B(27)	<= not(tcounter_ef(7));
 
 	-- Destination Enable: 'fifo_paf' is NOT negated because it is active low.
 	enable_C(0)		<= fifo_paf(0);
@@ -1199,27 +1209,31 @@ begin
 	enable_C(3)		<= fifo_paf(0);
 	enable_C(4)		<= fifo_paf(0);
 	enable_C(5)		<= fifo_paf(0);
+	enable_C(6)		<= fifo_paf(0);
 
-	enable_C(6)		<= fifo_paf(1);
 	enable_C(7)		<= fifo_paf(1);
 	enable_C(8)		<= fifo_paf(1);
 	enable_C(9)		<= fifo_paf(1);
 	enable_C(10)	<= fifo_paf(1);
 	enable_C(11)	<= fifo_paf(1);
+	enable_C(12)	<= fifo_paf(1);
+	enable_C(13)	<= fifo_paf(1);
 
-	enable_C(12)	<= fifo_paf(2);
-	enable_C(13)	<= fifo_paf(2);
 	enable_C(14)	<= fifo_paf(2);
 	enable_C(15)	<= fifo_paf(2);
 	enable_C(16)	<= fifo_paf(2);
 	enable_C(17)	<= fifo_paf(2);
+	enable_C(18)	<= fifo_paf(2);
+	enable_C(19)	<= fifo_paf(2);
+	enable_C(20)	<= fifo_paf(2);
 
-	enable_C(18)	<= fifo_paf(3);
-	enable_C(19)	<= fifo_paf(3);
-	enable_C(20)	<= fifo_paf(3);
 	enable_C(21)	<= fifo_paf(3);
 	enable_C(22)	<= fifo_paf(3);
 	enable_C(23)	<= fifo_paf(3);
+	enable_C(24)	<= fifo_paf(3);
+	enable_C(25)	<= fifo_paf(3);
+	enable_C(26)	<= fifo_paf(3);
+	enable_C(27)	<= fifo_paf(3);
 
 	-- Slot Transfer Size:
 	transfer(0)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
@@ -1228,27 +1242,31 @@ begin
 	transfer(3)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(4)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(5)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-
 	transfer(6)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+
 	transfer(7)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(8)		<= oreg(12)(6 downto 0); --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
-	transfer(9)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(8)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(9)		<= oreg(12)(6 downto 0); --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
 	transfer(10)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(11)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-
 	transfer(12)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(13)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(14)	<= oreg(12)(6 downto 0); --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
-	transfer(15)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(16)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(17)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 
+	transfer(14)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(15)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(16)	<= oreg(12)(6 downto 0); --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(17)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(18)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(19)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(20)	<= oreg(12)(6 downto 0); --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(20)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+
 	transfer(21)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(22)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(23)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(23)	<= oreg(12)(6 downto 0); --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(24)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(25)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(26)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(27)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 
 	-- Slot Address:
 	address(0)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
@@ -1257,85 +1275,97 @@ begin
 	address(3)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
 	address(4)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
 	address(5)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	address(6)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
 
-	address(6)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
 	address(7)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
 	address(8)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
 	address(9)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
 	address(10)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
 	address(11)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
+	address(12)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
+	address(13)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
 
-	address(12)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
-	address(13)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
 	address(14)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
 	address(15)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
 	address(16)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
 	address(17)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(18)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(19)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(20)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
 
-	address(18)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
-	address(19)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
-	address(20)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
 	address(21)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
 	address(22)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
 	address(23)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(24)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(25)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(26)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(27)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
 
 	-- 32 bits construct.	
 	idata(0)		<= x"AA55AA55";											--001 palavra
 	idata(1)		<= time_q;												--001 palavra
 	idata(2)		<= x"0" & "00" & q(1) & x"0" & "00" & q(0);				--128 palavras
-	idata(3)		<= tdc_q(4)(15 downto 0) & tdc_q(0)(15 downto 0);		--001 palavra
-	idata(4)		<= tcounter_q(0);										--001 palavra
-	idata(5)		<= tcounter_q(1);										--001 palavra
+	idata(3)		<= tdc_ef(0) & "00000" & tdc_q(0);						--001 palavra
+	idata(4)		<= tdc_ef(4) & "00000" & tdc_q(4);	 					--001 palavra
+	idata(5)		<= tcounter_q(0);										--001 palavra
+	idata(6)		<= tcounter_q(1);										--001 palavra
 
-	idata(6)		<= x"AA55AA55";											--001 palavra
-	idata(7)		<= time_q;												--001 palavra
-	idata(8)		<= x"0" & "00" & q(3) & x"0" & "00" & q(2);				--128 palavras
-	idata(9)		<= tdc_q(5)(15 downto 0) & tdc_q(1)(15 downto 0);		--001 palavra
-	idata(10)		<= tcounter_q(2);										--001 palavra
-	idata(11)		<= tcounter_q(3);										--001 palavra
+	idata(7)		<= x"AA55AA55";											--001 palavra
+	idata(8)		<= time_q;												--001 palavra
+	idata(9)		<= x"0" & "00" & q(3) & x"0" & "00" & q(2);				--128 palavras
+	idata(10)		<= tdc_ef(1) & "00000" & tdc_q(1);						--001 palavra
+	idata(11)		<= tdc_ef(5) & "00000" & tdc_q(5);						--001 palavra
+	idata(12)		<= tcounter_q(2);										--001 palavra
+	idata(13)		<= tcounter_q(3);										--001 palavra
 
-	idata(12)		<= x"AA55AA55";											--001 palavra
-	idata(13)		<= time_q;												--001 palavra
-	idata(14)		<= x"0" & "00" & q(5) & x"0" & "00" & q(4);				--128 palavras
-	idata(15)		<= tdc_q(6)(15 downto 0) & tdc_q(2)(15 downto 0);		--001 palavra
-	idata(16)		<= tcounter_q(4);										--001 palavra
-	idata(17)		<= tcounter_q(5);										--001 palavra
+	idata(14)		<= x"AA55AA55";											--001 palavra
+	idata(15)		<= time_q;												--001 palavra
+	idata(16)		<= x"0" & "00" & q(5) & x"0" & "00" & q(4);				--128 palavras
+	idata(17)		<= tdc_ef(2) & "00000" & tdc_q(2);						--001 palavra
+	idata(18)		<= tdc_ef(6) & "00000" & tdc_q(6);						--001 palavra
+	idata(19)		<= tcounter_q(4);										--001 palavra
+	idata(20)		<= tcounter_q(5);										--001 palavra
 
-	idata(18)		<= x"AA55AA55";											--001 palavra	
-	idata(19)		<= time_q;												--001 palavra
-	idata(20)		<= x"0" & "00" & q(7) & x"0" & "00" & q(6);				--128 palavras
-	idata(21)		<= tdc_q(7)(15 downto 0) & tdc_q(3)(15 downto 0);		--001 palavra
-	idata(22)		<= tcounter_q(6);										--001 palavra
-	idata(23)		<= tcounter_q(7);										--001 palavra
+	idata(21)		<= x"AA55AA55";											--001 palavra	
+	idata(22)		<= time_q;												--001 palavra
+	idata(23)		<= x"0" & "00" & q(7) & x"0" & "00" & q(6);				--128 palavras
+	idata(24)		<= tdc_ef(3) & "00000" & tdc_q(3);						--001 palavra
+	idata(25)		<= tdc_ef(7) & "00000" & tdc_q(7);						--001 palavra
+	idata(26)		<= tcounter_q(6);										--001 palavra
+	idata(27)		<= tcounter_q(7);										--001 palavra
 
 	-- Mode: '00' for non branch and '01' for branch and '10' for constant value.
-	mode(0)			<= "00";
-	mode(1)			<= "00";
-	mode(2)			<= "00";
-	mode(3)			<= "10";
-	mode(4)			<= "10";
-	mode(5)			<= "10";
+	mode(0)			<= "00";												--Header
+	mode(1)			<= "00";												--Timestamp
+	mode(2)			<= "00";												--ADC
+	mode(3)			<= "10";												--TDC
+	mode(4)			<= "10";												--TDC
+	mode(5)			<= "10";												--Trigger Counter
+	mode(6)			<= "10";												--Trigger Counter
 	
-	mode(6)			<= "00";
 	mode(7)			<= "00";
 	mode(8)			<= "00";
-	mode(9)			<= "10";
+	mode(9)			<= "00";
 	mode(10)		<= "10";
 	mode(11)		<= "10";
+	mode(12)		<= "10";
+	mode(13)		<= "10";
 	
-	mode(12)		<= "00";
-	mode(13)		<= "00";
 	mode(14)		<= "00";
-	mode(15)		<= "10";
-	mode(16)		<= "10";
+	mode(15)		<= "00";
+	mode(16)		<= "00";
 	mode(17)		<= "10";
+	mode(18)		<= "10";
+	mode(19)		<= "10";
+	mode(20)		<= "10";
 	
-	mode(18)		<= "00";
-	mode(19)		<= "00";
-	mode(20)		<= "00";
-	mode(21)		<= "10";
-	mode(22)		<= "10";
-	mode(23)		<= "10";
+	mode(21)		<= "00";
+	mode(22)		<= "00";
+	mode(23)		<= "00";
+	mode(24)		<= "10";
+	mode(25)		<= "10";
+	mode(26)		<= "10";
+	mode(27)		<= "10";
 
 	-- Constant Value definitions.
 	ctval(0)		<= x"FFFFFFFF";
@@ -1344,27 +1374,31 @@ begin
 	ctval(3)		<= x"FFFFFFFF";
 	ctval(4)		<= x"FFFFFFFF";
 	ctval(5)		<= x"FFFFFFFF";
-
 	ctval(6)		<= x"FFFFFFFF";
+
 	ctval(7)		<= x"FFFFFFFF";
 	ctval(8)		<= x"FFFFFFFF";
 	ctval(9)		<= x"FFFFFFFF";
 	ctval(10)		<= x"FFFFFFFF";
 	ctval(11)		<= x"FFFFFFFF";
-
 	ctval(12)		<= x"FFFFFFFF";
 	ctval(13)		<= x"FFFFFFFF";
+
 	ctval(14)		<= x"FFFFFFFF";
 	ctval(15)		<= x"FFFFFFFF";
 	ctval(16)		<= x"FFFFFFFF";
 	ctval(17)		<= x"FFFFFFFF";
-
 	ctval(18)		<= x"FFFFFFFF";
 	ctval(19)		<= x"FFFFFFFF";
 	ctval(20)		<= x"FFFFFFFF";
+
 	ctval(21)		<= x"FFFFFFFF";
 	ctval(22)		<= x"FFFFFFFF";
 	ctval(23)		<= x"FFFFFFFF";
+	ctval(24)		<= x"FFFFFFFF";
+	ctval(25)		<= x"FFFFFFFF";
+	ctval(26)		<= x"FFFFFFFF";
+	ctval(27)		<= x"FFFFFFFF";
 	
 	--*******************************************************************************
 	
@@ -1373,36 +1407,36 @@ begin
 	rd(0)			<= db_rd(2);
 	rd(1)			<= db_rd(2);
 	tdc_rd(0)		<= db_rd(3);
-	tdc_rd(4)		<= db_rd(3);
-	tcounter_rd(0)	<= db_rd(4);
-	tcounter_rd(1)	<= db_rd(5);
+	tdc_rd(4)		<= db_rd(4);
+	tcounter_rd(0)	<= db_rd(5);
+	tcounter_rd(1)	<= db_rd(6);
 
-	-- Header		<= db_rd(6);
-	time_rd(1)		<= db_rd(7);
-	rd(2)			<= db_rd(8);
-	rd(3)			<= db_rd(8);
-	tdc_rd(1)		<= db_rd(9);
-	tdc_rd(5)		<= db_rd(9);
-	tcounter_rd(2)	<= db_rd(10);
-	tcounter_rd(3)	<= db_rd(11);
+	-- Header		<= db_rd(7);
+	time_rd(1)		<= db_rd(8);
+	rd(2)			<= db_rd(9);
+	rd(3)			<= db_rd(9);
+	tdc_rd(1)		<= db_rd(10);
+	tdc_rd(5)		<= db_rd(11);
+	tcounter_rd(2)	<= db_rd(12);
+	tcounter_rd(3)	<= db_rd(13);
 
-	-- Header		<= db_rd(12);
-	time_rd(2)		<= db_rd(13);
-	rd(4)			<= db_rd(14);
-	rd(5)			<= db_rd(14);	
-	tdc_rd(2)		<= db_rd(15);
-	tdc_rd(6)		<= db_rd(15);
-	tcounter_rd(4)	<= db_rd(16);
-	tcounter_rd(5)	<= db_rd(17);
+	-- Header		<= db_rd(14);
+	time_rd(2)		<= db_rd(15);
+	rd(4)			<= db_rd(16);
+	rd(5)			<= db_rd(16);	
+	tdc_rd(2)		<= db_rd(17);
+	tdc_rd(6)		<= db_rd(18);
+	tcounter_rd(4)	<= db_rd(19);
+	tcounter_rd(5)	<= db_rd(20);
 	
-	-- Header		<= db_rd(18);
-	time_rd(3)		<= db_rd(19);
-	rd(6)			<= db_rd(20);
-	rd(7)			<= db_rd(20);
-	tdc_rd(3)		<= db_rd(21);
-	tdc_rd(7)		<= db_rd(21);
-	tcounter_rd(6)	<= db_rd(22);
-	tcounter_rd(7)	<= db_rd(23);
+	-- Header		<= db_rd(21);
+	time_rd(3)		<= db_rd(22);
+	rd(6)			<= db_rd(23);
+	rd(7)			<= db_rd(23);
+	tdc_rd(3)		<= db_rd(24);
+	tdc_rd(7)		<= db_rd(25);
+	tcounter_rd(6)	<= db_rd(26);
+	tcounter_rd(7)	<= db_rd(27);
 
 	--*******************************************************************************
 

@@ -106,6 +106,9 @@ architecture one_tdcconfig of tdcconfig is
 	signal rWaitAftEvent 	: std_logic_vector(7 downto 0);
 	signal contagem		 	: std_logic_vector(1 downto 0);
 	
+	-- Reset Counter
+	signal ResetCounter		: std_logic_vector(3 downto 0) := x"0";
+	
 begin
 
 	tdc_oen <= '1';
@@ -157,7 +160,7 @@ begin
 	-------------------------------------------------------
 	process (rst, clk, start_in, rTDCDone, r_fifo) begin
 		if (rst = '1') then
-			sm_TDCx <= sPowerUp;
+			sm_TDCx <= sIdle; --sPowerUp;
 			oTDC_Adr <= (others => '0');
 			oTDC_CSN <= '1';
 			oTDC_WRN <= '1';
@@ -165,17 +168,10 @@ begin
 			InitCounter <= (others => '0');
 			oTDC_StopDis <= "0000";
 			conf_done <= '0';
+			ResetCounter <= x"0";
+			
 		elsif (clk'event and clk = '1') then
 			case sm_TDCx is
-				when sPowerUp =>
-					oTDC_PuResN <= '0';
-					InitCounter <= (others => '0');
-					oTDC_Adr <= "0000";
-					oTDC_StopDis <= "0000";
-					conf_done <= '0';
-					sm_TDCx <= sIdle;
-					conf_select <= '1';
-					
 				when sIdle =>
 					oTDC_PuResN <= '1';
 					InitCounter <= (others => '0');
@@ -185,11 +181,28 @@ begin
 					conf_select <= '1';
 
 					if start_conf_pulse = '1' then
-						sm_TDCx <= sInitTDC;
+						sm_TDCx <= sPowerUp; --sInitTDC;
 					else
-						sm_TDCx <= sm_TDCx;
+						sm_TDCx <= sIdle; --sm_TDCx;
 					end if;
+
+				-- It is a RESET state.
+				when sPowerUp =>
+					oTDC_PuResN <= '0';
+					InitCounter <= (others => '0');
+					oTDC_Adr <= "0000";
+					oTDC_StopDis <= "0000";
+					conf_done <= '0';
+					conf_select <= '1';			
+					-- Reset Counter
+					ResetCounter <= ResetCounter + 1;
 				
+					if (ResetCounter = x"F") then
+						sm_TDCx <= sInitTDC; --sIdle;
+					else
+						sm_TDCx <= sPowerUp;
+					end if;
+								
 				when sInitTDC =>
 					case InitCounter is
 						when x"0" =>					-- sRingEdges
@@ -293,10 +306,11 @@ begin
 					ioTDC_Data <= (others => 'Z');
 					InitCounter <= (others => '0');
 					conf_done <= '1';
+					ResetCounter <= x"0";
 					if start_conf_pulse = '1' then 
-						sm_TDCx <= sIdle;
+						sm_TDCx <= sPowerUp; --Idle;
 					else
-						sm_TDCx <= sm_TDCx;
+						sm_TDCx <= sConfDone; --sm_TDCx;
 					end if;
 					
 				when others =>

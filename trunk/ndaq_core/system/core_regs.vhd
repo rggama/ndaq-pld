@@ -36,7 +36,7 @@ package core_regs is
 		(x"7A",	true,	true,	false,	x"03"),	-- 08 - Th 2H.
 		(x"7B",	true,	true,	false,	x"00"),	-- 09 - Trigger Slope: Falling/Rising.
 		(x"50",	true,	true,	false,	x"00"),	-- 10 - TDC.
-		(x"51",	true,	true,	true,	x"00"),	-- 11 - TDC.
+		(x"51",	true,	true,	true,		x"00"),	-- 11 - TDC.
 		(x"81",	true,	true,	false,	x"1D"),	-- 12 - Event Size.
 		(x"40",	true,	true,	false,	x"00"),	-- 13 - DataBuilder's enable.
 		(x"41",	true,	true,	false,	x"00"),	-- 14 - DataBuilder's FIFO 1 Block Configuration.
@@ -46,7 +46,7 @@ package core_regs is
 		(x"70",	true,	true,	false,	x"00"),	-- 18 - Internal Trigger Output Selector.
 		--
 		(x"27",	true,	true,	false,	x"00"),	-- 19 - R/W Test Register.
-		(x"28",	true,	true,	false,	x"43")	-- 20 - Firmware Version.
+		(x"28",	true,	true,	false,	x"44")	-- 20 - Firmware Version.
 	);
 
 -------------------------------------------------------------------------------
