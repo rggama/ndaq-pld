@@ -1305,32 +1305,32 @@ begin
 	idata(0)		<= x"AA55AA55";											--001 palavra
 	idata(1)		<= time_q;												--001 palavra
 	idata(2)		<= x"0" & "00" & q(1) & x"0" & "00" & q(0);				--128 palavras
-	idata(3)		<= tdc_ef(0) & "00000" & tdc_q(0);						--001 palavra
-	idata(4)		<= tdc_ef(4) & "00000" & tdc_q(4);	 					--001 palavra
+	idata(3)		<= tdc_errflag & "00000" & tdc_q(0);					--001 palavra
+	idata(4)		<= tdc_errflag & "00000" & tdc_q(4); 					--001 palavra
 	idata(5)		<= tcounter_q(0);										--001 palavra
 	idata(6)		<= tcounter_q(1);										--001 palavra
 
 	idata(7)		<= x"AA55AA55";											--001 palavra
 	idata(8)		<= time_q;												--001 palavra
 	idata(9)		<= x"0" & "00" & q(3) & x"0" & "00" & q(2);				--128 palavras
-	idata(10)		<= tdc_ef(1) & "00000" & tdc_q(1);						--001 palavra
-	idata(11)		<= tdc_ef(5) & "00000" & tdc_q(5);						--001 palavra
+	idata(10)		<= tdc_errflag & "00000" & tdc_q(1);					--001 palavra
+	idata(11)		<= tdc_errflag & "00000" & tdc_q(5);					--001 palavra
 	idata(12)		<= tcounter_q(2);										--001 palavra
 	idata(13)		<= tcounter_q(3);										--001 palavra
 
 	idata(14)		<= x"AA55AA55";											--001 palavra
 	idata(15)		<= time_q;												--001 palavra
 	idata(16)		<= x"0" & "00" & q(5) & x"0" & "00" & q(4);				--128 palavras
-	idata(17)		<= tdc_ef(2) & "00000" & tdc_q(2);						--001 palavra
-	idata(18)		<= tdc_ef(6) & "00000" & tdc_q(6);						--001 palavra
+	idata(17)		<= tdc_errflag & "00000" & tdc_q(2);					--001 palavra
+	idata(18)		<= tdc_errflag & "00000" & tdc_q(6);					--001 palavra
 	idata(19)		<= tcounter_q(4);										--001 palavra
 	idata(20)		<= tcounter_q(5);										--001 palavra
 
 	idata(21)		<= x"AA55AA55";											--001 palavra	
 	idata(22)		<= time_q;												--001 palavra
 	idata(23)		<= x"0" & "00" & q(7) & x"0" & "00" & q(6);				--128 palavras
-	idata(24)		<= tdc_ef(3) & "00000" & tdc_q(3);						--001 palavra
-	idata(25)		<= tdc_ef(7) & "00000" & tdc_q(7);						--001 palavra
+	idata(24)		<= tdc_errflag & "00000" & tdc_q(3);					--001 palavra
+	idata(25)		<= tdc_errflag & "00000" & tdc_q(7);					--001 palavra
 	idata(26)		<= tcounter_q(6);										--001 palavra
 	idata(27)		<= tcounter_q(7);										--001 palavra
 

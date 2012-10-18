@@ -46,7 +46,7 @@ package core_regs is
 		(x"70",	true,	true,	false,	x"00"),	-- 18 - Internal Trigger Output Selector.
 		--
 		(x"27",	true,	true,	false,	x"00"),	-- 19 - R/W Test Register.
-		(x"28",	true,	true,	false,	x"44")	-- 20 - Firmware Version.
+		(x"28",	true,	true,	false,	x"45")	-- 20 - Firmware Version.
 	);
 
 -------------------------------------------------------------------------------
