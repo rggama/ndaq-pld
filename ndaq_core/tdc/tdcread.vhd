@@ -94,12 +94,12 @@ begin
 	--------------------------------------------------
 	
 	
-	-- enable_read	<=	not(channel_ff(0) or channel_ff(1) or
-						-- channel_ff(2) or channel_ff(3) or
-						-- channel_ff(4) or channel_ff(5) or
-						-- channel_ff(6) or channel_ff(7));
+	enable_read	<=	not(channel_ff(0) or channel_ff(1) or
+						channel_ff(2) or channel_ff(3) or
+						channel_ff(4) or channel_ff(5) or
+						channel_ff(6) or channel_ff(7));
 
-	enable_read	<= '1';
+	-- enable_read	<= '1';
 
 	----------------------------------------------
 	-- Registering ef1, ef2 and irflag - 2 chains.
@@ -134,7 +134,6 @@ begin
 			otdc_ADR <= "0000";
 			otdc_CSN <= '1';
 			otdc_RDN <= '1';
-			--otdc_Data <= (others => 'Z');
 			i_data_valid <= '0';
 			tdc_addr <= REG8;
 			sm_TDCx <= sIdle;
@@ -142,44 +141,27 @@ begin
 			fifo2_issue	<= '0';
 		elsif (clk'event and clk = '1') then
 			case sm_TDCx is
+				
+				
+				-- Idle
 				when sIdle =>
 					otdc_ADR <= "0000";
 					otdc_CSN <= '1';
 					otdc_RDN <= '1';
-					--otdc_Data <= (others => 'Z');
 					i_data_valid <= '0';
 					otdc_alutr <= '0';
 					selected_fifo <= '0';
-					-- if enable_read = '0' then	
-						-- sm_TDCx <= sTestEFs;
-					-- else
-						-- sm_TDCx <= sm_TDCx;
-					-- end if;
-					if enable_read = '1' then	
-						sm_TDCx <= sTestEFs;
-					else
+
+					-- Se a IRflag estiver em nivel baixo, espere nesse estado.
+					if rtdc_irflag = '0' then
 						sm_TDCx <= sIdle;
-					end if;
-				
-				when sTestEFs =>
-					otdc_ADR <= "0000";
-					otdc_CSN <= '1';
-					otdc_RDN <= '1';
-					--otdc_Data <= (others => 'Z');
-					i_data_valid <= '0';
-					if (rtdc_ef1 = '0' or rtdc_ef2 = '0') then
-						if rtdc_irflag = '1' then
-							 otdc_alutr <= '1'; 	-- TDC reset, keeping the contents of the configuration registers								
-							 sm_TDCx <= sIdle;
-						else
-							otdc_alutr <= '0';
-							sm_TDCx <= sSelectFIFO;
-						end if;
+					-- Se a IRflag estiver em nivel alto, significa que a janela de tempo acabou e a medição pode ser lida.
 					else
-						--sm_TDCx <= sIdle;
-						sm_TDCx <= sTestEFs;
+						sm_TDCx <= sSelectFIFO;
 					end if;
-					
+								
+				
+				-- Testa EF1 e EF2
 				when sSelectFIFO =>
 					otdc_ADR <= "0000";
 					otdc_CSN <= '1';
@@ -187,71 +169,89 @@ begin
 					--otdc_Data <= (others => 'Z');
 					i_data_valid <= '0';
 					otdc_alutr <= '0';
-					--both fifos have data: read fifo1 and issue a fifo2 read for the next cycle.
-					if rtdc_ef1 = '0' and rtdc_ef2 = '0' and fifo2_issue = '0' then
-						tdc_addr <= REG8;
-						selected_fifo <= '0';
-						fifo2_issue	<= '1';
-					--fifo2 have data or fifo2 read issued: read fifo2.
-					elsif rtdc_ef2 = '0' or fifo2_issue = '1' then
-						tdc_addr <= REG9;
-						selected_fifo <= '1';
-						fifo2_issue	<= '0';
-					--fifo1 have data: read fifo 1.
-					elsif rtdc_ef1 = '0' then
-						tdc_addr <= REG8;
-						selected_fifo <= '0';
-						fifo2_issue	<= '0';
+					
+					--
+					if (enable_read = '1') then	
+						--both fifos have data: read fifo1 and issue a fifo2 read for the next cycle.
+						if rtdc_ef1 = '0' and rtdc_ef2 = '0' and fifo2_issue = '0' then
+							tdc_addr <= REG8;
+							selected_fifo <= '0';
+							fifo2_issue	<= '1';
+							sm_TDCx <= sCSN;
+						--fifo2 have data or fifo2 read issued: read fifo2.
+						elsif rtdc_ef2 = '0' or fifo2_issue = '1' then
+							tdc_addr <= REG9;
+							selected_fifo <= '1';
+							fifo2_issue	<= '0';
+							sm_TDCx <= sCSN;
+						--fifo1 have data: read fifo 1.
+						elsif rtdc_ef1 = '0' then
+							tdc_addr <= REG8;
+							selected_fifo <= '0';
+							fifo2_issue	<= '0';
+							sm_TDCx <= sCSN;
+						else
+							sm_TDCx <= sSelectFIFO;
+						end if;
 					else
-						null;
+						sm_TDCx <= sSelectFIFO;
 					end if;
-					sm_TDCx <= sCSN;
+			
 
+				-- Começa a Leitura
 				when sCSN =>							
 					otdc_ADR <= tdc_addr;				-- Address valid
 					otdc_CSN <= '0';					-- CS falling edge
 					oTDC_RDN <= '1';
-					--otdc_Data <= (others => 'Z');
+					--
 					i_data_valid <= '0';
 					sm_TDCx <= sRDdown;
 					otdc_alutr <= '0';
 				
+				-- Leitura
 				when sRDdown =>						
 					oTDC_ADR <= tdc_addr;				-- Address valid
 					oTDC_CSN <= '0';					
 					oTDC_RDN <= '0';					-- RD falling edge (25ns after CS falling-edge)
-					--otdc_Data <= (others => 'Z');
+					--
 					i_data_valid <= '0';
 					sm_TDCx <= sRDup;
 					otdc_alutr <= '0';
 				
+				-- Leitura
 				when sRDup =>							-- CS and RD rising edge
 					oTDC_ADR <= tdc_addr;
 					oTDC_CSN <= '1';
 					oTDC_RDN <= '1';
-					--oTDC_Data <= iTDC_Data;				-- Data capture
+					--
 					i_data_valid <= '1';
 					sm_TDCx <= sReadDone;
 					otdc_alutr <= '0';
 				
+				-- Leitura (final)
 				when sReadDone =>						-- Remove Address and Data
 					oTDC_ADR <= (others => 'Z');
 					oTDC_CSN <= '1';
 					oTDC_RDN <= '1';
-					--oTDC_Data <= iTDC_Data;
+					--
 					i_data_valid <= '0';				-- Data strobe indicating valid data
 					otdc_alutr <= '0';
-					--if enable_read = '1' then
+					
+					-- Se ainda há dados nas FIFOs, o ciclo deve começar de novo sem Reset e
+					-- sem passar pelo testa da IRflag.
+					if ((rtdc_ef1 = '0') or (rtdc_ef2 = '0')) then
+						sm_TDCx <= sSelectFIFO;
+					-- Caso contrário, os resultados das duas FIFOs para uma janela de tempo já foram lidos.
+					-- Deve-se resetar e começar do 'sIdle'.
+					else
+						otdc_alutr <= '1'; 	-- TDC reset, keeping the contents of the configuration registers
 						sm_TDCx <= sIdle;
-					--else
-						--sm_TDCx <= sm_TDCx;
-					--end if;
-				
+					end if;
+					
 				when others =>
 					oTDC_ADR <= (others => 'Z');
 					oTDC_CSN <= '1';
 					oTDC_RDN <= '1';
-					--oTDC_Data <= (others => 'Z');
 					i_data_valid <= '0';
 					sm_TDCx <= sIdle;
 					otdc_alutr <= '0';
