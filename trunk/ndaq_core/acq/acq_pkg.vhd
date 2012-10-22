@@ -53,21 +53,7 @@ package acq_pkg is
 	--MAX_WORDS e o maximo de palavras que a POST FIFO pode conter para que
 	--um novo evento seja gravado. Ou seja, a POST FIFO deve ter espaco 
 	--suficiente para guardar um evento completo.
-		
-
-	--Power para o ADC - '1' -> ADC LIGADO e '0' -> ADC DESLIGADO		
-	constant 	ADC12_PWR				: std_logic	:= '1';		
-	
-	--Power para o ADC - '1' -> ADC LIGADO e '0' -> ADC DESLIGADO	
-	constant 	ADC34_PWR				: std_logic	:= '1';		
-	
-	--Power para o ADC - '1' -> ADC LIGADO e '0' -> ADC DESLIGADO	
-	
-	constant	ADC56_PWR				: std_logic	:= '1';		
-	
-	--Power para o ADC - '1' -> ADC LIGADO e '0' -> ADC DESLIGADO
-	constant 	ADC78_PWR				: std_logic	:= '1';		
-	
+			
 																			
 --*******************************************************************************************************************************
 

@@ -26,6 +26,13 @@ package tdc_pkg is
 	subtype CTDC_T	is std_logic_vector(7 downto 0);
 	subtype	OTDC_T	is std_logic_vector(25 downto 0);
 	type	OTDC_A	is array (7 downto 0) of OTDC_T;
+	
+	--
+	-- Register's Data Types
+	--
+	
+	subtype TDCREG_T is std_logic_vector(27 downto 0);
+	type 	TDCREG_A is array (11 downto 0) of TDCREG_T;	--11 registradores + Master_Reset.
 
 	
 --*******************************************************************************************************************************

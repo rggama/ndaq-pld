@@ -16,27 +16,31 @@ library work;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
-use work.all;
+--
+use work.tdc_pkg.all;
 --
 entity tdcconfig is
 	port
 	(
-	-- General control signals
-	signal rst			: in std_logic;
-	signal clk			: in std_logic;	-- 40MHz clock
-	signal start_conf	: in std_logic;	-- Start the configuration machine (active high pulse with 2-periods clock width)
-	signal conf_done	: out std_logic;	-- Indicates end of configuration (active high pulse) 
-	signal conf_select	: out std_logic := '1';
-	
-	-- TDC inputs/outputs
-	signal iotdc_data	 : inout std_logic_vector(27 downto 0);
-	signal otdc_stopdis	 : out	 std_logic_vector(1 to 4);
-	signal otdc_wrn		 : out  std_logic;	-- TDC Write
-	signal otdc_csn	 	 : out	 std_logic;		-- TDC Chip Select
-	signal otdc_puresn	 : out  std_logic;	-- TDC Power-up Reset (active low)
-	signal tdc_oen		 : out  std_logic;	-- TDC Output Enable (active low)
-	signal otdc_adr		 : out  std_logic_vector(3 downto 0) := x"0"; -- TDC Address
-	signal itdc_irflag	 : in   std_logic		-- TDC Interrupt flag (active high)
+		-- General control signals
+		signal rst			: in std_logic;
+		signal clk			: in std_logic;									-- 40MHz clock
+		signal start_conf	: in std_logic;									-- Start the configuration machine (active high pulse with 2-periods clock width)
+		signal conf_done	: out std_logic;								-- Indicates end of configuration (active high pulse) 
+		signal conf_select	: out std_logic := '1';
+		
+		-- TDC inputs/outputs
+		signal iotdc_data	: inout	std_logic_vector(27 downto 0);
+		signal otdc_stopdis	: out	std_logic_vector(1 to 4);
+		signal otdc_wrn		: out  	std_logic;								-- TDC Write
+		signal otdc_csn		: out	std_logic;								-- TDC Chip Select
+		signal otdc_puresn	: out  	std_logic;								-- TDC Power-up Reset (active low)
+		signal tdc_oen		: out  	std_logic;								-- TDC Output Enable (active low)
+		signal otdc_adr		: out  	std_logic_vector(3 downto 0) := x"0";	-- TDC Address
+		signal itdc_irflag	: in   	std_logic;								-- TDC Interrupt flag (active high)
+		
+		-- Registers Data Input
+		signal reg_array	: in 	TDCREG_A								-- Registers's Value Input Array 
 	);
 end tdcconfig;
 --
@@ -51,44 +55,17 @@ architecture one_tdcconfig of tdcconfig is
 	constant REG5  : std_logic_vector(3 downto 0) := "0101";
 	constant REG6  : std_logic_vector(3 downto 0) := "0110";
 	constant REG7  : std_logic_vector(3 downto 0) := "0111";
-	constant REG8  : std_logic_vector(3 downto 0) := "1000";
-	constant REG9  : std_logic_vector(3 downto 0) := "1001";
+	--constant REG8  : std_logic_vector(3 downto 0) := "1000";
+	--constant REG9  : std_logic_vector(3 downto 0) := "1001";
 	constant REG11 : std_logic_vector(3 downto 0) := "1011";
 	constant REG12 : std_logic_vector(3 downto 0) := "1100";
 	constant REG14 : std_logic_vector(3 downto 0) := "1110";
 
-	-- Valores do exemplo da página 28 do datasheet do TDC-GPX. 
-	constant VALOR_REG0  : std_logic_vector(27 downto 0) := x"007fc81"; 
-	constant VALOR_REG1  : std_logic_vector(27 downto 0) := x"0000000"; 
-	constant VALOR_REG2  : std_logic_vector(27 downto 0) := x"0000002"; -- Modo I
-	constant VALOR_REG3  : std_logic_vector(27 downto 0) := x"0000000";
-	constant VALOR_REG4  : std_logic_vector(27 downto 0) := x"6000000"; 
-	constant VALOR_REG5  : std_logic_vector(27 downto 0) := x"0E004DA"; 
-	constant VALOR_REG6  : std_logic_vector(27 downto 0) := x"0000000";
-	constant VALOR_REG7  : std_logic_vector(27 downto 0) := x"0281FB4"; --Res 82.3045ps 
-	constant VALOR_REG11 : std_logic_vector(27 downto 0) := x"7FF0000"; 
-	constant VALOR_REG12 : std_logic_vector(27 downto 0) := x"2000000"; 
-	constant VALOR_REG14 : std_logic_vector(27 downto 0) := x"0000000";
-	constant Master_Reset : std_logic_vector(27 downto 0) := x"6400000"; -- Na hora de fazer o Master Reset, deve-se levar em consideração
-																		 -- o que já foi escrito no REG4 anteriormente.
-																		 
-	signal reg_data		: std_Logic_Vector(7 downto 0);
-	signal read_status : std_Logic;
-	signal r_data		: std_Logic_Vector(31 downto 0);
-	signal dma			: std_Logic_Vector(11 downto 0);
+	--
 	
-   signal rTDCDone 	: std_logic;
-   signal rTDCDoneAck : std_logic;
-
-   signal rst_int		: std_logic;
-   signal oUSBRD  	: std_logic;
-   signal readDataUSB : signed(7 downto 0);
-
-	signal rCanHit : std_Logic;
-	
-	signal InitCounter : std_logic_vector(3 downto 0);	-- Herman
-	signal TDC_Addr		: std_logic_vector(3 downto 0);  -- Herman
-	signal TDC_Data		: std_logic_vector(27 downto 0); -- Herman
+	signal InitCounter 	: std_logic_vector(3 downto 0);		-- Herman
+	signal TDC_Addr		: std_logic_vector(3 downto 0);		-- Herman
+	signal TDC_Data		: std_logic_vector(27 downto 0);	-- Herman
 
 	type state_type is (s_test, s_assert_p0, s_assert_p1, s_check_fall);
 	signal state_pulse : state_type;
@@ -99,16 +76,9 @@ architecture one_tdcconfig of tdcconfig is
 
 	type sm_tdc is (sPowerUp, sIdle, sInitTDC, sCSN, sWRdown, sWRup, sInitEnd, sConfDone);
 	signal sm_TDCx : sm_tdc;
-	--attribute syn_encoding : string;	-- Este atributo evita o travamento do projeto no SPRO
+	attribute syn_encoding : string;	-- Este atributo evita o travamento do projeto no SPRO
 	attribute syn_encoding of sm_tdc : type is "safe";
-	
-	-- TEMPORARY SIGNALS !!!!!!!!!!!!
-	signal start_in 		: std_logic;
-	signal r_fifo	 		: std_logic;
-	signal reset	 		: std_logic;
-	signal rWaitAftEvent 	: std_logic_vector(7 downto 0);
-	signal contagem		 	: std_logic_vector(1 downto 0);
-	
+		
 	-- Reset Counter
 	signal ResetCounter		: std_logic_vector(3 downto 0) := x"0";
 	
@@ -157,13 +127,13 @@ begin
 		end if;
 	end process;
 	
-	--conf_done <= start_conf_pulse;
+	
 	-------------------------------------------------------
 	-- TDC registers configuration and readout handshake --
 	-------------------------------------------------------
-	process (rst, clk, start_in, rTDCDone, r_fifo) begin
+	process (rst, clk) begin
 		if (rst = '1') then
-			sm_TDCx <= sIdle; --sPowerUp;
+			sm_TDCx <= sIdle;
 			oTDC_Adr <= (others => '0');
 			oTDC_CSN <= '1';
 			oTDC_WRN <= '1';
@@ -184,9 +154,9 @@ begin
 					conf_select <= '1';
 
 					if start_conf_pulse = '1' then
-						sm_TDCx <= sPowerUp; --sInitTDC;
+						sm_TDCx <= sPowerUp;
 					else
-						sm_TDCx <= sIdle; --sm_TDCx;
+						sm_TDCx <= sIdle;
 					end if;
 
 				-- It is a RESET state.
@@ -201,7 +171,7 @@ begin
 					ResetCounter <= ResetCounter + 1;
 				
 					if (ResetCounter = x"F") then
-						sm_TDCx <= sInitTDC; --sIdle;
+						sm_TDCx <= sInitTDC;
 					else
 						sm_TDCx <= sPowerUp;
 					end if;
@@ -210,40 +180,40 @@ begin
 					case InitCounter is
 						when x"0" =>					-- sRingEdges
 							TDC_Addr <= REG0;
-							TDC_Data <= VALOR_REG0;
+							TDC_Data <= reg_array(0);	--VALOR_REG0;
 						when x"1" =>					-- sAdjBits
 							TDC_Addr <= REG1;
-							TDC_Data <= VALOR_REG1;
+							TDC_Data <= reg_array(1);	--VALOR_REG1;
 						when x"2" =>					-- sSetMode
 							TDC_Addr <= REG2;
-							TDC_Data <= VALOR_REG2;
+							TDC_Data <= reg_array(2);	--VALOR_REG2;
 						when x"3" =>					-- sSetTTL
 							TDC_Addr <= REG3;
-							TDC_Data <= VALOR_REG3;
+							TDC_Data <= reg_array(3);	--VALOR_REG3;
 						when x"4" =>					-- sMTimer
 							TDC_Addr <= REG4;
-							TDC_Data <= VALOR_REG4;
+							TDC_Data <= reg_array(4);	--VALOR_REG4;
 						when x"5" =>					-- sStartOffset
 							TDC_Addr <= REG5;
-							TDC_Data <= VALOR_REG5;
+							TDC_Data <= reg_array(5);	--VALOR_REG5;
 						when x"6" =>					-- sECLImp
 							TDC_Addr <= REG6;
-							TDC_Data <= VALOR_REG6;
+							TDC_Data <= reg_array(6);	--VALOR_REG6;
 						when x"7" =>					-- sRes
 							TDC_Addr <= REG7;
-							TDC_Data <= VALOR_REG7;
+							TDC_Data <= reg_array(7);	--VALOR_REG7;
 						when x"8" =>					-- sPLLStatus
 							TDC_Addr <= REG11;
-							TDC_Data <= VALOR_REG11;
+							TDC_Data <= reg_array(8);	--VALOR_REG11;
 						when x"9" =>					-- sMTimerStatus
 							TDC_Addr <= REG12;
-							TDC_Data <= VALOR_REG12;
+							TDC_Data <= reg_array(9);	--VALOR_REG12;
 						when x"A" =>					-- sREG14
 							TDC_Addr <= REG14;
-							TDC_Data <= VALOR_REG14;
+							TDC_Data <= reg_array(10);	--VALOR_REG14;
 						when x"B" =>					-- sReset
 							TDC_Addr <= REG4;
-							TDC_Data <= Master_Reset;
+							TDC_Data <= reg_array(11);	--Master_Reset;
 						when others =>
 							TDC_Addr <= (others => '0');
 							TDC_Data <= (others => 'Z');
@@ -257,7 +227,7 @@ begin
 					conf_done <= '0';
 					sm_TDCx <= sCSN;
 				
-				when sCSN =>							-- CS falling edge
+				when sCSN =>						-- CS falling edge
 					oTDC_PuResN <= '1';
 					oTDC_Adr <= TDC_Addr;
 					oTDC_CSN <= '0';
@@ -275,7 +245,7 @@ begin
 					conf_done <= '0';
 					sm_TDCx <= sWRup;
 				
-				when sWRup =>							-- CS and WR rising edge
+				when sWRup =>						-- CS and WR rising edge
 					oTDC_PuResN <= '1';
 					oTDC_Adr <= TDC_Addr;
 					oTDC_CSN <= '1';
@@ -284,7 +254,7 @@ begin
 					conf_done <= '0';
 					sm_TDCx <= sInitEnd;
 				
-				when sInitEnd =>						-- Remove Address and Data
+				when sInitEnd =>					-- Remove Address and Data
 					oTDC_PuResN <= '1';
 					oTDC_Adr <= (others => 'Z');
 					oTDC_CSN <= '1';
@@ -295,12 +265,11 @@ begin
 					if (InitCounter < x"B") then 
 						sm_TDCx <= sInitTDC;
 					else
-
 						conf_select <= '0';
 						sm_TDCx <= sConfDone;
 					end if;
 				
-				when sConfDone =>						-- Indicates configuration is done 'conf_done=1'
+				when sConfDone =>					-- Indicates configuration is done 'conf_done=1'
 					oTDC_PuResN <= '1';
 					oTDC_StopDis <= "0000";
 					oTDC_Adr <= (others => 'Z');
@@ -311,9 +280,9 @@ begin
 					conf_done <= '1';
 					ResetCounter <= x"0";
 					if start_conf_pulse = '1' then 
-						sm_TDCx <= sPowerUp; --Idle;
+						sm_TDCx <= sPowerUp;		-- If start_conf_pulse is issued again, go to RESET state again.
 					else
-						sm_TDCx <= sConfDone; --sm_TDCx;
+						sm_TDCx <= sConfDone;
 					end if;
 					
 				when others =>

@@ -37,7 +37,7 @@ package vme_regs is
 		(x"33",	true,	true,	false,	x"00"),	-- 07 - R/W Test Register	-	-	VME: Base+0x800000.
 		(x"83",	true,	true,	false,	x"00"), -- 08 - Data Builder Block Size	-	Not assigned to VME.
 
-		(x"28",	true,	true,	false,	x"45"),	-- 09 - Firmware Version	-	-	VME: Base+0x900000.
+		(x"28",	true,	true,	false,	x"46"),	-- 09 - Firmware Version	-	-	VME: Base+0x900000.
 		
 		(x"29",	true,	true,	false,	x"16")	-- 10 - NDAQ Number	-	-	-	-	VME: Base+0xB00000.
 		

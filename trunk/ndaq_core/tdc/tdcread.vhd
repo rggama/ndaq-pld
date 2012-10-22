@@ -99,7 +99,6 @@ begin
 						channel_ff(4) or channel_ff(5) or
 						channel_ff(6) or channel_ff(7));
 
-	-- enable_read	<= '1';
 
 	----------------------------------------------
 	-- Registering ef1, ef2 and irflag - 2 chains.
