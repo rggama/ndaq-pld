@@ -42,7 +42,7 @@ entity tdc is
 	(	
 		signal rst				: in 		std_logic;
 		signal clk				: in 		std_logic;	-- 40MHz clock
-		signal dclk				: in	std_logic;
+		signal dclk				: in		std_logic;
 		
 		-------------------
 		-- TDC interface --
@@ -69,7 +69,12 @@ entity tdc is
 		signal otdc_data		: out	std_logic_vector(27 downto 0);
 		signal channel_ef		: out	CTDC_T;
 		signal channel_rd		: in	CTDC_T;
-		signal channel_out		: out	OTDC_A
+		signal channel_out		: out	OTDC_A;
+		
+		---------------
+		-- Registers --
+		---------------
+		signal reg_array		: in	TDCREG_A	-- Registers's Value Input Array
 	);
 end tdc;
 
@@ -80,7 +85,8 @@ architecture one_tdc of tdc is
 	---------------------------------
 	component tdcconfig
 	port
-	( 	rst				: in  	std_logic;
+	( 	
+		rst				: in  	std_logic;
 		clk				: in  	std_logic;
 		start_conf		: in	std_logic;
 		conf_done		: out	std_logic;
@@ -92,7 +98,8 @@ architecture one_tdc of tdc is
 		otdc_puresn	 	: out  	std_logic;
 		tdc_oen		 	: out  	std_logic;
 		otdc_adr		: out  	std_logic_vector(3 downto 0);
-		itdc_irflag	 	: in   	std_logic
+		itdc_irflag	 	: in   	std_logic;
+		reg_array		: in	TDCREG_A
 	);
 	end component;
 	
@@ -159,7 +166,8 @@ begin
 		otdc_puresn	 	=> otdc_puresn,
 		tdc_oen		 	=> tdc_oen,
 		otdc_adr		=> tdcADR_conf,
-		itdc_irflag	 	=> itdc_irflag
+		itdc_irflag	 	=> itdc_irflag,
+		reg_array		=> reg_array
 	);
 	
 	--conf_done <= conf_select;

@@ -380,7 +380,12 @@ architecture rtl of ndaq_core is
 		signal otdc_data		: out	std_logic_vector(27 downto 0);
 		signal channel_ef		: out	CTDC_T;
 		signal channel_rd		: in	CTDC_T;
-		signal channel_out		: out	OTDC_A
+		signal channel_out		: out	OTDC_A;
+
+		---------------
+		-- Registers --
+		---------------
+		signal reg_array		: in	TDCREG_A	-- Registers's Value Input Array.
 	);	
 	end component;
 
@@ -567,7 +572,8 @@ architecture rtl of ndaq_core is
 	signal	tdc_ef					: CTDC_T;
 	signal	tdc_rd					: CTDC_T;
 	signal	tdc_q					: OTDC_A;
-
+	signal 	tdc_reg_array			: TDCREG_A;
+	
 	-- ACQ: Trigger Counter
 	signal tcounter_rd				: std_logic_vector((tcounter_channels-1) downto 0);
 	signal tcounter_ef				: std_logic_vector((tcounter_channels-1) downto 0);
@@ -635,17 +641,17 @@ begin
 	--------------------
 	-- ADCs interface --
 	--------------------
-	adc12_pwdn <= not(ADC12_PWR);
-	adc34_pwdn <= not(ADC34_PWR);
-	adc56_pwdn <= not(ADC56_PWR);
-	adc78_pwdn <= not(ADC78_PWR);
+	adc12_pwdn <= not(oreg(3)(0));
+	adc34_pwdn <= not(oreg(3)(1));
+	adc56_pwdn <= not(oreg(3)(2));
+	adc78_pwdn <= not(oreg(3)(3));
 
 	----------------------
 	-- FIFO's interface --
 	----------------------
 	fifo_wck	<= fclk;
 	
-	fifo_mrs	<= not(acq_rst);	-- Same as ACQ Reset. IDT FIFO's reset signal is active low.
+	fifo_mrs	<= not(acq_rst);	-- It's ACQ Reset and is negated because IDT FIFO's reset signal is active low.
 	fifo_prs	<= '1';
 	fifo_rt		<= '1';
 
@@ -807,15 +813,15 @@ begin
 
 	--
 	-- Enables
-	timebase_en		<= oreg(1)(0);
-	counter_en		<= oreg(1)(1);
-	etrigger_en		<= oreg(1)(2);
-	itrigger_en		<= oreg(1)(3);
-	acq_en			<= oreg(1)(4);
+	timebase_en		<= oreg(1)(0);	-- Enable the Timebase generator component.
+	counter_en		<= oreg(1)(1);	-- Enable the Internal Trigger Counter component.
+	etrigger_en		<= oreg(1)(2);	-- Enable the External Trigger component.
+	itrigger_en		<= oreg(1)(3);	-- Enable the Internal Trigger component.
+	acq_en			<= oreg(1)(4);  -- Enable the 8 ADC interface component.
 	
 	--
 	-- ACQ Reset
-	acq_rst			<= oreg(3)(0);
+	acq_rst			<= oreg(4)(0);
 
 	--
 	-- Timebase Counter Read Enable Logic
@@ -874,12 +880,12 @@ begin
 	-- data(7)		<= counter(7);
 
 	--
-	-- Event Size (to be compared with FIFO's used words). 
-	usedw_event_size <= "0000" & oreg(12)(6 downto 0);
+	-- ADC Event Size per trigger [in samples] (to be compared with FIFO's used words). 
+	usedw_event_size <= "0000" & oreg(2)(6 downto 0);
 
 	--
-	-- Internal Trigger Output Selector (8 to 1 mux)
-	itrigger_selector: itrigger_sel	<= int_trigger(conv_integer(oreg(18)(2 downto 0)));
+	-- Internal Trigger Channel Selector (8 to 1 mux)
+	itrigger_selector: itrigger_sel	<= int_trigger(conv_integer(oreg(5)(2 downto 0)));
 	
 	-- Constroi os 8 canais de aquisicao
 	adc_data_acq_construct:
@@ -920,10 +926,10 @@ begin
 		
 		--
 		-- Constructing the 10 bits Threshold registers.
-		thtemp1(9 downto 8) <= oreg(6)(1 downto 0);	-- high Th 1 reg
-		thtemp1(7 downto 0) <= oreg(5);				-- low Th 1 reg
-		thtemp2(9 downto 8) <= oreg(8)(1 downto 0);	-- high Th 2 reg
-		thtemp2(7 downto 0) <= oreg(7);				-- low Th 2 reg
+		thtemp1(9 downto 8) <= oreg(8)(1 downto 0);	-- high Th 1 reg
+		thtemp1(7 downto 0) <= oreg(7);				-- low Th 1 reg
+		thtemp2(9 downto 8) <= oreg(10)(1 downto 0);	-- high Th 2 reg
+		thtemp2(7 downto 0) <= oreg(9);				-- low Th 2 reg
 
 		--
 		-- Internal Trigger Generator
@@ -934,7 +940,7 @@ begin
 			clk					=> clk(i),
 			-- Trigger
 			enable				=> itrigger_en,
-			pos_neg				=> oreg(9)(0),				--'0' for RISING EDGE, '1' for FALLING EDGE.
+			pos_neg				=> oreg(11)(0),				--'0' for RISING EDGE, '1' for FALLING EDGE.
 			data_in				=> MY_CONV_SIGNED(data(i)),
 			th1					=> MY_CONV_SIGNED(thtemp1),	--CONV_SIGNED(T_RISE, data_width),
 			th2					=> MY_CONV_SIGNED(thtemp2),	--CONV_SIGNED(T_FALL, data_width),
@@ -973,7 +979,7 @@ begin
 			enable		=> acq_en,
 			acqin		=> acqin(i),
 			
-			tmode		=> oreg(4)(7),	-- '0' for External, '1' for Internal
+			tmode		=> oreg(6)(7),	-- '0' for External, '1' for Internal
 			
 			--OR'ed conditioned trigger inputs, active when 'tmode = '0''
 			trig0 		=> c_trigger_a(i),
@@ -1048,15 +1054,26 @@ begin
 		-----------------
 		-- TDC control --
 		-----------------
-		start_conf		=> oreg(10)(0),			-- Start the configuration machine (active high pulse with 2-periods width)
-		--conf_done		=> ireg(11)(0),			-- TEMPORARIO BY HERMAN		
+		start_conf		=> oreg(60)(0),			-- Start the configuration machine (active high pulse with 2-periods width)
+		conf_done		=> ireg(61)(0),			
 		otdc_data		=> open,
 		channel_ef		=> tdc_ef,
 		channel_rd		=> tdc_rd,
-		channel_out		=> tdc_q
+		channel_out		=> tdc_q,
+
+		---------------
+		-- Registers --
+		---------------
+		reg_array		=> tdc_reg_array
+		
 	);
 
-
+	-- TDC Registers's array connections (Phew!)
+	tdc_registers_construct:
+	for i in 0 to 11 generate
+		tdc_reg_array(i) <= oreg(15+i*4)(3 downto 0) & oreg(14+i*4) & oreg(13+i*4) & oreg(12+i*4);
+	end generate tdc_registers_construct;
+	
 -- ******************************* DATA BUILDER *******************************
 
 	--
@@ -1069,7 +1086,7 @@ begin
 		clk							=> dclk,
 		
 		--
-		enable						=> oreg(13)(0),
+		enable						=> oreg(62)(0),
 		
 		--
 		enable_A					=> enable_A,
@@ -1130,39 +1147,38 @@ begin
 
 	--
 	-- Slot Enable: '1' for enable.
-	enable_A(0)		<= oreg(14)(0); --'0';					-- Header
-	enable_A(1)		<= oreg(14)(1); --'1';					-- Timestamp
-	enable_A(2)		<= oreg(14)(2); --'0';					-- ADC
-	enable_A(3)		<= oreg(14)(3); --'0';					-- TDC
-	enable_A(4)		<= oreg(14)(3); --'0';					-- TDC
-	enable_A(5)		<= oreg(14)(4); --'1';					-- Trigger Counter
-	enable_A(6)		<= oreg(14)(5); --'1';					-- Trigger Counter
+	enable_A(0)		<= oreg(63)(0); --'0';					-- Header
+	enable_A(1)		<= oreg(63)(1); --'1';					-- Timestamp
+	enable_A(2)		<= oreg(63)(2); --'0';					-- ADC
+	enable_A(3)		<= oreg(63)(3); --'0';					-- TDC
+	enable_A(4)		<= oreg(63)(3); --'0';					-- TDC
+	enable_A(5)		<= oreg(63)(4); --'1';					-- Trigger Counter
+	enable_A(6)		<= oreg(63)(5); --'1';					-- Trigger Counter
 
-	enable_A(7)		<= oreg(15)(0); --'0';
-	enable_A(8)		<= oreg(15)(1); --'1';
-	enable_A(9)		<= oreg(15)(2); --'0';
-	enable_A(10)	<= oreg(15)(3); --'0';
-	enable_A(11)	<= oreg(15)(3); --'0';
-	enable_A(12)	<= oreg(15)(4); --'1';
-	enable_A(13)	<= oreg(15)(5); --'1';
+	enable_A(7)		<= oreg(64)(0); --'0';
+	enable_A(8)		<= oreg(64)(1); --'1';
+	enable_A(9)		<= oreg(64)(2); --'0';
+	enable_A(10)	<= oreg(64)(3); --'0';
+	enable_A(11)	<= oreg(64)(3); --'0';
+	enable_A(12)	<= oreg(64)(4); --'1';
+	enable_A(13)	<= oreg(64)(5); --'1';
 
-	enable_A(14)	<= oreg(16)(0); --'0';
-	enable_A(15)	<= oreg(16)(1); --'1';
-	enable_A(16)	<= oreg(16)(2); --'0';
-	enable_A(17)	<= oreg(16)(3); --'0';
-	enable_A(18)	<= oreg(16)(3); --'0';
-	enable_A(19)	<= oreg(16)(4); --'1';
-	enable_A(20)	<= oreg(16)(5); --'1';
+	enable_A(14)	<= oreg(65)(0); --'0';
+	enable_A(15)	<= oreg(65)(1); --'1';
+	enable_A(16)	<= oreg(65)(2); --'0';
+	enable_A(17)	<= oreg(65)(3); --'0';
+	enable_A(18)	<= oreg(65)(3); --'0';
+	enable_A(19)	<= oreg(65)(4); --'1';
+	enable_A(20)	<= oreg(65)(5); --'1';
 
-	enable_A(21)	<= oreg(17)(0); --'0';
-	enable_A(22)	<= oreg(17)(1); --'1';
-	enable_A(23)	<= oreg(17)(2); --'0';
-	enable_A(24)	<= oreg(17)(3); --'0';
-	enable_A(25)	<= oreg(17)(3); --'0';
-	enable_A(26)	<= oreg(17)(4); --'1';
-	enable_A(27)	<= oreg(17)(5); --'1';
+	enable_A(21)	<= oreg(66)(0); --'0';
+	enable_A(22)	<= oreg(66)(1); --'1';
+	enable_A(23)	<= oreg(66)(2); --'0';
+	enable_A(24)	<= oreg(66)(3); --'0';
+	enable_A(25)	<= oreg(66)(3); --'0';
+	enable_A(26)	<= oreg(66)(4); --'1';
+	enable_A(27)	<= oreg(66)(5); --'1';
 	
-	ireg(11)(0) <= tdc_ef1;  -- TEMPORARIO BY HERMAN EM 21/09/12
 
 	--
 	-- Transfer Enable: 
@@ -1238,7 +1254,7 @@ begin
 	-- Slot Transfer Size:
 	transfer(0)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(1)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(2)		<= oreg(12)(6 downto 0); --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(2)		<= oreg(2)(6 downto 0); -- This register is the ADC's Event Size (in samples) per trigger.
 	transfer(3)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(4)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(5)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
@@ -1246,7 +1262,7 @@ begin
 
 	transfer(7)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(8)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(9)		<= oreg(12)(6 downto 0); --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(9)		<= oreg(2)(6 downto 0); -- This register is the ADC's Event Size (in samples) per trigger.
 	transfer(10)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(11)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(12)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
@@ -1254,7 +1270,7 @@ begin
 
 	transfer(14)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(15)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(16)	<= oreg(12)(6 downto 0); --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(16)	<= oreg(2)(6 downto 0); -- This register is the ADC's Event Size (in samples) per trigger.
 	transfer(17)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(18)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(19)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
@@ -1262,13 +1278,17 @@ begin
 
 	transfer(21)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(22)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(23)	<= oreg(12)(6 downto 0); --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, NumBits(transfer_max));
+	transfer(23)	<= oreg(2)(6 downto 0); -- This register is the ADC's Event Size (in samples) per trigger.
 	transfer(24)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(25)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(26)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(27)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 
-	-- Slot Address:
+	-- Slot Address (Where the SLOT should be copied to):
+	-- '0' -> IDT FIFO 1
+	-- '1' -> IDT FIFO 2
+	-- '2' -> IDT FIFO 3
+	-- '3' -> IDT FIFO 4
 	address(0)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
 	address(1)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
 	address(2)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
