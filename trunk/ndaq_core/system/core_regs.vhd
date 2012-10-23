@@ -116,7 +116,7 @@ package core_regs is
 
 		--
 		(x"27",	true,	true,	false,	x"00"),	-- 67 - R/W Test Register.
-		(x"28",	true,	true,	false,	x"46")	-- 68 - Firmware Version.
+		(x"28",	true,	true,	false,	x"47")	-- 68 - Firmware Version.
 	);
 
 -------------------------------------------------------------------------------

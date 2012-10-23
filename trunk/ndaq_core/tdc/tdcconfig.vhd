@@ -76,7 +76,6 @@ architecture one_tdcconfig of tdcconfig is
 
 	type sm_tdc is (sPowerUp, sIdle, sInitTDC, sCSN, sWRdown, sWRup, sInitEnd, sConfDone);
 	signal sm_TDCx : sm_tdc;
-	attribute syn_encoding : string;	-- Este atributo evita o travamento do projeto no SPRO
 	attribute syn_encoding of sm_tdc : type is "safe";
 		
 	-- Reset Counter

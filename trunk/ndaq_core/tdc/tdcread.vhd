@@ -28,6 +28,10 @@ entity tdcread is
 		signal itdc_irflag	: in	std_logic;	-- TDC Interrupt flag (active high)
 		signal itdc_ef1		: in	std_logic;	-- TDC FIFO-1 Empty flag (active high)
 		signal itdc_ef2 	: in	std_logic;	-- TDC FIFO-2 Empty flag (active high)
+
+		-- Operation Mode
+		signal mode			: in	std_logic; -- '0' for SINGLE, '1' for CONTINUOUS.
+
 		-- Readout FIFOs
 		signal channel_ef	: out	CTDC_T;
 		signal channel_rd	: in	CTDC_T;
@@ -61,7 +65,7 @@ architecture rtl of tdcread is
 	
 
 	-- Signals
-	type sm_tdc is (sIdle, sTestEFs, sSelectFIFO, sCSN, sRDdown, sRDup, sReadDone);
+	type sm_tdc is (sIdle, sTestEFs, sSelectFIFO, sCSN, sRDdown, sRDup, sReadDone, sTestData);
 	signal sm_TDCx : sm_tdc;
 	attribute syn_encoding : string;
 	attribute syn_encoding of sm_tdc : type is "safe";
@@ -85,6 +89,8 @@ architecture rtl of tdcread is
 	signal rtdc_ef1 		: std_logic := '1';
 	signal rtdc_ef2 		: std_logic := '1';
 	signal rtdc_irflag 		: std_logic := '0';
+	
+	signal ResetCounter		: std_logic_vector(3 downto 0) := x"0";
 	
 --
 --
@@ -125,9 +131,9 @@ begin
 	end process;
 	
 	
-	----------------------
-	-- TDC data readout --
-	----------------------
+	--------------------------
+	-- TDC data readout FSM --
+	--------------------------
 	process (rst, clk, enable_read, fifo2_issue) begin
 		if (rst = '1') then
 			otdc_ADR <= "0000";
@@ -138,6 +144,8 @@ begin
 			sm_TDCx <= sIdle;
 			otdc_alutr <= '0';
 			fifo2_issue	<= '0';
+
+			
 		elsif (clk'event and clk = '1') then
 			case sm_TDCx is
 				
@@ -151,16 +159,23 @@ begin
 					otdc_alutr <= '0';
 					selected_fifo <= '0';
 
-					-- Se a IRflag estiver em nivel baixo, espere nesse estado.
-					if rtdc_irflag = '0' then
-						sm_TDCx <= sIdle;
-					-- Se a IRflag estiver em nivel alto, significa que a janela de tempo acabou e a medição pode ser lida.
-					else
+					
+					-- Se o modo for o CONTINUOUS (mode = '1') não há teste do MTimer. 
+					if (mode = '1') then
 						sm_TDCx <= sSelectFIFO;
+					-- Caso contrário, se o modo for o SINGLE (mode = '0') o teste do MTimer é feito a seguir:
+					else
+						-- Se a IRflag estiver em nivel baixo (MTimer ainda não acabou), espere nesse estado.
+						if (rtdc_irflag = '0') then
+							sm_TDCx <= sIdle;
+						-- Se a IRflag estiver em nivel alto, significa que a janela de tempo acabou e a medição pode ser lida.
+						else
+							sm_TDCx <= sSelectFIFO;
+						end if;
 					end if;
 								
 				
-				-- Testa EF1 e EF2
+				-- Testa EF1, EF2 e 'enable_read'.
 				when sSelectFIFO =>
 					otdc_ADR <= "0000";
 					otdc_CSN <= '1';
@@ -169,22 +184,23 @@ begin
 					i_data_valid <= '0';
 					otdc_alutr <= '0';
 					
-					--
+					-- O sinal 'enable_read' fica inativo ('0') quando qualquer uma das 8 FIFOs de 
+					-- leitura do TDC (sintetizadas no FPGA) ficam cheias.
 					if (enable_read = '1') then	
 						--both fifos have data: read fifo1 and issue a fifo2 read for the next cycle.
-						if rtdc_ef1 = '0' and rtdc_ef2 = '0' and fifo2_issue = '0' then
+						if ((rtdc_ef1 = '0') and (rtdc_ef2 = '0') and (fifo2_issue = '0')) then
 							tdc_addr <= REG8;
 							selected_fifo <= '0';
 							fifo2_issue	<= '1';
 							sm_TDCx <= sCSN;
 						--fifo2 have data or fifo2 read issued: read fifo2.
-						elsif rtdc_ef2 = '0' or fifo2_issue = '1' then
+						elsif ((rtdc_ef2 = '0') or (fifo2_issue = '1')) then
 							tdc_addr <= REG9;
 							selected_fifo <= '1';
 							fifo2_issue	<= '0';
 							sm_TDCx <= sCSN;
 						--fifo1 have data: read fifo 1.
-						elsif rtdc_ef1 = '0' then
+						elsif (rtdc_ef1 = '0') then
 							tdc_addr <= REG8;
 							selected_fifo <= '0';
 							fifo2_issue	<= '0';
@@ -223,7 +239,7 @@ begin
 					oTDC_CSN <= '1';
 					oTDC_RDN <= '1';
 					--
-					i_data_valid <= '1';
+					i_data_valid <= '1';				-- Write Strobe for the 8 READOUT FIFOs (inside the FPGA)
 					sm_TDCx <= sReadDone;
 					otdc_alutr <= '0';
 				
@@ -233,19 +249,37 @@ begin
 					oTDC_CSN <= '1';
 					oTDC_RDN <= '1';
 					--
-					i_data_valid <= '0';				-- Data strobe indicating valid data
+					i_data_valid <= '0';
+					otdc_alutr <= '0';
+					
+					-- Se o modo for o CONTINUOUS (mode = '1'), deve-se simplesmente ler os dados disponíveis nas FIFOs do TDC. 
+					if (mode = '1') then
+						sm_TDCx <= sSelectFIFO;
+					-- Caso contrário, modo SINGLE, deve-se fazer o teste abaixo:
+					else
+						sm_TDCx <= sTestData;
+					end if;
+				
+				-- Testa se ainda há dados na FIFO 1 ou FIFO 2 do TDC.
+				when sTestData =>						
+					oTDC_ADR <= (others => 'Z');
+					oTDC_CSN <= '1';
+					oTDC_RDN <= '1';
+					--
+					i_data_valid <= '0';
 					otdc_alutr <= '0';
 					
 					-- Se ainda há dados nas FIFOs, o ciclo deve começar de novo sem Reset e
-					-- sem passar pelo testa da IRflag.
+					-- sem passar pelo teste do MTimber (via IRFlag no estado sIdle).
 					if ((rtdc_ef1 = '0') or (rtdc_ef2 = '0')) then
 						sm_TDCx <= sSelectFIFO;
 					-- Caso contrário, os resultados das duas FIFOs para uma janela de tempo já foram lidos.
 					-- Deve-se resetar e começar do 'sIdle'.
 					else
-						otdc_alutr <= '1'; 	-- TDC reset, keeping the contents of the configuration registers
+						otdc_alutr <= '1'; 	-- TDC reset (via ALU Trigger pin), keeping the contents of the configuration registers.
 						sm_TDCx <= sIdle;
 					end if;
+										
 					
 				when others =>
 					oTDC_ADR <= (others => 'Z');
