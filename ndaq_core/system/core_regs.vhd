@@ -8,7 +8,7 @@ use ieee.std_logic_1164.all;
 package core_regs is
 
 	-- total system registers
-	constant num_regs			: integer := 69;
+	constant num_regs			: integer := 71;
 
 	type	SYS_REGS_STRUCT		is record
 			addr				: std_logic_vector(7 downto 0);
@@ -106,17 +106,19 @@ package core_regs is
 
 		(x"F0",	true,	true,	false,	x"00"),	-- 60 - TDC Configuration Latch.
 		(x"F1",	true,	true,	true,	x"00"),	-- 61 - TDC Configuration Latch Status.
+		(x"F2",	true,	true,	false,	x"00"),	-- 62 - TDC STOPs disable and Start Disable.
+		(x"F3",	true,	true,	false,	x"00"),	-- 63 - TDC Reset.
 
 		-- Databuilder
-		(x"40",	true,	true,	false,	x"00"),	-- 62 - DataBuilder's enable.
-		(x"41",	true,	true,	false,	x"00"),	-- 63 - DataBuilder's FIFO 1 Block Configuration.
-		(x"42",	true,	true,	false,	x"00"),	-- 64 - DataBuilder's FIFO 2 Block Configuration.
-		(x"43",	true,	true,	false,	x"00"),	-- 65 - DataBuilder's FIFO 3 Block Configuration.
-		(x"44",	true,	true,	false,	x"00"),	-- 66 - DataBuilder's FIFO 4 Block Configuration.
+		(x"40",	true,	true,	false,	x"00"),	-- 64 - DataBuilder's enable.
+		(x"41",	true,	true,	false,	x"00"),	-- 65 - DataBuilder's FIFO 1 Block Configuration.
+		(x"42",	true,	true,	false,	x"00"),	-- 66 - DataBuilder's FIFO 2 Block Configuration.
+		(x"43",	true,	true,	false,	x"00"),	-- 67 - DataBuilder's FIFO 3 Block Configuration.
+		(x"44",	true,	true,	false,	x"00"),	-- 68 - DataBuilder's FIFO 4 Block Configuration.
 
 		--
-		(x"27",	true,	true,	false,	x"00"),	-- 67 - R/W Test Register.
-		(x"28",	true,	true,	false,	x"47")	-- 68 - Firmware Version.
+		(x"27",	true,	true,	false,	x"00"),	-- 69 - R/W Test Register.
+		(x"28",	true,	true,	false,	x"48")	-- 70 - Firmware Version.
 	);
 
 -------------------------------------------------------------------------------
