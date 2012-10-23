@@ -89,11 +89,10 @@ architecture rtl of tdcread is
 	signal rtdc_ef1 		: std_logic := '1';
 	signal rtdc_ef2 		: std_logic := '1';
 	signal rtdc_irflag 		: std_logic := '0';
-	
-	signal ResetCounter		: std_logic_vector(3 downto 0) := x"0";
-	
+		
 --
 --
+
 begin	
 	--------------------------------------------------
 	-- Read Enable Based on Readout FIFOs Full Flag --

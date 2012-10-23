@@ -1039,13 +1039,13 @@ begin
 		-- TDC interface --
 		-------------------
 		iotdc_data		=> tdc_data,
-		otdc_stopdis	=> tdc_stop_dis,
-		tdc_start_dis 	=> tdc_start_dis,
+		otdc_stopdis	=> open,		-- acessado por um registrador.
+		tdc_start_dis 	=> open,		-- acessado por um registrador.	
 		otdc_rdn		=> tdc_rdn,
 		otdc_wrn		=> tdc_wrn,
 		otdc_csn	 	=> tdc_csn,
 		otdc_alutr	 	=> tdc_alutr,
-		otdc_puresn	 	=> tdc_puresn,
+		otdc_puresn	 	=> open,		-- acessado por um registrador.
 		tdc_oen		 	=> tdc_oen,
 		otdc_adr		=> tdc_adr,
 		itdc_irflag	 	=> tdc_irflag,
@@ -1076,6 +1076,19 @@ begin
 		tdc_reg_array(i) <= oreg(15+i*4)(3 downto 0) & oreg(14+i*4) & oreg(13+i*4) & oreg(12+i*4);
 	end generate tdc_registers_construct;
 	
+	-- TDC STOPs Disable acessado através de um registrador para ser controlado por software:
+	tdc_stop_dis(1) <= oreg(62)(0);
+	tdc_stop_dis(2) <= oreg(62)(1);
+	tdc_stop_dis(3) <= oreg(62)(2);
+	tdc_stop_dis(4) <= oreg(62)(3);
+	
+	-- TDC START Disable acessado através de um registrador para ser controlado por software:
+	tdc_start_dis <= oreg(62)(4);
+	
+	-- TDC Reset acessado através de um registrador para ser controlado por software:
+	-- É negado por ser ativo em nível baixo.
+	tdc_puresn <= not(oreg(63)(0)); 
+	
 -- ******************************* DATA BUILDER *******************************
 
 	--
@@ -1088,7 +1101,7 @@ begin
 		clk							=> dclk,
 		
 		--
-		enable						=> oreg(62)(0),
+		enable						=> oreg(64)(0),
 		
 		--
 		enable_A					=> enable_A,
@@ -1149,37 +1162,37 @@ begin
 
 	--
 	-- Slot Enable: '1' for enable.
-	enable_A(0)		<= oreg(63)(0); --'0';					-- Header
-	enable_A(1)		<= oreg(63)(1); --'1';					-- Timestamp
-	enable_A(2)		<= oreg(63)(2); --'0';					-- ADC
-	enable_A(3)		<= oreg(63)(3); --'0';					-- TDC
-	enable_A(4)		<= oreg(63)(3); --'0';					-- TDC
-	enable_A(5)		<= oreg(63)(4); --'1';					-- Trigger Counter
-	enable_A(6)		<= oreg(63)(5); --'1';					-- Trigger Counter
+	enable_A(0)		<= oreg(65)(0); --'0';					-- Header
+	enable_A(1)		<= oreg(65)(1); --'1';					-- Timestamp
+	enable_A(2)		<= oreg(65)(2); --'0';					-- ADC
+	enable_A(3)		<= oreg(65)(3); --'0';					-- TDC
+	enable_A(4)		<= oreg(65)(3); --'0';					-- TDC
+	enable_A(5)		<= oreg(65)(4); --'1';					-- Trigger Counter
+	enable_A(6)		<= oreg(65)(5); --'1';					-- Trigger Counter
 
-	enable_A(7)		<= oreg(64)(0); --'0';
-	enable_A(8)		<= oreg(64)(1); --'1';
-	enable_A(9)		<= oreg(64)(2); --'0';
-	enable_A(10)	<= oreg(64)(3); --'0';
-	enable_A(11)	<= oreg(64)(3); --'0';
-	enable_A(12)	<= oreg(64)(4); --'1';
-	enable_A(13)	<= oreg(64)(5); --'1';
+	enable_A(7)		<= oreg(66)(0); --'0';
+	enable_A(8)		<= oreg(66)(1); --'1';
+	enable_A(9)		<= oreg(66)(2); --'0';
+	enable_A(10)	<= oreg(66)(3); --'0';
+	enable_A(11)	<= oreg(66)(3); --'0';
+	enable_A(12)	<= oreg(66)(4); --'1';
+	enable_A(13)	<= oreg(66)(5); --'1';
 
-	enable_A(14)	<= oreg(65)(0); --'0';
-	enable_A(15)	<= oreg(65)(1); --'1';
-	enable_A(16)	<= oreg(65)(2); --'0';
-	enable_A(17)	<= oreg(65)(3); --'0';
-	enable_A(18)	<= oreg(65)(3); --'0';
-	enable_A(19)	<= oreg(65)(4); --'1';
-	enable_A(20)	<= oreg(65)(5); --'1';
+	enable_A(14)	<= oreg(67)(0); --'0';
+	enable_A(15)	<= oreg(67)(1); --'1';
+	enable_A(16)	<= oreg(67)(2); --'0';
+	enable_A(17)	<= oreg(67)(3); --'0';
+	enable_A(18)	<= oreg(67)(3); --'0';
+	enable_A(19)	<= oreg(67)(4); --'1';
+	enable_A(20)	<= oreg(67)(5); --'1';
 
-	enable_A(21)	<= oreg(66)(0); --'0';
-	enable_A(22)	<= oreg(66)(1); --'1';
-	enable_A(23)	<= oreg(66)(2); --'0';
-	enable_A(24)	<= oreg(66)(3); --'0';
-	enable_A(25)	<= oreg(66)(3); --'0';
-	enable_A(26)	<= oreg(66)(4); --'1';
-	enable_A(27)	<= oreg(66)(5); --'1';
+	enable_A(21)	<= oreg(68)(0); --'0';
+	enable_A(22)	<= oreg(68)(1); --'1';
+	enable_A(23)	<= oreg(68)(2); --'0';
+	enable_A(24)	<= oreg(68)(3); --'0';
+	enable_A(25)	<= oreg(68)(3); --'0';
+	enable_A(26)	<= oreg(68)(4); --'1';
+	enable_A(27)	<= oreg(68)(5); --'1';
 	
 
 	--
