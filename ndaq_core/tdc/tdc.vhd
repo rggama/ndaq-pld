@@ -66,6 +66,7 @@ entity tdc is
 		-----------------
 		signal start_conf		: in	std_logic;	-- Start the configuration machine (active high pulse with 2-periods width)
 		signal conf_done		: out	std_logic;
+		signal mode				: in	std_logic;	-- Operation Mode: '0' for SINGLE, '1' for CONTINUOUS.
 		signal otdc_data		: out	std_logic_vector(27 downto 0);
 		signal channel_ef		: out	CTDC_T;
 		signal channel_rd		: in	CTDC_T;
@@ -123,6 +124,8 @@ architecture one_tdc of tdc is
 		signal itdc_irflag	: in	std_logic;	-- TDC Interrupt flag (active high)
 		signal itdc_ef1		: in	std_logic;	-- TDC FIFO-1 Empty flag (active high)
 		signal itdc_ef2 	: in	std_logic;	-- TDC FIFO-2 Empty flag (active high)
+		-- Operation Mode
+		signal mode			: in	std_logic; -- '0' for SINGLE, '1' for CONTINUOUS.
 		-- Readout FIFOs
 		signal channel_ef	: out	CTDC_T;
 		signal channel_rd	: in	CTDC_T;
@@ -190,6 +193,7 @@ begin
 		itdc_ef1		=> itdc_ef1, 
 		itdc_ef2 		=> itdc_ef2,
 		
+		mode			=> mode,
 		channel_ef		=> channel_ef,
 		channel_rd		=> channel_rd,
 		channel_out		=> channel_out

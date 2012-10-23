@@ -342,7 +342,7 @@ architecture rtl of ndaq_core is
 		signal e				: out	std_logic;	--empty flag
 
 		signal rdusedw			: out	USEDW_T;	-- used words sync'ed to read clock
-		signal wrusedw			: out	USEDW_T	-- used words sync'ed to write clock
+		signal wrusedw			: out	USEDW_T		-- used words sync'ed to write clock
 	);
 	end component;
 
@@ -378,6 +378,7 @@ architecture rtl of ndaq_core is
 		signal conf_done		: out	std_logic;
 		signal start_conf		: in	std_logic;
 		signal otdc_data		: out	std_logic_vector(27 downto 0);
+		signal mode				: in	std_logic;	-- Operation Mode: '0' for SINGLE, '1' for CONTINUOUS.
 		signal channel_ef		: out	CTDC_T;
 		signal channel_rd		: in	CTDC_T;
 		signal channel_out		: out	OTDC_A;
@@ -1055,7 +1056,8 @@ begin
 		-- TDC control --
 		-----------------
 		start_conf		=> oreg(60)(0),			-- Start the configuration machine (active high pulse with 2-periods width)
-		conf_done		=> ireg(61)(0),			
+		conf_done		=> ireg(61)(0),	
+		mode			=> oreg(60)(7),
 		otdc_data		=> open,
 		channel_ef		=> tdc_ef,
 		channel_rd		=> tdc_rd,
