@@ -31,7 +31,7 @@ package core_regs is
 		-- ACQ
 		(x"80",	true,	true,	false,	x"00"),	-- 01 - ACQ Enables. 
 		(x"81",	true,	true,	false,	x"1D"),	-- 02 - ADC Event Size Per Trigger.
-		(x"87",	true,	true,	false,	x"0F"),	-- 03 - ADC Power.
+		(x"87",	true,	true,	false,	x"00"),	-- 03 - ADC Power (Powered down by default).
 		(x"89",	true,	true,	false,	x"00"),	-- 04 - ACQ Reset (Also Internal/External FIFOs Reset).
 
 		-- Trigger
