@@ -71,28 +71,28 @@
 --    external        = true  => mapping used with user bus, false => used in same device (user_data_in/out)
 --							 = TRADUCAO: tem que ser 'true' para que um dispositivo externo possa usar o barramento de dados
 --												VME diretamente, sem os dados passarem por dentro desta FPGA.
-
+-- LF: Shift all address one number to the right (00300 -> 00030) to test inside the NuDAQ
 
 
 --    base address, window size (mask), AM_SGL,AM_BLT,DTACK (positive number means number of BCs to generate DTACK)
 
-		((x"00100000", x"00F00000", x"09", x"0B", 0, true),  -- 00 - FIFO 1		  		// USED TO u_read(0) or u_write(0)
-		 (x"00200000", x"00F00000", x"09", x"0B", 0, true),  -- 01 - FIFO 2		  		// USED TO u_read(1) or u_write(1)
-		 (x"00300000", x"00F00000", x"09", x"0B", 0, true),  -- 02 - FIFO 3		  		// USED TO u_read(2) or u_write(2)
-		 (x"00400000", x"00F00000", x"09", x"0B", 0, true),  -- 03 - FIFO 4		  		// USED TO u_read(3) or u_write(3)
+		((x"00010000", x"000F0000", x"09", x"0B", 0, true),  -- 00 - FIFO 1 -> LF change 11/2012 // USED TO u_read(0) or u_write(0)
+		 (x"00020000", x"000F0000", x"09", x"0B", 0, true),  -- 01 - FIFO 2 -> LF change 11/2012 // USED TO u_read(1) or u_write(1)
+		 (x"00030000", x"000F0000", x"09", x"0B", 0, true),  -- 02 - FIFO 3 -> LF change 11/2012 // USED TO u_read(2) or u_write(2)
+		 (x"00040000", x"000F0000", x"09", x"0B", 0, true),  -- 03 - FIFO 4 -> LF change 11/2012 // USED TO u_read(3) or u_write(3)
 			
-		 (x"00500000", x"00F00000", x"09", x"0B", 0, false), -- 04 - FIFO Flags	  		// USED TO u_read(4) or u_write(4)
+		 (x"00050000", x"000F0000", x"09", x"0B", 0, false), -- 04 - FIFO Flags	  		// USED TO u_read(4) or u_write(4)
 
-		 (x"00600000", x"00F00000", x"09", x"0B", 0, false), -- 05 - SPI Data	  		// USED TO u_read(5) or u_write(5)
-		 (x"00700000", x"00F00000", x"09", x"0B", 0, false), -- 06 - SPI Status	  		// USED TO u_read(6) or u_write(6)
+		 (x"00060000", x"000F0000", x"09", x"0B", 0, false), -- 05 - SPI Data	  		// USED TO u_read(5) or u_write(5)
+		 (x"00070000", x"000F0000", x"09", x"0B", 0, false), -- 06 - SPI Status	  		// USED TO u_read(6) or u_write(6)
 
-		 (x"00800000", x"00F00000", x"09", x"0B", 0, false), -- 07 - R/W Test	  		// USED TO u_read(7) or u_write(7)
+		 (x"00080000", x"000F0000", x"09", x"0B", 0, false), -- 07 - R/W Test	  		// USED TO u_read(7) or u_write(7)
 
-		 (x"00900000", x"00F00000", x"09", x"0B", 0, false), -- 08 - Firmware Version	// USED TO u_read(8) or u_write(8)
+		 (x"00090000", x"000F0000", x"09", x"0B", 0, false), -- 08 - Firmware Version	// USED TO u_read(8) or u_write(8)
 
-		 (x"00A00000", x"00F00000", x"09", x"0B", 0, false), -- 09 - Reset Register		// USED TO u_read(9) or u_write(9)
+		 (x"000A0000", x"000F0000", x"09", x"0B", 0, false), -- 09 - Reset Register		// USED TO u_read(9) or u_write(9)
 
-		 (x"00B00000", x"00F00000", x"09", x"0B", 0, false), -- 10 - Reset Register		// USED TO u_read(10) or u_write(10)
+		 (x"000B0000", x"000F0000", x"09", x"0B", 0, false), -- 10 - Reset Register		// USED TO u_read(10) or u_write(10)
 																			
 		 (x"00000000", x"00000000", x"09", x"0B", -1, true),  -- NOT USED 
 		 (x"00000000", x"00000000", x"09", x"0B", -1, true),  -- NOT USED 
