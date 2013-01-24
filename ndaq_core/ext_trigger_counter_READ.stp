@@ -1,0 +1,265 @@
+<session jtag_chain="USB-Blaster [USB-0]" jtag_device="@1: EP3C40/EP4CE(30|40) (0x020F40DD)" sof_file="ndaq_core.sof">
+  <display_tree gui_logging_enabled="0">
+    <display_branch instance="auto_signaltap_0" log="USE_GLOBAL_TEMP" signal_set="USE_GLOBAL_TEMP" trigger="USE_GLOBAL_TEMP"/>
+  </display_tree>
+  <instance entity_name="sld_signaltap" is_auto_node="yes" is_expanded="true" name="auto_signaltap_0" source_file="sld_signaltap.vhd">
+    <node_ip_info instance_id="0" mfg_id="110" node_id="0" version="6"/>
+    <signal_set global_temp="1" is_expanded="true" name="signal_set: 2013/01/23 18:56:50  #0">
+      <clock name="core_clkman:clock_manager|core_pll:core_pll_inst|c1" polarity="posedge" tap_mode="classic"/>
+      <config ram_type="M4K" reserved_data_nodes="0" reserved_storage_qualifier_nodes="0" reserved_trigger_nodes="0" sample_depth="256" trigger_in_enable="yes" trigger_in_node="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|rdreq" trigger_in_tap_mode="classic" trigger_out_enable="no"/>
+      <top_entity/>
+      <signal_vec>
+        <trigger_input_vec>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|rdempty" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|rdreq" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|wrfull" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|wrreq" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[28]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[29]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[30]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[31]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[9]" tap_mode="classic" type="combinatorial"/>
+        </trigger_input_vec>
+        <data_input_vec>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|rdempty" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|rdreq" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|wrfull" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|wrreq" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[28]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[29]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[30]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[31]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[9]" tap_mode="classic" type="combinatorial"/>
+        </data_input_vec>
+        <storage_qualifier_input_vec>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|rdempty" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|rdreq" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|wrfull" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|wrreq" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[28]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[29]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[30]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[31]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[9]" tap_mode="classic" type="combinatorial"/>
+        </storage_qualifier_input_vec>
+      </signal_vec>
+      <presentation>
+        <data_view>
+          <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|rdreq"/>
+          <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|rdempty"/>
+          <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|wrreq"/>
+          <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|wrfull"/>
+          <bus is_signal_inverted="no" link="all" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q" order="msb_to_lsb" radix="unsigned_dec" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[31]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[30]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[29]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[28]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[27]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[26]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[25]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[24]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[23]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[22]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[21]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[20]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[19]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[18]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[17]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[16]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[15]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[14]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[13]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[12]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[11]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[10]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[9]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[8]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[7]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[6]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[5]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[4]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[3]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[2]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[1]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[0]"/>
+          </bus>
+        </data_view>
+        <setup_view>
+          <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|rdreq"/>
+          <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|rdempty"/>
+          <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|wrreq"/>
+          <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|wrfull"/>
+          <bus is_signal_inverted="no" link="all" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q" order="msb_to_lsb" radix="unsigned_dec" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[31]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[30]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[29]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[28]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[27]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[26]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[25]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[24]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[23]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[22]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[21]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[20]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[19]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[18]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[17]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[16]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[15]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[14]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[13]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[12]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[11]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[10]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[9]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[8]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[7]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[6]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[5]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[4]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[3]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[2]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[1]"/>
+            <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|q[0]"/>
+          </bus>
+        </setup_view>
+      </presentation>
+      <trigger CRC="95B3F209" attribute_mem_mode="false" gap_record="true" global_temp="1" is_expanded="true" name="trigger: 2013/01/23 18:56:50  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="64" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="rising edge" trigger_out="active high" trigger_type="circular">
+        <power_up_trigger position="pre" storage_qualifier_disabled="no" trigger_in="dont_care" trigger_out="active high"/>
+        <events use_custom_flow_control="no">
+          <level enabled="yes" name="condition1" type="basic"><power_up enabled="yes">
+            </power_up><op_node/>
+          </level>
+        </events>
+        <storage_qualifier_events>
+          <transitional>000000000000000000000000000000000000
+            <pwr_up_transitional>000000000000000000000000000000000000</pwr_up_transitional>
+          </transitional>
+          <storage_qualifier_level type="basic">
+            <power_up>
+            </power_up>
+            <op_node/>
+          </storage_qualifier_level>
+          <storage_qualifier_level type="basic">
+            <power_up>
+            </power_up>
+            <op_node/>
+          </storage_qualifier_level>
+          <storage_qualifier_level type="basic">
+            <power_up>
+            </power_up>
+            <op_node/>
+          </storage_qualifier_level>
+        </storage_qualifier_events>
+        <log>
+          <data global_temp="1" name="log: 2013/01/23 20:36:13  #0" power_up_mode="false" sample_depth="255" trigger_position="-1">100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010100000000000000000000000001001010010000010000000000000000000000001001100</data>
+          <extradata>1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</extradata>
+        </log>
+      </trigger>
+    </signal_set>
+    <position_info>
+      <single attribute="active tab" value="0"/>
+      <single attribute="data horizontal scroll position" value="17"/>
+      <single attribute="data vertical scroll position" value="0"/>
+      <single attribute="zoom level denominator" value="1"/>
+      <single attribute="zoom level numerator" value="2"/>
+      <single attribute="zoom offset denominator" value="1"/>
+      <single attribute="zoom offset numerator" value="65408"/>
+    </position_info>
+  </instance>
+  <mnemonics/>
+  <static_plugin_mnemonics/>
+  <global_info>
+    <single attribute="active instance" value="0"/>
+    <single attribute="config widget visible" value="1"/>
+    <single attribute="data log widget visible" value="1"/>
+    <single attribute="hierarchy widget visible" value="1"/>
+    <single attribute="instance widget visible" value="1"/>
+    <single attribute="jtag widget visible" value="1"/>
+    <multi attribute="column width" size="23" value="34,34,309,74,68,70,88,88,98,98,88,88,110,101,101,101,101,101,101,101,101,107,78"/>
+    <multi attribute="frame size" size="2" value="1366,706"/>
+    <multi attribute="jtag widget size" size="2" value="334,120"/>
+  </global_info>
+</session>

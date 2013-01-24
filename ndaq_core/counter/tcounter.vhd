@@ -64,6 +64,12 @@ architecture rtl of tcounter is
 	signal r_timebase_en			: std_logic := '0';
 	signal s_timebase_en			: std_logic := '0';
 	
+	signal r_trigger_in				: std_logic := '0';
+	signal s_trigger_in				: std_logic := '0';
+	
+	signal incremented				: std_logic := '0';
+	signal r_incremented			: std_logic := '0';
+	
 --
 --
 	
@@ -81,6 +87,9 @@ begin
 		r_srst			<= '0';
 		r_timebase_en	<= '0';
 		s_timebase_en	<= '0';
+		--
+		incremented		<= '0';
+		r_incremented	<= '0';
 		
 	elsif (rising_edge(clk)) then  
 		--
@@ -88,6 +97,12 @@ begin
 		--
 		r_timebase_en <= timebase_en;
 		s_timebase_en <= r_timebase_en;
+		--
+		r_trigger_in <= trigger_in;
+		s_trigger_in <= r_trigger_in;
+		
+		--
+		r_incremented <= incremented;
 		
 		-- Synchronous Reset
 		if (r_srst = '1') then
@@ -95,7 +110,11 @@ begin
 		
 		elsif ((enable = '1') and (trigger_in = '1') and (s_timebase_en = '1')) then
 			i_counter	<= i_counter + 1;
-	
+			incremented <= '1';
+			
+		else
+			incremented <= '0';
+			
 		end if;			
 	end if;
 end process;
@@ -156,7 +175,8 @@ begin
 	elsif (rising_edge(clk)) then
 
 		--if ((timebase_en = '0') and (reg_wait = '0') and (fifo_full = '0')) then
-		if ((s_timebase_en = '1') and (reg_wait = '0') and (fifo_full = '0')) then
+		--if ((s_timebase_en = '1') and (reg_wait = '0') and (fifo_full = '0')) then
+		if ((r_incremented = '1') and (s_trigger_in = '1') and (fifo_full = '0')) then
 			fifo_wen	<= '1';
 		else
 			fifo_wen	<= '0';
