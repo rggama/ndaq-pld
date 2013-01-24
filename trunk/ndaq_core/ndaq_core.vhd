@@ -258,9 +258,8 @@ architecture rtl of ndaq_core is
 	(	
 		signal rst					: in	std_logic;
 		signal clk					: in	std_logic;
-		-- Timebase Generator
-		signal timebase_out			: out	std_logic;
-		signal fifowen_out			: out	std_logic;
+		--
+		signal trigger_in			: in	std_logic;
 		-- Timebase Counter
 		signal enable				: in	std_logic;
 		signal srst					: in	std_logic;
@@ -533,13 +532,10 @@ architecture rtl of ndaq_core is
 	signal fclk						: std_logic;
 	
 	-- Timebase
-	signal time_rd					: std_logic_vector(3 downto 0);
-	signal time_rd_comb				: std_logic;
+	signal time_rd					: std_logic;
 	signal time_ef					: std_logic;
-	signal time_q					: std_logic_vector(31 downto 0);
-	signal timebase_out				: std_logic;
-	signal fifowen_wire				: std_logic;
-	
+	signal time_q					: TCOUNTER_DATA_T; -- 32 bits
+
 	-- ACQ: ADC
 	signal timebase_en				: std_logic;
 	signal counter_en				: std_logic;
@@ -560,6 +556,7 @@ architecture rtl of ndaq_core is
 	signal int_trigger				: std_logic_vector((adc_channels-1) downto 0);
 	signal itrigger_sel				: std_logic;
 	signal acqin					: std_logic_vector((adc_channels-1) downto 0);
+	signal acq_lock					: std_logic;
 	signal usedw_event_size			: USEDW_T;
 
 	signal data						: F_DATA_WIDTH_T;	-- FIFOs input DATA bus vector
@@ -579,7 +576,7 @@ architecture rtl of ndaq_core is
 	signal tcounter_rd				: std_logic_vector((tcounter_channels-1) downto 0);
 	signal tcounter_ef				: std_logic_vector((tcounter_channels-1) downto 0);
 	signal tcounter_q				: TCOUNTER_DATA_A;
-	
+
 	-- Data Builder
 	signal	enable_A				: SLOTS_T;
 	signal	enable_B				: SLOTS_T;
@@ -814,8 +811,8 @@ begin
 
 	--
 	-- Enables
-	timebase_en		<= oreg(1)(0);	-- Enable the Timebase generator component.
-	counter_en		<= oreg(1)(1);	-- Enable the Internal Trigger Counter component.
+	timebase_en		<= oreg(1)(0) and not(acq_lock);	-- Enable the Timebase generator component.
+	counter_en		<= oreg(1)(1) and not(acq_lock);	-- Enable the Internal Trigger Counter component.
 	etrigger_en		<= oreg(1)(2);	-- Enable the External Trigger component.
 	itrigger_en		<= oreg(1)(3);	-- Enable the Internal Trigger component.
 	acq_en			<= oreg(1)(4);  -- Enable the 8 ADC interface component.
@@ -825,28 +822,10 @@ begin
 	acq_rst			<= oreg(4)(0);
 
 	--
-	-- Timebase Counter Read Enable Logic
-	time_rd_comb	<= time_rd(0) or time_rd(1) or time_rd(2) or time_rd(3);
-	
-	--
-	-- Timebase Generator
-	timebase_gen:
-	timebase port map
-	(	
-		rst					=> acq_rst,
-		clk					=> clkcore,
-		-- Timebase Generator
-		timebase_out		=> timebase_out,
-		fifowen_out			=> fifowen_wire,
-		-- Timebase Counter
-		enable				=> timebase_en,
-		srst				=> acq_rst,
-		rdclk				=> dclk,
-		rden				=> time_rd_comb,
-		fifo_empty			=> time_ef,
-		counter_q			=> time_q
-	);	
-
+	-- ACQ In(0..n) OR'ed is a lock signal. It means that the system is busy.
+	acq_lock <= acqin(0) or acqin(1) or acqin(2) or acqin(3) or
+			acqin(4) or acqin(5) or acqin(6) or acqin(7);
+			
 	--
 	-- ADC DCOs (Data Clock Outputs) assignements.
 	clk(0)		<= adc12_dco;
@@ -888,6 +867,45 @@ begin
 	-- Internal Trigger Channel Selector (8 to 1 mux)
 	itrigger_selector: itrigger_sel	<= int_trigger(conv_integer(oreg(5)(2 downto 0)));
 	
+	--
+	-- Main (not lockable) Trigger Counter
+	trigger_counter:
+	tcounter port map
+	(	
+		rst					=> acq_rst,
+		clk					=> clkcore,
+		-- Counter
+		trigger_in			=> c_trigger_a(0),
+		timebase_en			=> '1', --timebase_out,
+		enable				=> counter_en,
+		srst				=> acq_rst,
+		--
+		fifowen_in			=> '0',
+		--
+		rdclk				=> dclk,
+		rden				=> m_tcounter_rd,
+		fifo_empty			=> m_tcounter_ef,
+		counter_q			=> m_tcounter_q
+	);	
+
+		--
+	-- Timebase Generator
+	timebase_gen:
+	timebase port map
+	(	
+		rst					=> acq_rst,
+		clk					=> clkcore,
+		--
+		trigger_in			=> c_trigger_a(0),
+		-- Timebase Counter
+		enable				=> timebase_en,
+		srst				=> acq_rst,
+		rdclk				=> dclk,
+		rden				=> time_rd,
+		fifo_empty			=> time_ef,
+		counter_q			=> time_q
+	);			
+
 	-- Constroi os 8 canais de aquisicao
 	adc_data_acq_construct:
 	for i in 0 to (adc_channels-1) generate
@@ -927,10 +945,10 @@ begin
 		
 		--
 		-- Constructing the 10 bits Threshold registers.
-		thtemp1(9 downto 8) <= oreg(8)(1 downto 0);	-- high Th 1 reg
-		thtemp1(7 downto 0) <= oreg(7);				-- low Th 1 reg
+		thtemp1(9 downto 8) <= oreg(8)(1 downto 0);		-- high Th 1 reg
+		thtemp1(7 downto 0) <= oreg(7);					-- low Th 1 reg
 		thtemp2(9 downto 8) <= oreg(10)(1 downto 0);	-- high Th 2 reg
-		thtemp2(7 downto 0) <= oreg(9);				-- low Th 2 reg
+		thtemp2(7 downto 0) <= oreg(9);					-- low Th 2 reg
 
 		--
 		-- Internal Trigger Generator
@@ -956,19 +974,19 @@ begin
 			rst					=> acq_rst,
 			clk					=> clk(i),
 			-- Counter
-			trigger_in			=> int_trigger(i),
-			timebase_en			=> timebase_out,
+			trigger_in			=> c_trigger_a(i), --int_trigger(i),
+			timebase_en			=> '1', --timebase_out,
 			enable				=> counter_en,
 			srst				=> acq_rst,
 			--
-			fifowen_in			=> fifowen_wire,
+			fifowen_in			=> '0',
 			--
 			rdclk				=> dclk,
 			rden				=> tcounter_rd(i),
 			fifo_empty			=> tcounter_ef(i),
 			counter_q			=> tcounter_q(i)
 		);	
-		
+				
 		--
 		-- Controla a escrita nas POST FIFOs a partir de um 'trigger' condicionado
 		stream_IN:
@@ -1201,7 +1219,7 @@ begin
 	-- timestamp NOT empty let us go.
 	-- tdc NOT empty let us go.
 	-- tcounter NOT empty let us go.
-	enable_B(0)		<= even_enable(0) and odd_enable(0);
+	enable_B(0)		<= not(tcounter_ef(0)) or not(tcounter_ef(1)); --even_enable(0) and odd_enable(0);
 	enable_B(1)		<= not(time_ef);
 	enable_B(2)		<= even_enable(0) and odd_enable(0);
 	enable_B(3)		<= not(tdc_ef(0));
@@ -1209,24 +1227,24 @@ begin
 	enable_B(5)		<= not(tcounter_ef(0));
 	enable_B(6)		<= not(tcounter_ef(1));
 
-	enable_B(7)		<= even_enable(1) and odd_enable(1);
-	enable_B(8)		<= not(time_ef);
+	enable_B(7)		<= not(tcounter_ef(2)) or not(tcounter_ef(3)); --even_enable(1) and odd_enable(1);
+	enable_B(8)		<= '1'; --not(time_ef);
 	enable_B(9)		<= even_enable(1) and odd_enable(1);
 	enable_B(10)	<= not(tdc_ef(1));
 	enable_B(11)	<= not(tdc_ef(5));
 	enable_B(12)	<= not(tcounter_ef(2));
 	enable_B(13)	<= not(tcounter_ef(3));
 
-	enable_B(14)	<= even_enable(2) and odd_enable(2);
-	enable_B(15)	<= not(time_ef);
+	enable_B(14)	<= not(tcounter_ef(4)) or not(tcounter_ef(5)); --even_enable(2) and odd_enable(2);
+	enable_B(15)	<= '1'; --not(time_ef);
 	enable_B(16)	<= even_enable(2) and odd_enable(2);
 	enable_B(17)	<= not(tdc_ef(2));
 	enable_B(18)	<= not(tdc_ef(6));
 	enable_B(19)	<= not(tcounter_ef(4));
 	enable_B(20)	<= not(tcounter_ef(5));
 
-	enable_B(21)	<= even_enable(3) and odd_enable(3);
-	enable_B(22)	<= not(time_ef);
+	enable_B(21)	<= not(tcounter_ef(6)) or not(tcounter_ef(7)); --even_enable(3) and odd_enable(3);
+	enable_B(22)	<= '1'; --not(time_ef);
 	enable_B(23)	<= even_enable(3) and odd_enable(3); 
 	enable_B(24)	<= not(tdc_ef(3));
 	enable_B(25)	<= not(tdc_ef(7));
@@ -1371,32 +1389,32 @@ begin
 
 	-- Mode: '00' for non branch and '01' for branch and '10' for constant value.
 	mode(0)			<= "00";												--Header
-	mode(1)			<= "00";												--Timestamp
-	mode(2)			<= "00";												--ADC
+	mode(1)			<= "10";												--Timestamp
+	mode(2)			<= "10";												--ADC
 	mode(3)			<= "10";												--TDC
 	mode(4)			<= "10";												--TDC
 	mode(5)			<= "10";												--Trigger Counter
 	mode(6)			<= "10";												--Trigger Counter
 	
 	mode(7)			<= "00";
-	mode(8)			<= "00";
-	mode(9)			<= "00";
+	mode(8)			<= "10";
+	mode(9)			<= "10";
 	mode(10)		<= "10";
 	mode(11)		<= "10";
 	mode(12)		<= "10";
 	mode(13)		<= "10";
 	
 	mode(14)		<= "00";
-	mode(15)		<= "00";
-	mode(16)		<= "00";
+	mode(15)		<= "10";
+	mode(16)		<= "10";
 	mode(17)		<= "10";
 	mode(18)		<= "10";
 	mode(19)		<= "10";
 	mode(20)		<= "10";
 	
 	mode(21)		<= "00";
-	mode(22)		<= "00";
-	mode(23)		<= "00";
+	mode(22)		<= "10";
+	mode(23)		<= "10";
 	mode(24)		<= "10";
 	mode(25)		<= "10";
 	mode(26)		<= "10";
@@ -1438,7 +1456,7 @@ begin
 	--*******************************************************************************
 	
 	-- Header		<= db_rd(0);
-	time_rd(0)		<= db_rd(1);
+	time_rd			<= db_rd(1);
 	rd(0)			<= db_rd(2);
 	rd(1)			<= db_rd(2);
 	tdc_rd(0)		<= db_rd(3);
@@ -1447,7 +1465,7 @@ begin
 	tcounter_rd(1)	<= db_rd(6);
 
 	-- Header		<= db_rd(7);
-	time_rd(1)		<= db_rd(8);
+	-- Time			<= db_rd(8);
 	rd(2)			<= db_rd(9);
 	rd(3)			<= db_rd(9);
 	tdc_rd(1)		<= db_rd(10);
@@ -1456,7 +1474,7 @@ begin
 	tcounter_rd(3)	<= db_rd(13);
 
 	-- Header		<= db_rd(14);
-	time_rd(2)		<= db_rd(15);
+	-- Time			<= db_rd(15);
 	rd(4)			<= db_rd(16);
 	rd(5)			<= db_rd(16);	
 	tdc_rd(2)		<= db_rd(17);
@@ -1465,14 +1483,14 @@ begin
 	tcounter_rd(5)	<= db_rd(20);
 	
 	-- Header		<= db_rd(21);
-	time_rd(3)		<= db_rd(22);
+	-- Time			<= db_rd(22);
 	rd(6)			<= db_rd(23);
 	rd(7)			<= db_rd(23);
 	tdc_rd(3)		<= db_rd(24);
 	tdc_rd(7)		<= db_rd(25);
 	tcounter_rd(6)	<= db_rd(26);
 	tcounter_rd(7)	<= db_rd(27);
-
+	
 	--*******************************************************************************
 
 	-- 'fifo_wen' is active low.

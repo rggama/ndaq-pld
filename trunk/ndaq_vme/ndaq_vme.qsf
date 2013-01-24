@@ -28,7 +28,7 @@ set_global_assignment -name DEVICE EP3C25F324C8
 set_global_assignment -name TOP_LEVEL_ENTITY ndaq_vme
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 8.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "15:07:41  NOVEMBER 26, 2008"
-set_global_assignment -name LAST_QUARTUS_VERSION "10.1 SP1"
+set_global_assignment -name LAST_QUARTUS_VERSION 12.1
 set_global_assignment -name USE_GENERATED_PHYSICAL_CONSTRAINTS OFF -section_id eda_blast_fpga
 set_global_assignment -name DEVICE_FILTER_PIN_COUNT 324
 set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 8

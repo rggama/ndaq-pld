@@ -1,0 +1,638 @@
+<session jtag_chain="USB-Blaster [USB-0]" jtag_device="@1: EP3C40/EP4CE(30|40) (0x020F40DD)" sof_file="ndaq_core.sof">
+  <display_tree gui_logging_enabled="0">
+    <display_branch instance="auto_signaltap_0" log="USE_GLOBAL_TEMP" signal_set="USE_GLOBAL_TEMP" trigger="USE_GLOBAL_TEMP"/>
+  </display_tree>
+  <instance entity_name="sld_signaltap" is_auto_node="yes" is_expanded="true" name="auto_signaltap_0" source_file="sld_signaltap.vhd">
+    <node_ip_info instance_id="0" mfg_id="110" node_id="0" version="6"/>
+    <position_info>
+      <single attribute="active tab" value="0"/>
+      <single attribute="data horizontal scroll position" value="224"/>
+      <single attribute="data vertical scroll position" value="0"/>
+      <single attribute="zoom level denominator" value="1"/>
+      <single attribute="zoom level numerator" value="8"/>
+      <single attribute="zoom offset denominator" value="1"/>
+      <single attribute="zoom offset numerator" value="16352"/>
+      <multi attribute="timebars" size="1" value="256"/>
+    </position_info>
+    <signal_set global_temp="1" name="signal_set: 2013/01/23 19:32:12  #0">
+      <clock name="core_clkman:clock_manager|core_pll:core_pll_inst|c1" polarity="posedge" tap_mode="classic"/>
+      <config ram_type="M4K" reserved_data_nodes="0" reserved_storage_qualifier_nodes="0" reserved_trigger_nodes="0" sample_depth="256" trigger_in_enable="yes" trigger_in_node="databuilder:data_builder|wrs" trigger_in_tap_mode="classic" trigger_out_enable="no"/>
+      <top_entity/>
+      <signal_vec>
+        <trigger_input_vec>
+          <wire name="databuilder:data_builder|odata[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[28]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[29]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[30]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[31]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rds" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|s_counter[0]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|s_counter[1]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|s_counter[2]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|s_counter[3]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|s_counter[4]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[0]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[1]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[2]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[3]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[4]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[5]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[6]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|wr[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|wr[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|wr[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|wr[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|wrs" tap_mode="classic" type="register"/>
+        </trigger_input_vec>
+        <data_input_vec>
+          <wire name="databuilder:data_builder|odata[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[28]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[29]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[30]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[31]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rds" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|s_counter[0]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|s_counter[1]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|s_counter[2]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|s_counter[3]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|s_counter[4]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[0]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[1]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[2]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[3]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[4]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[5]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[6]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|wr[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|wr[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|wr[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|wr[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|wrs" tap_mode="classic" type="register"/>
+        </data_input_vec>
+        <storage_qualifier_input_vec>
+          <wire name="databuilder:data_builder|odata[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[28]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[29]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[30]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[31]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|odata[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rd[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rda[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|rds" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|s_counter[0]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|s_counter[1]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|s_counter[2]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|s_counter[3]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|s_counter[4]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[0]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[1]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[2]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[3]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[4]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[5]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|t_counter[6]" tap_mode="classic" type="register"/>
+          <wire name="databuilder:data_builder|wr[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|wr[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|wr[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|wr[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="databuilder:data_builder|wrs" tap_mode="classic" type="register"/>
+        </storage_qualifier_input_vec>
+      </signal_vec>
+      <presentation>
+        <data_view>
+          <bus is_signal_inverted="no" link="all" name="databuilder:data_builder|odata" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[31]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[30]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[29]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[28]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[27]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[26]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[25]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[24]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[23]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[22]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[21]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[20]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[19]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[18]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[17]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[16]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[15]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[14]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[13]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[12]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[11]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[10]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[9]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[8]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[7]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[6]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[5]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[4]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[3]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[2]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[1]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="databuilder:data_builder|rd" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[27]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[26]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[25]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[24]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[23]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[22]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[21]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[20]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[19]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[18]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[17]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[16]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[15]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[14]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[13]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[12]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[11]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[10]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[9]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[8]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[7]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[6]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[5]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[4]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[3]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[2]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[1]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="databuilder:data_builder|rda" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[27]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[26]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[25]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[24]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[23]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[22]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[21]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[20]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[19]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[18]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[17]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[16]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[15]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[14]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[13]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[12]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[11]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[10]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[9]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[8]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[7]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[6]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[5]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[4]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[3]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[2]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[1]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="databuilder:data_builder|wr" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="databuilder:data_builder|wr[3]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|wr[2]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|wr[1]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|wr[0]"/>
+          </bus>
+          <net is_signal_inverted="no" name="databuilder:data_builder|wrs"/>
+          <net is_signal_inverted="no" name="databuilder:data_builder|rds"/>
+          <bus is_signal_inverted="no" link="all" name="databuilder:data_builder|s_counter" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="databuilder:data_builder|s_counter[4]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|s_counter[3]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|s_counter[2]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|s_counter[1]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|s_counter[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="databuilder:data_builder|t_counter" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="databuilder:data_builder|t_counter[6]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|t_counter[5]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|t_counter[4]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|t_counter[3]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|t_counter[2]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|t_counter[1]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|t_counter[0]"/>
+          </bus>
+        </data_view>
+        <setup_view>
+          <bus is_signal_inverted="no" link="all" name="databuilder:data_builder|odata" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[31]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[30]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[29]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[28]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[27]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[26]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[25]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[24]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[23]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[22]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[21]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[20]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[19]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[18]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[17]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[16]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[15]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[14]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[13]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[12]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[11]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[10]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[9]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[8]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[7]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[6]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[5]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[4]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[3]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[2]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[1]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|odata[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="databuilder:data_builder|rd" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[27]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[26]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[25]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[24]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[23]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[22]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[21]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[20]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[19]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[18]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[17]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[16]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[15]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[14]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[13]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[12]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[11]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[10]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[9]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[8]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[7]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[6]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[5]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[4]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[3]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[2]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[1]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rd[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="databuilder:data_builder|rda" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[27]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[26]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[25]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[24]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[23]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[22]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[21]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[20]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[19]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[18]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[17]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[16]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[15]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[14]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[13]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[12]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[11]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[10]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[9]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[8]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[7]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[6]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[5]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[4]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[3]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[2]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[1]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|rda[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="databuilder:data_builder|wr" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="databuilder:data_builder|wr[3]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|wr[2]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|wr[1]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|wr[0]"/>
+          </bus>
+          <net is_signal_inverted="no" name="databuilder:data_builder|wrs"/>
+          <net is_signal_inverted="no" name="databuilder:data_builder|rds"/>
+          <bus is_signal_inverted="no" link="all" name="databuilder:data_builder|s_counter" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="databuilder:data_builder|s_counter[4]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|s_counter[3]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|s_counter[2]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|s_counter[1]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|s_counter[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="databuilder:data_builder|t_counter" order="msb_to_lsb" radix="hex" state="collapse" type="register">
+            <net is_signal_inverted="no" name="databuilder:data_builder|t_counter[6]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|t_counter[5]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|t_counter[4]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|t_counter[3]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|t_counter[2]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|t_counter[1]"/>
+            <net is_signal_inverted="no" name="databuilder:data_builder|t_counter[0]"/>
+          </bus>
+        </setup_view>
+      </presentation>
+      <trigger CRC="94602CAA" attribute_mem_mode="false" gap_record="true" global_temp="1" name="trigger: 2013/01/23 19:32:12  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="64" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="rising edge" trigger_out="active high" trigger_type="circular">
+        <power_up_trigger position="pre" storage_qualifier_disabled="no" trigger_in="dont_care" trigger_out="active high"/>
+        <events use_custom_flow_control="no">
+          <level enabled="yes" name="condition1" type="basic">
+            <power_up enabled="yes">
+            </power_up>
+            <op_node/>
+          </level>
+        </events>
+        <storage_qualifier_events>
+          <transitional>0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+            <pwr_up_transitional>0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</pwr_up_transitional>
+          </transitional>
+          <storage_qualifier_level type="basic">
+            <power_up>
+            </power_up>
+            <op_node/>
+          </storage_qualifier_level>
+          <storage_qualifier_level type="basic">
+            <power_up>
+            </power_up>
+            <op_node/>
+          </storage_qualifier_level>
+          <storage_qualifier_level type="basic">
+            <power_up>
+            </power_up>
+            <op_node/>
+          </storage_qualifier_level>
+        </storage_qualifier_events>
+        <log>
+          <data global_temp="1" name="log: 2013/01/23 19:45:24  #0" power_up_mode="false" sample_depth="255" trigger_position="-1">1010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000001010101101001010010101101010100100000000000000000000000000000000000000000000000000000000000000000000000000101010110100101001010110101010010000000000000000000000000000000000000000000000000000000000000000000000000010101011010010100101011010101001000000000000000000000000000000000000000000000000000000000000000000000000000000000000110000000000100000000000000000000000000000000000010000000000000000000000000000010010110001101001</data>
+          <extradata>1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</extradata>
+        </log>
+      </trigger>
+    </signal_set>
+  </instance>
+  <mnemonics/>
+  <static_plugin_mnemonics/>
+  <global_info>
+    <single attribute="active instance" value="0"/>
+    <single attribute="config widget visible" value="1"/>
+    <single attribute="data log widget visible" value="1"/>
+    <single attribute="hierarchy widget visible" value="1"/>
+    <single attribute="instance widget visible" value="1"/>
+    <single attribute="jtag widget visible" value="1"/>
+    <multi attribute="column width" size="23" value="34,34,266,74,68,70,88,88,98,98,88,88,110,101,101,101,101,101,101,101,101,107,103"/>
+    <multi attribute="frame size" size="2" value="1366,706"/>
+    <multi attribute="jtag widget size" size="2" value="334,120"/>
+  </global_info>
+</session>
