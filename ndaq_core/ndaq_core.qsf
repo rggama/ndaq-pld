@@ -60,7 +60,6 @@ set_location_assignment PIN_A9 -to adc12_data[3]
 set_location_assignment PIN_A10 -to adc12_data[2]
 set_location_assignment PIN_A11 -to adc12_dco
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to adc12_dco
-set_global_assignment -name MISC_FILE "D:/Projetos/Neutrinos/QuartusII/ndaq_core/ndaq_core.dpf"
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to adc34_data[11]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to adc34_data[10]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to adc34_data[9]
@@ -437,22 +436,16 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to clkcore
 set_location_assignment PIN_A12 -to clkcore
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
-set_global_assignment -name SMART_RECOMPILE ON
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Administrador/Meus documentos/Meus Projetos/Neutrinos/QuartusII/ndaq_core/ndaq_core.dpf"
+set_global_assignment -name SMART_RECOMPILE OFF
 set_global_assignment -name USE_CONFIGURATION_DEVICE ON
 set_global_assignment -name FORCE_CONFIGURATION_VCCIO ON
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS_WEAK_PULLUP "AS INPUT TRI-STATED"
 set_global_assignment -name CYCLONEIII_CONFIGURATION_DEVICE EPCS16
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/bridge_ndaq_core_0.0/ndaq_core.dpf"
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/ndaq_core_0.0/ndaq_core.dpf"
 set_global_assignment -name OPTIMIZE_HOLD_TIMING "IO PATHS AND MINIMUM TPD PATHS"
 set_global_assignment -name SYNCHRONIZER_IDENTIFICATION AUTO
 set_global_assignment -name CYCLONEII_OPTIMIZATION_TECHNIQUE SPEED
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/ndaq_core_0.0_DDR/ndaq_core.dpf"
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/ndaq-pld/ndaq_core/ndaq_core.dpf"
 set_global_assignment -name ENABLE_BENEFICIAL_SKEW_OPTIMIZATION OFF
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/merged/ndaq_core/ndaq_core.dpf"
 set_location_assignment PIN_C19 -to mosi
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to mosi
 set_location_assignment PIN_D19 -to miso
@@ -460,7 +453,6 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to miso
 set_location_assignment PIN_A19 -to spiclk
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spiclk
 set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to spiclk -comment "Slave SPI clock input"
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_core/ndaq_core.dpf"
 set_instance_assignment -name FAST_INPUT_REGISTER OFF -to trigger_a
 set_instance_assignment -name FAST_INPUT_REGISTER OFF -to adc12_data*
 set_instance_assignment -name FAST_INPUT_REGISTER OFF -to adc34_data*
@@ -469,7 +461,6 @@ set_instance_assignment -name FAST_INPUT_REGISTER OFF -to adc78_data*
 set_global_assignment -name FLOW_ENABLE_RTL_VIEWER OFF
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_paf[3]
 set_location_assignment PIN_J17 -to fifo_paf[3]
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/pld_r40/ndaq_core/ndaq_core.dpf"
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_paf[2]
 set_location_assignment PIN_H16 -to fifo_paf[2]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_paf[1]
@@ -494,18 +485,35 @@ set_location_assignment PIN_B17 -to fifo1_pae_o
 set_location_assignment PIN_C17 -to fifo2_pae_o
 set_location_assignment PIN_A20 -to fifo3_pae_o
 set_location_assignment PIN_B20 -to fifo4_pae_o
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/LSD_LUC/Desktop/pld_r43/ndaq_core/ndaq_core.dpf"
-set_global_assignment -name ENABLE_SIGNALTAP ON
+set_global_assignment -name ENABLE_SIGNALTAP OFF
 set_global_assignment -name USE_SIGNALTAP_FILE ext_trigger_counter_WRITE.stp
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_ef[0]
 set_location_assignment PIN_C20 -to fifo_ef[0]
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/USB/pld/ndaq_core/ndaq_core.dpf"
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_ef[1]
 set_location_assignment PIN_D22 -to fifo_ef[1]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_ef[2]
 set_location_assignment PIN_F21 -to fifo_ef[2]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fifo_ef[3]
 set_location_assignment PIN_H19 -to fifo_ef[3]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to tdc_data*
+set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
+set_global_assignment -name NUM_PARALLEL_PROCESSORS 4
+set_global_assignment -name AUTO_EXPORT_INCREMENTAL_COMPILATION ON
+set_global_assignment -name INCREMENTAL_COMPILATION_EXPORT_FILE ndaq_core.qxp
+set_global_assignment -name INCREMENTAL_COMPILATION_EXPORT_POST_SYNTH ON
+set_global_assignment -name INCREMENTAL_COMPILATION_EXPORT_POST_FIT ON
+set_global_assignment -name INCREMENTAL_COMPILATION_EXPORT_ROUTING ON
+set_global_assignment -name INCREMENTAL_COMPILATION_EXPORT_PARTITION_NAME Top
+set_location_assignment PIN_T11 -to overflow_a
+set_location_assignment PIN_B18 -to overflow_b
+set_location_assignment PIN_A18 -to overflow_c
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to overflow_a
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to overflow_b
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to overflow_c
+set_global_assignment -name VHDL_FILE acq/dcfifom.vhd
+set_global_assignment -name VHDL_FILE acq/overflow.vhd
+set_global_assignment -name VHDL_FILE counter/mcounter_pkg.vhd
+set_global_assignment -name VHDL_FILE counter/mcounter.vhd
 set_global_assignment -name VHDL_FILE counter/timebase.vhd
 set_global_assignment -name VHDL_FILE counter/timebase_pll.vhd
 set_global_assignment -name VHDL_FILE counter/tcounter_pkg.vhd
@@ -522,7 +530,6 @@ set_global_assignment -name VHDL_FILE system/core_cmddec.vhd
 set_global_assignment -name VHDL_FILE system/core_rconst.vhd
 set_global_assignment -name VHDL_FILE spi/s_spi.vhd
 set_global_assignment -name SDC_FILE ndaq_core.sdc
-set_global_assignment -name VHDL_FILE acq/fifos.vhd
 set_global_assignment -name VHDL_FILE acq/tpulse.vhd
 set_global_assignment -name VHDL_FILE acq/writefifo.vhd
 set_global_assignment -name QIP_FILE acq/prefifo.qip
@@ -537,122 +544,10 @@ set_global_assignment -name VHDL_FILE tdc/tdcread.vhd
 set_global_assignment -name VHDL_FILE tdc/tdc.vhd
 set_global_assignment -name VHDL_FILE tdc/tdcfifo.vhd
 set_global_assignment -name SIGNALTAP_FILE ndaq_core_vmetest.stp
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/USB/pld_r58/ndaq_core/ndaq_core.dpf"
-set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to tdc_data*
 set_global_assignment -name QIP_FILE counter/counter_fifo.qip
-set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_INFO=805334528" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_POWER_UP_TRIGGER=0" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_INVERSION_MASK_LENGTH=0" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ATTRIBUTE_MEM_MODE=OFF" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_FLOW_USE_GENERATED=0" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_BITS=11" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_BUFFER_FULL_STOP=1" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_CURRENT_RESOURCE_WIDTH=1" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL=1" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_IN_ENABLED=1" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=basic,1," -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id auto_signaltap_0
 set_global_assignment -name SIGNALTAP_FILE ext_trigger_counter.stp
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|rdempty" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|rdreq" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|wrfull" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|wrreq" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|rdempty" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|rdreq" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|wrfull" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_fifo:READOUT_FIFO|dcfifo:dcfifo_component|wrreq" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=256" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=256" -section_id auto_signaltap_0
 set_global_assignment -name SIGNALTAP_FILE ext_trigger_counter_WRITE.stp
 set_global_assignment -name SIGNALTAP_FILE ext_trigger_counter_READ.stp
 set_global_assignment -name SIGNALTAP_FILE databuilder.stp
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to adc12_dco -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[11]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[12]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[13]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[14]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[15]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[16]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[17]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[18]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[19]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[20]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[21]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[22]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[19] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[23]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[20] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[24]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[21] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[25]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[22] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[26]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[23] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[27]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[24] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[28]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[25] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[29]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[26] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[27] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[30]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[28] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[31]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[29] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[30] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[31] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[32] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[33] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[34] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[35] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[11]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[12]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[13]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[14]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[15]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[16]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[17]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[18]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[19]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[20]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[21]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[22]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[19] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[23]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[20] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[24]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[21] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[25]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[22] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[26]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[23] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[27]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[24] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[28]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[25] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[29]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[26] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[27] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[30]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[28] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[31]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[29] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[30] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[31] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[32] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[33] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[34] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[35] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|counter_reg[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT trigger_in -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|s_trigger_in" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[36] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|enable" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[36] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|enable" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[37] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|incremented" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[38] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|s_trigger_in" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[37] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|incremented" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[38] -to "tcounter:\\adc_data_acq_construct:0:trigger_counter|s_trigger_in" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=39" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=39" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=139" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=31478" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=27017" -section_id auto_signaltap_0
-set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
-set_global_assignment -name NUM_PARALLEL_PROCESSORS 4
-set_global_assignment -name AUTO_EXPORT_INCREMENTAL_COMPILATION ON
-set_global_assignment -name INCREMENTAL_COMPILATION_EXPORT_FILE ndaq_core.qxp
-set_global_assignment -name INCREMENTAL_COMPILATION_EXPORT_POST_SYNTH ON
-set_global_assignment -name INCREMENTAL_COMPILATION_EXPORT_POST_FIT ON
-set_global_assignment -name INCREMENTAL_COMPILATION_EXPORT_ROUTING ON
-set_global_assignment -name INCREMENTAL_COMPILATION_EXPORT_PARTITION_NAME Top
+set_global_assignment -name QIP_FILE counter/mcounter_fifo.qip
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
