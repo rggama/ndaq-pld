@@ -21,7 +21,7 @@ architecture testbench of ndaq_sim_tbench is
 -- devices under test
 
 	-- CORE FPGA
-	component ndaq_core
+	component ndaq_core 
 	port
 	(	
 		------------------
@@ -51,11 +51,11 @@ architecture testbench of ndaq_sim_tbench is
 		-- TDC interface --
 		-------------------
 		signal tdc_data			: inout	std_logic_vector(27 downto 0); --***WATCH OUT***
-		signal tdc_stop_dis		: out		std_logic_vector(1 to 4);
-		signal tdc_start_dis 	: out		std_logic;
-		signal tdc_wrn		 	: out		std_logic;
-		signal tdc_rdn		 	: out		std_logic;
-		signal tdc_csn		 	: out		std_logic;
+		signal tdc_stop_dis		: out	std_logic_vector(1 to 4);
+		signal tdc_start_dis 	: out	std_logic;
+		signal tdc_wrn		 	: out	std_logic;
+		signal tdc_rdn		 	: out	std_logic;
+		signal tdc_csn		 	: out	std_logic;
 		signal tdc_alutr	 	: out  	std_logic;
 		signal tdc_puresn	 	: out  	std_logic;
 		signal tdc_oen		 	: out  	std_logic;
@@ -71,21 +71,19 @@ architecture testbench of ndaq_sim_tbench is
 		-- FIFO's interface --
 		----------------------
 		-- Data Bus
-		signal fifo_data_bus : out std_logic_vector(31 downto 0);
+		signal fifo_data_bus 	: out std_logic_vector(31 downto 0);
 		
 		-- Control signals
-		signal fifo1_wen	 	: out   	std_logic;	-- Write Enable
-		signal fifo2_wen	 	: out   	std_logic;
-		signal fifo3_wen	 	: out   	std_logic;
-		signal fifo4_wen	 	: out   	std_logic;
-		signal fifo_wck			: out		std_logic;	-- Write Clock to all FIFOs (PLL-4 output)
+		signal fifo_wen	 		: out   std_logic_vector(3 downto 0);	-- Write Enable
+
+		signal fifo_wck			: out	std_logic;	-- Write Clock to all FIFOs (PLL-4 output)
 		
-		signal fifo_mrs			: out		std_logic;	-- Master Reset
-		signal fifo_prs			: out		std_logic;	-- Partial Reset
-		signal fifo_fs0			: out		std_logic;	-- Flag Select Bit 0
-		signal fifo_fs1			: out		std_logic;	-- Flag Select Bit 1
-		signal fifo_ld		 	: out		std_logic;	-- Load
-		signal fifo_rt		 	: out		std_logic;	-- Retransmit
+		signal fifo_mrs			: out	std_logic;	-- Master Reset
+		signal fifo_prs			: out	std_logic;	-- Partial Reset
+		signal fifo_fs0			: out	std_logic;	-- Flag Select Bit 0
+		signal fifo_fs1			: out	std_logic;	-- Flag Select Bit 1
+		signal fifo_ld		 	: out	std_logic;	-- Load
+		signal fifo_rt		 	: out	std_logic;	-- Retransmit
 		
 		-- Flags
 		signal fifo1_ff			: in   	std_logic;	-- FULL flag
@@ -93,20 +91,19 @@ architecture testbench of ndaq_sim_tbench is
 		signal fifo3_ff			: in   	std_logic;
 		signal fifo4_ff			: in   	std_logic;
 		
-		signal fifo1_ef			: in   	std_logic;	-- EMPTY flag
-		signal fifo2_ef			: in   	std_logic;
-		signal fifo3_ef			: in   	std_logic;
-		signal fifo4_ef			: in   	std_logic;
+		-- signal fifo1_ef			: in   	std_logic;	-- EMPTY flag
+		-- signal fifo2_ef			: in   	std_logic;
+		-- signal fifo3_ef			: in   	std_logic;
+		-- signal fifo4_ef			: in   	std_logic;
+		
+		signal fifo_ef			: in	std_logic_vector(3 downto 0);
 		
 		signal fifo1_hf			: in   	std_logic;	-- HALF-FULL flag
 		signal fifo2_hf			: in   	std_logic;
 		signal fifo3_hf			: in   	std_logic;
 		signal fifo4_hf			: in   	std_logic;
 		
-		signal fifo1_paf	 	: in   	std_logic;	-- ALMOST-FULL flag
-		signal fifo2_paf	 	: in   	std_logic;
-		signal fifo3_paf	 	: in   	std_logic;
-		signal fifo4_paf	 	: in   	std_logic;		
+		signal fifo_paf	 		: in   	std_logic_vector(3 downto 0);	-- ALMOST-FULL flag
 		
 		signal fifo1_pae	 	: in   	std_logic;	-- ALMOST-EMPTY flag
 		signal fifo2_pae	 	: in   	std_logic;
@@ -117,42 +114,55 @@ architecture testbench of ndaq_sim_tbench is
 		--------------------
 		-- SRAM interface --
 		--------------------
-		signal sram_add	 		: out		std_logic_vector(18 downto 0);
-		signal sram_data		: inout 	std_logic_vector(7 downto 0);
-		signal sram_we			: out		std_logic;
-		signal sram_oe			: out		std_logic;
-		signal sram_cs			: out		std_logic;
+		signal sram_add	 		: out	std_logic_vector(18 downto 0);
+		signal sram_data		: inout std_logic_vector(7 downto 0);
+		signal sram_we			: out	std_logic;
+		signal sram_oe			: out	std_logic;
+		signal sram_cs			: out	std_logic;
 		
 		
 		------------------------------
 		-- LVDS connector interface --
 		------------------------------
-		signal lvdsin 		 	:in  		std_logic_vector(15 downto 0);		
+		signal lvdsin 		 	:in  	std_logic_vector(15 downto 0);		
 		
 		---------------
 		-- Slave SPI --
 		---------------
-		signal spiclk			: in		std_logic;
-		signal mosi				: in		std_logic;
-		signal miso				: out		std_logic;
+		signal spiclk			: in	std_logic;
+		signal mosi				: in	std_logic;
+		signal miso				: out	std_logic;
+		signal cs				: in	std_logic;
+		
+		---------------
+		-- FIFO PAE --
+		---------------
+		signal fifo1_pae_o		: out	std_logic;
+		signal fifo2_pae_o		: out	std_logic;
+		signal fifo3_pae_o		: out	std_logic;
+		signal fifo4_pae_o		: out	std_logic;
 
 		--------------------
 		-- Trigger inputs --
 		--------------------
-		signal trigger_a		: in		std_logic;	
-		signal trigger_b		: in		std_logic;
-		signal trigger_c		: in		std_logic
+		signal trigger_a		: in	std_logic;	
+		signal trigger_b		: in	std_logic;
+		signal trigger_c		: in	std_logic;
 		
-		-----------------------
-		-- Temporary signals --
-		-----------------------
-		--signal mux_sel		: in		std_logic_vector(2 downto 0)
+		----------------------------------
+		-- Overflow Signals to FPGA VME --
+		----------------------------------
+		signal overflow_a		: out	std_logic;
+		signal overflow_b		: out	std_logic;	
+		signal overflow_c		: out	std_logic
+		
 	);
 	end component;
+	
 
 	-- VME FPGA
 	component ndaq_vme
-	port
+port
 	(	
 		------------
 		-- AD9510  --
@@ -231,6 +241,9 @@ architecture testbench of ndaq_sim_tbench is
 		--signal fifo4_ef 	:in  	std_logic;
 
 		signal fifo_ef		:in		std_logic_vector(3 downto 0);
+
+		-- FIFO's programmable almost empty flag. These signals come from Core FPGA.
+		signal fifo_pae		:in		std_logic_vector(3 downto 0);
 		
 		----------------
 		-- Master SPI --
@@ -239,14 +252,29 @@ architecture testbench of ndaq_sim_tbench is
 		signal spiclk		:out	std_logic;
 		signal mosi			:out	std_logic;
 		signal miso			:in		std_logic;
+		signal cs			:out	std_logic;
 		
 		-------------------
 		-- CAN interface --
 		-------------------
 		signal can_pgc	 	 :out  	std_logic;
 		signal can_pgd	 	 :out  	std_logic;
-		signal can_pgm	 	 :out  	std_logic
-	);			
+		signal can_pgm	 	 :out  	std_logic;
+		
+		--------------------
+		-- Overflow Flags --
+		--------------------
+		signal overflow_a 	:in		std_logic;
+		signal overflow_b	:in		std_logic;
+		signal overflow_c	:in		std_logic;
+		
+		-----------------
+		-- Test Points --
+		-----------------
+		
+		signal t1_a			:out	std_logic;
+		signal t1_b			:out	std_logic
+	);
 	end component;
 
 	-- Fake IDT FIFO
@@ -294,6 +322,7 @@ signal delayed	: boolean := false;
 signal spiclk	: std_logic;
 signal mosi		: std_logic;
 signal miso		: std_logic;
+signal cs		: std_logic;
 
 -- IDT FIFO
 
@@ -317,6 +346,12 @@ signal n_idt_empty	: std_logic_vector(1 to 4);
 signal n_idt_full	: std_logic_vector(1 to 4);
 signal wrusedw		: USEDW_T;
 signal idt_paf		: std_logic_vector(1 to 4);
+
+-- Overflow Flags
+
+signal overflow_a	: std_logic;
+signal overflow_b	: std_logic;
+signal overflow_c	: std_logic;
 
 --
 -- arch begin
@@ -376,10 +411,10 @@ port map
 		fifo_data_bus =>  idt_data,
 		
 		-- Control signals
-		fifo1_wen	 	=>  idt_wr(1), 		-- Write Enable
-		fifo2_wen	 	=>  idt_wr(2),   	
-		fifo3_wen	 	=>  idt_wr(3),   	
-		fifo4_wen	 	=>  idt_wr(4),   	
+		fifo_wen(0) 	=>  idt_wr(1), 		-- Write Enable
+		fifo_wen(1) 	=>  idt_wr(2),   	
+		fifo_wen(2) 	=>  idt_wr(3),   	
+		fifo_wen(3) 	=>  idt_wr(4),   	
 		fifo_wck		=>  idt_wrclk,		-- Write Clock to all FIFOs (PLL-4 open,put)
 		
 		fifo_mrs		=>  idt_rst,		-- Master Reset
@@ -395,22 +430,19 @@ port map
 		fifo3_ff		=> n_idt_full(3),
 		fifo4_ff		=> n_idt_full(4),
 		
-		fifo1_ef		=>     	'Z',	-- EMPTY flag
-		fifo2_ef		=>     	'Z',
-		fifo3_ef		=>     	'Z',
-		fifo4_ef		=>     	'Z',
+		fifo_ef			=> (others => 'Z'),	-- EMPTY flag
 		
-		fifo1_hf		=>     	'Z',	-- HALF-FULL flag
+		fifo1_hf		=>     	'Z',		-- HALF-FULL flag
 		fifo2_hf		=>     	'Z',
 		fifo3_hf		=>     	'Z',
 		fifo4_hf		=>     	'Z',
 		
-		fifo1_paf	 	=> idt_paf(1),	-- ALMOST-FULL flag
-		fifo2_paf		=> idt_paf(2),
-		fifo3_paf		=> idt_paf(3),
-		fifo4_paf	 	=> idt_paf(4),		
+		fifo_paf(0) 	=> idt_paf(1),		-- ALMOST-FULL flag
+		fifo_paf(1)		=> idt_paf(2),
+		fifo_paf(2)		=> idt_paf(3),
+		fifo_paf(3) 	=> idt_paf(4),		
 		
-		fifo1_pae	 	=>     	'Z',	-- ALMOST-EMPTY flag
+		fifo1_pae	 	=>     	'Z',		-- ALMOST-EMPTY flag
 		fifo2_pae	 	=>     	'Z',
 		fifo3_pae	 	=>     	'Z',
 		fifo4_pae	 	=>     	'Z',
@@ -437,13 +469,21 @@ port map
 		spiclk		=> spiclk,
 		mosi		=> mosi,
 		miso		=> miso,
+		cs			=> '1',
 
 		--------------------
 		-- Trigger inputs --
 		--------------------
 		trigger_a	=> trigger,
 		trigger_b	=> 'Z',
-		trigger_c 	=> 'Z' 
+		trigger_c 	=> 'Z',
+
+		----------------------------------
+		-- Overflow Signals to FPGA VME --
+		----------------------------------
+		overflow_a	=> overflow_a,
+		overflow_b	=> overflow_b,
+		overflow_c	=> overflow_c
 	);
 		
 
@@ -519,20 +559,36 @@ port map
 		fifo_ef(1)	=> n_idt_empty(2),
 		fifo_ef(2)	=> n_idt_empty(3),
 		fifo_ef(3)	=> n_idt_empty(4),
-
+		-- FIFO's programmable almost empty flag. These signals come from Core FPGA.
+		fifo_pae	=> (others => 'Z'),
+		
 		----------------
 		-- Master SPI --
 		----------------
 		spiclk		=> spiclk,
 		mosi		=> mosi,
 		miso		=> miso,
+		cs			=> cs,
 		
 		-------------------
 		-- CAN interface --
 		-------------------
 		can_pgc     => open,
 		can_pgd     => open,
-		can_pgm     => open
+		can_pgm     => open,
+
+		--------------------
+		-- Overflow Flags --
+		--------------------
+		overflow_a 	=> overflow_a,
+		overflow_b	=> overflow_b,
+		overflow_c	=> overflow_c,
+		
+		-----------------
+		-- Test Points --
+		-----------------
+		t1_a		=> open,
+		t1_b		=> open
 	);
 
 -- Fake IDT FIFOs

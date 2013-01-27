@@ -13,7 +13,7 @@ use work.vmeif_usr.all;
 use work.vme_regs.all;
 
 use work.functions_pkg.all;			-- Misc. functions
-use work.databuilder_pkg.all;		-- Data Builder definitions
+use work.usb_databuilder_pkg.all;		-- Data Builder definitions
 
 entity ndaq_vme is 
 	port
@@ -330,7 +330,7 @@ architecture rtl of ndaq_vme is
 	end component;
 	
 	-- Data Builder
-	component databuilder
+	component usb_databuilder
 	port
 	(	
 		--
@@ -768,7 +768,7 @@ begin
 --*********************************************************************************************************
 	
 	data_builder: 
-	databuilder port map 
+	usb_databuilder port map 
 	(
 		--
 		rst							=> rdout_rst, --mrst,

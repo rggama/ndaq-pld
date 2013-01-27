@@ -57,16 +57,23 @@ Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling entity vme_cmddec
 -- Compiling architecture rtl of vme_cmddec
 
-} {} {}} ../../ndaq_core/counter/mcounter_pkg.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_pkg.vhd
+} {} {}} ../../ndaq_core/ndaq_core.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/ndaq_core.vhd
 Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Loading package std_logic_arith
 -- Loading package STD_LOGIC_UNSIGNED
--- Compiling package mcounter_pkg
--- Compiling package body mcounter_pkg
+-- Loading package MATH_REAL
+-- Loading package functions_pkg
+-- Loading package core_regs
+-- Loading package acq_pkg
+-- Loading package tdc_pkg
 -- Loading package mcounter_pkg
+-- Loading package tcounter_pkg
+-- Loading package databuilder_pkg
+-- Compiling entity ndaq_core
+-- Compiling architecture rtl of ndaq_core
 
 } {} {}} ../../ndaq_core/system/core_rconst.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_rconst.vhd
 Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
@@ -78,13 +85,16 @@ Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling entity core_rconst
 -- Compiling architecture rtl of core_rconst
 
-} {} {}} ../../ndaq_core/acq/postfifo.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/acq/postfifo.vhd
+} {} {}} ../../ndaq_core/counter/mcounter_pkg.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_pkg.vhd
 Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
--- Compiling entity postfifo
--- Compiling architecture SYN of postfifo
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Compiling package mcounter_pkg
+-- Compiling package body mcounter_pkg
+-- Loading package mcounter_pkg
 
 } {} {}} ../../ndaq_vme/usb_readout/f2ft_copier.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/f2ft_copier.vhd
 Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
@@ -95,6 +105,14 @@ Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Loading package STD_LOGIC_UNSIGNED
 -- Compiling entity f2ft_copier
 -- Compiling architecture rtl of f2ft_copier
+
+} {} {}} ../../ndaq_core/acq/postfifo.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/acq/postfifo.vhd
+Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity postfifo
+-- Compiling architecture SYN of postfifo
 
 } {} {}} ../../ndaq_core/system/core_clkman.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_clkman.vhd
 Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
@@ -160,6 +178,23 @@ Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling package body functions_pkg
 -- Loading package functions_pkg
 
+} {} {}} ../../ndaq_vme/ndaq_vme.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_vme/ndaq_vme.vhd
+Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Loading package NUMERIC_STD
+-- Loading package vmeif_pkg
+-- Loading package vmeif_usr
+-- Loading package vme_regs
+-- Loading package MATH_REAL
+-- Loading package functions_pkg
+-- Loading package usb_databuilder_pkg
+-- Compiling entity ndaq_vme
+-- Compiling architecture rtl of ndaq_vme
+
 } {} {}} ../../ndaq_core/counter/counter_fifo.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/counter/counter_fifo.vhd
 Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Loading package STANDARD
@@ -177,23 +212,6 @@ Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Loading package STD_LOGIC_UNSIGNED
 -- Compiling entity m_spi
 -- Compiling architecture rtl of m_spi
-
-} {} {}} ../../ndaq_vme/ndaq_vme.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_vme/ndaq_vme.vhd
-Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package std_logic_arith
--- Loading package STD_LOGIC_UNSIGNED
--- Loading package NUMERIC_STD
--- Loading package vmeif_pkg
--- Loading package vmeif_usr
--- Loading package vme_regs
--- Loading package MATH_REAL
--- Loading package functions_pkg
--- Loading package databuilder_pkg
--- Compiling entity ndaq_vme
--- Compiling architecture rtl of ndaq_vme
 
 } {} {}} ../../ndaq_core/counter/tcounter.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter.vhd
 Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
@@ -501,15 +519,6 @@ Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling entity s_spi
 -- Compiling architecture rtl of s_spi
 
-} {} {}} ../../ndaq_core/system/core_regs.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_regs.vhd
-Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Compiling package core_regs
--- Compiling package body core_regs
--- Loading package core_regs
-
 } {} {}} ../../ndaq_core/tdc/tdc.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc.vhd
 Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Loading package STANDARD
@@ -521,13 +530,14 @@ Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling entity tdc
 -- Compiling architecture one_tdc of tdc
 
-} {} {}} ./board_level/idt_fifo.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/board_level/idt_fifo.vhd
+} {} {}} ../../ndaq_core/system/core_regs.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_regs.vhd
 Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
--- Compiling entity idt_fifo
--- Compiling architecture SYN of idt_fifo
+-- Compiling package core_regs
+-- Compiling package body core_regs
+-- Loading package core_regs
 
 } {} {}} ../../ndaq_core/tdc/tdc_pkg.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc_pkg.vhd
 Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
@@ -539,5 +549,13 @@ Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling package tdc_pkg
 -- Compiling package body tdc_pkg
 -- Loading package tdc_pkg
+
+} {} {}} ./board_level/idt_fifo.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/board_level/idt_fifo.vhd
+Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity idt_fifo
+-- Compiling architecture SYN of idt_fifo
 
 } {} {}}
