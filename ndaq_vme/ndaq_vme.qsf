@@ -330,9 +330,19 @@ set_location_assignment PIN_T2 -to fifo_pae[0]
 set_location_assignment PIN_T1 -to fifo_pae[1]
 set_location_assignment PIN_L1 -to fifo_pae[2]
 set_location_assignment PIN_L2 -to fifo_pae[3]
+set_location_assignment PIN_A11 -to t1_a
+set_location_assignment PIN_B12 -to t1_b
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to t1_a
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to t1_b
+set_location_assignment PIN_T3 -to overflow_a
+set_location_assignment PIN_R2 -to overflow_b
+set_location_assignment PIN_R1 -to overflow_c
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to overflow_a
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to overflow_b
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to overflow_c
+set_global_assignment -name VHDL_FILE usb_readout/usb_databuilder_pkg.vhd
+set_global_assignment -name VHDL_FILE usb_readout/usb_databuilder.vhd
 set_global_assignment -name VHDL_FILE ../ndaq_core/acq/functions_pkg.vhd
-set_global_assignment -name VHDL_FILE usb_readout/databuilder.vhd
-set_global_assignment -name VHDL_FILE usb_readout/databuilder_pkg.vhd
 set_global_assignment -name VHDL_FILE system/vme_cmddec.vhd
 set_global_assignment -name VHDL_FILE system/vme_rconst.vhd
 set_global_assignment -name VHDL_FILE system/vme_regs.vhd
@@ -354,14 +364,4 @@ set_global_assignment -name VHDL_FILE ndaq_vme.vhd
 set_global_assignment -name QIP_FILE system/my_pll.qip
 set_global_assignment -name VHDL_FILE spi/m_spi.vhd
 set_global_assignment -name QIP_FILE usb_readout/readout_fifo.qip
-set_location_assignment PIN_A11 -to t1_a
-set_location_assignment PIN_B12 -to t1_b
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to t1_a
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to t1_b
-set_location_assignment PIN_T3 -to overflow_a
-set_location_assignment PIN_R2 -to overflow_b
-set_location_assignment PIN_R1 -to overflow_c
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to overflow_a
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to overflow_b
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to overflow_c
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
