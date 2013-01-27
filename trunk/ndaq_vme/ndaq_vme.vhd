@@ -115,6 +115,13 @@ entity ndaq_vme is
 		signal can_pgd	 	 :out  	std_logic;
 		signal can_pgm	 	 :out  	std_logic;
 		
+		--------------------
+		-- Overflow Flags --
+		--------------------
+		signal overflow_a 	:in		std_logic;
+		signal overflow_b	:in		std_logic;
+		signal overflow_c	:in		std_logic;
+		
 		-----------------
 		-- Test Points --
 		-----------------
@@ -425,13 +432,14 @@ architecture rtl of ndaq_vme is
 	signal u_fifo_ren	: std_logic_vector(3 downto 0);
 
 	-- FT245bm_if
-	signal ft_wr	: std_logic := '1';
-	signal ft_rd	: std_logic := '1';
-	signal ft_idata	: std_logic_vector(7 downto 0) := x"00";
-	signal ft_odata	: std_logic_vector(7 downto 0) := x"00";
+	signal f2ft_enable	: std_logic := '0';
+	signal ft_wr		: std_logic := '1';
+	signal ft_rd		: std_logic := '1';
+	signal ft_idata		: std_logic_vector(7 downto 0) := x"00";
+	signal ft_odata		: std_logic_vector(7 downto 0) := x"00";
 
-	signal ft_dwait	: std_logic := '0';
-	signal ft_dataa	: std_logic := '0';
+	signal ft_dwait		: std_logic := '0';
+	signal ft_dataa		: std_logic := '0';
 			
 	-- Command Decoder / Registers
 	signal a_wr			: std_logic_vector((num_regs-1) downto 0);
@@ -664,8 +672,10 @@ begin
 	ireg(5)(1)			<= fifo_pae(1);
 	ireg(5)(2)			<= fifo_pae(2);
 	ireg(5)(3)			<= fifo_pae(3);
-	ireg(5)(6 downto 4)	<= (others => '0');
-	ireg(5)(7)			<= stsclk;
+	ireg(5)(4)			<= overflow_a;	-- External FIFOs Overflow
+	ireg(5)(5)			<= overflow_b;	-- ADC + Counter + Timer Overflow
+	ireg(5)(6)			<= overflow_c;	-- TDC Readout FIFOs Overflow
+	ireg(5)(7)			<= stsclk;		-- AD9510 PLL Locked Status
 
 	-- VME Registers Assignments.	*** MUST MAKE THAT AUTOMATIC ! ***
 	b_wr(0)		<= user_write(9);
@@ -838,6 +848,9 @@ begin
 		rdusedw		=> usb_fifo_rdusedw
 	);
 
+	-- 
+	f2ft_enable <= not(oreg(1)(7));  --NOT Command Response Enable.
+	
 	--
 	f_to_ft_copier:
 	f2ft_copier port map
@@ -846,7 +859,7 @@ begin
 		rst			=> rdout_rst, --mrst,
 
 		-- Arbiter interface
-		enable		=> not(oreg(1)(7)),  --NOT Command Response Enable.
+		enable		=> f2ft_enable,
 		isidle		=> open,
 	
 		-- FIFO interface

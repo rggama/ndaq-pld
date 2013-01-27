@@ -38,7 +38,6 @@ set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name LL_ROOT_REGION ON -section_id "Root Region"
 set_global_assignment -name LL_MEMBER_STATE LOCKED -section_id "Root Region"
-set_global_assignment -name MISC_FILE "D:/Projetos/Neutrinos/QuartusII/ndaq_vme/ndaq_vme.dpf"
 set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to vme_add[26]
 set_location_assignment PIN_U11 -to vme_add[26]
@@ -266,9 +265,7 @@ set_location_assignment PIN_D5 -to vme_irq[4]
 set_location_assignment PIN_D9 -to vme_irq[5]
 set_location_assignment PIN_E6 -to vme_irq[6]
 set_location_assignment PIN_E7 -to vme_irq[7]
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Administrador/Meus documentos/Meus Projetos/Neutrinos/QuartusII/ndaq_vme/ndaq_vme.dpf"
 set_global_assignment -name OPTIMIZE_HOLD_TIMING "IO PATHS AND MINIMUM TPD PATHS"
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/ndaq_vme/ndaq_vme.dpf"
 set_global_assignment -name SETUP_HOLD_DETECTION ON
 set_global_assignment -name GLITCH_DETECTION OFF
 set_global_assignment -name ADD_DEFAULT_PINS_TO_SIMULATION_OUTPUT_WAVEFORMS OFF
@@ -289,21 +286,15 @@ set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name STATE_MACHINE_PROCESSING "ONE-HOT"
 set_global_assignment -name SAFE_STATE_MACHINE ON
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/b_ndaq_vme_0.1/ndaq_vme.dpf"
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/bridge_ndaq_vme_0.0/ndaq_vme.dpf"
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/ndaq_vme_0.0/ndaq_vme.dpf"
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/ndaq-pld/ndaq_vme/ndaq_vme.dpf"
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name OUTPUT_IO_TIMING_ENDPOINT "NEAR END"
 set_global_assignment -name EDA_SIMULATION_TOOL "<None>"
 set_global_assignment -name EDA_OUTPUT_DATA_FORMAT NONE -section_id eda_simulation
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/pld_r14/ndaq_vme/ndaq_vme.dpf"
 set_location_assignment PIN_M1 -to spiclk
 set_location_assignment PIN_P1 -to mosi
 set_location_assignment PIN_P2 -to miso
 set_global_assignment -name RTLV_GROUP_COMB_LOGIC_IN_CLOUD OFF
 set_global_assignment -name RTLV_SIMPLIFIED_LOGIC OFF
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/pld_r24/ndaq_vme/ndaq_vme.dpf"
 set_location_assignment PIN_U3 -to fifo_ef[0]
 set_location_assignment PIN_V6 -to fifo_oe[3]
 set_location_assignment PIN_V3 -to fifo_ef[1]
@@ -339,7 +330,6 @@ set_location_assignment PIN_T2 -to fifo_pae[0]
 set_location_assignment PIN_T1 -to fifo_pae[1]
 set_location_assignment PIN_L1 -to fifo_pae[2]
 set_location_assignment PIN_L2 -to fifo_pae[3]
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/LSD_LUC/Desktop/pld_r43/ndaq_vme/ndaq_vme.dpf"
 set_global_assignment -name VHDL_FILE ../ndaq_core/acq/functions_pkg.vhd
 set_global_assignment -name VHDL_FILE usb_readout/databuilder.vhd
 set_global_assignment -name VHDL_FILE usb_readout/databuilder_pkg.vhd
@@ -364,9 +354,14 @@ set_global_assignment -name VHDL_FILE ndaq_vme.vhd
 set_global_assignment -name QIP_FILE system/my_pll.qip
 set_global_assignment -name VHDL_FILE spi/m_spi.vhd
 set_global_assignment -name QIP_FILE usb_readout/readout_fifo.qip
-set_global_assignment -name MISC_FILE "C:/Documents and Settings/Rafael/Desktop/USB/pld_r58/ndaq_vme/ndaq_vme.dpf"
 set_location_assignment PIN_A11 -to t1_a
 set_location_assignment PIN_B12 -to t1_b
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to t1_a
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to t1_b
+set_location_assignment PIN_T3 -to overflow_a
+set_location_assignment PIN_R2 -to overflow_b
+set_location_assignment PIN_R1 -to overflow_c
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to overflow_a
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to overflow_b
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to overflow_c
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

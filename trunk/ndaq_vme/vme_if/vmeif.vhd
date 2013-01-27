@@ -904,16 +904,18 @@
 --	ADER(3)	<= x"00";			-- HERMAN INSERE EM 08/09/10: ASSIM NAO PRECISA DE RESET PARA CARREGAR ADER
 
 -- Changed on 11/2012 to run with the NuDAQ
-	ADER(0)	<= x"02";		
-	ADER(1)	<= BAR(3 downto 0) & "0000";	
-	ADER(2)	<= x"00";		
-	ADER(3)	<= x"00";		
+		ADER(0)	<= x"02";		
+		ADER(1)	<= BAR(3 downto 0) & "0000";	
+		ADER(2)	<= x"00";		
+		ADER(3)	<= x"00";		
 
+		
 	write_csr : process(i_clock, i_reset, BAR, i_vme_data)
       variable index : integer;
     begin
 	 
       if (i_reset) then
+		
 		 --ADER(3)	<= x"00";
 		 --ADER(2)	<= x"00";
 		 --ADER(1)	<= x"00";

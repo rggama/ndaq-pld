@@ -50,6 +50,7 @@ entity writefifo is
 				
 		signal usedw			: in	USEDW_T;
 		signal full				: in	std_logic;
+		signal enough_room_flag : out	std_logic;
 		
 		-- Parameters
 		
@@ -64,11 +65,12 @@ architecture rtl of writefifo is
 
 	signal rst_r		: std_logic	:= '1';
 	signal scounter		: USEDW_T;							-- sample counter
-	
+	signal tcounter		: std_logic_vector(3 downto 0);
 	
 	-- Build an enumerated type for the state machine
 	type state_type is (idle, 	
-						wrfifoa
+						wrfifoa,
+						disabled
 						);
 
 	-- Register to hold the current state
@@ -82,6 +84,8 @@ architecture rtl of writefifo is
 	
 	--
 	signal wmax_r		: USEDW_T;
+	
+	signal enough_room	: std_logic := '0';
 	
 	signal i_wr			: std_logic := '0';
 	signal i_acqin		: std_logic := '0';
@@ -104,8 +108,22 @@ begin
 			wmax_r	<= wmax;
 		end if;
 	end process;
---
 
+	process (usedw, wmax_r)
+	begin
+		if (usedw < wmax_r) then
+			enough_room <= '1';
+		else
+			enough_room <= '0';
+		end if;	
+	end process;
+	
+	--
+	--
+	enough_room_flag <= enough_room;
+	
+	--
+	--
 	writefifofsm:
 	process (clk, rst_r)
 	begin
@@ -121,9 +139,9 @@ begin
 					((enable = '1') and 
 						(  
 								(((trig0 = '1') or (trig1 = '1') or (trig2 = '1'))
-								and (usedw < wmax_r) and (full = '0') and (tmode = '0'))
+								and (enough_room = '1') and (full = '0') and (tmode = '0'))
 							or
-								((trig3 = '1') and (usedw < wmax_r) and (full = '0') 
+								((trig3 = '1') and (enough_room = '1') and (full = '0') 
 								and (tmode = '1'))
 							
 						) 
@@ -138,11 +156,22 @@ begin
 					scounter <= scounter + 1;
 					--
 					if (scounter = esize) then
-						state <= idle;
+						state <= idle; --disabled;
 						--
 						scounter	<= (others => '0');
 					else
 						state <= wrfifoa;
+					end if;
+					
+				when disabled =>
+					tcounter <= tcounter + 1;
+					--
+					if (tcounter = x"2") then
+						state	<= idle;
+						--
+						tcounter <= (others => '0');
+					else
+						state <= disabled;
 					end if;
 
 			end case;
@@ -158,6 +187,10 @@ begin
 				i_wr	<= '1';
 				i_acqin	<= '1';
 
+			when disabled	=>
+				i_wr	<= '0';
+				i_acqin <= '1';
+				
 			when others	=>
 				i_wr	<= '0';
 				i_acqin	<= '0';
