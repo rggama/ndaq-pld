@@ -37,7 +37,7 @@ entity writefifo is
 		signal rst				: in 	std_logic; 			-- async if
 		
 		signal enable			: in 	std_logic;
-		signal acqin			: out	std_logic := '0';
+		signal acq_in			: out	std_logic := '0';
 	
 		signal tmode			: in 	std_logic;
 		
@@ -64,13 +64,16 @@ end writefifo;
 architecture rtl of writefifo is
 
 	signal rst_r		: std_logic	:= '1';
+
+	--
+	--
 	signal scounter		: USEDW_T;							-- sample counter
 	signal tcounter		: std_logic_vector(3 downto 0);
 	
 	-- Build an enumerated type for the state machine
 	type state_type is (idle, 	
-						wrfifoa,
-						disabled
+						wrfifoa--,
+						--disabled
 						);
 
 	-- Register to hold the current state
@@ -88,7 +91,7 @@ architecture rtl of writefifo is
 	signal enough_room	: std_logic := '0';
 	
 	signal i_wr			: std_logic := '0';
-	signal i_acqin		: std_logic := '0';
+	signal i_acq_in		: std_logic := '0';
 --
 
 begin
@@ -100,6 +103,7 @@ begin
 			rst_r	<= rst;
 		end if;
 	end process;
+	
 	
 -- ** WMAX Register Interface 
 	process (clk)
@@ -140,9 +144,9 @@ begin
 						(  
 								(((trig0 = '1') or (trig1 = '1') or (trig2 = '1'))
 								and (enough_room = '1') and (full = '0') and (tmode = '0'))
-							or
-								((trig3 = '1') and (enough_room = '1') and (full = '0') 
-								and (tmode = '1'))
+							--or
+							--	((r_trig3 = '1') and (enough_room = '1') and (full = '0') 
+							--	and (tmode = '1'))
 							
 						) 
 					) then	
@@ -163,16 +167,16 @@ begin
 						state <= wrfifoa;
 					end if;
 					
-				when disabled =>
-					tcounter <= tcounter + 1;
-					--
-					if (tcounter = x"2") then
-						state	<= idle;
-						--
-						tcounter <= (others => '0');
-					else
-						state <= disabled;
-					end if;
+				-- when disabled =>
+					-- tcounter <= tcounter + 1;
+					-- --
+					-- if (tcounter = x"2") then
+						-- state	<= idle;
+						-- --
+						-- tcounter <= (others => '0');
+					-- else
+						-- state <= disabled;
+					-- end if;
 
 			end case;
 		end if;
@@ -182,33 +186,37 @@ begin
 	process (state)
 	begin
 		case (state) is
-
+			
+			when idle		=>
+				i_wr		<= '0';
+				i_acq_in	<= '0';
+				
 			when wrfifoa	=>
-				i_wr	<= '1';
-				i_acqin	<= '1';
+				i_wr		<= '1';
+				i_acq_in	<= '1';
 
-			when disabled	=>
-				i_wr	<= '0';
-				i_acqin <= '1';
+			-- when disabled	=>
+				-- i_wr		<= '0';
+				-- i_acq_in	<= '1';
 				
 			when others	=>
-				i_wr	<= '0';
-				i_acqin	<= '0';
+				i_wr		<= '0';
+				i_acq_in	<= '0';
 			
 		end case;
 	end process;
 	
-	--acqin	<= i_acqin;	
+	--acq_in	<= i_acq_in;	
 	
 	output_register:
 	process (clk, rst)
 	begin
 		if (rst = '1') then
 			wr		<= '0';
-			acqin	<= '0';
+			acq_in	<= '0';
 		elsif (rising_edge(clk)) then
 			wr		<= i_wr;
-			acqin	<= i_acqin;
+			acq_in	<= i_acq_in;
 		end if;
 	end process;
 

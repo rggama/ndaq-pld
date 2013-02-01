@@ -290,7 +290,7 @@ port
 		q			: OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
 		rdempty		: OUT STD_LOGIC ;
 		wrfull		: OUT STD_LOGIC ;
-		wrusedw		: OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
+		wrusedw		: OUT STD_LOGIC_VECTOR (16 DOWNTO 0)
 	);
 	end component;
 	
@@ -305,6 +305,7 @@ signal clkvme	: std_logic;
 signal dcounter		: std_logic_vector(7 downto 0) := x"FF";
 signal dcounter_t	: std_logic := '0';
 signal dcounter_en	: std_logic := '0';
+signal trigger_gen	: std_logic := '0';
 signal trigger		: std_logic := '0';
 signal adc_data		: std_logic_vector(9 downto 0);
 
@@ -327,7 +328,7 @@ signal cs		: std_logic;
 -- IDT FIFO
 
 type IDTQ_T is array (1 to 4) of std_logic_vector(31 downto 0);
-type USEDW_T is array (1 to 4) of std_logic_vector(7 downto 0);
+type USEDW_T is array (1 to 4) of std_logic_vector(16 downto 0);
 
 signal idt_data		: std_logic_vector(31 downto 0);
 signal idt_q		: IDTQ_T;
@@ -345,6 +346,7 @@ signal n_idt_wr		: std_logic_vector(1 to 4);
 signal n_idt_empty	: std_logic_vector(1 to 4);
 signal n_idt_full	: std_logic_vector(1 to 4);
 signal wrusedw		: USEDW_T;
+signal used_comp	: std_logic_vector(16 downto 0);
 signal idt_paf		: std_logic_vector(1 to 4);
 
 -- Overflow Flags
@@ -618,7 +620,18 @@ for i in 1 to 4 generate
 	idt_q_bus	<= idt_q(i) when (idt_oe(i) = '0') else (others => 'Z');
 	
 	-- FIFO PAF
-	idt_paf(i)	<= not(wrusedw(i)(7));
+	--idt_paf(i)	<= not(wrusedw(i)(7));
+	
+	used_comp <= "1" & x"FDAA";
+	
+	process (wrusedw)
+	begin
+		if (wrusedw(i) = used_comp) then
+			idt_paf(i) <= '0'; --active
+		else
+			idt_paf(i) <= '1';
+		end if;
+	end process;
 
 	-- Negating signals as real IDT FIFO works this way
 	n_idt_rd(i)		<= not(idt_rd(i));
@@ -668,6 +681,24 @@ loop
 end loop;
 end process clkvme_gen;
 
+trigger_process: process
+begin
+	trigger_gen <= '0';
+	wait for 300 ns;
+loop
+	trigger_gen <= '1';
+	wait for 16 ns;
+	trigger_gen <= '0';
+	wait for 230 ns;
+	trigger_gen <= '1';
+	wait for 16 ns;
+	trigger_gen <= '0';
+	wait for 500 ns;
+end loop;
+end process trigger_process;
+
+trigger <= trigger_gen;
+
 -- -- Reset 
 -- rst_gen: process
 -- begin
@@ -703,7 +734,7 @@ end process clkvme_gen;
 
 	adc_data(7 downto 0)	<= dcounter;
 	adc_data(9 downto 8)	<= "00";
-	trigger					<= dcounter_t;
+	--trigger					<= dcounter_t;
 	
 --***************************** FT245BM Behavior *******************************
 
@@ -751,22 +782,23 @@ loop
 	wait for 80 ns; -- T6: 80 ns; 
 	
 	-- Command counting and loop waiting
-	if (delayed = false) then
-		if (cmd_cntr = (total_cmds-1)) then
-			wait for 777 us;
-			delayed		<= true;
-		else
-			cmd_cntr	<= cmd_cntr+1;
-			delayed		<= false;
-		end if;
-	else
-		-- Delayed command counting and loop ending
-		if (del_cntr = (del_cmds-1)) then
-			wait;
-		else
-			del_cntr	<= del_cntr+1;
-		end if;
-	end if;
+	-- if (delayed = false) then
+		-- if (cmd_cntr = (total_cmds-1)) then
+			-- wait for 777 us;
+			-- delayed		<= true;
+		-- else
+			-- cmd_cntr	<= cmd_cntr+1;
+			-- delayed		<= false;
+		-- end if;
+	-- else
+		-- -- Delayed command counting and loop ending
+		-- if (del_cntr = (del_cmds-1)) then
+			-- wait;
+		-- else
+			-- del_cntr	<= del_cntr+1;
+		-- end if;
+	-- end if;
+	wait;
 end loop; 
 end process rxf_gen;
 

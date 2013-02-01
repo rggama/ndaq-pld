@@ -519,6 +519,15 @@ Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling entity s_spi
 -- Compiling architecture rtl of s_spi
 
+} {} {}} ../../ndaq_core/system/core_regs.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_regs.vhd
+Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling package core_regs
+-- Compiling package body core_regs
+-- Loading package core_regs
+
 } {} {}} ../../ndaq_core/tdc/tdc.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc.vhd
 Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Loading package STANDARD
@@ -530,14 +539,13 @@ Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling entity tdc
 -- Compiling architecture one_tdc of tdc
 
-} {} {}} ../../ndaq_core/system/core_regs.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_regs.vhd
+} {} {}} ./board_level/idt_fifo.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/board_level/idt_fifo.vhd
 Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
--- Compiling package core_regs
--- Compiling package body core_regs
--- Loading package core_regs
+-- Compiling entity idt_fifo
+-- Compiling architecture SYN of idt_fifo
 
 } {} {}} ../../ndaq_core/tdc/tdc_pkg.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc_pkg.vhd
 Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
@@ -549,13 +557,5 @@ Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling package tdc_pkg
 -- Compiling package body tdc_pkg
 -- Loading package tdc_pkg
-
-} {} {}} ./board_level/idt_fifo.vhd {1 {vcom -work work -2002 -explicit C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/board_level/idt_fifo.vhd
-Model Technology ModelSim ALTERA vcom 10.1b Compiler 2012.04 Apr 27 2012
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Compiling entity idt_fifo
--- Compiling architecture SYN of idt_fifo
 
 } {} {}}
