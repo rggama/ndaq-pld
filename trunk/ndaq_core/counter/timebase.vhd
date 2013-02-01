@@ -120,7 +120,8 @@ begin
 		--
 		if ((r_srst = '1') or (int_rst = '1')) then
 			timebase_cntr <= (others => '0');
-		elsif ((enable = '1') and (r_timebase_en = '1')) then
+			
+		elsif ((r_timebase_en = '1')) then --(enable = '1') and 
 			timebase_cntr	<= timebase_cntr + 1;
 		end if;
 		

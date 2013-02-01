@@ -6,19 +6,87 @@
     <node_ip_info instance_id="0" mfg_id="110" node_id="0" version="6"/>
     <position_info>
       <single attribute="active tab" value="0"/>
-      <single attribute="data horizontal scroll position" value="17"/>
-      <single attribute="data vertical scroll position" value="0"/>
+      <single attribute="data horizontal scroll position" value="0"/>
+      <single attribute="data vertical scroll position" value="9"/>
       <single attribute="zoom level denominator" value="1"/>
-      <single attribute="zoom level numerator" value="2"/>
+      <single attribute="zoom level numerator" value="4"/>
       <single attribute="zoom offset denominator" value="1"/>
-      <single attribute="zoom offset numerator" value="65408"/>
+      <single attribute="zoom offset numerator" value="32704"/>
     </position_info>
-    <signal_set global_temp="1" name="signal_set: 2013/01/25 17:02:13  #0">
+    <signal_set global_temp="1" name="signal_set: 2013/01/28 12:11:35  #0">
       <clock name="adc12_dco" polarity="posedge" tap_mode="classic"/>
       <config ram_type="M4K" reserved_data_nodes="0" reserved_storage_qualifier_nodes="0" reserved_trigger_nodes="0" sample_depth="256" trigger_in_enable="yes" trigger_in_node="tcounter:\adc_data_acq_construct:0:trigger_counter|s_trigger_in" trigger_in_tap_mode="classic" trigger_out_enable="no"/>
       <top_entity/>
       <signal_vec>
         <trigger_input_vec>
+          <wire name="mcounter:mtrigger_counter|counter_q[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[28]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[29]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[30]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[31]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[32]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[33]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[34]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[35]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[0]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[10]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[11]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[12]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[13]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[14]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[15]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[16]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[17]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[18]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[19]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[1]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[20]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[21]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[22]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[23]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[24]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[25]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[26]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[27]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[28]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[29]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[2]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[30]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[31]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[3]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[4]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[5]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[6]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[7]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[8]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[9]" tap_mode="classic" type="register"/>
           <wire name="mcounter:mtrigger_counter|lock" tap_mode="classic" type="combinatorial"/>
           <wire name="mcounter:mtrigger_counter|mcounter_fifo:READOUT_FIFO|data[35]" tap_mode="classic" type="combinatorial"/>
           <wire name="mcounter:mtrigger_counter|r_fifo_wen" tap_mode="classic" type="register"/>
@@ -67,6 +135,74 @@
           <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|s_trigger_in" tap_mode="classic" type="register"/>
         </trigger_input_vec>
         <data_input_vec>
+          <wire name="mcounter:mtrigger_counter|counter_q[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[28]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[29]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[30]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[31]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[32]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[33]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[34]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[35]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[0]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[10]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[11]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[12]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[13]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[14]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[15]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[16]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[17]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[18]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[19]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[1]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[20]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[21]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[22]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[23]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[24]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[25]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[26]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[27]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[28]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[29]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[2]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[30]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[31]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[3]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[4]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[5]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[6]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[7]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[8]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[9]" tap_mode="classic" type="register"/>
           <wire name="mcounter:mtrigger_counter|lock" tap_mode="classic" type="combinatorial"/>
           <wire name="mcounter:mtrigger_counter|mcounter_fifo:READOUT_FIFO|data[35]" tap_mode="classic" type="combinatorial"/>
           <wire name="mcounter:mtrigger_counter|r_fifo_wen" tap_mode="classic" type="register"/>
@@ -115,6 +251,74 @@
           <wire name="tcounter:\adc_data_acq_construct:0:trigger_counter|s_trigger_in" tap_mode="classic" type="register"/>
         </data_input_vec>
         <storage_qualifier_input_vec>
+          <wire name="mcounter:mtrigger_counter|counter_q[0]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[10]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[11]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[12]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[13]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[14]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[15]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[16]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[17]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[18]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[19]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[1]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[20]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[21]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[22]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[23]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[24]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[25]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[26]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[27]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[28]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[29]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[2]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[30]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[31]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[32]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[33]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[34]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[35]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[3]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[4]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[5]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[6]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[7]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[8]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_q[9]" tap_mode="classic" type="combinatorial"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[0]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[10]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[11]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[12]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[13]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[14]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[15]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[16]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[17]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[18]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[19]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[1]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[20]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[21]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[22]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[23]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[24]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[25]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[26]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[27]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[28]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[29]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[2]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[30]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[31]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[3]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[4]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[5]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[6]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[7]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[8]" tap_mode="classic" type="register"/>
+          <wire name="mcounter:mtrigger_counter|counter_reg[9]" tap_mode="classic" type="register"/>
           <wire name="mcounter:mtrigger_counter|lock" tap_mode="classic" type="combinatorial"/>
           <wire name="mcounter:mtrigger_counter|mcounter_fifo:READOUT_FIFO|data[35]" tap_mode="classic" type="combinatorial"/>
           <wire name="mcounter:mtrigger_counter|r_fifo_wen" tap_mode="classic" type="register"/>
@@ -213,6 +417,78 @@
           <net is_signal_inverted="no" name="mcounter:mtrigger_counter|r_trigger_in"/>
           <net is_signal_inverted="no" name="mcounter:mtrigger_counter|s_trigger_in"/>
           <net is_signal_inverted="no" name="mcounter:mtrigger_counter|trigger_in"/>
+          <bus is_signal_inverted="no" link="all" name="mcounter:mtrigger_counter|counter_q" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[35]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[34]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[33]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[32]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[31]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[30]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[29]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[28]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[27]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[26]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[25]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[24]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[23]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[22]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[21]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[20]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[19]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[18]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[17]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[16]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[15]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[14]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[13]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[12]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[11]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[10]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[9]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[8]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[7]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[6]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[5]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[4]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[3]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[2]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[1]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="mcounter:mtrigger_counter|counter_reg" order="msb_to_lsb" radix="unsigned_dec" state="collapse" type="register">
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[31]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[30]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[29]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[28]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[27]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[26]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[25]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[24]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[23]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[22]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[21]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[20]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[19]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[18]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[17]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[16]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[15]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[14]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[13]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[12]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[11]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[10]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[9]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[8]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[7]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[6]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[5]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[4]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[3]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[2]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[1]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[0]"/>
+          </bus>
         </data_view>
         <setup_view>
           <net is_signal_inverted="no" name="tcounter:\adc_data_acq_construct:0:trigger_counter|s_trigger_in"/>
@@ -263,9 +539,81 @@
           <net is_signal_inverted="no" name="mcounter:mtrigger_counter|r_trigger_in"/>
           <net is_signal_inverted="no" name="mcounter:mtrigger_counter|s_trigger_in"/>
           <net is_signal_inverted="no" name="mcounter:mtrigger_counter|trigger_in"/>
+          <bus is_signal_inverted="no" link="all" name="mcounter:mtrigger_counter|counter_q" order="msb_to_lsb" radix="hex" state="collapse" type="combinatorial">
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[35]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[34]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[33]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[32]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[31]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[30]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[29]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[28]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[27]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[26]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[25]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[24]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[23]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[22]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[21]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[20]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[19]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[18]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[17]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[16]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[15]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[14]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[13]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[12]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[11]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[10]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[9]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[8]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[7]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[6]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[5]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[4]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[3]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[2]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[1]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_q[0]"/>
+          </bus>
+          <bus is_signal_inverted="no" link="all" name="mcounter:mtrigger_counter|counter_reg" order="msb_to_lsb" radix="unsigned_dec" state="collapse" type="register">
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[31]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[30]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[29]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[28]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[27]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[26]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[25]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[24]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[23]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[22]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[21]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[20]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[19]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[18]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[17]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[16]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[15]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[14]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[13]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[12]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[11]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[10]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[9]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[8]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[7]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[6]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[5]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[4]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[3]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[2]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[1]"/>
+            <net is_signal_inverted="no" name="mcounter:mtrigger_counter|counter_reg[0]"/>
+          </bus>
         </setup_view>
       </presentation>
-      <trigger CRC="E2450F9E" attribute_mem_mode="false" gap_record="true" global_temp="1" name="trigger: 2013/01/25 17:02:13  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="64" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="rising edge" trigger_out="active high" trigger_type="circular">
+      <trigger CRC="123E02B7" attribute_mem_mode="false" gap_record="true" global_temp="1" name="trigger: 2013/01/28 12:11:35  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="64" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="rising edge" trigger_out="active high" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no" trigger_in="dont_care" trigger_out="active high"/>
         <events use_custom_flow_control="no">
           <level enabled="yes" name="condition1" type="basic">
@@ -275,8 +623,8 @@
           </level>
         </events>
         <storage_qualifier_events>
-          <transitional>0000000000000000000000000000000000000000000000
-            <pwr_up_transitional>0000000000000000000000000000000000000000000000</pwr_up_transitional>
+          <transitional>000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+            <pwr_up_transitional>000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</pwr_up_transitional>
           </transitional>
           <storage_qualifier_level type="basic">
             <power_up>
@@ -295,8 +643,8 @@
           </storage_qualifier_level>
         </storage_qualifier_events>
         <log>
-          <data global_temp="1" name="log: 2013/01/25 17:05:40  #0" power_up_mode="false" sample_depth="255" trigger_position="-1">0000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100000000000001000000000010000000000000010010010000000000000100000000001000000000000001001001000000000000010000000000100000000000000100100100</data>
-          <extradata>1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</extradata>
+          <data global_temp="1" name="log: 2013/01/28 12:30:51  #0" power_up_mode="true" sample_depth="255" trigger_position="255">111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111</data>
+          <extradata>111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111T</extradata>
         </log>
       </trigger>
     </signal_set>
@@ -307,12 +655,12 @@
     <single attribute="active instance" value="0"/>
     <single attribute="config widget visible" value="1"/>
     <single attribute="data log widget visible" value="1"/>
+    <single attribute="hierarchy widget height" value="129"/>
     <single attribute="hierarchy widget visible" value="1"/>
     <single attribute="instance widget visible" value="1"/>
     <single attribute="jtag widget visible" value="1"/>
+    <multi attribute="column width" size="23" value="34,34,411,74,68,70,88,88,98,98,88,88,110,101,101,101,101,101,101,101,101,107,78"/>
     <multi attribute="frame size" size="2" value="1366,706"/>
     <multi attribute="jtag widget size" size="2" value="334,120"/>
-    <single attribute="hierarchy widget height" value="129"/>
-    <multi attribute="column width" size="23" value="34,34,316,74,68,70,88,88,98,98,88,88,110,101,101,101,101,101,101,101,101,107,167"/>
   </global_info>
 </session>

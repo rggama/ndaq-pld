@@ -67,7 +67,6 @@ architecture rtl of mcounter is
 	signal r_lock					: std_logic := '0';
 	signal s_lock					: std_logic := '0';	
 	signal t_lock					: std_logic := '0'; 
-	signal u_lock					: std_logic := '0';
 --
 --
 	
@@ -123,7 +122,6 @@ begin
 		r_lock <= lock;
 		s_lock <= r_lock;
 		t_lock <= s_lock;
-		u_lock <= t_lock;
 		
 		end if;
 end process;
@@ -154,7 +152,7 @@ end process;
 
 --
 --
-fifo_data <= u_lock & "000" & counter_reg;
+fifo_data <= t_lock & "000" & counter_reg;
 
 --
 --Readout FIFO

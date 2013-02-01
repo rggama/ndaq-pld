@@ -10,7 +10,7 @@ Z2 DPx4 ieee 18 std_logic_unsigned 0 22 RYmj;=TK`k=k>D@Cz`zoB3
 Z3 DPx4 ieee 15 std_logic_arith 0 22 4`Y?g_lkdn;7UL9IiJck01
 Z4 DPx3 std 6 textio 0 22 5>J:;AW>W0[[dW0I6EN1Q0
 Z5 DPx4 ieee 14 std_logic_1164 0 22 5=aWaoGZSMWIcH0i^f`XF1
-Z6 w1359332168
+Z6 w1359339039
 Z7 dC:\Users\Athayde\Desktop\pld\ndaq_sim\whole
 Z8 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/acq_pkg.vhd
 Z9 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/acq_pkg.vhd
@@ -19,7 +19,7 @@ L14
 VKLGDYdakhJdH2X:0oFgUC3
 Z10 OV;C;10.1b;51
 32
-Z11 !s108 1359333096.340000
+Z11 !s108 1359401545.638000
 Z12 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/acq_pkg.vhd|
 Z13 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/acq_pkg.vhd|
 Z14 o-work work -2002 -explicit -O0
@@ -48,7 +48,7 @@ nbody
 !s100 IbnUYB`mmd4jieOlh?m0J1
 !i10b 1
 Eclkman
-Z18 w1359332167
+Z18 w1359339038
 R2
 R3
 R4
@@ -61,7 +61,7 @@ L15
 VmnKOUlW8z@P>L=iIX4S:Z3
 R10
 32
-Z21 !s108 1359333095.392000
+Z21 !s108 1359339823.768000
 Z22 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/system/clkman.vhd|
 Z23 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/system/clkman.vhd|
 R14
@@ -132,7 +132,7 @@ L15
 Vi>aI=L;QL8c7Z?FT@QI<f0
 R10
 32
-Z35 !s108 1359333094.851000
+Z35 !s108 1359404333.637000
 Z36 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_clkman.vhd|
 Z37 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_clkman.vhd|
 R14
@@ -160,7 +160,7 @@ R15
 Ecore_cmddec
 R6
 Z38 DPx4 ieee 11 numeric_std 0 22 O3PF8EB`?j9=z7KT`fn941
-Z39 DPx4 work 9 core_regs 0 22 dj2e4^h_`XCKIHCmm:l^e3
+Z39 DPx4 work 9 core_regs 0 22 B7?2AWVSVbZJ`d9>:@aad2
 R4
 R5
 R7
@@ -171,7 +171,7 @@ L9
 Vn1b=RoTH?NZF_@N?_`D5<1
 R10
 32
-Z42 !s108 1359333096.884000
+Z42 !s108 1359404333.983000
 Z43 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_cmddec.vhd|
 Z44 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_cmddec.vhd|
 R14
@@ -208,7 +208,7 @@ L42
 Vn^DkakKAz?m<Q^EOGS3XX3
 R10
 32
-Z47 !s108 1359333094.935000
+Z47 !s108 1359404333.701000
 Z48 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_pll.vhd|
 Z49 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_pll.vhd|
 R14
@@ -245,7 +245,7 @@ L9
 VU_MUMXbS6[g=e8]V3GJEB1
 R10
 32
-Z52 !s108 1359333096.753000
+Z52 !s108 1359404333.901000
 Z53 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_rconst.vhd|
 Z54 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_rconst.vhd|
 R14
@@ -273,21 +273,21 @@ R15
 Pcore_regs
 R4
 R5
-R6
+Z55 w1359390927
 R7
-Z55 8C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_regs.vhd
-Z56 FC:/Users/Athayde/Desktop/pld/ndaq_core/system/core_regs.vhd
+Z56 8C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_regs.vhd
+Z57 FC:/Users/Athayde/Desktop/pld/ndaq_core/system/core_regs.vhd
 l0
 L8
-Vdj2e4^h_`XCKIHCmm:l^e3
+VB7?2AWVSVbZJ`d9>:@aad2
 R10
 32
-Z57 !s108 1359333096.586000
-Z58 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_regs.vhd|
-Z59 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_regs.vhd|
+Z58 !s108 1359404333.785000
+Z59 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_regs.vhd|
+Z60 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/system/core_regs.vhd|
 R14
 R15
-!s100 gLWzf`0ZM^9goScVd8>X@3
+!s100 BYmN6KGB?Rz=C0C`DjaVW1
 !i10b 1
 Bbody
 R39
@@ -298,29 +298,29 @@ L130
 V5NeKP<R>=21h7nf5dY4G>3
 R10
 32
-R57
 R58
 R59
+R60
 R14
 R15
 nbody
 !s100 W12;g7H9Wgmf4B`LJPkUW0
 !i10b 1
 Ecounter_fifo
-R18
+R6
 R4
 R5
 R7
-Z60 8C:/Users/Athayde/Desktop/pld/ndaq_core/counter/counter_fifo.vhd
-Z61 FC:/Users/Athayde/Desktop/pld/ndaq_core/counter/counter_fifo.vhd
+Z61 8C:/Users/Athayde/Desktop/pld/ndaq_core/counter/counter_fifo.vhd
+Z62 FC:/Users/Athayde/Desktop/pld/ndaq_core/counter/counter_fifo.vhd
 l0
 L42
 VVE5O=ElU@9Nh[:fkjJJ8i1
 R10
 32
-Z62 !s108 1359333098.273000
-Z63 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/counter/counter_fifo.vhd|
-Z64 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/counter/counter_fifo.vhd|
+Z63 !s108 1359401547.170000
+Z64 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/counter/counter_fifo.vhd|
+Z65 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/counter/counter_fifo.vhd|
 R14
 R15
 !s100 h7Q74V3TJ:R4V]@_nj<dM2
@@ -334,16 +334,16 @@ L58
 VB??flShmi8m<YO>[?bPLW0
 R10
 32
-R62
 R63
 R64
+R65
 R14
 R15
 !s100 mNLnX]P75_P@2_5D]Khj41
 !i10b 1
 Edatabuilder
 R6
-Z65 DPx4 work 15 databuilder_pkg 0 22 3EWfFRU55AfW2z:H2TWl80
+Z66 DPx4 work 15 databuilder_pkg 0 22 3EWfFRU55AfW2z:H2TWl80
 R17
 R1
 R2
@@ -351,22 +351,22 @@ R3
 R4
 R5
 R7
-Z66 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/databuilder.vhd
-Z67 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/databuilder.vhd
+Z67 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/databuilder.vhd
+Z68 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/databuilder.vhd
 l0
 L16
 VScaH:Y24<9kOf^j`3zEzz2
 R10
 32
-Z68 !s108 1359333097.196000
-Z69 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/databuilder.vhd|
-Z70 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/databuilder.vhd|
+Z69 !s108 1359401546.071000
+Z70 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/databuilder.vhd|
+Z71 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/databuilder.vhd|
 R14
 R15
 !s100 i0QgmleQ^ghi3:4?aBmW;2
 !i10b 1
 Artl
-R65
+R66
 R17
 R1
 R2
@@ -379,9 +379,9 @@ L46
 VcZF_@]fdK[n8hH6VOK[U;2
 R10
 32
-R68
 R69
 R70
+R71
 R14
 R15
 !s100 XEHgPDA;RTaB@PVhjzMZ43
@@ -395,22 +395,22 @@ R4
 R5
 R6
 R7
-Z71 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/databuilder_pkg.vhd
-Z72 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/databuilder_pkg.vhd
+Z72 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/databuilder_pkg.vhd
+Z73 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/databuilder_pkg.vhd
 l0
 L15
 V3EWfFRU55AfW2z:H2TWl80
 R10
 32
-Z73 !s108 1359333097.284000
-Z74 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/databuilder_pkg.vhd|
-Z75 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/databuilder_pkg.vhd|
+Z74 !s108 1359401546.140000
+Z75 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/databuilder_pkg.vhd|
+Z76 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/databuilder_pkg.vhd|
 R14
 R15
 !s100 g6O?28D?=IbJIH7C5oE`D0
 !i10b 1
 Bbody
-R65
+R66
 R17
 R1
 R2
@@ -422,9 +422,9 @@ L69
 Vk<MCF3HZAk>K7X>fKogW=2
 R10
 32
-R73
 R74
 R75
+R76
 R14
 R15
 nbody
@@ -440,16 +440,16 @@ R16
 R4
 R5
 R7
-Z76 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/dcfifom.vhd
-Z77 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/dcfifom.vhd
+Z77 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/dcfifom.vhd
+Z78 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/dcfifom.vhd
 l0
 L12
 VRBbf1LAiSkb;AZd5;zB[T0
 R10
 32
-Z78 !s108 1359333097.368000
-Z79 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/dcfifom.vhd|
-Z80 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/dcfifom.vhd|
+Z79 !s108 1359401546.208000
+Z80 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/dcfifom.vhd|
+Z81 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/dcfifom.vhd|
 R14
 R15
 !s100 iTPh<CecVz6@`DM@2h3420
@@ -468,21 +468,21 @@ L35
 VPk0FR@CY5=d]V5^az6_em1
 R10
 32
-R78
 R79
 R80
+R81
 R14
 R15
 !s100 7jcehJJdHkK?FDMazVKLR1
 !i10b 1
 Ef2f_copier
-Z81 w1322581765
-Z82 DPx4 ieee 18 std_logic_unsigned 0 22 hEMVMlaNCR^<OOoVNV;m90
-Z83 DPx4 ieee 15 std_logic_arith 0 22 GJbAT?7@hRQU9IQ702DT]2
+Z82 w1322581765
+Z83 DPx4 ieee 18 std_logic_unsigned 0 22 hEMVMlaNCR^<OOoVNV;m90
+Z84 DPx4 ieee 15 std_logic_arith 0 22 GJbAT?7@hRQU9IQ702DT]2
 R27
 R28
-Z84 8C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/usb_readout/f2f_copier.vhd
-Z85 FC:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/usb_readout/f2f_copier.vhd
+Z85 8C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/usb_readout/f2f_copier.vhd
+Z86 FC:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_vme/usb_readout/f2f_copier.vhd
 l0
 L14
 V>l`f@7NU90gK[fBm5UGc:3
@@ -492,8 +492,8 @@ R14
 R15
 !s100 gcC:N11EgHBGSJGZkEiP53
 Artl
-R82
 R83
+R84
 R27
 DEx4 work 10 f2f_copier 0 22 >l`f@7NU90gK[fBm5UGc:3
 l76
@@ -502,7 +502,7 @@ VKg:B0X<QWJ:K79S;9LFcG2
 R31
 32
 R32
-Z86 Mx2 4 ieee 15 std_logic_arith
+Z87 Mx2 4 ieee 15 std_logic_arith
 Mx1 4 ieee 18 std_logic_unsigned
 R14
 R15
@@ -514,16 +514,16 @@ R3
 R4
 R5
 R7
-Z87 8C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/f2ft_copier.vhd
-Z88 FC:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/f2ft_copier.vhd
+Z88 8C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/f2ft_copier.vhd
+Z89 FC:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/f2ft_copier.vhd
 l0
 L13
 Vn6f?NR@1_TCkLaJYZM:X20
 R10
 32
-Z89 !s108 1359333095.808000
-Z90 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/f2ft_copier.vhd|
-Z91 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/f2ft_copier.vhd|
+Z90 !s108 1359339824.189000
+Z91 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/f2ft_copier.vhd|
+Z92 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/f2ft_copier.vhd|
 R14
 R15
 !s100 k0dX2iRXenO621a7j56hh0
@@ -539,9 +539,9 @@ L38
 V_fc^l6XB[n8FCzhc<UcI71
 R10
 32
-R89
 R90
 R91
+R92
 R14
 R15
 !s100 [nXi1^nWbVM`R1Vgk=CkB3
@@ -553,16 +553,16 @@ R3
 R4
 R5
 R7
-Z92 8C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_ab.vhd
-Z93 FC:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_ab.vhd
+Z93 8C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_ab.vhd
+Z94 FC:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_ab.vhd
 l0
 L15
 VM_bTmI:k]PkzES2kZkI]Y3
 R10
 32
-Z94 !s108 1359333095.119000
-Z95 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_ab.vhd|
-Z96 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_ab.vhd|
+Z95 !s108 1359339823.512000
+Z96 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_ab.vhd|
+Z97 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_ab.vhd|
 R14
 R15
 !s100 >U^_iOAc4Yj4^NWC`W;UB1
@@ -578,9 +578,9 @@ L39
 V3FU9gKAeL0^5V6aE5Z]C>0
 R10
 32
-R94
 R95
 R96
+R97
 R14
 R15
 !s100 NZM?[ZPH5m7zeYDfP`Rd`1
@@ -592,16 +592,16 @@ R3
 R4
 R5
 R7
-Z97 8C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_if.vhd
-Z98 FC:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_if.vhd
+Z98 8C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_if.vhd
+Z99 FC:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_if.vhd
 l0
 L19
 VQgC_Kl_@D`EiF2<38d^ad1
 R10
 32
-Z99 !s108 1359333095.205000
-Z100 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_if.vhd|
-Z101 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_if.vhd|
+Z100 !s108 1359339823.575000
+Z101 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_if.vhd|
+Z102 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_if.vhd|
 R14
 R15
 !s100 kS>KEl6TzGIUS=9Ujob_f1
@@ -617,9 +617,9 @@ L48
 V0PXmzm:2iGL6o^8^M92kP1
 R10
 32
-R99
 R100
 R101
+R102
 R14
 R15
 !s100 ZVdKc=7]f9M2lgi3AZ7IU0
@@ -631,16 +631,16 @@ R3
 R4
 R5
 R7
-Z102 8C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_rx.vhd
-Z103 FC:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_rx.vhd
+Z103 8C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_rx.vhd
+Z104 FC:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_rx.vhd
 l0
 L18
 V1VZP31T8zoJQbV@8KnfV71
 R10
 32
-Z104 !s108 1359333095.267000
-Z105 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_rx.vhd|
-Z106 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_rx.vhd|
+Z105 !s108 1359339823.639000
+Z106 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_rx.vhd|
+Z107 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_rx.vhd|
 R14
 R15
 !s100 hBR>g[E`Be3kRz4T3W4U<0
@@ -656,9 +656,9 @@ L41
 V1lA4c3FezLkPVoMA0jS3i1
 R10
 32
-R104
 R105
 R106
+R107
 R14
 R15
 !s100 ?AS6[XCUk49^X8fc31Qc23
@@ -670,16 +670,16 @@ R3
 R4
 R5
 R7
-Z107 8C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_tx.vhd
-Z108 FC:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_tx.vhd
+Z108 8C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_tx.vhd
+Z109 FC:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_tx.vhd
 l0
 L19
 VN[B<2]4zA=nX3K=:0D32b3
 R10
 32
-Z109 !s108 1359333095.330000
-Z110 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_tx.vhd|
-Z111 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_tx.vhd|
+Z110 !s108 1359339823.703000
+Z111 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_tx.vhd|
+Z112 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/FT245BM_if/FT245BM_tx.vhd|
 R14
 R15
 !s100 ^fl0SLi6W?Q3VM[>acg1N2
@@ -695,9 +695,9 @@ L42
 V5dgKBMgP`[=N_nG?>Uc:41
 R10
 32
-R109
 R110
 R111
+R112
 R14
 R15
 !s100 ]UnXC86?NO]9hZWZ@?E5j0
@@ -709,17 +709,17 @@ R4
 R5
 R6
 R7
-Z112 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/functions_pkg.vhd
-Z113 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/functions_pkg.vhd
+Z113 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/functions_pkg.vhd
+Z114 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/functions_pkg.vhd
 l0
 L16
 VP1lo:4ob_c20SG=U4_^5R3
 R10
 32
 b1
-Z114 !s108 1359333097.133000
-Z115 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/functions_pkg.vhd|
-Z116 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/functions_pkg.vhd|
+Z115 !s108 1359401546.007000
+Z116 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/functions_pkg.vhd|
+Z117 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/functions_pkg.vhd|
 R14
 R15
 !s100 ]QzkSzJG9DIYFS:?WmF0i2
@@ -735,58 +735,58 @@ L34
 V<0?V0OMzKNCZ>HzzPbf^>2
 R10
 32
-R114
 R115
 R116
+R117
 R14
 R15
 nbody
 !s100 NQO`l;f9P?BI6^:6XBRge2
 !i10b 1
 Eidt_fifo
-R18
+Z118 w1359408099
 R4
 R5
 R7
-Z117 8C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/board_level/idt_fifo.vhd
-Z118 FC:/Users/Athayde/Desktop/pld/ndaq_sim/whole/board_level/idt_fifo.vhd
+Z119 8C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/board_level/idt_fifo.vhd
+Z120 FC:/Users/Athayde/Desktop/pld/ndaq_sim/whole/board_level/idt_fifo.vhd
 l0
 L42
-V_YXK8Llf=@bh_I`o<Hk`H0
+VL]cI6bG=oMKiURWfG5bJc3
+!s100 f3`88UJhS4DXhcUF7bf050
 R10
 32
-Z119 !s108 1359333096.209000
-Z120 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/board_level/idt_fifo.vhd|
-Z121 !s107 C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/board_level/idt_fifo.vhd|
+!i10b 1
+Z121 !s108 1359408800.537000
+Z122 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/board_level/idt_fifo.vhd|
+Z123 !s107 C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/board_level/idt_fifo.vhd|
 R14
 R15
-!s100 gW_3cT:S@QRI2QZ>[25=J1
-!i10b 1
 Asyn
 R4
 R5
-DEx4 work 8 idt_fifo 0 22 _YXK8Llf=@bh_I`o<Hk`H0
-l97
+DEx4 work 8 idt_fifo 0 22 L]cI6bG=oMKiURWfG5bJc3
+l98
 L59
-VAl`YBJeYZNkeLOJdP1O7?3
+Vcb`HSgDVaXZ6iBLHZaaVR0
+!s100 :UCmaMg<Td6W@19i8=_?f1
 R10
 32
-R119
-R120
+!i10b 1
 R121
+R122
+R123
 R14
 R15
-!s100 8GM=79]XBzU=idH>hOa<J0
-!i10b 1
 Eidtfifo_ctr
-Z122 w1322511753
-Z123 DPx4 work 7 acq_pkg 0 22 1=Fe0TS6`1KNVk7AmgzAR1
+Z124 w1322511753
+Z125 DPx4 work 7 acq_pkg 0 22 1=Fe0TS6`1KNVk7AmgzAR1
+R84
 R83
-R82
 R27
 R28
-Z124 8C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/idtfifo_ctr.vhd
-Z125 FC:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/idtfifo_ctr.vhd
+Z126 8C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/idtfifo_ctr.vhd
+Z127 FC:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/idtfifo_ctr.vhd
 l0
 L19
 Vbi?PLS22H_C1[27VM=3`j2
@@ -796,9 +796,9 @@ R14
 R15
 !s100 C6LCgdDnnL38izA7^7dAj3
 Aone_idtfifo_ctr
-R123
+R125
+R84
 R83
-R82
 R27
 DEx4 work 11 idtfifo_ctr 0 22 bi?PLS22H_C1[27VM=3`j2
 l57
@@ -806,22 +806,22 @@ L40
 V:eo^GDFN_giF4JkMk1:LV2
 R31
 32
-Z126 Mx4 4 ieee 14 std_logic_1164
-Z127 Mx3 4 ieee 18 std_logic_unsigned
-R86
-Z128 Mx1 4 work 7 acq_pkg
+Z128 Mx4 4 ieee 14 std_logic_1164
+Z129 Mx3 4 ieee 18 std_logic_unsigned
+R87
+Z130 Mx1 4 work 7 acq_pkg
 R14
 R15
 !s100 ?jFNg<cWR7;<RN1ePZ3f[1
 Eidtfifo_top
-Z129 w1322141194
-R123
+Z131 w1322141194
+R125
+R84
 R83
-R82
 R27
 R28
-Z130 8C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/idtfifo_top.vhd
-Z131 FC:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/idtfifo_top.vhd
+Z132 8C:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/idtfifo_top.vhd
+Z133 FC:/Documents and Settings/Rafael/Desktop/pld_r27/ndaq_core/acq/idtfifo_top.vhd
 l0
 L19
 Vii]]F11[RJ@iQEKMiB9G42
@@ -831,9 +831,9 @@ R14
 R15
 !s100 i20Q@ezgdUmC^AQl]Tm=;1
 Aone_idtfifo_top
-R123
+R125
+R84
 R83
-R82
 R27
 DEx4 work 11 idtfifo_top 0 22 ii]]F11[RJ@iQEKMiB9G42
 l92
@@ -841,10 +841,10 @@ L49
 V=WK=6k=Z4_]8lD?_]200D0
 R31
 32
-R126
-R127
-R86
 R128
+R129
+R87
+R130
 R14
 R15
 !s100 Gl4DcmgFRK2lE]_1fiW:z1
@@ -854,21 +854,21 @@ R17
 R1
 R2
 R16
-Z132 DPx4 ieee 16 std_logic_signed 0 22 E>OLoMaBGQ?hbGgOoNXM^1
+Z134 DPx4 ieee 16 std_logic_signed 0 22 E>OLoMaBGQ?hbGgOoNXM^1
 R3
 R4
 R5
 R7
-Z133 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/itrigger.vhd
-Z134 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/itrigger.vhd
+Z135 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/itrigger.vhd
+Z136 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/itrigger.vhd
 l0
 L15
 VA]oB`T7LM;XL4XIfm8DlT1
 R10
 32
-Z135 !s108 1359333096.404000
-Z136 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/itrigger.vhd|
-Z137 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/itrigger.vhd|
+Z137 !s108 1359401545.708000
+Z138 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/itrigger.vhd|
+Z139 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/itrigger.vhd|
 R14
 R15
 !s100 PXS;W?PIm`=c1D:>AiWU:2
@@ -878,7 +878,7 @@ R17
 R1
 R2
 R16
-R132
+R134
 R3
 R4
 R5
@@ -888,9 +888,9 @@ L29
 VGGmX=[AaO6DFb<h5V?=d42
 R10
 32
-R135
-R136
 R137
+R138
+R139
 R14
 R15
 !s100 TB6GkHnY@ob4WcVFT6jbc2
@@ -902,16 +902,16 @@ R3
 R4
 R5
 R7
-Z138 8C:/Users/Athayde/Desktop/pld/ndaq_vme/spi/m_spi.vhd
-Z139 FC:/Users/Athayde/Desktop/pld/ndaq_vme/spi/m_spi.vhd
+Z140 8C:/Users/Athayde/Desktop/pld/ndaq_vme/spi/m_spi.vhd
+Z141 FC:/Users/Athayde/Desktop/pld/ndaq_vme/spi/m_spi.vhd
 l0
 L14
 VhXVLLOdE`884Qjhd6IZSF0
 R10
 32
-Z140 !s108 1359333096.014000
-Z141 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/spi/m_spi.vhd|
-Z142 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/spi/m_spi.vhd|
+Z142 !s108 1359339824.389000
+Z143 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/spi/m_spi.vhd|
+Z144 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/spi/m_spi.vhd|
 R14
 R15
 !s100 TkR]kLU6?_ZDR1[633J<>1
@@ -927,42 +927,42 @@ L38
 VeJXzhemK]0m[68]GUg@aR0
 R10
 32
-R140
-R141
 R142
+R143
+R144
 R14
 R15
 !s100 JEHG2BnV;6=J6[_g5@O;70
 !i10b 1
 Emcounter
-R18
-Z143 DPx4 work 12 tcounter_pkg 0 22 o9noC>Fek]dYFSXT:QdaA0
+R6
+Z145 DPx4 work 12 tcounter_pkg 0 22 o9noC>Fek]dYFSXT:QdaA0
 R2
-Z144 DPx4 work 12 mcounter_pkg 0 22 T^Al3W@FEJ1]1gI:l]z472
-R132
+Z146 DPx4 work 12 mcounter_pkg 0 22 T^Al3W@FEJ1]1gI:l]z472
+R134
 R3
 R4
 R5
 R7
-Z145 8C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter.vhd
-Z146 FC:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter.vhd
+Z147 8C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter.vhd
+Z148 FC:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter.vhd
 l0
 L14
 Vl;CI>3C6WJ@bKCWi_g9PN2
 R10
 32
-Z147 !s108 1359333098.182000
-Z148 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter.vhd|
-Z149 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter.vhd|
+Z149 !s108 1359401547.082000
+Z150 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter.vhd|
+Z151 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter.vhd|
 R14
 R15
 !s100 Bo`00ghzHfZS_`WU]7@@U2
 !i10b 1
 Artl
-R143
+R145
 R2
-R144
-R132
+R146
+R134
 R3
 R4
 R5
@@ -972,28 +972,28 @@ L32
 ViXfYb>XC@J9zd>LVR:UGN2
 R10
 32
-R147
-R148
 R149
+R150
+R151
 R14
 R15
 !s100 ZC4T_C1Q_cXi@<D@Pz?T[1
 !i10b 1
 Emcounter_fifo
-R18
+R6
 R4
 R5
 R7
-Z150 8C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_fifo.vhd
-Z151 FC:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_fifo.vhd
+Z152 8C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_fifo.vhd
+Z153 FC:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_fifo.vhd
 l0
 L42
 V8fF1F86?JWl@40Wh5nLCV3
 R10
 32
-Z152 !s108 1359333098.112000
-Z153 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_fifo.vhd|
-Z154 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_fifo.vhd|
+Z154 !s108 1359401547.012000
+Z155 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_fifo.vhd|
+Z156 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_fifo.vhd|
 R14
 R15
 !s100 k1Bc9O;N2TSfVFIZUSVMT0
@@ -1007,9 +1007,9 @@ L58
 Vhmifa6CO2JjlYR4>WUF253
 R10
 32
-R152
-R153
 R154
+R155
+R156
 R14
 R15
 !s100 An7LShjzK0cP9L@2eR6G03
@@ -1019,24 +1019,24 @@ R2
 R3
 R4
 R5
-R18
+R6
 R7
-Z155 8C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_pkg.vhd
-Z156 FC:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_pkg.vhd
+Z157 8C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_pkg.vhd
+Z158 FC:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_pkg.vhd
 l0
 L15
 VT^Al3W@FEJ1]1gI:l]z472
 R10
 32
-Z157 !s108 1359333098.050000
-Z158 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_pkg.vhd|
-Z159 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_pkg.vhd|
+Z159 !s108 1359401546.929000
+Z160 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_pkg.vhd|
+Z161 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/counter/mcounter_pkg.vhd|
 R14
 R15
 !s100 G22HDP1@<@m]9AHRLUT041
 !i10b 1
 Bbody
-R144
+R146
 R2
 R3
 R4
@@ -1046,9 +1046,9 @@ L37
 V11;XWAJ9:HK4@XZXR;=a21
 R10
 32
-R157
-R158
 R159
+R160
+R161
 R14
 R15
 nbody
@@ -1059,16 +1059,16 @@ R18
 R4
 R5
 R7
-Z160 8C:/Users/Athayde/Desktop/pld/ndaq_vme/system/my_pll.vhd
-Z161 FC:/Users/Athayde/Desktop/pld/ndaq_vme/system/my_pll.vhd
+Z162 8C:/Users/Athayde/Desktop/pld/ndaq_vme/system/my_pll.vhd
+Z163 FC:/Users/Athayde/Desktop/pld/ndaq_vme/system/my_pll.vhd
 l0
 L42
 V^<1WF]e?2JB_oSGF`ZoJA1
 R10
 32
-Z162 !s108 1359333095.456000
-Z163 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/system/my_pll.vhd|
-Z164 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/system/my_pll.vhd|
+Z164 !s108 1359339823.831000
+Z165 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/system/my_pll.vhd|
+Z166 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/system/my_pll.vhd|
 R14
 R15
 !s100 e;joK_iLL3OYNm_HEAnMD3
@@ -1082,19 +1082,19 @@ L56
 VOFSIVLi4k4S002>]d2McX3
 R10
 32
-R162
-R163
 R164
+R165
+R166
 R14
 R15
 !s100 B0BQGFWg7SZBIhWJboB>z2
 !i10b 1
 Endaq_core
-R6
-R65
-R143
-R144
-Z165 DPx4 work 7 tdc_pkg 0 22 MCSHTOnjjnBfT?;c1EoM31
+Z167 w1359404264
+R66
+R145
+R146
+Z168 DPx4 work 7 tdc_pkg 0 22 MCSHTOnjjnBfT?;c1EoM31
 R16
 R39
 R17
@@ -1104,25 +1104,25 @@ R3
 R4
 R5
 R7
-Z166 8C:/Users/Athayde/Desktop/pld/ndaq_core/ndaq_core.vhd
-Z167 FC:/Users/Athayde/Desktop/pld/ndaq_core/ndaq_core.vhd
+Z169 8C:/Users/Athayde/Desktop/pld/ndaq_core/ndaq_core.vhd
+Z170 FC:/Users/Athayde/Desktop/pld/ndaq_core/ndaq_core.vhd
 l0
 L57
 VnK0E^P8A6fBXMIT5WOHf[1
 R10
 32
-Z168 !s108 1359333094.422000
-Z169 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/ndaq_core.vhd|
-Z170 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/ndaq_core.vhd|
+Z171 !s108 1359404325.589000
+Z172 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/ndaq_core.vhd|
+Z173 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/ndaq_core.vhd|
 R14
 R15
 !s100 ]l4?ZEdU[ZoVV^74?l7`10
 !i10b 1
 Artl
-R65
-R143
-R144
-R165
+R66
+R145
+R146
+R168
 R16
 R39
 R17
@@ -1134,93 +1134,93 @@ R5
 DEx4 work 9 ndaq_core 0 22 nK0E^P8A6fBXMIT5WOHf[1
 l696
 L196
-V8TlVIO5Y;_=]CLQX?]D1Y1
+V:H>mJ9a6mAoPV[MRB>a;b0
 R10
 32
-R168
-R169
-R170
+R171
+R172
+R173
 R14
 R15
-!s100 dD<Fa5FT_4V4]UZhQIG0K1
+!s100 :LLkB[ijXW6nA=C51mhIX2
 !i10b 1
 Endaq_sim_tbench
-Z171 w1359335817
-Z172 DPx4 work 11 usbcmds_pkg 0 22 c_1NN^T<P1B[2dY>RiVFN2
+Z174 w1359408751
+Z175 DPx4 work 11 usbcmds_pkg 0 22 c_1NN^T<P1B[2dY>RiVFN2
 R3
 R2
 R4
 R5
 R7
-Z173 8C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/ndaq_sim_tbench.vht
-Z174 FC:/Users/Athayde/Desktop/pld/ndaq_sim/whole/ndaq_sim_tbench.vht
+Z176 8C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/ndaq_sim_tbench.vht
+Z177 FC:/Users/Athayde/Desktop/pld/ndaq_sim/whole/ndaq_sim_tbench.vht
 l0
 L14
 VL=l6^4ObL29c>^o]P^3hc1
-!s100 zh2zFDnLQdD2TI0E?8KZ?3
 R10
 32
-!i10b 1
-Z175 !s108 1359335821.181000
-Z176 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/ndaq_sim_tbench.vht|
-Z177 !s107 C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/ndaq_sim_tbench.vht|
+Z178 !s108 1359408769.278000
+Z179 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/ndaq_sim_tbench.vht|
+Z180 !s107 C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/ndaq_sim_tbench.vht|
 R14
 R15
+!s100 zh2zFDnLQdD2TI0E?8KZ?3
+!i10b 1
 Atestbench
-R172
+R175
 R3
 R2
 R4
 R5
-Z178 DEx4 work 15 ndaq_sim_tbench 0 22 L=l6^4ObL29c>^o]P^3hc1
-l358
+DEx4 work 15 ndaq_sim_tbench 0 22 L=l6^4ObL29c>^o]P^3hc1
+l360
 L18
-VfPH`W6F8djC:BomnREN2A0
-!s100 45J<Njel`1L9<7=>KM=za2
+V=V_nHFfI3fRh`bBRO>PLR2
 R10
 32
-!i10b 1
-R175
-R176
-R177
+R178
+R179
+R180
 R14
 R15
+!s100 =MbFHSA;P37c=D_F>2YdT3
+!i10b 1
 Endaq_vme
-Z179 w1359333372
-Z180 DPx4 work 19 usb_databuilder_pkg 0 22 0cQ:P5[OTDa10SEOnfZQH0
+R18
+Z181 DPx4 work 19 usb_databuilder_pkg 0 22 0cQ:P5[OTDa10SEOnfZQH0
 R17
 R1
-Z181 DPx4 work 8 vme_regs 0 22 NRB7f^k]]:aG_RW12JlaK0
-Z182 DPx4 work 9 vmeif_usr 0 22 Rj_bh7Zcn1zK]]2I1EzRT2
+Z182 DPx4 work 8 vme_regs 0 22 NRB7f^k]]:aG_RW12JlaK0
+Z183 DPx4 work 9 vmeif_usr 0 22 Rj_bh7Zcn1zK]]2I1EzRT2
 R38
-Z183 DPx4 work 9 vmeif_pkg 0 22 mhF`7Y>zDlg3Vb>2DV^5V0
+Z184 DPx4 work 9 vmeif_pkg 0 22 mhF`7Y>zDlg3Vb>2DV^5V0
 R2
 R3
 R4
 R5
 R7
-Z184 8C:/Users/Athayde/Desktop/pld/ndaq_vme/ndaq_vme.vhd
-Z185 FC:/Users/Athayde/Desktop/pld/ndaq_vme/ndaq_vme.vhd
+Z185 8C:/Users/Athayde/Desktop/pld/ndaq_vme/ndaq_vme.vhd
+Z186 FC:/Users/Athayde/Desktop/pld/ndaq_vme/ndaq_vme.vhd
 l0
 L18
 V]mC8A66`cV?z:CHmcaRfD2
 R10
 32
-Z186 !s108 1359334059.461000
-Z187 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/ndaq_vme.vhd|
-Z188 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/ndaq_vme.vhd|
+Z187 !s108 1359339824.459000
+Z188 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/ndaq_vme.vhd|
+Z189 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/ndaq_vme.vhd|
 R14
 R15
 !s100 n6PH_JVBD7DJ56oT<FA>c1
 !i10b 1
 Artl
-R180
+R181
 R17
 R1
-R181
 R182
-R38
 R183
+R38
+R184
 R2
 R3
 R4
@@ -1231,36 +1231,36 @@ L134
 V@o?j?`1`^z94nDNlfVfmn1
 R10
 32
-R186
 R187
 R188
+R189
 R14
 R15
 !s100 W]DkGHMSH<cBhAQO1kM:O0
 !i10b 1
 Eoverflow
 R6
-R132
+R134
 R3
 R4
 R5
 R7
-Z189 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/overflow.vhd
-Z190 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/overflow.vhd
+Z190 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/overflow.vhd
+Z191 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/overflow.vhd
 l0
 L12
 VEW^`I?TfG0lWR]nmQI98S1
 R10
 32
-Z191 !s108 1359333097.430000
-Z192 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/overflow.vhd|
-Z193 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/overflow.vhd|
+Z192 !s108 1359401546.296000
+Z193 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/overflow.vhd|
+Z194 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/overflow.vhd|
 R14
 R15
 !s100 k<moR6iO]Bfm8X?IgP7<l1
 !i10b 1
 Artl
-R132
+R134
 R3
 R4
 R5
@@ -1270,9 +1270,9 @@ L25
 VF5WBWckU34zkA<;63zZ=R0
 R10
 32
-R191
 R192
 R193
+R194
 R14
 R15
 !s100 S?fc=k:oc^Vg:_ze`P<Di0
@@ -1282,16 +1282,16 @@ R6
 R4
 R5
 R7
-Z194 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/postfifo.vhd
-Z195 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/postfifo.vhd
+Z195 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/postfifo.vhd
+Z196 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/postfifo.vhd
 l0
 L42
 Vmclol681o:;Y7Dfg=`Dk?3
 R10
 32
-Z196 !s108 1359333094.541000
-Z197 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/postfifo.vhd|
-Z198 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/postfifo.vhd|
+Z197 !s108 1359401545.150000
+Z198 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/postfifo.vhd|
+Z199 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/postfifo.vhd|
 R14
 R15
 !s100 zeaT3oD]SfBlK`Nf`X5>;3
@@ -1305,9 +1305,9 @@ L60
 V]m@:f[hOckQ[d14N_HS0l0
 R10
 32
-R196
 R197
 R198
+R199
 R14
 R15
 !s100 =1AjiTYz<fNbkjUQECIm<3
@@ -1317,16 +1317,16 @@ R6
 R4
 R5
 R7
-Z199 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/prefifo.vhd
-Z200 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/prefifo.vhd
+Z200 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/prefifo.vhd
+Z201 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/prefifo.vhd
 l0
 L42
 V_BUEXShlEQlB6V8MlW4Qh0
 R10
 32
-Z201 !s108 1359333094.663000
-Z202 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/prefifo.vhd|
-Z203 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/prefifo.vhd|
+Z202 !s108 1359401545.214000
+Z203 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/prefifo.vhd|
+Z204 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/prefifo.vhd|
 R14
 R15
 !s100 O`0A1l<:8a]H:Qh=MJ2hd2
@@ -1340,28 +1340,28 @@ L58
 V^_[:=hTQOgCi9^ghLI5MT0
 R10
 32
-R201
 R202
 R203
+R204
 R14
 R15
 !s100 3B@YdY2;:hjf49H_ML0Xg2
 !i10b 1
 Epriarb8
-Z204 w1358809611
+Z205 w1358809611
 R4
 R5
 R7
-Z205 8C:/Users/Athayde/Desktop/pld/ndaq_vme/system/priarb8.vhd
-Z206 FC:/Users/Athayde/Desktop/pld/ndaq_vme/system/priarb8.vhd
+Z206 8C:/Users/Athayde/Desktop/pld/ndaq_vme/system/priarb8.vhd
+Z207 FC:/Users/Athayde/Desktop/pld/ndaq_vme/system/priarb8.vhd
 l0
 L17
 VGO3nI1kFPLC7SA3MY0LBZ1
 R10
 32
-Z207 !s108 1359312577.530000
-Z208 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/system/priarb8.vhd|
-Z209 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/system/priarb8.vhd|
+Z208 !s108 1359312577.530000
+Z209 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/system/priarb8.vhd|
+Z210 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/system/priarb8.vhd|
 R14
 R15
 !s100 DFg_Bd?_cFTMNddUYe8aK0
@@ -1375,9 +1375,9 @@ L36
 VPIg`BJgF2JQdKY@`a`D6i3
 R10
 32
-R207
 R208
 R209
+R210
 R14
 R15
 !s100 kz^cl>^UXg_j;_Pc8dG:T0
@@ -1387,16 +1387,16 @@ R18
 R4
 R5
 R7
-Z210 8C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/readout_fifo.vhd
-Z211 FC:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/readout_fifo.vhd
+Z211 8C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/readout_fifo.vhd
+Z212 FC:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/readout_fifo.vhd
 l0
 L42
 V]M6aac1JF_]m4RfSoKDIj0
 R10
 32
-Z212 !s108 1359333095.873000
-Z213 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/readout_fifo.vhd|
-Z214 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/readout_fifo.vhd|
+Z213 !s108 1359339824.268000
+Z214 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/readout_fifo.vhd|
+Z215 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/readout_fifo.vhd|
 R14
 R15
 !s100 ;HDKzH4AX[H1=TQOc=TI70
@@ -1410,9 +1410,9 @@ L62
 Vm60@XWTV1jS_]GiT1XUoj1
 R10
 32
-R212
 R213
 R214
+R215
 R14
 R15
 !s100 dWSkaL]NI<jZY`9lnk]:>2
@@ -1424,16 +1424,16 @@ R3
 R4
 R5
 R7
-Z215 8C:/Users/Athayde/Desktop/pld/ndaq_vme/system/reset.vhd
-Z216 FC:/Users/Athayde/Desktop/pld/ndaq_vme/system/reset.vhd
+Z216 8C:/Users/Athayde/Desktop/pld/ndaq_vme/system/reset.vhd
+Z217 FC:/Users/Athayde/Desktop/pld/ndaq_vme/system/reset.vhd
 l0
 L15
 VJH:K90^WXFo<:K2jCXaP]3
 R10
 32
-Z217 !s108 1359333095.522000
-Z218 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/system/reset.vhd|
-Z219 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/system/reset.vhd|
+Z218 !s108 1359339823.897000
+Z219 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/system/reset.vhd|
+Z220 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/system/reset.vhd|
 R14
 R15
 !s100 O1PVf9`DZ_5GhZ69a;]Oh0
@@ -1449,9 +1449,9 @@ L28
 Vo[P>Mh;hIaZUg]_@L<;2X0
 R10
 32
-R217
 R218
 R219
+R220
 R14
 R15
 !s100 S]56Yn[EWmeNCNoz29Dh_0
@@ -1463,16 +1463,16 @@ R3
 R4
 R5
 R7
-Z220 8C:/Users/Athayde/Desktop/pld/ndaq_core/spi/s_spi.vhd
-Z221 FC:/Users/Athayde/Desktop/pld/ndaq_core/spi/s_spi.vhd
+Z221 8C:/Users/Athayde/Desktop/pld/ndaq_core/spi/s_spi.vhd
+Z222 FC:/Users/Athayde/Desktop/pld/ndaq_core/spi/s_spi.vhd
 l0
 L14
 VANF2HlU12=Ch:;C<2OE@T3
 R10
 32
-Z222 !s108 1359333095.056000
-Z223 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/spi/s_spi.vhd|
-Z224 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/spi/s_spi.vhd|
+Z223 !s108 1359401545.572000
+Z224 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/spi/s_spi.vhd|
+Z225 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/spi/s_spi.vhd|
 R14
 R15
 !s100 0R^WTb_m:L@flVEb0?3MC2
@@ -1488,9 +1488,9 @@ L38
 Vih62m83=debckaM7i2<W_0
 R10
 32
-R222
 R223
 R224
+R225
 R14
 R15
 !s100 WdeUL;:><Mb6[8RPa1e=m3
@@ -1500,16 +1500,16 @@ R18
 R4
 R5
 R7
-Z225 8C:/Users/Athayde/Desktop/pld/ndaq_vme/swc/swc.vhd
-Z226 FC:/Users/Athayde/Desktop/pld/ndaq_vme/swc/swc.vhd
+Z226 8C:/Users/Athayde/Desktop/pld/ndaq_vme/swc/swc.vhd
+Z227 FC:/Users/Athayde/Desktop/pld/ndaq_vme/swc/swc.vhd
 l0
 L15
 VAeBKk?h??KLZz?SZCa7;@3
 R10
 32
-Z227 !s108 1359333095.956000
-Z228 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/swc/swc.vhd|
-Z229 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/swc/swc.vhd|
+Z228 !s108 1359339824.332000
+Z229 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/swc/swc.vhd|
+Z230 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/swc/swc.vhd|
 R14
 R15
 !s100 ClNZD2_Z^L<nSZ2cN29Oa0
@@ -1523,40 +1523,40 @@ L33
 V>ihi<>Q2bQOlXkSjWNYJi2
 R10
 32
-R227
 R228
 R229
+R230
 R14
 R15
 !s100 fFO>=YcRI5VQ6Ul^lIlN<1
 !i10b 1
 Etcounter
-R18
+R6
 R2
-R143
-R132
+R145
+R134
 R3
 R4
 R5
 R7
-Z230 8C:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter.vhd
-Z231 FC:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter.vhd
+Z231 8C:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter.vhd
+Z232 FC:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter.vhd
 l0
 L15
 VcO2M2>GlPQhdlmBz<HnOk1
 R10
 32
-Z232 !s108 1359333097.983000
-Z233 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter.vhd|
-Z234 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter.vhd|
+Z233 !s108 1359401546.862000
+Z234 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter.vhd|
+Z235 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter.vhd|
 R14
 R15
 !s100 8DQ0Bohm2Ri:4P?BdXV2]0
 !i10b 1
 Artl
 R2
-R143
-R132
+R145
+R134
 R3
 R4
 R5
@@ -1566,9 +1566,9 @@ L35
 V69RDBcYaGmOFP[7GEk30T1
 R10
 32
-R232
 R233
 R234
+R235
 R14
 R15
 !s100 CPAmlZIXzXlCGXfBFTAV23
@@ -1578,24 +1578,24 @@ R2
 R3
 R4
 R5
-R18
+R6
 R7
-Z235 8C:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter_pkg.vhd
-Z236 FC:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter_pkg.vhd
+Z236 8C:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter_pkg.vhd
+Z237 FC:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter_pkg.vhd
 l0
 L15
 Vo9noC>Fek]dYFSXT:QdaA0
 R10
 32
-Z237 !s108 1359333097.918000
-Z238 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter_pkg.vhd|
-Z239 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter_pkg.vhd|
+Z238 !s108 1359401546.776000
+Z239 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter_pkg.vhd|
+Z240 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/counter/tcounter_pkg.vhd|
 R14
 R15
 !s100 M77P5G?g4QT6GVdFKe>>z3
 !i10b 1
 Bbody
-R143
+R145
 R2
 R3
 R4
@@ -1605,9 +1605,9 @@ L37
 VnGOZ:H<[_n1n?zekWoXl[2
 R10
 32
-R237
 R238
 R239
+R240
 R14
 R15
 nbody
@@ -1615,28 +1615,28 @@ nbody
 !i10b 1
 Etdc
 R6
-R165
+R168
 R2
 R3
 R4
 R5
 R7
-Z240 8C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc.vhd
-Z241 FC:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc.vhd
+Z241 8C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc.vhd
+Z242 FC:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc.vhd
 l0
 L40
 VML[kl4<dD<^QieT=NhAUX2
 R10
 32
-Z242 !s108 1359333097.784000
-Z243 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc.vhd|
-Z244 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc.vhd|
+Z243 !s108 1359401546.639000
+Z244 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc.vhd|
+Z245 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc.vhd|
 R14
 R15
 !s100 3JIbPmdFCTIzX>G8Wb85e2
 !i10b 1
 Aone_tdc
-R165
+R168
 R2
 R3
 R4
@@ -1647,9 +1647,9 @@ L82
 Via_EjzigTNg?]X69`kWWc1
 R10
 32
-R242
 R243
 R244
+R245
 R14
 R15
 !s100 2dZX:QD^^c`0mNT<`7mQl2
@@ -1661,22 +1661,22 @@ R4
 R5
 R6
 R7
-Z245 8C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc_pkg.vhd
-Z246 FC:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc_pkg.vhd
+Z246 8C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc_pkg.vhd
+Z247 FC:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc_pkg.vhd
 l0
 L15
 VMCSHTOnjjnBfT?;c1EoM31
 R10
 32
-Z247 !s108 1359333097.709000
-Z248 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc_pkg.vhd|
-Z249 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc_pkg.vhd|
+Z248 !s108 1359401546.573000
+Z249 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc_pkg.vhd|
+Z250 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdc_pkg.vhd|
 R14
 R15
 !s100 1bDo9GdDDag;0ibml<g1`0
 !i10b 1
 Bbody
-R165
+R168
 R2
 R3
 R4
@@ -1686,9 +1686,9 @@ L44
 VcfMJ;8_1E2N0kV^5Ia<L?1
 R10
 32
-R247
 R248
 R249
+R250
 R14
 R15
 nbody
@@ -1696,28 +1696,28 @@ nbody
 !i10b 1
 Etdcconfig
 R6
-R165
+R168
 R2
 R3
 R4
 R5
 R7
-Z250 8C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcconfig.vhd
-Z251 FC:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcconfig.vhd
+Z251 8C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcconfig.vhd
+Z252 FC:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcconfig.vhd
 l0
 L22
 V5RzdJ[4UC62`N5=8gcBN[1
 R10
 32
-Z252 !s108 1359333097.644000
-Z253 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcconfig.vhd|
-Z254 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcconfig.vhd|
+Z253 !s108 1359401546.501000
+Z254 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcconfig.vhd|
+Z255 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcconfig.vhd|
 R14
 R15
 !s100 hC3WENQfBCBIJ`2DGmE9E2
 !i10b 1
 Aone_tdcconfig
-R165
+R168
 R2
 R3
 R4
@@ -1728,9 +1728,9 @@ L47
 V4EV;zVJ_5jF1i0Re@okfn3
 R10
 32
-R252
 R253
 R254
+R255
 R14
 R15
 !s100 Wbz0P7iQ[j^]:9nMdlU<T1
@@ -1740,16 +1740,16 @@ R6
 R4
 R5
 R7
-Z255 8C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcfifo.vhd
-Z256 FC:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcfifo.vhd
+Z256 8C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcfifo.vhd
+Z257 FC:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcfifo.vhd
 l0
 L42
 VKWCDR:j7D?SEhUi[1Z:kj0
 R10
 32
-Z257 !s108 1359333097.579000
-Z258 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcfifo.vhd|
-Z259 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcfifo.vhd|
+Z258 !s108 1359401546.437000
+Z259 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcfifo.vhd|
+Z260 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcfifo.vhd|
 R14
 R15
 !s100 d9PbDk80I2OOmQf7Q6dZH3
@@ -1763,37 +1763,37 @@ L58
 V1l@z>7iLL4KF:jE?zkEni3
 R10
 32
-R257
 R258
 R259
+R260
 R14
 R15
 !s100 Sgh2b>UmMF:;dmCNMmW>T1
 !i10b 1
 Etdcread
 R6
-R165
+R168
 R2
 R3
 R4
 R5
 R7
-Z260 8C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcread.vhd
-Z261 FC:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcread.vhd
+Z261 8C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcread.vhd
+Z262 FC:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcread.vhd
 l0
 L13
 VbR:hBTjBO4Mjh<ccQ7;4]0
 R10
 32
-Z262 !s108 1359333097.510000
-Z263 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcread.vhd|
-Z264 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcread.vhd|
+Z263 !s108 1359401546.364000
+Z264 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcread.vhd|
+Z265 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/tdc/tdcread.vhd|
 R14
 R15
 !s100 l9zLkeWiio8S]zI?m3:U`0
 !i10b 1
 Artl
-R165
+R168
 R2
 R3
 R4
@@ -1804,36 +1804,36 @@ L44
 Vm=b2aRPijRFV>5Zc:EIJl3
 R10
 32
-R262
 R263
 R264
+R265
 R14
 R15
 !s100 dMUm_Qgdfh4[EMT>zQ]jJ2
 !i10b 1
 Etimebase
-R18
-R132
+R6
+R134
 R3
 R4
 R5
 R7
-Z265 8C:/Users/Athayde/Desktop/pld/ndaq_core/counter/timebase.vhd
-Z266 FC:/Users/Athayde/Desktop/pld/ndaq_core/counter/timebase.vhd
+Z266 8C:/Users/Athayde/Desktop/pld/ndaq_core/counter/timebase.vhd
+Z267 FC:/Users/Athayde/Desktop/pld/ndaq_core/counter/timebase.vhd
 l0
 L15
 VG4z[C2LfRcVk_kUTm32z13
 R10
 32
-Z267 !s108 1359333097.849000
-Z268 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/counter/timebase.vhd|
-Z269 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/counter/timebase.vhd|
+Z268 !s108 1359401546.711000
+Z269 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/counter/timebase.vhd|
+Z270 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/counter/timebase.vhd|
 R14
 R15
 !s100 Bm1Sk3EB2Aa>H<8g>ET0W3
 !i10b 1
 Artl
-R132
+R134
 R3
 R4
 R5
@@ -1843,9 +1843,9 @@ L31
 V_4JU2?hZ1JcaHK5iai61m1
 R10
 32
-R267
 R268
 R269
+R270
 R14
 R15
 !s100 A6gGRk:3ZO8m6eA3=?DLk1
@@ -1855,16 +1855,16 @@ R6
 R4
 R5
 R7
-Z270 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/tpulse.vhd
-Z271 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/tpulse.vhd
+Z271 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/tpulse.vhd
+Z272 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/tpulse.vhd
 l0
 L9
 V0m5Q<@DJQ==PP>CmGR?P]2
 R10
 32
-Z272 !s108 1359333094.726000
-Z273 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/tpulse.vhd|
-Z274 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/tpulse.vhd|
+Z273 !s108 1359401545.293000
+Z274 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/tpulse.vhd|
+Z275 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/tpulse.vhd|
 R14
 R15
 !s100 lhTP>B?YEcXl;lFI?:M5d0
@@ -1878,9 +1878,9 @@ L19
 VH:azG7m?N4ARL0F5>KccL0
 R10
 32
-R272
 R273
 R274
+R275
 R14
 R15
 !s100 Z]gN^B;XFnO[Bl3e;4FI81
@@ -1903,7 +1903,7 @@ w1304532438
 !s100 LI_F>Bn3Ti@BYcaDWRlPA0
 Eusb_databuilder
 R18
-R180
+R181
 R17
 R1
 R2
@@ -1911,22 +1911,22 @@ R3
 R4
 R5
 R7
-Z275 8C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/usb_databuilder.vhd
-Z276 FC:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/usb_databuilder.vhd
+Z276 8C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/usb_databuilder.vhd
+Z277 FC:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/usb_databuilder.vhd
 l0
 L16
 VN=?c990QK:S_F;KmPIH=R0
 R10
 32
-Z277 !s108 1359333096.951000
-Z278 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/usb_databuilder.vhd|
-Z279 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/usb_databuilder.vhd|
+Z278 !s108 1359339825.308000
+Z279 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/usb_databuilder.vhd|
+Z280 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/usb_databuilder.vhd|
 R14
 R15
 !s100 M0dB@d6:J75D_a?>ZQPga1
 !i10b 1
 Artl
-R180
+R181
 R17
 R1
 R2
@@ -1939,9 +1939,9 @@ L44
 VmP;FOz?_[7]`M;Zc=W82A3
 R10
 32
-R277
 R278
 R279
+R280
 R14
 R15
 !s100 X5@n57;IFb@:LRUTQlCKe0
@@ -1955,22 +1955,22 @@ R4
 R5
 R18
 R7
-Z280 8C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/usb_databuilder_pkg.vhd
-Z281 FC:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/usb_databuilder_pkg.vhd
+Z281 8C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/usb_databuilder_pkg.vhd
+Z282 FC:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/usb_databuilder_pkg.vhd
 l0
 L15
 V0cQ:P5[OTDa10SEOnfZQH0
 R10
 32
-Z282 !s108 1359333097.067000
-Z283 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/usb_databuilder_pkg.vhd|
-Z284 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/usb_databuilder_pkg.vhd|
+Z283 !s108 1359339825.387000
+Z284 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/usb_databuilder_pkg.vhd|
+Z285 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/usb_readout/usb_databuilder_pkg.vhd|
 R14
 R15
 !s100 <cAZb60UG2mLTUeePlRJB3
 !i10b 1
 Bbody
-R180
+R181
 R17
 R1
 R2
@@ -1982,9 +1982,9 @@ L60
 Vn_^KO:[BEdU0i9=Tblgk]2
 R10
 32
-R282
 R283
 R284
+R285
 R14
 R15
 nbody
@@ -1993,24 +1993,24 @@ nbody
 Pusbcmds_pkg
 R4
 R5
-R18
+R6
 R7
-Z285 8C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/usbcmds_pkg.vhd
-Z286 FC:/Users/Athayde/Desktop/pld/ndaq_sim/whole/usbcmds_pkg.vhd
+Z286 8C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/usbcmds_pkg.vhd
+Z287 FC:/Users/Athayde/Desktop/pld/ndaq_sim/whole/usbcmds_pkg.vhd
 l0
 L7
 Vc_1NN^T<P1B[2dY>RiVFN2
 R10
 32
-Z287 !s108 1359333096.471000
-Z288 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/usbcmds_pkg.vhd|
-Z289 !s107 C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/usbcmds_pkg.vhd|
+Z288 !s108 1359339824.806000
+Z289 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/usbcmds_pkg.vhd|
+Z290 !s107 C:/Users/Athayde/Desktop/pld/ndaq_sim/whole/usbcmds_pkg.vhd|
 R14
 R15
 !s100 QOhi:BiNMfn1abie5BQDR0
 !i10b 1
 Bbody
-R172
+R175
 R4
 R5
 l0
@@ -2018,9 +2018,9 @@ L91
 V8jIQPBZ^A<zLG7dGRUk=N2
 R10
 32
-R287
 R288
 R289
+R290
 R14
 R15
 nbody
@@ -2029,27 +2029,27 @@ nbody
 Evme_cmddec
 R18
 R38
-R181
+R182
 R4
 R5
 R7
-Z290 8C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_cmddec.vhd
-Z291 FC:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_cmddec.vhd
+Z291 8C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_cmddec.vhd
+Z292 FC:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_cmddec.vhd
 l0
 L9
 VGi_5ejzG@7ibV@SLRBd6i3
 R10
 32
-Z292 !s108 1359333096.818000
-Z293 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_cmddec.vhd|
-Z294 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_cmddec.vhd|
+Z293 !s108 1359339825.169000
+Z294 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_cmddec.vhd|
+Z295 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_cmddec.vhd|
 R14
 R15
 !s100 8a?D>gl3=W;MD?1G=iLQ?0
 !i10b 1
 Artl
 R38
-R181
+R182
 R4
 R5
 DEx4 work 10 vme_cmddec 0 22 Gi_5ejzG@7ibV@SLRBd6i3
@@ -2058,36 +2058,36 @@ L43
 VIF0KXd1=9POV1AREeef=X3
 R10
 32
-R292
 R293
 R294
+R295
 R14
 R15
 !s100 bfnS]O0<G2J]9n:XUFH4R1
 !i10b 1
 Evme_rconst
 R18
-R181
+R182
 R38
 R4
 R5
 R7
-Z295 8C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_rconst.vhd
-Z296 FC:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_rconst.vhd
+Z296 8C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_rconst.vhd
+Z297 FC:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_rconst.vhd
 l0
 L9
 VAj1B3Ina_jJm=^BPL3Wf]1
 R10
 32
-Z297 !s108 1359333096.647000
-Z298 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_rconst.vhd|
-Z299 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_rconst.vhd|
+Z298 !s108 1359339825.031000
+Z299 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_rconst.vhd|
+Z300 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_rconst.vhd|
 R14
 R15
 !s100 i6m?aK@e[93aTU[gDzMcA3
 !i10b 1
 Artl
-R181
+R182
 R38
 R4
 R5
@@ -2097,9 +2097,9 @@ L39
 VA?k;jPMN57bENn8Y>e4Nb0
 R10
 32
-R297
 R298
 R299
+R300
 R14
 R15
 !s100 JCGQT>kfX2a;Z4CllCSz@3
@@ -2109,22 +2109,22 @@ R4
 R5
 R18
 R7
-Z300 8C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_regs.vhd
-Z301 FC:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_regs.vhd
+Z301 8C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_regs.vhd
+Z302 FC:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_regs.vhd
 l0
 L8
 VNRB7f^k]]:aG_RW12JlaK0
 R10
 32
-Z302 !s108 1359333096.528000
-Z303 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_regs.vhd|
-Z304 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_regs.vhd|
+Z303 !s108 1359339824.871000
+Z304 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_regs.vhd|
+Z305 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/system/vme_regs.vhd|
 R14
 R15
 !s100 1RTn_6zYk]@@>TKLn`DFa3
 !i10b 1
 Bbody
-R181
+R182
 R4
 R5
 l0
@@ -2132,9 +2132,9 @@ L52
 V`6eKjz>fg>F:J5Kg`82gY2
 R10
 32
-R302
 R303
 R304
+R305
 R14
 R15
 nbody
@@ -2142,29 +2142,29 @@ nbody
 !i10b 1
 Evmeif
 R18
-R182
 R183
+R184
 R38
 R4
 R5
 R7
-Z305 8C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif.vhd
-Z306 FC:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif.vhd
+Z306 8C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif.vhd
+Z307 FC:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif.vhd
 l0
 L53
 V[cba0KoE_W;=]7R7XN2^`3
 R10
 32
-Z307 !s108 1359333095.586000
-Z308 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif.vhd|
-Z309 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif.vhd|
+Z308 !s108 1359339823.963000
+Z309 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif.vhd|
+Z310 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif.vhd|
 R14
 R15
 !s100 G_cW]cX9m6UFKY:iZY1bf3
 !i10b 1
 Avmeif_one
-R182
 R183
+R184
 R38
 R4
 R5
@@ -2174,9 +2174,9 @@ L117
 V9^_7XL1N17>6ck0JYok@>1
 R10
 32
-R307
 R308
 R309
+R310
 R14
 R15
 !s100 6EXa0R8i=0SEzZW=_MW[I0
@@ -2187,22 +2187,22 @@ R4
 R5
 R18
 R7
-Z310 8C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif_pkg.vhd
-Z311 FC:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif_pkg.vhd
+Z311 8C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif_pkg.vhd
+Z312 FC:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif_pkg.vhd
 l0
 L18
 VmhF`7Y>zDlg3Vb>2DV^5V0
 R10
 32
-Z312 !s108 1359333095.662000
-Z313 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif_pkg.vhd|
-Z314 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif_pkg.vhd|
+Z313 !s108 1359339824.050000
+Z314 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif_pkg.vhd|
+Z315 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif_pkg.vhd|
 R14
 R15
 !s100 ]EmA0h9lToJ4TiV9D3z@D1
 !i10b 1
 Bbody
-R183
+R184
 R38
 R4
 R5
@@ -2211,38 +2211,38 @@ L49
 VdNS5fU<50lIcB5HQJlC500
 R10
 32
-R312
 R313
 R314
+R315
 R14
 R15
 nbody
 !s100 :^m]bP3WzAS71W=hJl]OQ1
 !i10b 1
 Pvmeif_usr
-R183
+R184
 R38
 R4
 R5
 R18
 R7
-Z315 8C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif_usr.vhd
-Z316 FC:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif_usr.vhd
+Z316 8C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif_usr.vhd
+Z317 FC:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif_usr.vhd
 l0
 L18
 VRj_bh7Zcn1zK]]2I1EzRT2
 R10
 32
-Z317 !s108 1359333095.727000
-Z318 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif_usr.vhd|
-Z319 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif_usr.vhd|
+Z318 !s108 1359339824.121000
+Z319 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif_usr.vhd|
+Z320 !s107 C:/Users/Athayde/Desktop/pld/ndaq_vme/vme_if/vmeif_usr.vhd|
 R14
 R15
 !s100 Xf`o2QBGoXIi<Co3KN7ZX1
 !i10b 1
 Bbody
-R182
 R183
+R184
 R38
 R4
 R5
@@ -2251,9 +2251,9 @@ L168
 Vd23h3AAePoObOkg`g0YLo2
 R10
 32
-R317
 R318
 R319
+R320
 R14
 R15
 nbody
@@ -2269,16 +2269,16 @@ R3
 R4
 R5
 R7
-Z320 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/writefifo.vhd
-Z321 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/writefifo.vhd
+Z321 8C:/Users/Athayde/Desktop/pld/ndaq_core/acq/writefifo.vhd
+Z322 FC:/Users/Athayde/Desktop/pld/ndaq_core/acq/writefifo.vhd
 l0
 L33
 VX8YM[@jHChMGVQjf@X71e1
 R10
 32
-Z322 !s108 1359333094.785000
-Z323 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/writefifo.vhd|
-Z324 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/writefifo.vhd|
+Z323 !s108 1359401545.354000
+Z324 !s90 -reportprogress|300|-work|work|-2002|-explicit|C:/Users/Athayde/Desktop/pld/ndaq_core/acq/writefifo.vhd|
+Z325 !s107 C:/Users/Athayde/Desktop/pld/ndaq_core/acq/writefifo.vhd|
 R14
 R15
 !s100 ZLPnO>GS2<k[=D^eH1Tj83
@@ -2297,9 +2297,9 @@ L64
 VHQ_=iNo0j<mbUkPX47;IV3
 R10
 32
-R322
 R323
 R324
+R325
 R14
 R15
 !s100 =:;GSI_18PBn^HG7Fm4cE2

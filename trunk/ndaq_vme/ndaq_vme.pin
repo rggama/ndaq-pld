@@ -1,0 +1,394 @@
+ -- Copyright (C) 1991-2012 Altera Corporation
+ -- Your use of Altera Corporation's design tools, logic functions 
+ -- and other software and tools, and its AMPP partner logic 
+ -- functions, and any output files from any of the foregoing 
+ -- (including device programming or simulation files), and any 
+ -- associated documentation or information are expressly subject 
+ -- to the terms and conditions of the Altera Program License 
+ -- Subscription Agreement, Altera MegaCore Function License 
+ -- Agreement, or other applicable license agreement, including, 
+ -- without limitation, that your use is for the sole purpose of 
+ -- programming logic devices manufactured by Altera and sold by 
+ -- Altera or its authorized distributors.  Please refer to the 
+ -- applicable agreement for further details.
+ -- 
+ -- This is a Quartus II output file. It is for reporting purposes only, and is
+ -- not intended for use as a Quartus II input file. This file cannot be used
+ -- to make Quartus II pin assignments - for instructions on how to make pin
+ -- assignments, please see Quartus II help.
+ ---------------------------------------------------------------------------------
+
+
+
+ ---------------------------------------------------------------------------------
+ -- NC            : No Connect. This pin has no internal connection to the device.
+ -- DNU           : Do Not Use. This pin MUST NOT be connected.
+ -- VCCINT        : Dedicated power pin, which MUST be connected to VCC  (1.2V).
+ -- VCCIO         : Dedicated power pin, which MUST be connected to VCC
+ --                 of its bank.
+ --					Bank 1:		3.3V
+ --					Bank 2:		3.3V
+ --					Bank 3:		3.3V
+ --					Bank 4:		3.3V
+ --					Bank 5:		3.3V
+ --					Bank 6:		3.3V
+ --					Bank 7:		3.3V
+ --					Bank 8:		3.3V
+ -- GND           : Dedicated ground pin. Dedicated GND pins MUST be connected to GND.
+ --					It can also be used to report unused dedicated pins. The connection
+ --					on the board for unused dedicated pins depends on whether this will
+ --					be used in a future design. One example is device migration. When
+ --					using device migration, refer to the device pin-tables. If it is a
+ --					GND pin in the pin table or if it will not be used in a future design
+ --					for another purpose the it MUST be connected to GND. If it is an unused
+ --					dedicated pin, then it can be connected to a valid signal on the board
+ --					(low, high, or toggling) if that signal is required for a different
+ --					revision of the design.
+ -- GND+          : Unused input pin. It can also be used to report unused dual-purpose pins.
+ --					This pin should be connected to GND. It may also be connected  to a
+ --					valid signal  on the board  (low, high, or toggling)  if that signal
+ --					is required for a different revision of the design.
+ -- GND*          : Unused  I/O  pin. Connect each pin marked GND* directly to GND
+ --           	    or leave it unconnected.
+ -- RESERVED      : Unused I/O pin, which MUST be left unconnected.
+ -- RESERVED_INPUT    : Pin is tri-stated and should be connected to the board.
+ -- RESERVED_INPUT_WITH_WEAK_PULLUP    : Pin is tri-stated with internal weak pull-up resistor.
+ -- RESERVED_INPUT_WITH_BUS_HOLD       : Pin is tri-stated with bus-hold circuitry.
+ -- RESERVED_OUTPUT_DRIVEN_HIGH        : Pin is output driven high.
+ ---------------------------------------------------------------------------------
+
+
+
+ ---------------------------------------------------------------------------------
+ -- Pin directions (input, output or bidir) are based on device operating in user mode.
+ ---------------------------------------------------------------------------------
+
+Quartus II 64-Bit Version 12.1 Build 177 11/07/2012 SJ Web Edition
+CHIP  "ndaq_vme"  ASSIGNED TO AN: EP3C25F324C8
+
+Pin Name/Usage               : Location  : Dir.   : I/O Standard      : Voltage : I/O Bank  : User Assignment
+-------------------------------------------------------------------------------------------------------------
+stsclk                       : A1        : input  : 3.3-V LVTTL       :         : 8         : Y              
+vme_am[0]                    : A2        : input  : 3.3-V LVTTL       :         : 8         : Y              
+vme_am[1]                    : A3        : input  : 3.3-V LVTTL       :         : 8         : Y              
+vme_am[2]                    : A4        : input  : 3.3-V LVTTL       :         : 8         : Y              
+vme_am[3]                    : A5        : input  : 3.3-V LVTTL       :         : 8         : Y              
+vme_am[4]                    : A6        : input  : 3.3-V LVTTL       :         : 8         : Y              
+vme_am[5]                    : A7        : input  : 3.3-V LVTTL       :         : 8         : Y              
+vme_ds1                      : A8        : input  : 3.3-V LVTTL       :         : 8         : Y              
+GND+                         : A9        :        :                   :         : 8         :                
+clk50M                       : A10       : input  : 3.3-V LVTTL       :         : 7         : Y              
+t1_a                         : A11       : output : 3.3-V LVTTL       :         : 7         : Y              
+vme_ga[0]                    : A12       : input  : 3.3-V LVTTL       :         : 7         : Y              
+vme_ga[2]                    : A13       : input  : 3.3-V LVTTL       :         : 7         : Y              
+vme_data[28]                 : A14       : bidir  : 3.3-V LVTTL       :         : 7         : Y              
+vme_data[21]                 : A15       : bidir  : 3.3-V LVTTL       :         : 7         : Y              
+vme_data[19]                 : A16       : bidir  : 3.3-V LVTTL       :         : 7         : Y              
+vme_data[14]                 : A17       : bidir  : 3.3-V LVTTL       :         : 7         : Y              
+vme_data[7]                  : A18       : bidir  : 3.3-V LVTTL       :         : 7         : Y              
+vme_as                       : B1        : input  : 3.3-V LVTTL       :         : 1         : Y              
+vme_wr                       : B2        : input  : 3.3-V LVTTL       :         : 1         : Y              
+vme_iackin                   : B3        : input  : 3.3-V LVTTL       :         : 8         : Y              
+vme_berr                     : B4        : output : 3.3-V LVTTL       :         : 8         : Y              
+vme_oea                      : B5        : output : 3.3-V LVTTL       :         : 8         : Y              
+vme_iackout                  : B6        : output : 3.3-V LVTTL       :         : 8         : Y              
+vme_irq[1]                   : B7        : output : 3.3-V LVTTL       :         : 8         : Y              
+vme_ds0                      : B8        : input  : 3.3-V LVTTL       :         : 8         : Y              
+GND+                         : B9        :        :                   :         : 8         :                
+GND+                         : B10       :        :                   :         : 7         :                
+GND*                         : B11       :        :                   :         : 7         :                
+t1_b                         : B12       : output : 3.3-V LVTTL       :         : 7         : Y              
+vme_ga[1]                    : B13       : input  : 3.3-V LVTTL       :         : 7         : Y              
+vme_data[27]                 : B14       : bidir  : 3.3-V LVTTL       :         : 7         : Y              
+vme_data[20]                 : B15       : bidir  : 3.3-V LVTTL       :         : 7         : Y              
+vme_data[18]                 : B16       : bidir  : 3.3-V LVTTL       :         : 7         : Y              
+vme_data[13]                 : B17       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+vme_data[6]                  : B18       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+vme_lw                       : C1        : input  : 3.3-V LVTTL       :         : 1         : Y              
+vme_sysrst                   : C2        : input  : 3.3-V LVTTL       :         : 1         : Y              
+vme_iack                     : C3        : input  : 3.3-V LVTTL       :         : 1         : Y              
+GND                          : C4        : gnd    :                   :         :           :                
+vme_irq[2]                   : C5        : output : 3.3-V LVTTL       :         : 8         : Y              
+GND                          : C6        : gnd    :                   :         :           :                
+GND*                         : C7        :        :                   :         : 8         :                
+GND                          : C8        : gnd    :                   :         :           :                
+vme_irq[3]                   : C9        : output : 3.3-V LVTTL       :         : 8         : Y              
+GND*                         : C10       :        :                   :         : 7         :                
+GND                          : C11       : gnd    :                   :         :           :                
+vme_ga[3]                    : C12       : input  : 3.3-V LVTTL       :         : 7         : Y              
+GND                          : C13       : gnd    :                   :         :           :                
+vme_data[26]                 : C14       : bidir  : 3.3-V LVTTL       :         : 7         : Y              
+GND                          : C15       : gnd    :                   :         :           :                
+vme_data[17]                 : C16       : bidir  : 3.3-V LVTTL       :         : 7         : Y              
+vme_data[12]                 : C17       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+vme_data[5]                  : C18       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+~ALTERA_ASDO_DATA1~ / RESERVED_INPUT_WITH_WEAK_PULLUP : D1        : input  : 3.3-V LVTTL       :         : 1         : N              
+vme_sysclk                   : D2        : input  : 3.3-V LVTTL       :         : 1         : Y              
+vme_vack                     : D3        : input  : 3.3-V LVTTL       :         : 1         : Y              
+VCCIO8                       : D4        : power  :                   : 3.3V    : 8         :                
+vme_irq[4]                   : D5        : output : 3.3-V LVTTL       :         : 8         : Y              
+VCCIO8                       : D6        : power  :                   : 3.3V    : 8         :                
+GND*                         : D7        :        :                   :         : 8         :                
+VCCIO8                       : D8        : power  :                   : 3.3V    : 8         :                
+vme_irq[5]                   : D9        : output : 3.3-V LVTTL       :         : 8         : Y              
+GND*                         : D10       :        :                   :         : 7         :                
+VCCIO7                       : D11       : power  :                   : 3.3V    : 7         :                
+GND*                         : D12       :        :                   :         : 7         :                
+VCCIO7                       : D13       : power  :                   : 3.3V    : 7         :                
+vme_data[25]                 : D14       : bidir  : 3.3-V LVTTL       :         : 7         : Y              
+VCCIO7                       : D15       : power  :                   : 3.3V    : 7         :                
+vme_data[16]                 : D16       : bidir  : 3.3-V LVTTL       :         : 7         : Y              
+vme_data[11]                 : D17       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+vme_data[4]                  : D18       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+vme_verr                     : E1        : input  : 3.3-V LVTTL       :         : 1         : Y              
+~ALTERA_FLASH_nCE_nCSO~ / RESERVED_INPUT_WITH_WEAK_PULLUP : E2        : input  : 3.3-V LVTTL       :         : 1         : N              
+GND                          : E3        : gnd    :                   :         :           :                
+VCCA3                        : E4        : power  :                   : 2.5V    :           :                
+GNDA3                        : E5        : gnd    :                   :         :           :                
+vme_irq[6]                   : E6        : output : 3.3-V LVTTL       :         : 8         : Y              
+vme_irq[7]                   : E7        : output : 3.3-V LVTTL       :         : 8         : Y              
+GND*                         : E8        :        :                   :         : 8         :                
+GND*                         : E9        :        :                   :         : 8         :                
+GND*                         : E10       :        :                   :         : 8         :                
+GND*                         : E11       :        :                   :         : 7         :                
+GND*                         : E12       :        :                   :         : 7         :                
+GND*                         : E13       :        :                   :         : 7         :                
+vme_data[24]                 : E14       : bidir  : 3.3-V LVTTL       :         : 7         : Y              
+VCCD_PLL2                    : E15       : power  :                   : 1.2V    :           :                
+GND                          : E16       : gnd    :                   :         :           :                
+vme_data[10]                 : E17       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+~ALTERA_nCEO~ / RESERVED_OUTPUT_OPEN_DRAIN : E18       : output : 3.3-V LVTTL       :         : 6         : N              
+GND+                         : F1        :        :                   :         : 1         :                
+GND+                         : F2        :        :                   :         : 1         :                
+GND*                         : F3        :        :                   :         : 1         :                
+VCCIO1                       : F4        : power  :                   : 3.3V    : 1         :                
+VCCD_PLL3                    : F5        : power  :                   : 1.2V    :           :                
+GND*                         : F6        :        :                   :         : 8         :                
+GND*                         : F7        :        :                   :         : 8         :                
+GND*                         : F8        :        :                   :         : 8         :                
+GND*                         : F9        :        :                   :         : 8         :                
+vme_ga[4]                    : F10       : input  : 3.3-V LVTTL       :         : 7         : Y              
+vme_gap                      : F11       : input  : 3.3-V LVTTL       :         : 7         : Y              
+GND*                         : F12       :        :                   :         : 7         :                
+vme_data[31]                 : F13       : bidir  : 3.3-V LVTTL       :         : 7         : Y              
+VCCA2                        : F14       : power  :                   : 2.5V    :           :                
+GNDA2                        : F15       : gnd    :                   :         :           :                
+VCCIO6                       : F16       : power  :                   : 3.3V    : 6         :                
+GND+                         : F17       :        :                   :         : 6         :                
+GND+                         : F18       :        :                   :         : 6         :                
+vme_dtack                    : G1        : output : 3.3-V LVTTL       :         : 1         : Y              
+vme_oetack                   : G2        : output : 3.3-V LVTTL       :         : 1         : Y              
+GND                          : G3        : gnd    :                   :         :           :                
+VCCIO1                       : G4        : power  :                   : 3.3V    : 1         :                
+nSTATUS                      : G5        :        :                   :         : 1         :                
+GND*                         : G6        :        :                   :         : 8         :                
+VCCINT                       : G7        : power  :                   : 1.2V    :           :                
+VCCINT                       : G8        : power  :                   : 1.2V    :           :                
+GND                          : G9        : gnd    :                   :         :           :                
+VCCINT                       : G10       : power  :                   : 1.2V    :           :                
+VCCINT                       : G11       : power  :                   : 1.2V    :           :                
+VCCINT                       : G12       : power  :                   : 1.2V    :           :                
+vme_data[30]                 : G13       : bidir  : 3.3-V LVTTL       :         : 7         : Y              
+vme_data[23]                 : G14       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+VCCIO6                       : G15       : power  :                   : 3.3V    : 6         :                
+GND                          : G16       : gnd    :                   :         :           :                
+vme_data[9]                  : G17       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+vme_data[2]                  : G18       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+vme_oed                      : H1        : output : 3.3-V LVTTL       :         : 1         : Y              
+vme_dird                     : H2        : output : 3.3-V LVTTL       :         : 1         : Y              
+~ALTERA_DATA0~ / RESERVED_INPUT_WITH_WEAK_PULLUP : H3        : input  : 3.3-V LVTTL       :         : 1         : N              
+~ALTERA_DCLK~                : H4        : output : 3.3-V LVTTL       :         : 1         : N              
+nCONFIG                      : H5        :        :                   :         : 1         :                
+GND*                         : H6        :        :                   :         : 1         :                
+VCCINT                       : H7        : power  :                   : 1.2V    :           :                
+GND                          : H8        : gnd    :                   :         :           :                
+GND                          : H9        : gnd    :                   :         :           :                
+GND                          : H10       : gnd    :                   :         :           :                
+GND                          : H11       : gnd    :                   :         :           :                
+VCCINT                       : H12       : power  :                   : 1.2V    :           :                
+vme_data[29]                 : H13       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+vme_data[22]                 : H14       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+vme_data[3]                  : H15       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+vme_data[15]                 : H16       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+vme_data[8]                  : H17       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+vme_data[1]                  : H18       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+TCK                          : J1        : input  :                   :         : 1         :                
+TMS                          : J2        : input  :                   :         : 1         :                
+GND                          : J3        : gnd    :                   :         :           :                
+VCCIO1                       : J4        : power  :                   : 3.3V    : 1         :                
+TDO                          : J5        : output :                   :         : 1         :                
+TDI                          : J6        : input  :                   :         : 1         :                
+VCCINT                       : J7        : power  :                   : 1.2V    :           :                
+GND                          : J8        : gnd    :                   :         :           :                
+GND                          : J9        : gnd    :                   :         :           :                
+GND                          : J10       : gnd    :                   :         :           :                
+GND                          : J11       : gnd    :                   :         :           :                
+VCCINT                       : J12       : power  :                   : 1.2V    :           :                
+vme_data[0]                  : J13       : bidir  : 3.3-V LVTTL       :         : 6         : Y              
+MSEL3                        : J14       :        :                   :         : 6         :                
+VCCIO6                       : J15       : power  :                   : 3.3V    : 6         :                
+GND                          : J16       : gnd    :                   :         :           :                
+MSEL2                        : J17       :        :                   :         : 6         :                
+MSEL1                        : J18       :        :                   :         : 6         :                
+GND*                         : K1        :        :                   :         : 2         :                
+GND*                         : K2        :        :                   :         : 2         :                
+GND                          : K3        : gnd    :                   :         :           :                
+VCCIO2                       : K4        : power  :                   : 3.3V    : 2         :                
+GND*                         : K5        :        :                   :         : 2         :                
+nCE                          : K6        :        :                   :         : 1         :                
+VCCINT                       : K7        : power  :                   : 1.2V    :           :                
+GND                          : K8        : gnd    :                   :         :           :                
+GND                          : K9        : gnd    :                   :         :           :                
+GND                          : K10       : gnd    :                   :         :           :                
+GND                          : K11       : gnd    :                   :         :           :                
+VCCINT                       : K12       : power  :                   : 1.2V    :           :                
+MSEL0                        : K13       :        :                   :         : 6         :                
+CONF_DONE                    : K14       :        :                   :         : 6         :                
+VCCIO5                       : K15       : power  :                   : 3.3V    : 5         :                
+GND                          : K16       : gnd    :                   :         :           :                
+vme_add[8]                   : K17       : input  : 3.3-V LVTTL       :         : 5         : Y              
+vme_add[2]                   : K18       : input  : 3.3-V LVTTL       :         : 5         : Y              
+fifo_pae[2]                  : L1        : input  : 2.5 V             :         : 2         : Y              
+fifo_pae[3]                  : L2        : input  : 2.5 V             :         : 2         : Y              
+GND*                         : L3        :        :                   :         : 2         :                
+GND*                         : L4        :        :                   :         : 2         :                
+GND*                         : L5        :        :                   :         : 2         :                
+GND*                         : L6        :        :                   :         : 2         :                
+VCCINT                       : L7        : power  :                   : 1.2V    :           :                
+GND                          : L8        : gnd    :                   :         :           :                
+GND                          : L9        : gnd    :                   :         :           :                
+GND                          : L10       : gnd    :                   :         :           :                
+GND                          : L11       : gnd    :                   :         :           :                
+VCCINT                       : L12       : power  :                   : 1.2V    :           :                
+GND*                         : L13       :        :                   :         : 5         :                
+GND*                         : L14       :        :                   :         : 5         :                
+vme_add[13]                  : L15       : input  : 3.3-V LVTTL       :         : 5         : Y              
+vme_add[11]                  : L16       : input  : 3.3-V LVTTL       :         : 5         : Y              
+vme_add[7]                   : L17       : input  : 3.3-V LVTTL       :         : 5         : Y              
+vme_add[1]                   : L18       : input  : 3.3-V LVTTL       :         : 5         : Y              
+spiclk                       : M1        : output : 3.3-V LVTTL       :         : 2         : Y              
+cs                           : M2        : output : 3.3-V LVTTL       :         : 2         : Y              
+GND*                         : M3        :        :                   :         : 2         :                
+VCCIO2                       : M4        : power  :                   : 3.3V    : 2         :                
+GND*                         : M5        :        :                   :         : 2         :                
+GND*                         : M6        :        :                   :         : 3         :                
+VCCINT                       : M7        : power  :                   : 1.2V    :           :                
+VCCINT                       : M8        : power  :                   : 1.2V    :           :                
+VCCINT                       : M9        : power  :                   : 1.2V    :           :                
+GND                          : M10       : gnd    :                   :         :           :                
+VCCINT                       : M11       : power  :                   : 1.2V    :           :                
+VCCINT                       : M12       : power  :                   : 1.2V    :           :                
+vme_add[20]                  : M13       : input  : 3.3-V LVTTL       :         : 4         : Y              
+vme_add[14]                  : M14       : input  : 3.3-V LVTTL       :         : 5         : Y              
+VCCIO5                       : M15       : power  :                   : 3.3V    : 5         :                
+GND                          : M16       : gnd    :                   :         :           :                
+vme_add[6]                   : M17       : input  : 3.3-V LVTTL       :         : 5         : Y              
+GND*                         : M18       :        :                   :         : 5         :                
+GND+                         : N1        :        :                   :         : 2         :                
+GND+                         : N2        :        :                   :         : 2         :                
+GND                          : N3        : gnd    :                   :         :           :                
+VCCIO2                       : N4        : power  :                   : 3.3V    : 2         :                
+VCCA1                        : N5        : power  :                   : 2.5V    :           :                
+GND*                         : N6        :        :                   :         : 3         :                
+GND*                         : N7        :        :                   :         : 3         :                
+GND*                         : N8        :        :                   :         : 3         :                
+GND*                         : N9        :        :                   :         : 3         :                
+vme_add[31]                  : N10       : input  : 3.3-V LVTTL       :         : 4         : Y              
+vme_add[29]                  : N11       : input  : 3.3-V LVTTL       :         : 4         : Y              
+vme_add[24]                  : N12       : input  : 3.3-V LVTTL       :         : 4         : Y              
+vme_add[19]                  : N13       : input  : 3.3-V LVTTL       :         : 4         : Y              
+VCCA4                        : N14       : power  :                   : 2.5V    :           :                
+vme_add[12]                  : N15       : input  : 3.3-V LVTTL       :         : 5         : Y              
+GND*                         : N16       :        :                   :         : 5         :                
+GND+                         : N17       :        :                   :         : 5         :                
+GND+                         : N18       :        :                   :         : 5         :                
+mosi                         : P1        : output : 3.3-V LVTTL       :         : 2         : Y              
+miso                         : P2        : input  : 3.3-V LVTTL       :         : 2         : Y              
+GND                          : P3        : gnd    :                   :         :           :                
+VCCD_PLL1                    : P4        : power  :                   : 1.2V    :           :                
+GNDA1                        : P5        : gnd    :                   :         :           :                
+GND*                         : P6        :        :                   :         : 3         :                
+GND*                         : P7        :        :                   :         : 3         :                
+GND*                         : P8        :        :                   :         : 3         :                
+GND*                         : P9        :        :                   :         : 3         :                
+vme_add[30]                  : P10       : input  : 3.3-V LVTTL       :         : 4         : Y              
+vme_add[28]                  : P11       : input  : 3.3-V LVTTL       :         : 4         : Y              
+vme_add[23]                  : P12       : input  : 3.3-V LVTTL       :         : 4         : Y              
+vme_add[18]                  : P13       : input  : 3.3-V LVTTL       :         : 4         : Y              
+GNDA4                        : P14       : gnd    :                   :         :           :                
+VCCD_PLL4                    : P15       : power  :                   : 1.2V    :           :                
+GND                          : P16       : gnd    :                   :         :           :                
+vme_add[5]                   : P17       : input  : 3.3-V LVTTL       :         : 5         : Y              
+GND*                         : P18       :        :                   :         : 5         :                
+overflow_c                   : R1        : input  : 3.3-V LVTTL       :         : 2         : Y              
+overflow_b                   : R2        : input  : 3.3-V LVTTL       :         : 2         : Y              
+GND*                         : R3        :        :                   :         : 2         :                
+GND*                         : R4        :        :                   :         : 2         :                
+GND*                         : R5        :        :                   :         : 2         :                
+VCCIO3                       : R6        : power  :                   : 3.3V    : 3         :                
+VCCIO3                       : R7        : power  :                   : 3.3V    : 3         :                
+GND*                         : R8        :        :                   :         : 3         :                
+VCCIO3                       : R9        : power  :                   : 3.3V    : 3         :                
+VCCIO4                       : R10       : power  :                   : 3.3V    : 4         :                
+vme_add[27]                  : R11       : input  : 3.3-V LVTTL       :         : 4         : Y              
+VCCIO4                       : R12       : power  :                   : 3.3V    : 4         :                
+vme_add[17]                  : R13       : input  : 3.3-V LVTTL       :         : 4         : Y              
+VCCIO4                       : R14       : power  :                   : 3.3V    : 4         :                
+VCCIO5                       : R15       : power  :                   : 3.3V    : 5         :                
+vme_add[10]                  : R16       : input  : 3.3-V LVTTL       :         : 5         : Y              
+vme_add[4]                   : R17       : input  : 3.3-V LVTTL       :         : 5         : Y              
+GND*                         : R18       :        :                   :         : 5         :                
+fifo_pae[1]                  : T1        : input  : 2.5 V             :         : 2         : Y              
+fifo_pae[0]                  : T2        : input  : 2.5 V             :         : 2         : Y              
+overflow_a                   : T3        : input  : 3.3-V LVTTL       :         : 2         : Y              
+GND*                         : T4        :        :                   :         : 3         :                
+GND                          : T5        : gnd    :                   :         :           :                
+GND*                         : T6        :        :                   :         : 3         :                
+GND                          : T7        : gnd    :                   :         :           :                
+GND*                         : T8        :        :                   :         : 3         :                
+GND                          : T9        : gnd    :                   :         :           :                
+GND                          : T10       : gnd    :                   :         :           :                
+GND*                         : T11       :        :                   :         : 4         :                
+GND                          : T12       : gnd    :                   :         :           :                
+vme_add[16]                  : T13       : input  : 3.3-V LVTTL       :         : 4         : Y              
+vme_add[15]                  : T14       : input  : 3.3-V LVTTL       :         : 4         : Y              
+GND                          : T15       : gnd    :                   :         :           :                
+vme_add[9]                   : T16       : input  : 3.3-V LVTTL       :         : 5         : Y              
+vme_add[3]                   : T17       : input  : 3.3-V LVTTL       :         : 5         : Y              
+GND*                         : T18       :        :                   :         : 5         :                
+can_pgc                      : U1        : output : 3.3-V LVTTL       :         : 3         : Y              
+GND*                         : U2        :        :                   :         : 3         :                
+fifo_ef[0]                   : U3        : input  : 3.3-V LVTTL       :         : 3         : Y              
+fifo_ef[2]                   : U4        : input  : 3.3-V LVTTL       :         : 3         : Y              
+fifo_oe[0]                   : U5        : output : 3.3-V LVTTL       :         : 3         : Y              
+fifo_oe[2]                   : U6        : output : 3.3-V LVTTL       :         : 3         : Y              
+fifo_ren[0]                  : U7        : output : 3.3-V LVTTL       :         : 3         : Y              
+fifo_ren[2]                  : U8        : output : 3.3-V LVTTL       :         : 3         : Y              
+GND+                         : U9        :        :                   :         : 3         :                
+GND+                         : U10       :        :                   :         : 4         :                
+vme_add[26]                  : U11       : input  : 3.3-V LVTTL       :         : 4         : Y              
+vme_add[22]                  : U12       : input  : 3.3-V LVTTL       :         : 4         : Y              
+usb_Data[0]                  : U13       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
+usb_Data[2]                  : U14       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
+usb_Data[4]                  : U15       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
+usb_Data[6]                  : U16       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
+usb_Read                     : U17       : output : 3.3-V LVTTL       :         : 4         : Y              
+usb_TXE                      : U18       : input  : 3.3-V LVTTL       :         : 4         : Y              
+can_pgd                      : V1        : output : 3.3-V LVTTL       :         : 3         : Y              
+can_pgm                      : V2        : output : 3.3-V LVTTL       :         : 3         : Y              
+fifo_ef[1]                   : V3        : input  : 3.3-V LVTTL       :         : 3         : Y              
+fifo_ef[3]                   : V4        : input  : 3.3-V LVTTL       :         : 3         : Y              
+fifo_oe[1]                   : V5        : output : 3.3-V LVTTL       :         : 3         : Y              
+fifo_oe[3]                   : V6        : output : 3.3-V LVTTL       :         : 3         : Y              
+fifo_ren[1]                  : V7        : output : 3.3-V LVTTL       :         : 3         : Y              
+fifo_ren[3]                  : V8        : output : 3.3-V LVTTL       :         : 3         : Y              
+GND+                         : V9        :        :                   :         : 3         :                
+GND+                         : V10       :        :                   :         : 4         :                
+vme_add[25]                  : V11       : input  : 3.3-V LVTTL       :         : 4         : Y              
+vme_add[21]                  : V12       : input  : 3.3-V LVTTL       :         : 4         : Y              
+usb_Data[1]                  : V13       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
+usb_Data[3]                  : V14       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
+usb_Data[5]                  : V15       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
+usb_Data[7]                  : V16       : bidir  : 3.3-V LVTTL       :         : 4         : Y              
+usb_Write                    : V17       : output : 3.3-V LVTTL       :         : 4         : Y              
+usb_RXF                      : V18       : input  : 3.3-V LVTTL       :         : 4         : Y              

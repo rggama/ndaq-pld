@@ -64,9 +64,6 @@ architecture rtl of tcounter is
 	signal r_timebase_en			: std_logic := '0';
 	signal s_timebase_en			: std_logic := '0';
 	
-	signal r_trigger_in				: std_logic := '0';
-	signal s_trigger_in				: std_logic := '0';
-	
 	signal incremented				: std_logic := '0';
 	signal r_incremented			: std_logic := '0';
 	
@@ -90,6 +87,8 @@ begin
 		--
 		incremented		<= '0';
 		r_incremented	<= '0';
+		--
+		counter_reg <= (others => '0');
 		
 	elsif (rising_edge(clk)) then  
 		--
@@ -97,9 +96,6 @@ begin
 		--
 		r_timebase_en <= timebase_en;
 		s_timebase_en <= r_timebase_en;
-		--
-		r_trigger_in <= trigger_in;
-		s_trigger_in <= r_trigger_in;
 		
 		--
 		r_incremented <= incremented;
@@ -115,52 +111,14 @@ begin
 		else
 			incremented <= '0';
 			
-		end if;			
-	end if;
-end process;
-
--- --
--- -- Counter Register
--- COUNTER_REGISTER: process(rst, clk)
--- begin
-	-- if (rst ='1') then
-		-- counter_reg <= (others => '0');
-		-- reg_wait		<= '0';
-	-- elsif (rising_edge(clk)) then
-
-		-- if ((timebase_en = '0') and (reg_wait = '0')) then
-			-- counter_reg		<= i_counter;
-			-- reg_wait		<= '1';
-		-- end if;
-		
-		-- if (timebase_en = '1') then
-			-- reg_wait		<= '0';
-		-- end if;
-
-	-- end if;
--- end process;
-
---
--- Counter Register
-COUNTER_REGISTER: process(rst, clk)
-begin
-	if (rst ='1') then
-		counter_reg <= (others => '0');
-		reg_wait		<= '0';
-	elsif (rising_edge(clk)) then
-
-		--
-		if (s_timebase_en = '1') then
-			reg_wait		<= '1';
-		else
-			reg_wait		<= '0';
 		end if;
 		
 		--
 		counter_reg		<= i_counter;
-
+		
 	end if;
 end process;
+
 
 --***********************************************************************************************
 
@@ -176,7 +134,7 @@ begin
 
 		--if ((timebase_en = '0') and (reg_wait = '0') and (fifo_full = '0')) then
 		--if ((s_timebase_en = '1') and (reg_wait = '0') and (fifo_full = '0')) then
-		if ((r_incremented = '1') and (s_trigger_in = '1') and (fifo_full = '0')) then
+		if ((r_incremented = '1') and (fifo_full = '0')) then --and (s_trigger_in = '1')
 			fifo_wen	<= '1';
 		else
 			fifo_wen	<= '0';
