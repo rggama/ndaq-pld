@@ -17,13 +17,13 @@ entity dcfifom is
 		signal rst				: in 	std_logic; -- async reset
 		
 		signal wr				: in 	std_logic;
-		signal d					: in	DATA_T;
+		signal d				: in	DATA_T;
 		
 		signal rd				: in	std_logic;	
-		signal q					: out	DATA_T;
+		signal q				: out	DATA_T;
 		
-		signal f					: out	std_logic;	--full flag
-		signal e					: out	std_logic;	--empty flag
+		signal f				: out	std_logic;	--full flag
+		signal e				: out	std_logic;	--empty flag
 
 		signal rdusedw			: out	USEDW_T;	-- used words sync'ed to read clock
 		signal wrusedw			: out	USEDW_T	-- used words sync'ed to write clock

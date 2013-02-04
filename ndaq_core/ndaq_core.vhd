@@ -179,7 +179,7 @@ entity ndaq_core is
 		-- Trigger inputs --
 		--------------------
 		signal trigger_a		: in	std_logic;	
-		signal trigger_b		: in	std_logic;
+		signal trigger_b		: out	std_logic;
 		signal trigger_c		: in	std_logic;
 		
 		----------------------------------
@@ -427,6 +427,16 @@ architecture rtl of ndaq_core is
 		signal channel_rd		: in	CTDC_T;
 		signal channel_out		: out	OTDC_A;
 
+		-------------
+		-- Trigger --
+		-------------
+		signal trig_in			: in	std_logic;
+
+		-----------
+		-- Debug --
+		-----------
+		signal datavalid		: out	std_logic;
+
 		---------------
 		-- Registers --
 		---------------
@@ -648,10 +658,12 @@ architecture rtl of ndaq_core is
 	signal wrusedw					: F_USEDW_WIDTH_T; -- FIFOs USED WORDS bus vector sync'ed to write clock
 
 	-- ACQ: TDC
+	signal	tdc_trigger				: std_logic;
 	signal	tdc_ef					: CTDC_T;
 	signal	tdc_rd					: CTDC_T;
 	signal	tdc_q					: OTDC_A;
 	signal 	tdc_reg_array			: TDCREG_A;
+	signal  fstop 					: std_logic := '1';
 	
 	-- Overflow
 	signal overflow_rst				: std_logic;
@@ -916,15 +928,60 @@ begin
 	clk(6)		<= adc78_dco;
 	clk(7)		<= not(adc78_dco);
 
+	
+	--
+	-- Double Buffering ADC 0 (Even Channel)
+	process(clk, acq_rst)
+	begin
+		if (acq_rst = '1') then
+			data(0) <= (others => '0');
+		elsif (rising_edge(clk(0))) then
+			data(0) <= adc12_data;
+		end if;
+	end process;
+	
+	--
+	-- Double Buffering ADC 2 (Even Channel)
+	process(clk, acq_rst)
+	begin
+		if (acq_rst = '1') then
+			data(2) <= (others => '0');
+		elsif (rising_edge(clk(2))) then
+			data(2) <= adc34_data;
+		end if;
+	end process;
+
+	--
+	-- Double Buffering ADC 4 (Even Channel)
+	process(clk, acq_rst)
+	begin
+		if (acq_rst = '1') then
+			data(4) <= (others => '0');
+		elsif (rising_edge(clk(4))) then
+			data(4) <= adc56_data;
+		end if;
+	end process;
+
+	--
+	-- Double Buffering ADC 6 (Even Channel)
+	process(clk, acq_rst)
+	begin
+		if (acq_rst = '1') then
+			data(6) <= (others => '0');
+		elsif (rising_edge(clk(6))) then
+			data(6) <= adc78_data;
+		end if;
+	end process;
+
 	--
 	-- ADC Data Bus assignements.
-	data(0)		<= adc12_data;
+	--data(0)		<= adc12_data;
 	data(1)		<= adc12_data;
-	data(2)		<= adc34_data;
+	--data(2)		<= adc34_data;
 	data(3)		<= adc34_data;
-	data(4)		<= adc56_data;
+	--data(4)		<= adc56_data;
 	data(5)		<= adc56_data;
-	data(6)		<= adc78_data;
+	--data(6)		<= adc78_data;
 	data(7)		<= adc78_data;
 	
 	--
@@ -975,7 +1032,7 @@ begin
 		rst			=> acq_rst,
 		clk			=> clk(0), --clkcore,
 		enable		=> etrigger_en,
-		trig_in		=> trigger_b,
+		trig_in		=> '0', --trigger_b,
 		trig_out	=> c_trigger_b
 	);
 
@@ -1132,6 +1189,7 @@ begin
 			esize				=> usedw_event_size --CONV_STD_LOGIC_VECTOR(EVENT_SIZE, usedw_width)
 		);
 
+		
 		--
 		-- Modulo de FIFO: PRE+POST
 		fifo_module:
@@ -1158,6 +1216,18 @@ begin
 
 	
 -- ************************************ TDC ***********************************
+
+	
+	-- Condiciona trigger para o TDC
+	tdc_etrigger_cond:
+	tpulse port map
+	(	
+		rst			=> acq_rst,
+		clk			=> pclk,
+		enable		=> etrigger_en,
+		trig_in		=> trigger_a,
+		trig_out	=> tdc_trigger
+	);
 
 	--
 	-- TDC Interface
@@ -1196,6 +1266,17 @@ begin
 		channel_rd		=> tdc_rd,
 		channel_out		=> tdc_q,
 
+		-------------
+		-- Trigger --
+		-------------
+		trig_in			=> tdc_trigger,
+		
+
+		------------
+		-- DEBUG! --
+		------------
+		datavalid		=> trigger_b,
+		
 		---------------
 		-- Registers --
 		---------------
@@ -1209,14 +1290,25 @@ begin
 		tdc_reg_array(i) <= oreg(15+i*4)(3 downto 0) & oreg(14+i*4) & oreg(13+i*4) & oreg(12+i*4);
 	end generate tdc_registers_construct;
 	
+	process (clk(0), rst)
+	begin
+		if (rst = '1') then
+			fstop <= '1';
+		elsif (rising_edge(clk(0))) then
+			if (c_trigger_a = '1') then
+				fstop <= '0';
+			end if;
+		end if;
+	end process;
+	
 	-- TDC STOPs Disable acessado através de um registrador para ser controlado por software:
-	tdc_stop_dis(1) <= oreg(62)(0);
-	tdc_stop_dis(2) <= oreg(62)(1);
-	tdc_stop_dis(3) <= oreg(62)(2);
-	tdc_stop_dis(4) <= oreg(62)(3);
+	tdc_stop_dis(1) <= oreg(62)(0) or sys_lock;
+	tdc_stop_dis(2) <= oreg(62)(1) or sys_lock;
+	tdc_stop_dis(3) <= oreg(62)(2) or sys_lock;
+	tdc_stop_dis(4) <= oreg(62)(3) or sys_lock;
 	
 	-- TDC START Disable acessado através de um registrador para ser controlado por software:
-	tdc_start_dis <= oreg(62)(4);
+	tdc_start_dis <= oreg(62)(4) or sys_lock;
 	
 	-- TDC Reset acessado através de um registrador para ser controlado por software:
 	-- É negado por ser ativo em nível baixo.

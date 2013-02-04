@@ -513,7 +513,7 @@ adc78_data[9]                : W2        : input  : 3.3-V LVTTL       :         
 GND                          : W3        : gnd    :                   :         :           :                
 VCCIO2                       : W4        : power  :                   : 3.3V    : 2         :                
 VCCIO3                       : W5        : power  :                   : 3.3V    : 3         :                
-trigger_b                    : W6        : input  : 3.3-V LVTTL       :         : 3         : Y              
+trigger_b                    : W6        : output : 3.3-V LVTTL       :         : 3         : Y              
 lvdsin[13]                   : W7        : input  : 3.3-V LVTTL       :         : 3         : Y              
 RESERVED_INPUT               : W8        :        :                   :         : 3         :                
 VCCIO3                       : W9        : power  :                   : 3.3V    : 3         :                
