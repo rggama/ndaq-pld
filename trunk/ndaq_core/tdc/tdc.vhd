@@ -72,6 +72,16 @@ entity tdc is
 		signal channel_rd		: in	CTDC_T;
 		signal channel_out		: out	OTDC_A;
 		
+		-------------
+		-- Trigger --
+		-------------
+		signal trig_in			: in	std_logic;
+		
+		-----------
+		-- Debug --
+		-----------
+		signal datavalid		: out	std_logic;
+		
 		---------------
 		-- Registers --
 		---------------
@@ -124,8 +134,12 @@ architecture one_tdc of tdc is
 		signal itdc_irflag	: in	std_logic;	-- TDC Interrupt flag (active high)
 		signal itdc_ef1		: in	std_logic;	-- TDC FIFO-1 Empty flag (active high)
 		signal itdc_ef2 	: in	std_logic;	-- TDC FIFO-2 Empty flag (active high)
+		-- Trigger
+		signal trig_in		: in	std_logic;
 		-- Operation Mode
 		signal mode			: in	std_logic; -- '0' for SINGLE, '1' for CONTINUOUS.
+		-- Debug
+		signal datavalid	: out	std_logic;
 		-- Readout FIFOs
 		signal channel_ef	: out	CTDC_T;
 		signal channel_rd	: in	CTDC_T;
@@ -193,7 +207,12 @@ begin
 		itdc_ef1		=> itdc_ef1, 
 		itdc_ef2 		=> itdc_ef2,
 		
+		trig_in			=> trig_in,
+		
 		mode			=> mode,
+		
+		datavalid		=> datavalid,
+		
 		channel_ef		=> channel_ef,
 		channel_rd		=> channel_rd,
 		channel_out		=> channel_out

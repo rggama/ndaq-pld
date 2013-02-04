@@ -29,9 +29,15 @@ entity tdcread is
 		signal itdc_ef1		: in	std_logic;	-- TDC FIFO-1 Empty flag (active high)
 		signal itdc_ef2 	: in	std_logic;	-- TDC FIFO-2 Empty flag (active high)
 
+		-- Trigger
+		signal trig_in		: in	std_logic;
+		
 		-- Operation Mode
 		signal mode			: in	std_logic; -- '0' for SINGLE, '1' for CONTINUOUS.
 
+		-- Debug
+		signal datavalid	: out	std_logic;
+		
 		-- Readout FIFOs
 		signal channel_ef	: out	CTDC_T;
 		signal channel_rd	: in	CTDC_T;
@@ -48,6 +54,23 @@ architecture rtl of tdcread is
 	constant REG9  : std_logic_vector(3 downto 0) := "1001";		-- TDC FIFO 2 Address
 
 	-- Components
+
+	component sel_tdcfifo
+	port
+	(
+		aclr		: IN STD_LOGIC ;
+		clock		: IN STD_LOGIC ;
+		data		: IN STD_LOGIC_VECTOR (25 DOWNTO 0);
+		rdreq		: IN STD_LOGIC ;
+		sclr		: IN STD_LOGIC ;
+		wrreq		: IN STD_LOGIC ;
+		empty		: OUT STD_LOGIC ;
+		full		: OUT STD_LOGIC ;
+		q			: OUT STD_LOGIC_VECTOR (25 DOWNTO 0);
+		usedw		: OUT STD_LOGIC_VECTOR (1 DOWNTO 0)
+	);
+	end component;
+
 	component tdcfifo
 	port
 	(
@@ -63,25 +86,11 @@ architecture rtl of tdcread is
 	);
 	end component;
 	
-
-	-- Signals
-	type sm_tdc is (sIdle, sTestEFs, sSelectFIFO, sCSN, sRDdown, sRDup, sReadDone, sTestData);
-	signal sm_TDCx : sm_tdc;
-	attribute syn_encoding : string;
-	attribute syn_encoding of sm_tdc : type is "safe";
-
-	signal enable_read		: std_logic := '0';
-	signal tdc_addr			: std_logic_vector(3 downto 0);	
-	signal selected_fifo	: std_logic := '0';
-	signal fifo2_issue		: std_logic := '0';
-	signal i_data_valid		: std_logic := '0';
-	signal TDC_Data			: std_logic_vector(27 downto 0);
-	signal channel_sel		: std_logic_vector(2 downto 0) := "000";
-	signal channel_wr		: CTDC_T := x"00";
-	signal channel_ff		: CTDC_T := x"00";
+	-------------
+	-- Signals --
+	-------------
 	
-	signal i_data_valid2	: std_logic := '0';
-	
+	-- TDC Buffered Flags
 	signal stdc_ef1 		: std_logic := '1';
 	signal stdc_ef2 		: std_logic := '1';
 	signal stdc_irflag 		: std_logic := '0';
@@ -89,22 +98,68 @@ architecture rtl of tdcread is
 	signal rtdc_ef1 		: std_logic := '1';
 	signal rtdc_ef2 		: std_logic := '1';
 	signal rtdc_irflag 		: std_logic := '0';
+	
+	-- TDC Readout FSM
+	type sm_tdc 			is (sIdle, sTestEFs, sSelectFIFO, sCSN, sRDdown, sRDup, sReadDone, sTestData);
+	signal sm_TDCx 			: sm_tdc;
+	attribute syn_encoding	: string;
+	attribute syn_encoding 	of sm_tdc : type is "safe";
+	signal enable_read		: std_logic := '0';
+	signal fifo2_issue		: std_logic := '0';
+	signal i_data_valid		: std_logic := '0';
+	
+	-- Buffered TDC Data
+	signal TDC_Data			: std_logic_vector(27 downto 0);
+
+	-- Selection FIFO Write Enable Decoding
+	signal tdc_addr			: std_logic_vector(3 downto 0);	
+	signal selected_fifo	: std_logic := '0';
+	signal channel_sel		: std_logic_vector(2 downto 0) := "000";
+
+	-- Readout Window FSM
+	type sm_rwindow_t 		is (idle, window, clear, transfer);
+	signal sm_rwindow 		: sm_rwindow_t;
+	attribute syn_encoding 	of sm_rwindow_t : type is "safe";
+	signal i_clear			: std_logic := '0';
+	signal i_transfer		: std_logic := '0';
+	signal any_data			: std_logic := '0';
+	signal scounter			: std_logic_vector(7 downto 0) := x"00";
+	signal triggered		: std_logic := '0';
+
+	-- Selection FIFO Signals
+	signal sel_sclr			: CTDC_T := x"00";
+	signal sel_wr			: CTDC_T := x"00";
+	signal sel_ff			: CTDC_T := x"00";
+	signal sel_rd			: CTDC_T := x"00";
+	signal sel_ef			: CTDC_T := x"00";
+	signal sel_usedw		: SEL_USEDW_A;
+	signal sel_q			: SEL_A;
+
+	-- Readout FIFO Signals
+	signal channel_wr		: CTDC_T := x"00";
+	signal channel_ff		: CTDC_T := x"00";
+	
+	
 		
 --
 --
 
-begin	
+begin
+
+-- ************************************************************************* --
+	
 	--------------------------------------------------
 	-- Read Enable Based on Readout FIFOs Full Flag --
 	--------------------------------------------------
 	
 	
-	enable_read	<=	not(channel_ff(0) or channel_ff(1) or
-						channel_ff(2) or channel_ff(3) or
-						channel_ff(4) or channel_ff(5) or
-						channel_ff(6) or channel_ff(7));
+	-- enable_read	<=	not(channel_ff(0) or channel_ff(1) or
+						-- channel_ff(2) or channel_ff(3) or
+						-- channel_ff(4) or channel_ff(5) or
+						-- channel_ff(6) or channel_ff(7));
 
-
+	enable_read <= '1';
+	
 	----------------------------------------------
 	-- Registering ef1, ef2 and irflag - 2 chains.
 	----------------------------------------------
@@ -275,7 +330,8 @@ begin
 					-- Caso contrário, os resultados das duas FIFOs para uma janela de tempo já foram lidos.
 					-- Deve-se resetar e começar do 'sIdle'.
 					else
-						otdc_alutr <= '1'; 	-- TDC reset (via ALU Trigger pin), keeping the contents of the configuration registers.
+						--otdc_alutr <= '1'; 	-- TDC reset (via ALU Trigger pin), keeping the contents of the configuration registers.
+						
 						sm_TDCx <= sIdle;
 					end if;
 										
@@ -303,21 +359,180 @@ begin
 		end if;
 	end process;
 
-	--------------------------------------------------
-	-- TDC data channel selector and output buffers --
-	--------------------------------------------------
+	-------------------------------------
+	-- TDC data channel WRITE SELECTOR --
+	-------------------------------------
 	channel_sel	<= selected_fifo & TDC_Data(27 downto 26);
 		
 	-- Channel Selector Demux
 	process(channel_sel, i_data_valid)
 	begin
-		channel_wr <= (others => '0');
+		sel_wr <= (others => '0');
 		if (i_data_valid = '1') then
-			channel_wr(conv_integer(channel_sel))	<= '1';
+			sel_wr(conv_integer(channel_sel))	<= '1';
 		end if;
 	end process;
+
 	
-	-- otdc_Data Output Buffer
+-- ************************************************************************* --
+
+	any_data <= not(sel_ef(0)) or not(sel_ef(1)) or not(sel_ef(2)) or not(sel_ef(3)) or
+				not(sel_ef(4)) or not(sel_ef(5)) or not(sel_ef(6)) or not(sel_ef(7));
+				
+				
+	------------------------
+	-- Readout Window FSM --
+	------------------------
+	readout_window_fsm:
+	process (clk, rst)
+	begin
+		if (rst = '1') then
+			triggered <= '0';
+			--
+			scounter <= (others => '0');
+			--	
+			sm_rwindow <= idle;
+			
+		elsif (rising_edge(clk)) then
+			case sm_rwindow is
+				when idle =>
+					
+					if (any_data = '1') then
+						sm_rwindow <= window;
+					else
+						sm_rwindow <= idle;
+					end if;
+				
+				when window =>
+					-- Trigger Buffer (Holder)
+					if (trig_in = '1') then
+						triggered <= '1'; 
+					end if;
+					
+					-- Window Counter
+					scounter <= scounter + 1;
+					
+					-- WHAT TO DO!?!?!?!
+					if (scounter = x"44") then
+						scounter <= (others => '0');
+						--
+						if (triggered = '1') then
+							sm_rwindow <= transfer;
+							--
+							triggered <= '0'; 
+						else
+							sm_rwindow <= clear;
+						end if;
+					end if;
+									
+				when clear =>
+					sm_rwindow <= idle;
+					--
+					scounter <= (others => '0');
+					
+				when transfer =>
+					sm_rwindow <= idle;
+					--
+					scounter <= (others => '0');
+					
+			end case;
+		end if;
+	end process;
+
+	fsm_outputs:
+	process (sm_rwindow)
+	begin
+		case (sm_rwindow) is
+			
+			when idle =>
+				i_clear		<= '0';
+				i_transfer	<= '0';
+
+				
+			when window =>
+				i_clear		<= '0';
+				i_transfer	<= '0';
+			
+			when clear =>
+				i_clear		<= '1';
+				i_transfer	<= '0';
+			
+			when transfer =>
+				i_clear		<= '0';
+				i_transfer	<= '1';
+				
+			when others	=>
+				i_clear		<= '0';
+				i_transfer	<= '0';
+
+			
+		end case;
+	end process;
+	
+-- ************************************************************************* --
+	
+	---------------------------------------------
+	-- Separated channels SEL and OUTPUT FIFOs --
+	---------------------------------------------	
+	channel_out_construct:
+	for i in 0 to 7 generate
+		
+		sel_sclr(i) <= i_clear;
+		
+		selection_fifo:
+		sel_tdcfifo port map
+		(
+			aclr		=> rst,
+			clock		=> clk,
+			data		=> TDC_Data(25 downto 0),
+			rdreq		=> sel_rd(i),
+			sclr		=> sel_sclr(i),
+			wrreq		=> sel_wr(i),
+			empty		=> sel_ef(i),
+			full		=> sel_ff(i),
+			q			=> sel_q(i),
+			usedw		=> sel_usedw(i)
+		);
+
+		-- Selection FIFOs Read Enable
+		process (i_transfer, sel_ef)
+		begin
+			if ((i_transfer = '1') and (sel_ef(i) = '0')) then
+				sel_rd(i) <= '1';
+			else
+				sel_rd(i) <= '0';
+			end if;
+		end process;
+				
+		-- Readout FIFOs Write Enable
+		process (clk, rst)
+		begin
+			if (rst = '1') then 
+				channel_wr(i) <= '0';
+			elsif (rising_edge(clk)) then
+				channel_wr(i) <= sel_rd(i);
+			end if;
+		end process;
+		
+		readout_fifo:
+		tdcfifo port map
+		(
+			aclr		=> rst,
+			wrclk		=> clk,
+			rdclk		=> dclk,
+			data		=> sel_q(i),
+			wrreq		=> channel_wr(i),
+			rdreq		=> channel_rd(i),
+			wrfull		=> channel_ff(i),
+			rdempty		=> channel_ef(i),
+			q			=> channel_out(i)
+		);
+	end generate channel_out_construct;
+	
+	
+	-----------------------------
+	-- otdc_Data Output Buffer --
+	-----------------------------
 	process(rst, clk, i_data_valid)
 	begin
 		if (rst = '1') then
@@ -328,25 +543,11 @@ begin
 			end if;
 		end if;
 	end process;
-
-	-- Separated channel buffers
-	channel_out_construct:
-	for i in 0 to 7 generate
-		readout_fifo:
-		tdcfifo port map
-		(
-			aclr		=> rst,
-			wrclk		=> clk,
-			rdclk		=> dclk,
-			data		=> TDC_Data(25 downto 0),
-			wrreq		=> channel_wr(i),
-			rdreq		=> channel_rd(i),
-			wrfull		=> channel_ff(i),
-			rdempty		=> channel_ef(i),
-			q			=> channel_out(i)
-		);
-	end generate channel_out_construct;
-
+	
+	------------
+	-- DEBUG! --
+	------------
+	datavalid <= i_data_valid;
 --		
 
 end rtl;
