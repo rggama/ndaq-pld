@@ -76,6 +76,7 @@ entity tdc is
 		-- Trigger --
 		-------------
 		signal trig_in			: in	std_logic;
+		signal start			: out	std_logic;
 		
 		-----------
 		-- Debug --
@@ -136,6 +137,7 @@ architecture one_tdc of tdc is
 		signal itdc_ef2 	: in	std_logic;	-- TDC FIFO-2 Empty flag (active high)
 		-- Trigger
 		signal trig_in		: in	std_logic;
+		signal start		: out	std_logic;
 		-- Operation Mode
 		signal mode			: in	std_logic; -- '0' for SINGLE, '1' for CONTINUOUS.
 		-- Debug
@@ -208,6 +210,7 @@ begin
 		itdc_ef2 		=> itdc_ef2,
 		
 		trig_in			=> trig_in,
+		start			=> start,
 		
 		mode			=> mode,
 		
