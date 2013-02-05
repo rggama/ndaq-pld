@@ -56,7 +56,7 @@
 --
 -- user address decoder mask
 --								
-		constant usr_adem				: MEM_4_BYTE := ((x"FF"),(x"00"),(x"00"),(x"00"));
+		constant usr_adem				: MEM_4_BYTE := ((x"FF"),(x"F0"),(x"00"),(x"00"));
 --
 -- user address map
 --	

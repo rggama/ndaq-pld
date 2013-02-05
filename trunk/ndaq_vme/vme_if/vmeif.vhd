@@ -890,43 +890,44 @@
 		if (vme_gap = ga_par) then
 		  BAR <= not(vme_ga);
 		else
-		  BAR <= "11110";
+		  BAR <= "11100";
 		end if;
 	  end if;
-	end process bar_register;	
+	end process bar_register;
+	
 --
 -- write to control and status register RAM
 --
-
---	ADER(0)	<= BAR & "000";		-- HERMAN INSERE EM 29/07/10: ASSIM NAO PRECISA DE RESET PARA CARREGAR ADER (abaixo)
---	ADER(1)	<= x"00";			-- HERMAN INSERE EM 08/09/10: ASSIM NAO PRECISA DE RESET PARA CARREGAR ADER
---	ADER(2)	<= x"00";			-- HERMAN INSERE EM 08/09/10: ASSIM NAO PRECISA DE RESET PARA CARREGAR ADER
---	ADER(3)	<= x"00";			-- HERMAN INSERE EM 08/09/10: ASSIM NAO PRECISA DE RESET PARA CARREGAR ADER
-
--- Changed on 11/2012 to run with the NuDAQ
-		ADER(0)	<= x"02";		
-		ADER(1)	<= BAR(3 downto 0) & "0000";	
-		ADER(2)	<= x"00";		
-		ADER(3)	<= x"00";		
-
-		
 	write_csr : process(i_clock, i_reset, BAR, i_vme_data)
       variable index : integer;
     begin
 	 
-      if (i_reset) then
-		
+	 -- Modified by LF: ADER is loaded synchronously below.
+      --if (i_reset) then
 		 --ADER(3)	<= x"00";
 		 --ADER(2)	<= x"00";
 		 --ADER(1)	<= x"00";
-		 --ADER(0)	<= BAR & "000";						-- ADER intialised from BAR (= GA)		-- COMENTADO POR HERMAN EM 29/07/10		
-		---------------------------------------------- CSR_USR is not reset
-      elsif RISING_EDGE(i_clock) then
+		 --ADER(0)	<= BAR & "000";					-- ADER intialised from BAR (= GA)		
+		
+		---------------------------------------------- CSR_USR is not reset	
+	
+      --elsif RISING_EDGE(i_clock) then 
+	  if RISING_EDGE(i_clock) then
+		
+		-- LF's CSR Addressing (ADER synchronous loading).
+		if (i_reset) then
+			ADER(0)	<= x"02";	
+			ADER(1)	<= BAR(3 downto 0) & "0000";	
+			ADER(2)	<= x"00";		
+			ADER(3)	<= x"00";	
+		end if;
+		
+		--
 		if (csr_select and i_vme_write and ctrl_dtb_vmeok and not(ctrl_dtb_dtack)) then
 		  if (ADDRCOMP(i_vme_addr(11 downto 0),CSR_VME64X_MASK,CSR_VME64X_ADDR)) then
 		    if (ADDRCOMP(i_vme_addr(11 downto 0),ADER_MASK,ADER_ADDR)) then
 			  index := TO_INTEGER(UNSIGNED(i_vme_addr(3 downto 2)));
-			  --ADER(index) <= i_vme_data(7 downto 0);													-- COMENTADO POR HERMAN EM 29/07/10
+			  ADER(index) <= i_vme_data(7 downto 0);					
 			end if;
 		  elsif (ADDRCOMP(i_vme_addr(11 downto 0),CSR_USER_MASK,CSR_USER_ADDR)) then
 		  	index := TO_INTEGER(UNSIGNED(i_vme_addr(6 downto 2)));

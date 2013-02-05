@@ -178,8 +178,8 @@ entity ndaq_core is
 		--------------------
 		-- Trigger inputs --
 		--------------------
-		signal trigger_a		: in	std_logic;	
-		signal trigger_b		: out	std_logic;
+		signal trigger_a		: out	std_logic;	
+		signal trigger_b		: in	std_logic;
 		signal trigger_c		: in	std_logic;
 		
 		----------------------------------
@@ -431,6 +431,7 @@ architecture rtl of ndaq_core is
 		-- Trigger --
 		-------------
 		signal trig_in			: in	std_logic;
+		signal start			: out	std_logic;
 
 		-----------
 		-- Debug --
@@ -892,7 +893,7 @@ begin
 			if (rst = '1') then
 				counter(i)	<= (others => '0'); --CONV_STD_LOGIC_VECTOR(x"3FF", data_width);
 			elsif (rising_edge(clk(i))) then
-				if ((c_trigger_a = '1') or (acq_in(i) = '1')) then
+				if ((c_trigger_b = '1') or (acq_in(i) = '1')) then
 					counter(i)	<= counter(i) + 1;
 				else
 					counter(i)	<= (others => '0'); --CONV_STD_LOGIC_VECTOR(x"3FF", data_width);
@@ -1021,7 +1022,7 @@ begin
 		rst			=> acq_rst,
 		clk			=> clk(0), --clkcore,
 		enable		=> etrigger_en,
-		trig_in		=> trigger_a,
+		trig_in		=> '0',
 		trig_out	=> c_trigger_a
 	);
 	
@@ -1032,7 +1033,7 @@ begin
 		rst			=> acq_rst,
 		clk			=> clk(0), --clkcore,
 		enable		=> etrigger_en,
-		trig_in		=> '0', --trigger_b,
+		trig_in		=> trigger_b,
 		trig_out	=> c_trigger_b
 	);
 
@@ -1054,7 +1055,7 @@ begin
 		rst				=> acq_rst,
 		
 		enable			=> '1',
-		trig_in			=> c_trigger_a,
+		trig_in			=> c_trigger_b,
 		acq_in			=> acq_in,
 		
 		sys_lock		=> sys_lock,
@@ -1063,7 +1064,7 @@ begin
 	
 	--
 	-- Mighty Trigger Counter (will not be locked during dead time)
-	mcounter_trigger_in <= c_trigger_a; --or c_trigger_b(0) or c_trigger_c(0);
+	mcounter_trigger_in <= c_trigger_b; --or c_trigger_b(0) or c_trigger_c(0);
 	
 	mtrigger_counter:
 	mcounter port map
@@ -1088,7 +1089,7 @@ begin
 
 	--
 	-- Internal Trigger Counter
-	tcounter_trigger_in <= c_trigger_a; --or c_trigger_b(i) or c_trigger_c(i);
+	tcounter_trigger_in <= c_trigger_b; --or c_trigger_b(i) or c_trigger_c(i);
 			
 	trigger_counter:
 	tcounter port map
@@ -1121,7 +1122,7 @@ begin
 		rst					=> acq_rst,
 		clk					=> clk(0),
 		--
-		trigger_in			=> c_trigger_a,
+		trigger_in			=> c_trigger_b,
 		-- Timebase Counter
 		enable				=> timebase_en_comb,
 		srst				=> acq_rst,
@@ -1172,7 +1173,7 @@ begin
 			tmode				=> oreg(6)(7),	-- '0' for External, '1' for Internal
 			
 			--OR'ed conditioned trigger inputs, active when 'tmode = '0''
-			trig0 				=> c_trigger_a,
+			trig0 				=> c_trigger_b,
 			trig1 				=> '0', --c_trigger_b(i),
 			trig2				=> '0', --c_trigger_c(i),
 
@@ -1225,7 +1226,7 @@ begin
 		rst			=> acq_rst,
 		clk			=> pclk,
 		enable		=> etrigger_en,
-		trig_in		=> trigger_a,
+		trig_in		=> trigger_b,
 		trig_out	=> tdc_trigger
 	);
 
@@ -1270,12 +1271,13 @@ begin
 		-- Trigger --
 		-------------
 		trig_in			=> tdc_trigger,
+		start			=> trigger_a,	-- TDC Start Loopack thru 'trigger_a' output.
 		
 
 		------------
 		-- DEBUG! --
 		------------
-		datavalid		=> trigger_b,
+		datavalid		=> open,
 		
 		---------------
 		-- Registers --
@@ -1283,32 +1285,21 @@ begin
 		reg_array		=> tdc_reg_array
 		
 	);
-
+	
 	-- TDC Registers's array connections (Phew!)
 	tdc_registers_construct:
 	for i in 0 to 11 generate
 		tdc_reg_array(i) <= oreg(15+i*4)(3 downto 0) & oreg(14+i*4) & oreg(13+i*4) & oreg(12+i*4);
 	end generate tdc_registers_construct;
 	
-	process (clk(0), rst)
-	begin
-		if (rst = '1') then
-			fstop <= '1';
-		elsif (rising_edge(clk(0))) then
-			if (c_trigger_a = '1') then
-				fstop <= '0';
-			end if;
-		end if;
-	end process;
-	
 	-- TDC STOPs Disable acessado através de um registrador para ser controlado por software:
-	tdc_stop_dis(1) <= oreg(62)(0) or sys_lock;
-	tdc_stop_dis(2) <= oreg(62)(1) or sys_lock;
-	tdc_stop_dis(3) <= oreg(62)(2) or sys_lock;
-	tdc_stop_dis(4) <= oreg(62)(3) or sys_lock;
+	tdc_stop_dis(1) <= oreg(62)(0);-- or sys_lock;
+	tdc_stop_dis(2) <= oreg(62)(1);-- or sys_lock;
+	tdc_stop_dis(3) <= oreg(62)(2);-- or sys_lock;
+	tdc_stop_dis(4) <= oreg(62)(3);-- or sys_lock;
 	
 	-- TDC START Disable acessado através de um registrador para ser controlado por software:
-	tdc_start_dis <= oreg(62)(4) or sys_lock;
+	tdc_start_dis <= oreg(62)(4);-- or sys_lock;
 	
 	-- TDC Reset acessado através de um registrador para ser controlado por software:
 	-- É negado por ser ativo em nível baixo.

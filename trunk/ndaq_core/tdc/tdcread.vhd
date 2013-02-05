@@ -31,6 +31,7 @@ entity tdcread is
 
 		-- Trigger
 		signal trig_in		: in	std_logic;
+		signal start		: out	std_logic;
 		
 		-- Operation Mode
 		signal mode			: in	std_logic; -- '0' for SINGLE, '1' for CONTINUOUS.
@@ -126,6 +127,12 @@ architecture rtl of tdcread is
 	signal scounter			: std_logic_vector(7 downto 0) := x"00";
 	signal triggered		: std_logic := '0';
 
+	-- TDC Reset
+	signal tdc_reset		: std_logic := '0';
+	
+	-- ReSTART
+	signal restart			: std_logic := '0';
+	
 	-- Selection FIFO Signals
 	signal sel_sclr			: CTDC_T := x"00";
 	signal sel_wr			: CTDC_T := x"00";
@@ -196,7 +203,6 @@ begin
 			i_data_valid <= '0';
 			tdc_addr <= REG8;
 			sm_TDCx <= sIdle;
-			otdc_alutr <= '0';
 			fifo2_issue	<= '0';
 
 			
@@ -210,23 +216,22 @@ begin
 					otdc_CSN <= '1';
 					otdc_RDN <= '1';
 					i_data_valid <= '0';
-					otdc_alutr <= '0';
 					selected_fifo <= '0';
 
 					
-					-- Se o modo for o CONTINUOUS (mode = '1') não há teste do MTimer. 
-					if (mode = '1') then
+					-- -- Se o modo for o CONTINUOUS (mode = '1') não há teste do MTimer. 
+					-- if (mode = '1') then
 						sm_TDCx <= sSelectFIFO;
 					-- Caso contrário, se o modo for o SINGLE (mode = '0') o teste do MTimer é feito a seguir:
-					else
-						-- Se a IRflag estiver em nivel baixo (MTimer ainda não acabou), espere nesse estado.
-						if (rtdc_irflag = '0') then
-							sm_TDCx <= sIdle;
-						-- Se a IRflag estiver em nivel alto, significa que a janela de tempo acabou e a medição pode ser lida.
-						else
-							sm_TDCx <= sSelectFIFO;
-						end if;
-					end if;
+					-- else
+						-- -- Se a IRflag estiver em nivel baixo (MTimer ainda não acabou), espere nesse estado.
+						-- if (rtdc_irflag = '0') then
+							-- sm_TDCx <= sIdle;
+						-- -- Se a IRflag estiver em nivel alto, significa que a janela de tempo acabou e a medição pode ser lida.
+						-- else
+							-- sm_TDCx <= sSelectFIFO;
+						-- end if;
+					-- end if;
 								
 				
 				-- Testa EF1, EF2 e 'enable_read'.
@@ -236,8 +241,7 @@ begin
 					otdc_RDN <= '1';
 					--otdc_Data <= (others => 'Z');
 					i_data_valid <= '0';
-					otdc_alutr <= '0';
-					
+										
 					-- O sinal 'enable_read' fica inativo ('0') quando qualquer uma das 8 FIFOs de 
 					-- leitura do TDC (sintetizadas no FPGA) ficam cheias.
 					if (enable_read = '1') then	
@@ -275,8 +279,7 @@ begin
 					--
 					i_data_valid <= '0';
 					sm_TDCx <= sRDdown;
-					otdc_alutr <= '0';
-				
+									
 				-- Leitura
 				when sRDdown =>						
 					oTDC_ADR <= tdc_addr;				-- Address valid
@@ -285,8 +288,7 @@ begin
 					--
 					i_data_valid <= '0';
 					sm_TDCx <= sRDup;
-					otdc_alutr <= '0';
-				
+									
 				-- Leitura
 				when sRDup =>							-- CS and RD rising edge
 					oTDC_ADR <= tdc_addr;
@@ -295,7 +297,7 @@ begin
 					--
 					i_data_valid <= '1';				-- Write Strobe for the 8 READOUT FIFOs (inside the FPGA)
 					sm_TDCx <= sReadDone;
-					otdc_alutr <= '0';
+					
 				
 				-- Leitura (final)
 				when sReadDone =>						-- Remove Address and Data
@@ -304,8 +306,7 @@ begin
 					oTDC_RDN <= '1';
 					--
 					i_data_valid <= '0';
-					otdc_alutr <= '0';
-					
+										
 					-- Se o modo for o CONTINUOUS (mode = '1'), deve-se simplesmente ler os dados disponíveis nas FIFOs do TDC. 
 					if (mode = '1') then
 						sm_TDCx <= sSelectFIFO;
@@ -321,17 +322,14 @@ begin
 					oTDC_RDN <= '1';
 					--
 					i_data_valid <= '0';
-					otdc_alutr <= '0';
-					
+										
 					-- Se ainda há dados nas FIFOs, o ciclo deve começar de novo sem Reset e
 					-- sem passar pelo teste do MTimber (via IRFlag no estado sIdle).
 					if ((rtdc_ef1 = '0') or (rtdc_ef2 = '0')) then
 						sm_TDCx <= sSelectFIFO;
 					-- Caso contrário, os resultados das duas FIFOs para uma janela de tempo já foram lidos.
 					-- Deve-se resetar e começar do 'sIdle'.
-					else
-						--otdc_alutr <= '1'; 	-- TDC reset (via ALU Trigger pin), keeping the contents of the configuration registers.
-						
+					else	
 						sm_TDCx <= sIdle;
 					end if;
 										
@@ -342,7 +340,6 @@ begin
 					oTDC_RDN <= '1';
 					i_data_valid <= '0';
 					sm_TDCx <= sIdle;
-					otdc_alutr <= '0';
 			end case;
 		end if;
 	end process;
@@ -469,6 +466,51 @@ begin
 		end case;
 	end process;
 	
+-- ************************************************************************* --
+
+	--------------------------------------
+	-- TDC Master Reset via ALU Trigger --
+	--------------------------------------
+	process (clk, rst)
+	begin
+		if (rst = '1') then
+			tdc_reset <= '0';
+		elsif (rising_edge(clk)) then
+			if ((i_transfer = '1') or (i_clear = '1')) then
+				tdc_reset <= '1';
+			else
+				tdc_reset <= '0';
+			end if;
+		end if;
+	end process;
+
+	otdc_alutr <= tdc_reset;
+	
+	--------------------
+	-- Restart Signal --
+	--------------------
+	process (clk, rst)
+	begin
+		if (rst = '1') then
+			restart <= '0';
+		elsif (rising_edge(clk)) then
+			restart <= tdc_reset;
+		end if;
+	end process;
+	
+	------------------
+	-- Start Signal --
+	------------------
+	process (clk, rst)
+	begin
+		if (rst = '1') then
+			start <= '0';
+		elsif (rising_edge(clk)) then
+			start <= trig_in or restart;
+		end if;
+	end process;
+	
+
 -- ************************************************************************* --
 	
 	---------------------------------------------
