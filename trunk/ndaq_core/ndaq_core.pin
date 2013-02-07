@@ -490,7 +490,7 @@ adc78_data[6]                : V1        : input  : 3.3-V LVTTL       :         
 adc78_data[7]                : V2        : input  : 3.3-V LVTTL       :         : 2         : Y              
 RESERVED_INPUT               : V3        :        :                   :         : 2         :                
 RESERVED_INPUT               : V4        :        :                   :         : 2         :                
-trigger_a                    : V5        : output : 3.3-V LVTTL       :         : 3         : Y              
+trigger_a                    : V5        : input  : 3.3-V LVTTL       :         : 3         : Y              
 RESERVED_INPUT               : V6        :        :                   :         : 3         :                
 RESERVED_INPUT               : V7        :        :                   :         : 3         :                
 RESERVED_INPUT               : V8        :        :                   :         : 3         :                

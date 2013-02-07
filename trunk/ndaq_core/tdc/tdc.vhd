@@ -60,7 +60,8 @@ entity tdc is
 		signal itdc_irflag	 	: in   	std_logic;
 		signal itdc_ef2		 	: in   	std_logic;
 		signal itdc_ef1		 	: in   	std_logic;
-
+		signal itdc_erflag		: in	std_logic;	-- TDC Error Flag
+		
 		-----------------
 		-- TDC control --
 		-----------------
@@ -135,6 +136,7 @@ architecture one_tdc of tdc is
 		signal itdc_irflag	: in	std_logic;	-- TDC Interrupt flag (active high)
 		signal itdc_ef1		: in	std_logic;	-- TDC FIFO-1 Empty flag (active high)
 		signal itdc_ef2 	: in	std_logic;	-- TDC FIFO-2 Empty flag (active high)
+		signal itdc_erflag	: in	std_logic;	-- TDC Error Flag		
 		-- Trigger
 		signal trig_in		: in	std_logic;
 		signal start		: out	std_logic;
@@ -208,6 +210,7 @@ begin
 		itdc_irflag		=> itdc_irflag,
 		itdc_ef1		=> itdc_ef1, 
 		itdc_ef2 		=> itdc_ef2,
+		itdc_erflag		=> itdc_erflag,
 		
 		trig_in			=> trig_in,
 		start			=> start,

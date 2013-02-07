@@ -178,7 +178,7 @@ entity ndaq_core is
 		--------------------
 		-- Trigger inputs --
 		--------------------
-		signal trigger_a		: out	std_logic;	
+		signal trigger_a		: in	std_logic;	
 		signal trigger_b		: in	std_logic;
 		signal trigger_c		: in	std_logic;
 		
@@ -415,6 +415,7 @@ architecture rtl of ndaq_core is
 		signal itdc_irflag	 	: in   	std_logic;
 		signal itdc_ef2		 	: in   	std_logic;
 		signal itdc_ef1		 	: in   	std_logic;
+		signal itdc_erflag		: in	std_logic;
 
 		-----------------
 		-- TDC control --
@@ -640,7 +641,7 @@ architecture rtl of ndaq_core is
 	signal full						: std_logic_vector((adc_channels-1) downto 0);
 	signal empty					: std_logic_vector((adc_channels-1) downto 0);
 	signal c_trigger_a				: std_logic;
-	signal c_trigger_b				: std_logic;
+	signal acq_trigger				: std_logic;
 	signal c_trigger_c				: std_logic;
 	signal thtemp1					: DATA_T;
 	signal thtemp2					: DATA_T;
@@ -893,7 +894,7 @@ begin
 			if (rst = '1') then
 				counter(i)	<= (others => '0'); --CONV_STD_LOGIC_VECTOR(x"3FF", data_width);
 			elsif (rising_edge(clk(i))) then
-				if ((c_trigger_b = '1') or (acq_in(i) = '1')) then
+				if ((acq_trigger = '1') or (acq_in(i) = '1')) then
 					counter(i)	<= counter(i) + 1;
 				else
 					counter(i)	<= (others => '0'); --CONV_STD_LOGIC_VECTOR(x"3FF", data_width);
@@ -1026,15 +1027,15 @@ begin
 		trig_out	=> c_trigger_a
 	);
 	
-	-- Condiciona trigger da entrada 'B'
-	b_etrigger_cond:
+	-- Condiciona trigger para ACQ
+	ACQ_etrigger_cond:
 	tpulse port map
 	(	
 		rst			=> acq_rst,
 		clk			=> clk(0), --clkcore,
 		enable		=> etrigger_en,
 		trig_in		=> trigger_b,
-		trig_out	=> c_trigger_b
+		trig_out	=> acq_trigger
 	);
 
 	-- Condiciona trigger da entrada 'C'
@@ -1055,7 +1056,7 @@ begin
 		rst				=> acq_rst,
 		
 		enable			=> '1',
-		trig_in			=> c_trigger_b,
+		trig_in			=> acq_trigger,
 		acq_in			=> acq_in,
 		
 		sys_lock		=> sys_lock,
@@ -1064,7 +1065,7 @@ begin
 	
 	--
 	-- Mighty Trigger Counter (will not be locked during dead time)
-	mcounter_trigger_in <= c_trigger_b; --or c_trigger_b(0) or c_trigger_c(0);
+	mcounter_trigger_in <= acq_trigger; --or c_trigger_b(0) or c_trigger_c(0);
 	
 	mtrigger_counter:
 	mcounter port map
@@ -1089,7 +1090,7 @@ begin
 
 	--
 	-- Internal Trigger Counter
-	tcounter_trigger_in <= c_trigger_b; --or c_trigger_b(i) or c_trigger_c(i);
+	tcounter_trigger_in <= acq_trigger; --or c_trigger_b(i) or c_trigger_c(i);
 			
 	trigger_counter:
 	tcounter port map
@@ -1122,7 +1123,7 @@ begin
 		rst					=> acq_rst,
 		clk					=> clk(0),
 		--
-		trigger_in			=> c_trigger_b,
+		trigger_in			=> acq_trigger,
 		-- Timebase Counter
 		enable				=> timebase_en_comb,
 		srst				=> acq_rst,
@@ -1173,7 +1174,7 @@ begin
 			tmode				=> oreg(6)(7),	-- '0' for External, '1' for Internal
 			
 			--OR'ed conditioned trigger inputs, active when 'tmode = '0''
-			trig0 				=> c_trigger_b,
+			trig0 				=> acq_trigger,
 			trig1 				=> '0', --c_trigger_b(i),
 			trig2				=> '0', --c_trigger_c(i),
 
@@ -1230,6 +1231,17 @@ begin
 		trig_out	=> tdc_trigger
 	);
 
+	-- Condiciona trigger de RESET para o TDC
+	tdc_etrigger_cond:
+	tpulse port map
+	(	
+		rst			=> acq_rst,
+		clk			=> pclk,
+		enable		=> etrigger_en,
+		trig_in		=> trigger_a,
+		trig_out	=> tdc_reset_trigger
+	);
+
 	--
 	-- TDC Interface
 	tdc_top:
@@ -1255,7 +1267,8 @@ begin
 		itdc_irflag	 	=> tdc_irflag,
 		itdc_ef2		=> tdc_ef2,
 		itdc_ef1		=> tdc_ef1,
-
+		itdc_erflag		=> tdc_errflag,
+		
 		-----------------
 		-- TDC control --
 		-----------------
@@ -1271,7 +1284,7 @@ begin
 		-- Trigger --
 		-------------
 		trig_in			=> tdc_trigger,
-		start			=> trigger_a,	-- TDC Start Loopack thru 'trigger_a' output.
+		start			=> open, --trigger_a,	-- TDC Start Loopack thru 'trigger_a' output.
 		
 
 		------------
@@ -1626,32 +1639,32 @@ begin
 	idata(0)		<= mcounter_q(31 downto 0); --x"AA55AA55";											--001 palavra
 	idata(1)		<= time_q;												--001 palavra
 	idata(2)		<= x"0" & "00" & q(1) & x"0" & "00" & q(0);				--128 palavras
-	idata(3)		<= tdc_errflag & "00000" & tdc_q(0);					--001 palavra
-	idata(4)		<= tdc_errflag & "00000" & tdc_q(4); 					--001 palavra
+	idata(3)		<= tdc_q(0)(28 downto 26) & "000" & tdc_q(0)(25 downto 0);--001 palavra
+	idata(4)		<= tdc_q(4)(28 downto 26) & "000" & tdc_q(4)(25 downto 0);--001 palavra
 	idata(5)		<= tcounter_q;											--001 palavra
 	idata(6)		<= x"0000000" & "000" & busy;							--001 palavra
 
 	idata(7)		<= mcounter_q(31 downto 0); --x"AA55AA55";											--001 palavra
 	idata(8)		<= time_q;												--001 palavra
 	idata(9)		<= x"0" & "00" & q(3) & x"0" & "00" & q(2);				--128 palavras
-	idata(10)		<= tdc_errflag & "00000" & tdc_q(1);					--001 palavra
-	idata(11)		<= tdc_errflag & "00000" & tdc_q(5);					--001 palavra
+	idata(10)		<= tdc_q(1)(28 downto 26) & "000" & tdc_q(1)(25 downto 0);--001 palavra
+	idata(11)		<= tdc_q(5)(28 downto 26) & "000" & tdc_q(5)(25 downto 0);--001 palavra
 	idata(12)		<= tcounter_q;											--001 palavra
 	idata(13)		<= x"0000000" & "000" & busy;							--001 palavra
 
 	idata(14)		<= mcounter_q(31 downto 0); --x"AA55AA55";											--001 palavra
 	idata(15)		<= time_q;												--001 palavra
 	idata(16)		<= x"0" & "00" & q(5) & x"0" & "00" & q(4);				--128 palavras
-	idata(17)		<= tdc_errflag & "00000" & tdc_q(2);					--001 palavra
-	idata(18)		<= tdc_errflag & "00000" & tdc_q(6);					--001 palavra
+	idata(17)		<= tdc_q(2)(28 downto 26) & "000" & tdc_q(2)(25 downto 0);--001 palavra
+	idata(18)		<= tdc_q(6)(28 downto 26) & "000" & tdc_q(6)(25 downto 0);--001 palavra
 	idata(19)		<= tcounter_q;											--001 palavra
 	idata(20)		<= x"0000000" & "000" & busy;							--001 palavra
 
 	idata(21)		<= mcounter_q(31 downto 0); --x"AA55AA55";											--001 palavra	
 	idata(22)		<= time_q;												--001 palavra
 	idata(23)		<= x"0" & "00" & q(7) & x"0" & "00" & q(6);				--128 palavras
-	idata(24)		<= tdc_errflag & "00000" & tdc_q(3);					--001 palavra
-	idata(25)		<= tdc_errflag & "00000" & tdc_q(7);					--001 palavra
+	idata(24)		<= tdc_q(3)(28 downto 26) & "000" & tdc_q(3)(25 downto 0);--001 palavra
+	idata(25)		<= tdc_q(7)(28 downto 26) & "000" & tdc_q(7)(25 downto 0);--001 palavra
 	idata(26)		<= tcounter_q;											--001 palavra
 	idata(27)		<= x"0000000" & "000" & busy;							--001 palavra
 
