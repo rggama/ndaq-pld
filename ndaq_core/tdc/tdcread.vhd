@@ -28,6 +28,7 @@ entity tdcread is
 		signal itdc_irflag	: in	std_logic;	-- TDC Interrupt flag (active high)
 		signal itdc_ef1		: in	std_logic;	-- TDC FIFO-1 Empty flag (active high)
 		signal itdc_ef2 	: in	std_logic;	-- TDC FIFO-2 Empty flag (active high)
+		signal itdc_erflag	: in	std_logic;	-- TDC Error Flag
 
 		-- Trigger
 		signal trig_in		: in	std_logic;
@@ -76,12 +77,12 @@ architecture rtl of tdcread is
 	port
 	(
 		aclr		: IN STD_LOGIC  := '0';
-		data		: IN STD_LOGIC_VECTOR (25 DOWNTO 0);
+		data		: IN STD_LOGIC_VECTOR (28 DOWNTO 0);
 		rdclk		: IN STD_LOGIC ;
 		rdreq		: IN STD_LOGIC ;
 		wrclk		: IN STD_LOGIC ;
 		wrreq		: IN STD_LOGIC ;
-		q			: OUT STD_LOGIC_VECTOR (25 DOWNTO 0);
+		q			: OUT STD_LOGIC_VECTOR (28 DOWNTO 0);
 		rdempty		: OUT STD_LOGIC ;
 		wrfull		: OUT STD_LOGIC 
 	);
@@ -142,7 +143,11 @@ architecture rtl of tdcread is
 	signal sel_usedw		: SEL_USEDW_A;
 	signal sel_q			: SEL_A;
 
+	-- Empty Error
+	signal empty_error		: CTDC_T := x"00";
+	
 	-- Readout FIFO Signals
+	signal readout_data		: OTDC_A;
 	signal channel_wr		: CTDC_T := x"00";
 	signal channel_ff		: CTDC_T := x"00";
 	
@@ -477,7 +482,7 @@ begin
 			tdc_reset <= '0';
 		elsif (rising_edge(clk)) then
 			if ((i_transfer = '1') or (i_clear = '1')) then
-				tdc_reset <= '1';
+				tdc_reset <= '0'; --'1';
 			else
 				tdc_reset <= '0';
 			end if;
@@ -556,13 +561,19 @@ begin
 			end if;
 		end process;
 		
+		-- Empty Error
+		empty_error(i) <= not(sel_ef(i));
+		
+		-- Readout Data
+		readout_data(i) <= itdc_irflag & itdc_erflag & empty_error(i) & sel_q(i);
+		
 		readout_fifo:
 		tdcfifo port map
 		(
 			aclr		=> rst,
 			wrclk		=> clk,
 			rdclk		=> dclk,
-			data		=> sel_q(i),
+			data		=> readout_data(i),
 			wrreq		=> channel_wr(i),
 			rdreq		=> channel_rd(i),
 			wrfull		=> channel_ff(i),
