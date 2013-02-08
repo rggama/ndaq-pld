@@ -5,7 +5,7 @@ library ieee;
 library work;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
-use ieee.std_logic_signed.all;
+use ieee.std_logic_unsigned.all;
 
 use work.lvds_pkg.all;
 
@@ -89,13 +89,9 @@ begin
 
 --
 --
-rst_reg: process(rst, clk)
+rst_reg: process(clk)
 begin
-	if (rst = '1') then
-		--
-		r_rst <= '0';
-		
-	elsif (rising_edge(clk)) then  
+	if (rising_edge(clk)) then  
 		-- Registered Asynchronous Reset
 		r_rst <= rst;
 						
