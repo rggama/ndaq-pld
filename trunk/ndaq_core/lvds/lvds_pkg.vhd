@@ -21,11 +21,11 @@ package lvds_pkg is
 	
 	--
 	-- Trigger Stages
-	constant t_stages			: integer	:= 4;	-- Trigger Delay Stages = (t_stages - 1). If value = 1, there is no delay.
+	constant t_stages			: integer	:= 8;	-- Trigger Delay Stages = (t_stages - 1). If value = 1, there is no delay.
 	
 	--
 	-- Data Stages
-	constant d_stages			: integer	:= 4; 	-- Data Delay Stages = (d_stages - 1). If value = 1, there is no delay.
+	constant d_stages			: integer	:= 8; 	-- Data Delay Stages = (d_stages - 1). If value = 1, there is no delay.
 
 	--
 	-- LVDS Width
