@@ -335,7 +335,28 @@ architecture rtl of ndaq_core is
 		signal counter_q			: out	TCOUNTER_DATA_T := x"00000000"
 	);	
 	end component;
-
+	
+	component lvds
+	port
+	(	
+		signal rst					: in	std_logic;
+		signal clk					: in	std_logic;
+		-- 
+		signal enable				: in	std_logic;
+		signal trigger_in			: in	std_logic;
+		signal lvds_in				: in	LVDS_DATA_T := x"0000";
+		--
+		signal t_sel				: in	T_SEL_T;
+		signal d_sel				: in	D_SEL_T;
+		-- Readout FIFO
+		signal rdclk				: in	std_logic;
+		signal rden					: in	std_logic;
+		signal fifo_empty			: out	std_logic;
+		signal fifo_full			: out	std_logic;
+		signal lvds_q				: out	LVDS_DATA_T := x"0000"
+	);
+	end component;
+	
 	--
 	-- ADC FIFO Writer
 	component writefifo
@@ -432,6 +453,7 @@ architecture rtl of ndaq_core is
 		-- Trigger --
 		-------------
 		signal trig_in			: in	std_logic;
+		signal trig_rst			: in	std_logic;
 		signal start			: out	std_logic;
 
 		-----------
@@ -661,6 +683,7 @@ architecture rtl of ndaq_core is
 
 	-- ACQ: TDC
 	signal	tdc_trigger				: std_logic;
+	signal	tdc_reset_trigger		: std_logic;
 	signal	tdc_ef					: CTDC_T;
 	signal	tdc_rd					: CTDC_T;
 	signal	tdc_q					: OTDC_A;
@@ -1133,6 +1156,26 @@ begin
 		counter_q			=> time_q
 	);			
 
+	lvds_receiver:
+	lvds port map
+	(	
+		rst					=> acq_rst,
+		clk					=> clk(0),
+		-- 
+		enable				=> '1',
+		trigger_in			=> ,
+		lvds_in				=> ,
+		--
+		t_sel				=>,
+		d_sel				=>,
+		-- Readout FIFO
+		rdclk				=>,
+		rden				=>,
+		fifo_empty			=>,
+		fifo_full			=>,
+		lvds_q				=>
+	);	
+
 	-- Constroi os 8 canais de aquisicao
 	adc_data_acq_construct:
 	for i in 0 to (adc_channels-1) generate
@@ -1232,7 +1275,7 @@ begin
 	);
 
 	-- Condiciona trigger de RESET para o TDC
-	tdc_etrigger_cond:
+	tdc_rst_trigger_cond:
 	tpulse port map
 	(	
 		rst			=> acq_rst,
@@ -1284,6 +1327,7 @@ begin
 		-- Trigger --
 		-------------
 		trig_in			=> tdc_trigger,
+		trig_rst		=> tdc_reset_trigger,
 		start			=> open, --trigger_a,	-- TDC Start Loopack thru 'trigger_a' output.
 		
 

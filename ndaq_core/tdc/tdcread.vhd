@@ -32,6 +32,7 @@ entity tdcread is
 
 		-- Trigger
 		signal trig_in		: in	std_logic;
+		signal trig_rst		: in	std_logic;
 		signal start		: out	std_logic;
 		
 		-- Operation Mode
@@ -93,15 +94,26 @@ architecture rtl of tdcread is
 	-------------
 	
 	-- TDC Buffered Flags
-	signal stdc_ef1 		: std_logic := '1';
-	signal stdc_ef2 		: std_logic := '1';
-	signal stdc_irflag 		: std_logic := '0';
-	
-	signal rtdc_ef1 		: std_logic := '1';
-	signal rtdc_ef2 		: std_logic := '1';
-	signal rtdc_irflag 		: std_logic := '0';
-	
+	signal r_tdc_ef1 		: std_logic := '1';
+	signal r_tdc_ef2 		: std_logic := '1';
+	signal r_tdc_irflag		: std_logic := '0';
+	--
+	signal s_tdc_ef1 		: std_logic := '1';
+	signal s_tdc_ef2 		: std_logic := '1';
+	signal s_tdc_irflag 	: std_logic := '0';
+	--
+	signal t_tdc_ef1 		: std_logic := '1';
+	signal t_tdc_ef2 		: std_logic := '1';
+	--
+	signal u_tdc_ef1 		: std_logic := '1';
+	signal u_tdc_ef2 		: std_logic := '1';
+	--
+	signal v_tdc_ef1 		: std_logic := '1';
+	signal v_tdc_ef2 		: std_logic := '1';
+
 	-- TDC Readout FSM
+	signal ef1				: std_logic;
+	signal ef2				: std_logic;
 	type sm_tdc 			is (sIdle, sTestEFs, sSelectFIFO, sCSN, sRDdown, sRDup, sReadDone, sTestData);
 	signal sm_TDCx 			: sm_tdc;
 	attribute syn_encoding	: string;
@@ -127,6 +139,14 @@ architecture rtl of tdcread is
 	signal any_data			: std_logic := '0';
 	signal scounter			: std_logic_vector(7 downto 0) := x"00";
 	signal triggered		: std_logic := '0';
+
+	-- Reset Window FSM
+	signal no_reset			: std_logic := '0';
+	type sm_rst_t	 		is (idle, rst_window, reset);
+	signal sm_rst	 		: sm_rst_t;
+	attribute syn_encoding 	of sm_rst_t : type is "safe";
+	signal i_rst			: std_logic := '0';
+	signal tcounter			: std_logic_vector(7 downto 0) := x"00";
 
 	-- TDC Reset
 	signal tdc_reset		: std_logic := '0';
@@ -170,7 +190,17 @@ begin
 						-- channel_ff(4) or channel_ff(5) or
 						-- channel_ff(6) or channel_ff(7));
 
-	enable_read <= '1';
+	--
+	-- Enable read logic.
+	-- process(sm_rst)
+	-- begin
+		-- if (sm_rst = reset) then
+			-- enable_read <= '1';
+		-- else
+			-- enable_read <= '0';
+		-- end if;
+	-- end process;
+	enable_read <= '1'; --not(tdc_reset); 
 	
 	----------------------------------------------
 	-- Registering ef1, ef2 and irflag - 2 chains.
@@ -178,24 +208,46 @@ begin
 	process(rst, clk)
 	begin
 		if (rst = '1') then
-			stdc_ef1	<= '1';
-			stdc_ef2	<= '1';
-			stdc_irflag	<= '0';
+			r_tdc_ef1	 <= '1';
+			r_tdc_ef2	 <= '1';
+			r_tdc_irflag <= '0';
 			--
-			rtdc_ef1	<= '1';
-			rtdc_ef2	<= '1';
-			rtdc_irflag	<= '0';
+			s_tdc_ef1	 <= '1';
+			s_tdc_ef2	 <= '1';
+			s_tdc_irflag <= '0';
+			--
+			t_tdc_ef1	 <= '1';
+			t_tdc_ef2	 <= '1';
+			--
+			u_tdc_ef1	 <= '1';
+			u_tdc_ef2	 <= '1';
+			--
+			v_tdc_ef1	 <= '1';
+			v_tdc_ef2	 <= '1';
 		elsif (rising_edge(clk)) then
-			stdc_ef1	<= itdc_ef1;
-			stdc_ef2	<= itdc_ef2;
-			stdc_irflag	<= itdc_irflag;
+			r_tdc_ef1	 <= itdc_ef1;
+			r_tdc_ef2	 <= itdc_ef2;
+			r_tdc_irflag <= itdc_irflag;
 			--
-			rtdc_ef1	<= stdc_ef1;
-			rtdc_ef2	<= stdc_ef2;
-			rtdc_irflag	<= stdc_irflag;
+			s_tdc_ef1	 <= r_tdc_ef1;
+			s_tdc_ef2	 <= r_tdc_ef2;
+			s_tdc_irflag <= r_tdc_irflag;
+			--
+			t_tdc_ef1	 <= s_tdc_ef1;
+			t_tdc_ef2	 <= s_tdc_ef2;
+			--
+			u_tdc_ef1	 <= t_tdc_ef1;
+			u_tdc_ef2	 <= t_tdc_ef2;
+			--
+			v_tdc_ef1	 <= u_tdc_ef1;
+			v_tdc_ef2	 <= u_tdc_ef2;
 		end if;
 	end process;
 	
+	--
+	--
+	ef1 <= s_tdc_ef1 or v_tdc_ef1;
+	ef2 <= s_tdc_ef2 or v_tdc_ef2;
 	
 	--------------------------
 	-- TDC data readout FSM --
@@ -251,19 +303,19 @@ begin
 					-- leitura do TDC (sintetizadas no FPGA) ficam cheias.
 					if (enable_read = '1') then	
 						--both fifos have data: read fifo1 and issue a fifo2 read for the next cycle.
-						if ((rtdc_ef1 = '0') and (rtdc_ef2 = '0') and (fifo2_issue = '0')) then
+						if ((ef1 = '0') and (ef2 = '0') and (fifo2_issue = '0')) then
 							tdc_addr <= REG8;
 							selected_fifo <= '0';
 							fifo2_issue	<= '1';
 							sm_TDCx <= sCSN;
 						--fifo2 have data or fifo2 read issued: read fifo2.
-						elsif ((rtdc_ef2 = '0') or (fifo2_issue = '1')) then
+						elsif ((ef2 = '0') or (fifo2_issue = '1')) then
 							tdc_addr <= REG9;
 							selected_fifo <= '1';
 							fifo2_issue	<= '0';
 							sm_TDCx <= sCSN;
 						--fifo1 have data: read fifo 1.
-						elsif (rtdc_ef1 = '0') then
+						elsif (ef1 = '0') then
 							tdc_addr <= REG8;
 							selected_fifo <= '0';
 							fifo2_issue	<= '0';
@@ -330,7 +382,7 @@ begin
 										
 					-- Se ainda há dados nas FIFOs, o ciclo deve começar de novo sem Reset e
 					-- sem passar pelo teste do MTimber (via IRFlag no estado sIdle).
-					if ((rtdc_ef1 = '0') or (rtdc_ef2 = '0')) then
+					if ((ef1 = '0') or (ef2 = '0')) then
 						sm_TDCx <= sSelectFIFO;
 					-- Caso contrário, os resultados das duas FIFOs para uma janela de tempo já foram lidos.
 					-- Deve-se resetar e começar do 'sIdle'.
@@ -441,7 +493,7 @@ begin
 		end if;
 	end process;
 
-	fsm_outputs:
+	readout_window_fsm_outputs:
 	process (sm_rwindow)
 	begin
 		case (sm_rwindow) is
@@ -472,6 +524,85 @@ begin
 	end process;
 	
 -- ************************************************************************* --
+					
+	-- Reset Inhibit
+	process (s_tdc_ef1, s_tdc_ef2, sm_rwindow)
+	begin
+		if ((s_tdc_ef1 = '0') or (s_tdc_ef2 = '0') or 
+			(sm_rwindow = window)) then
+			
+			no_reset <= '1';
+		else
+			no_reset <= '0';
+		end if;
+	end process;
+	
+	---------------
+	-- Reset FSM --
+	---------------
+	rst_fsm:
+	process (clk, rst)
+	begin
+		if (rst = '1') then
+			--
+			tcounter <= (others => '0');
+			--	
+			sm_rst <= idle;
+			
+		elsif (rising_edge(clk)) then
+			case sm_rst is
+				when idle =>
+					--
+					if (trig_rst = '1') then
+						sm_rst <= rst_window;
+					else
+						sm_rst <= idle;
+					end if;
+				
+				when rst_window =>
+					-- Reset Window Counter
+					tcounter <= tcounter + 1;
+					
+					-- WHAT TO DO!?!?!?!
+					if (tcounter = x"88") then
+						tcounter <= (others => '0');
+						--
+						if (no_reset = '1') then
+							sm_rst <= idle;
+						else
+							sm_rst <= reset;
+						end if;
+					end if;
+									
+				when reset =>
+					sm_rst <= idle;
+										
+			end case;
+		end if;
+	end process;
+
+	rst_fsm_outputs:
+	process (sm_rst)
+	begin
+		case (sm_rst) is
+			
+			when idle =>
+				i_rst	<= '0';
+				
+			when rst_window =>
+				i_rst	<= '0';
+			
+			when reset =>
+				i_rst	<= '1';
+			
+			when others	=>
+				i_rst	<= '0';
+			
+		end case;
+	end process;
+
+	
+-- ************************************************************************* --
 
 	--------------------------------------
 	-- TDC Master Reset via ALU Trigger --
@@ -481,11 +612,12 @@ begin
 		if (rst = '1') then
 			tdc_reset <= '0';
 		elsif (rising_edge(clk)) then
-			if ((i_transfer = '1') or (i_clear = '1')) then
-				tdc_reset <= '0'; --'1';
-			else
-				tdc_reset <= '0';
-			end if;
+			--if ((i_rst = '1') and (no_reset = '0')) then 
+				--tdc_reset <= '1';
+			--else
+				--tdc_reset <= '0'; 
+			--end if;
+			tdc_reset <= i_rst;
 		end if;
 	end process;
 
@@ -494,26 +626,27 @@ begin
 	--------------------
 	-- Restart Signal --
 	--------------------
-	process (clk, rst)
-	begin
-		if (rst = '1') then
-			restart <= '0';
-		elsif (rising_edge(clk)) then
-			restart <= tdc_reset;
-		end if;
-	end process;
+	-- process (clk, rst)
+	-- begin
+		-- if (rst = '1') then
+			-- restart <= '0';
+		-- elsif (rising_edge(clk)) then
+			-- restart <= tdc_reset;
+		-- end if;
+	-- end process;
+	
 	
 	------------------
 	-- Start Signal --
 	------------------
-	process (clk, rst)
-	begin
-		if (rst = '1') then
-			start <= '0';
-		elsif (rising_edge(clk)) then
-			start <= trig_in or restart;
-		end if;
-	end process;
+	-- process (clk, rst)
+	-- begin
+		-- if (rst = '1') then
+			-- start <= '0';
+		-- elsif (rising_edge(clk)) then
+			-- start <= trig_in or restart;
+		-- end if;
+	-- end process;
 	
 
 -- ************************************************************************* --

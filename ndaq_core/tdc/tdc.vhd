@@ -77,6 +77,7 @@ entity tdc is
 		-- Trigger --
 		-------------
 		signal trig_in			: in	std_logic;
+		signal trig_rst			: in	std_logic;
 		signal start			: out	std_logic;
 		
 		-----------
@@ -139,6 +140,7 @@ architecture one_tdc of tdc is
 		signal itdc_erflag	: in	std_logic;	-- TDC Error Flag		
 		-- Trigger
 		signal trig_in		: in	std_logic;
+		signal trig_rst		: in	std_logic;		
 		signal start		: out	std_logic;
 		-- Operation Mode
 		signal mode			: in	std_logic; -- '0' for SINGLE, '1' for CONTINUOUS.
@@ -213,6 +215,7 @@ begin
 		itdc_erflag		=> itdc_erflag,
 		
 		trig_in			=> trig_in,
+		trig_rst		=> trig_rst,
 		start			=> start,
 		
 		mode			=> mode,
