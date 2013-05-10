@@ -18,6 +18,7 @@ entity mcounter is
 		signal clk					: in	std_logic;
 		-- Counter
 		signal trigger_in			: in	std_logic;
+		signal hetrigger_in			: in	std_logic;
 		signal enable				: in	std_logic;
 		signal lock					: in 	std_logic;
 		signal srst					: in	std_logic;
@@ -65,8 +66,12 @@ architecture rtl of mcounter is
 	signal r_incremented			: std_logic := '0';
 
 	signal r_lock					: std_logic := '0';
-	signal s_lock					: std_logic := '0';	
+	signal s_lock					: std_logic := '0';
 	signal t_lock					: std_logic := '0'; 
+
+	signal r_hetrigger_in				: std_logic := '0';
+	signal s_hetrigger_in				: std_logic := '0';
+	signal hetrigger				: std_logic := '0';	
 --
 --
 	
@@ -123,6 +128,10 @@ begin
 		s_lock <= r_lock;
 		t_lock <= s_lock;
 		
+		-- 11 bufered hetrigger !!
+		r_hetrigger_in <= hetrigger_in;
+		s_hetrigger_in <= r_hetrigger_in;
+		
 		end if;
 end process;
 
@@ -152,7 +161,8 @@ end process;
 
 --
 --
-fifo_data <= t_lock & "000" & counter_reg;
+hetrigger <= s_hetrigger_in;
+fifo_data <= t_lock & hetrigger & "00" & counter_reg; 
 
 --
 --Readout FIFO
