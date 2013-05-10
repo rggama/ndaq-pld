@@ -12,7 +12,8 @@ entity tpulse is
 		signal clk	        : in	std_logic;
 		signal enable		: in	std_logic;
 		signal trig_in      : in	std_logic;
-		signal trig_out     : out	std_logic := '0'
+		signal trig_out     : out	std_logic := '0';
+		signal delayedtrig_out     : out	std_logic := '0'
 	);
 end tpulse;
 --
@@ -33,6 +34,23 @@ architecture rtl of tpulse is
 	signal	r_trig_in	: std_logic := '0';
 	signal	i_trig_out	: std_logic := '0';
 	signal	r_enable	: std_logic	:= '0';
+	signal	r_delayedtrig_out : std_logic	:= '0';
+	signal	s_delayedtrig_out : std_logic	:= '0';
+	signal	t_delayedtrig_out : std_logic	:= '0';
+	signal	u_delayedtrig_out : std_logic	:= '0';
+	signal	v_delayedtrig_out : std_logic	:= '0';
+	signal	x_delayedtrig_out : std_logic	:= '0';
+	signal	z_delayedtrig_out : std_logic	:= '0';
+	signal	a_delayedtrig_out : std_logic	:= '0';
+	signal	b_delayedtrig_out : std_logic	:= '0';
+	signal	c_delayedtrig_out : std_logic	:= '0';
+	signal	d_delayedtrig_out : std_logic	:= '0';
+	signal	e_delayedtrig_out : std_logic	:= '0';
+	signal	f_delayedtrig_out : std_logic	:= '0';
+	signal	g_delayedtrig_out : std_logic	:= '0';
+	signal	h_delayedtrig_out : std_logic	:= '0';
+	signal	i_delayedtrig_out : std_logic	:= '0';
+	
 
 begin
 
@@ -100,6 +118,23 @@ begin
 			trig_out	<= '0';
 		elsif (rising_edge(clk)) then
 			trig_out	<= i_trig_out;
+			r_delayedtrig_out <= i_trig_out;
+			s_delayedtrig_out <= r_delayedtrig_out;
+			t_delayedtrig_out <= s_delayedtrig_out;
+			u_delayedtrig_out <= t_delayedtrig_out;
+			v_delayedtrig_out <= u_delayedtrig_out;
+			x_delayedtrig_out <= v_delayedtrig_out;
+			z_delayedtrig_out <= x_delayedtrig_out;
+			a_delayedtrig_out <= z_delayedtrig_out;
+			b_delayedtrig_out <= a_delayedtrig_out;
+			c_delayedtrig_out <= b_delayedtrig_out;
+			d_delayedtrig_out <= c_delayedtrig_out;
+			e_delayedtrig_out <= d_delayedtrig_out;
+			f_delayedtrig_out <= e_delayedtrig_out;
+			g_delayedtrig_out <= f_delayedtrig_out;
+			h_delayedtrig_out <= g_delayedtrig_out;
+			i_delayedtrig_out <= h_delayedtrig_out;
+			delayedtrig_out <= (a_delayedtrig_out or b_delayedtrig_out or c_delayedtrig_out or d_delayedtrig_out or e_delayedtrig_out);
 		end if;
 	end process;
 	

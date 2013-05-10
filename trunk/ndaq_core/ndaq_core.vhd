@@ -240,7 +240,8 @@ architecture rtl of ndaq_core is
 		signal clk				: in	std_logic;
 		signal enable		  	: in	std_logic;		
 		signal trig_in		  	: in	std_logic;
-		signal trig_out     	: out	std_logic
+		signal trig_out     	: out	std_logic;
+		signal delayedtrig_out     : out	std_logic
 	);
 	end component;
 
@@ -304,6 +305,7 @@ architecture rtl of ndaq_core is
 		signal clk					: in	std_logic;
 		-- Counter
 		signal trigger_in			: in	std_logic;
+		signal hetrigger_in			: in	std_logic;		
 		signal enable				: in	std_logic;
 		signal lock					: in 	std_logic;
 		signal srst					: in	std_logic;
@@ -632,6 +634,7 @@ architecture rtl of ndaq_core is
 	
 	-- Mighty Trigger Counter
 	signal mcounter_trigger_in		: std_logic;
+	signal mcounter_hetrigger_in		: std_logic;	
 	signal mcounter_rd				: std_logic;
 	signal mcounter_ef				: std_logic;
 	signal mcounter_q				: MCOUNTER_DATA_T; -- 36 bits
@@ -663,6 +666,7 @@ architecture rtl of ndaq_core is
 	signal etrigger_en				: std_logic;
 	signal itrigger_en				: std_logic;
 	signal acq_en					: std_logic;
+	signal dualtrigger_en				: std_logic;
 	signal acq_rst					: std_logic;	
 	signal clk						: std_logic_vector((adc_channels-1) downto 0);
 	signal rd						: std_logic_vector((adc_channels-1) downto 0);
@@ -671,6 +675,8 @@ architecture rtl of ndaq_core is
 	signal empty					: std_logic_vector((adc_channels-1) downto 0);
 	signal c_trigger_a				: std_logic;
 	signal acq_trigger				: std_logic;
+	signal acq_trigger_he				: std_logic;
+	signal he_trigger				: std_logic;
 	signal c_trigger_c				: std_logic;
 	signal thtemp1					: DATA_T;
 	signal thtemp2					: DATA_T;
@@ -689,6 +695,8 @@ architecture rtl of ndaq_core is
 	signal wrusedw					: F_USEDW_WIDTH_T; -- FIFOs USED WORDS bus vector sync'ed to write clock
 
 	-- ACQ: TDC
+	signal	tdc_hold_rst			: std_logic := '0';
+	signal	tdc_trigger_hold		: std_logic := '0';
 	signal	tdc_trigger				: std_logic;
 	signal	tdc_reset_trigger		: std_logic;
 	signal	tdc_ef					: CTDC_T;
@@ -705,6 +713,7 @@ architecture rtl of ndaq_core is
 	
 	-- Data Builder
 	signal 	busy					: std_logic;
+	signal  hetrigger				: std_logic;
 	signal	db_behavior				: MODE_T;
 	signal	enable_A				: SLOTS_T;
 	signal	enable_B				: SLOTS_T;
@@ -944,6 +953,7 @@ begin
 	etrigger_en		<= oreg(1)(2);	-- Enable the External Trigger component.
 	itrigger_en		<= oreg(1)(3);	-- Enable the Internal Trigger component.
 	acq_en			<= oreg(1)(4);  -- Enable the 8 ADC interface component.
+	dualtrigger_en		<= oreg(1)(5);  -- Enable dualtrigger for Double Chooz
 	
 	--
 	-- ACQ Reset
@@ -1076,7 +1086,8 @@ begin
 		clk			=> clk(0), --clkcore,
 		enable		=> etrigger_en,
 		trig_in		=> trigger_c,
-		trig_out	=> c_trigger_c
+		trig_out	=> c_trigger_c,
+		delayedtrig_out => he_trigger
 	);
 
 	lock_gen:
@@ -1086,7 +1097,7 @@ begin
 		rst				=> acq_rst,
 		
 		enable			=> '1',
-		trig_in			=> acq_trigger,
+		trig_in			=> acq_trigger_he,
 		acq_in			=> acq_in,
 		
 		sys_lock		=> sys_lock,
@@ -1096,6 +1107,19 @@ begin
 	--
 	-- Mighty Trigger Counter (will not be locked during dead time)
 	mcounter_trigger_in <= acq_trigger; --or c_trigger_b(0) or c_trigger_c(0);
+	--mcounter_hetrigger_in <= he_trigger;
+	
+	-- If we are on a Single Trigger system, all triggers are High Energy
+	process(clk)
+	begin
+		if (rising_edge(clk(0))) then
+		    if (dualtrigger_en ='1') then
+				 mcounter_hetrigger_in <= acq_trigger_he;
+		    else 
+				 mcounter_hetrigger_in <= '1';
+		    end if;
+		end if;
+	end process;
 	
 	mtrigger_counter:
 	mcounter port map
@@ -1104,6 +1128,7 @@ begin
 		clk					=> clk(0),
 		-- Counter
 		trigger_in			=> mcounter_trigger_in,
+		hetrigger_in			=> mcounter_hetrigger_in,
 		enable				=> counter_en,
 		lock				=> sys_lock,
 		srst				=> acq_rst,
@@ -1118,9 +1143,21 @@ begin
 	-- Enable condition for trigger counter (lockable) component.
 	tcounter_en_comb <= counter_en and not(adc_lock);
 
+	-- Single (Angra) or Double (Double Chooz) Trigger Selector
+	process(clk)
+	begin
+		if (rising_edge(clk(0))) then
+		    if (dualtrigger_en ='1') then
+				 acq_trigger_he <= (acq_trigger and he_trigger);
+		    else 
+				 acq_trigger_he <= acq_trigger;
+		    end if;
+		end if;
+	end process;
+
 	--
 	-- Internal Trigger Counter
-	tcounter_trigger_in <= acq_trigger; --or c_trigger_b(i) or c_trigger_c(i);
+	tcounter_trigger_in <= acq_trigger_he; --or c_trigger_b(i) or c_trigger_c(i);
 			
 	trigger_counter:
 	tcounter port map
@@ -1142,8 +1179,8 @@ begin
 	);
 
 	--
-	-- Enable condition for timebase generator (lockable) component.
-	timebase_en_comb <= timebase_en and not(adc_lock);
+	-- Enable condition for timebase generator (not-lockable) component.
+	timebase_en_comb <= timebase_en;-- and not(adc_lock);
 	
 	--
 	-- Timebase Generator	
@@ -1224,7 +1261,7 @@ begin
 			tmode				=> oreg(6)(7),	-- '0' for External, '1' for Internal
 			
 			--OR'ed conditioned trigger inputs, active when 'tmode = '0''
-			trig0 				=> acq_trigger,
+			trig0 				=> acq_trigger_he,
 			trig1 				=> '0', --c_trigger_b(i),
 			trig2				=> '0', --c_trigger_c(i),
 
@@ -1270,17 +1307,47 @@ begin
 -- ************************************ TDC ***********************************
 
 	
-	-- Condiciona trigger para o TDC
-	tdc_etrigger_cond:
-	tpulse port map
-	(	
-		rst			=> acq_rst,
-		clk			=> pclk,
-		enable		=> etrigger_en,
-		trig_in		=> trigger_b,
-		trig_out	=> tdc_trigger
-	);
+	-- Nao vamos mais tratar o acq_trigger_he com o condicionador de trigger ligado em pclk (40 MHz)
+	-- -- Condiciona trigger para o TDC
+	-- tdc_etrigger_cond:
+	-- tpulse port map
+	-- (	
+		-- rst			=> acq_rst,
+		-- clk			=> pclk,
+		-- enable		=> etrigger_en,
+		-- trig_in		=> acq_trigger_he,
+		-- trig_out	=> tdc_trigger
+	-- );
 
+	-- Vamos dar um jeito do acq_trigger_he ser amostrado sempre que houver uma borda de subida nele.
+	-- Este flip-flop recebe o acq_trigger_he como clock. Sua saida sera '1' quando houve uma borda de subida no clock.
+	-- Sua saida sera resetada ('0') com um reset assincrono 'tdc_hold_rst'.
+	process(acq_trigger_he, tdc_hold_rst)
+	begin
+		if (tdc_hold_rst = '1') then
+			tdc_trigger_hold <= '0';
+		elsif (rising_edge(acq_trigger_he)) then
+			tdc_trigger_hold <= '1';
+		end if;
+	end process;
+	
+	-- Este flip-flop ira amostrar o sinal gerado pelo flip-flop anterior (tdc_trigger_hold) atraves do clock de 40 MHz.
+	-- A saida deste flip-flop sera o 'trig_in' do componente TDCRead.
+	process(pclk, acq_rst)
+	begin
+		if (acq_rst = '1') then
+			tdc_trigger <= '0';
+		elsif (rising_edge(pclk)) then
+			tdc_trigger <= tdc_trigger_hold;
+		end if;
+	end process;
+	
+	--
+	-- Quando o flip-flop anterior (tdc_trigger) amostrar o sinal 'tdc_trigger_hold' em '1', 
+	-- o 'tdc_trigger_hold' sera assincronamente resetado.
+	tdc_hold_rst <= tdc_trigger;
+	
+	--
 	-- Condiciona trigger de RESET para o TDC
 	tdc_rst_trigger_cond:
 	tpulse port map
@@ -1499,6 +1566,7 @@ begin
 	--
 	-- Busy signal indicates that the data block was acquired during ACQ dead time.
 	busy <= mcounter_q(35);
+	hetrigger <= mcounter_q(34);
 	
 	--
 	-- Busy to Databuilder Behavior DECODER
@@ -1520,38 +1588,38 @@ begin
 	enable_A(0)		<= oreg(65)(0); --'0';					-- MightyCounter
 	enable_A(1)		<= oreg(65)(1); --'0';					-- LVDSLine
 	enable_A(2)		<= oreg(65)(2); --'1';					-- Timestamp
-	enable_A(3)		<= oreg(65)(3); --'0';					-- ADC
-	enable_A(4)		<= oreg(65)(4); --'0';					-- TDC
-	enable_A(5)		<= oreg(65)(4); --'0';					-- TDC
-	enable_A(6)		<= oreg(65)(5); --'1';					-- Trigger Counter
-	enable_A(7)		<= oreg(65)(6); --'1';					-- Busy FLag
+	enable_A(3)		<= oreg(65)(3) and not(busy) and hetrigger; --'0';					-- ADC
+	enable_A(4)		<= oreg(65)(4) and not(busy) and hetrigger; --'0';					-- TDC
+	enable_A(5)		<= oreg(65)(4) and not(busy) and hetrigger; --'0';					-- TDC
+	enable_A(6)		<= oreg(65)(5) and not(busy) and hetrigger; --'1';					-- Trigger Counter
+	enable_A(7)		<= oreg(65)(6) and not(busy) and hetrigger; --'1';					-- Busy FLag
 
 	enable_A(8)		<= oreg(66)(0); --'0';
 	enable_A(9)		<= oreg(66)(1); --'0';
 	enable_A(10)	<= oreg(66)(2); --'1';
-	enable_A(11)	<= oreg(66)(3); --'0';
-	enable_A(12)	<= oreg(66)(4); --'0';
-	enable_A(13)	<= oreg(66)(4); --'0';
-	enable_A(14)	<= oreg(66)(5); --'1';
-	enable_A(15)	<= oreg(66)(6); --'1';
+	enable_A(11)	<= oreg(66)(3) and not(busy) and hetrigger; --'0';
+	enable_A(12)	<= oreg(66)(4) and not(busy) and hetrigger; --'0';
+	enable_A(13)	<= oreg(66)(4) and not(busy) and hetrigger; --'0';
+	enable_A(14)	<= oreg(66)(5) and not(busy) and hetrigger; --'1';
+	enable_A(15)	<= oreg(66)(6) and not(busy) and hetrigger; --'1';
 
 	enable_A(16)	<= oreg(67)(0); --'0';
 	enable_A(17)	<= oreg(67)(1); --'0';
 	enable_A(18)	<= oreg(67)(2); --'1';
-	enable_A(19)	<= oreg(67)(3); --'0';
-	enable_A(20)	<= oreg(67)(4); --'0';
-	enable_A(21)	<= oreg(67)(4); --'0';
-	enable_A(22)	<= oreg(67)(5); --'1';
-	enable_A(23)	<= oreg(67)(6); --'1';
+	enable_A(19)	<= oreg(67)(3) and not(busy) and hetrigger; --'0';
+	enable_A(20)	<= oreg(67)(4) and not(busy) and hetrigger; --'0';
+	enable_A(21)	<= oreg(67)(4) and not(busy) and hetrigger; --'0';
+	enable_A(22)	<= oreg(67)(5) and not(busy) and hetrigger; --'1';
+	enable_A(23)	<= oreg(67)(6) and not(busy) and hetrigger; --'1';
 
 	enable_A(24)	<= oreg(68)(0); --'0';
 	enable_A(25)	<= oreg(68)(1); --'0';
 	enable_A(26)	<= oreg(68)(2); --'1';
-	enable_A(27)	<= oreg(68)(3); --'0';
-	enable_A(28)	<= oreg(68)(4); --'0';
-	enable_A(29)	<= oreg(68)(4); --'0';
-	enable_A(30)	<= oreg(68)(5); --'1';
-	enable_A(31)	<= oreg(68)(6); --'1';
+	enable_A(27)	<= oreg(68)(3) and not(busy) and hetrigger; --'0';
+	enable_A(28)	<= oreg(68)(4) and not(busy) and hetrigger; --'0';
+	enable_A(29)	<= oreg(68)(4) and not(busy) and hetrigger; --'0';
+	enable_A(30)	<= oreg(68)(5) and not(busy) and hetrigger; --'1';
+	enable_A(31)	<= oreg(68)(6) and not(busy) and hetrigger; --'1';
 	
 
 	--
@@ -1562,7 +1630,7 @@ begin
 	-- tcounter NOT empty let us go.
 	enable_B(0)		<= not(mcounter_ef); 
 	enable_B(1)		<= not(lvds_ef); 	
-	enable_B(2)		<= not(time_ef) and not(busy);
+	enable_B(2)		<= not(time_ef); --and not(busy);
 	enable_B(3)		<= even_enable(0) and odd_enable(0) and not(busy);
 	enable_B(4)		<= not(tdc_ef(0)) and not(busy);
 	enable_B(5)		<= not(tdc_ef(4)) and not(busy);
@@ -1713,7 +1781,7 @@ begin
 
 	-- 32 bits construct.	
 	idata(0)		<= mcounter_q(31 downto 0); --x"AA55AA55";				--001 palavra
-	idata(1)		<= x"0000" & lvds_q;									--001 palavra
+	idata(1)		<= busy & hetrigger & "00"& x"000" & lvds_q;									--001 palavra
 	idata(2)		<= time_q;												--001 palavra
 	idata(3)		<= x"0" & "00" & q(1) & x"0" & "00" & q(0);				--128 palavras
 	idata(4)		<= tdc_q(0)(28 downto 26) & "000" & tdc_q(0)(25 downto 0);--001 palavra
@@ -1722,7 +1790,7 @@ begin
 	idata(7)		<= x"0000000" & "000" & busy;							--001 palavra
 
 	idata(8)		<= mcounter_q(31 downto 0); --x"AA55AA55";				--001 palavra
-	idata(9)		<= x"0000" & lvds_q; 									--001 palavra
+	idata(9)		<= busy & hetrigger & "00"& x"000" & lvds_q; 									--001 palavra
 	idata(10)		<= time_q;												--001 palavra
 	idata(11)		<= x"0" & "00" & q(3) & x"0" & "00" & q(2);				--128 palavras
 	idata(12)		<= tdc_q(1)(28 downto 26) & "000" & tdc_q(1)(25 downto 0);--001 palavra
@@ -1731,7 +1799,7 @@ begin
 	idata(15)		<= x"0000000" & "000" & busy;							--001 palavra
 
 	idata(16)		<= mcounter_q(31 downto 0); --x"AA55AA55";				--001 palavra
-	idata(17)		<= x"0000" & lvds_q;									--001 palavra
+	idata(17)		<= busy & hetrigger & "00"& x"000" & lvds_q;									--001 palavra
 	idata(18)		<= time_q;												--001 palavra
 	idata(19)		<= x"0" & "00" & q(5) & x"0" & "00" & q(4);				--128 palavras
 	idata(20)		<= tdc_q(2)(28 downto 26) & "000" & tdc_q(2)(25 downto 0);--001 palavra
@@ -1740,7 +1808,7 @@ begin
 	idata(23)		<= x"0000000" & "000" & busy;							--001 palavra
 
 	idata(24)		<= mcounter_q(31 downto 0); --x"AA55AA55";				--001 palavra	
-	idata(25)		<= x"0000" & lvds_q;									--001 palavra
+	idata(25)		<= busy & hetrigger & "00"& x"000" & lvds_q;									--001 palavra
 	idata(26)		<= time_q;												--001 palavra
 	idata(27)		<= x"0" & "00" & q(7) & x"0" & "00" & q(6);				--128 palavras
 	idata(28)		<= tdc_q(3)(28 downto 26) & "000" & tdc_q(3)(25 downto 0);--001 palavra
@@ -1751,7 +1819,7 @@ begin
 	-- Mode: '00' for non branch and '01' for branch and '10' for constant value.
 	mode(0)			<= "00";												--MightyCounter
 	mode(1)			<= "00";												--LVDS 
-	mode(2)			<= db_behavior;											--Timestamp
+	mode(2)			<= "00";											--Timestamp
 	mode(3)			<= db_behavior;											--ADC
 	mode(4)			<= "10";												--TDC
 	mode(5)			<= "10";												--TDC
@@ -1760,7 +1828,7 @@ begin
 	
 	mode(8)			<= "00";
 	mode(9)			<= "00";
-	mode(10)		<= db_behavior;
+	mode(10)		<= "00";
 	mode(11)		<= db_behavior;
 	mode(12)		<= "10";
 	mode(13)		<= "10";
@@ -1769,7 +1837,7 @@ begin
 	
 	mode(16)		<= "00";
 	mode(17)		<= "00";
-	mode(18)		<= db_behavior;
+	mode(18)		<= "00";
 	mode(19)		<= db_behavior;
 	mode(20)		<= "10";
 	mode(21)		<= "10";
@@ -1778,7 +1846,7 @@ begin
 	
 	mode(24)		<= "00";
 	mode(25)		<= "00";
-	mode(26)		<= db_behavior;
+	mode(26)		<= "00";
 	mode(27)		<= db_behavior;
 	mode(28)		<= "10";
 	mode(29)		<= "10";
