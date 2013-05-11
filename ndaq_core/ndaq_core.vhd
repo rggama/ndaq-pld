@@ -400,16 +400,19 @@ architecture rtl of ndaq_core is
 		signal rdclk			: in 	std_logic; -- read clock
 		signal rst				: in 	std_logic; -- async reset
 		
+		signal wmode			: in	std_logic; -- Word Mode: '0' for 8 bits, '1' for 10 bits.
+		signal bmode			: in	std_logic_vector(1 downto 0); -- 8 Bits mode bit selection: See docs.
+
 		signal wr				: in 	std_logic;
 		signal d				: in	DATA_T;
 		
 		signal rd				: in	std_logic;	
-		signal q				: out	DATA_T;
+		signal q				: out	EFDATA_T;
 		
 		signal f				: out	std_logic;	--full flag
 		signal e				: out	std_logic;	--empty flag
 
-		signal rdusedw			: out	USEDW_T;	-- used words sync'ed to read clock
+		signal rdusedw			: out	DUSEDW_T;	-- used words sync'ed to read clock
 		signal wrusedw			: out	USEDW_T		-- used words sync'ed to write clock
 	);
 	end component;
@@ -666,7 +669,7 @@ architecture rtl of ndaq_core is
 	signal etrigger_en				: std_logic;
 	signal itrigger_en				: std_logic;
 	signal acq_en					: std_logic;
-	signal dualtrigger_en				: std_logic;
+	signal dualtrigger_en			: std_logic;
 	signal acq_rst					: std_logic;	
 	signal clk						: std_logic_vector((adc_channels-1) downto 0);
 	signal rd						: std_logic_vector((adc_channels-1) downto 0);
@@ -675,7 +678,7 @@ architecture rtl of ndaq_core is
 	signal empty					: std_logic_vector((adc_channels-1) downto 0);
 	signal c_trigger_a				: std_logic;
 	signal acq_trigger				: std_logic;
-	signal acq_trigger_he				: std_logic;
+	signal acq_trigger_he			: std_logic;
 	signal he_trigger				: std_logic;
 	signal c_trigger_c				: std_logic;
 	signal thtemp1					: DATA_T;
@@ -686,12 +689,14 @@ architecture rtl of ndaq_core is
 	signal enough_room				: std_logic_vector((adc_channels-1) downto 0);
 	signal adc_lock					: std_logic;
 	signal usedw_event_size			: USEDW_T;
-
+	signal dusedw_event_size		: DUSEDW_T;
+	signal wmode					: std_logic;
+	
 	signal data						: F_DATA_WIDTH_T;	-- FIFOs input DATA bus vector
-	signal q						: F_DATA_WIDTH_T;	-- FIFOs output DATA  bus vector 
+	signal q						: F_EFDATA_WIDTH_T;	-- FIFOs output DATA  bus vector 
 
 
-	signal rdusedw					: F_USEDW_WIDTH_T; -- FIFOs USED WORDS bus vector sync'ed to read clock
+	signal rdusedw					: F_DUSEDW_WIDTH_T; -- FIFOs USED WORDS bus vector sync'ed to read clock
 	signal wrusedw					: F_USEDW_WIDTH_T; -- FIFOs USED WORDS bus vector sync'ed to write clock
 
 	-- ACQ: TDC
@@ -1053,6 +1058,10 @@ begin
 	usedw_event_size <= "0000" & oreg(2)(6 downto 0);
 
 	--
+	-- HALF of ADC Event Size per trigger [in samples] (to be compared with FIFO's used words on the READ SIDE). 
+	dusedw_event_size <= "0000" & oreg(2)(6 downto 1);
+
+	--
 	-- Internal Trigger Channel Selector (8 to 1 mux)
 	itrigger_selector: itrigger_sel	<= int_trigger(conv_integer(oreg(5)(2 downto 0)));
 	
@@ -1287,7 +1296,10 @@ begin
 			wrclk		=> clk(i),
 			rdclk		=> dclk,
 			rst			=> acq_rst,
-		
+			
+			wmode		=> wmode,
+			bmode		=> oreg(72)(1 downto 0),
+			
 			wr			=> wr(i),
 			d			=> data(i),
 		
@@ -1537,10 +1549,10 @@ begin
 		--
 		-- Even Internal FIFO enough data test
 		even_read_test:
-		process(rdusedw, usedw_event_size, empty)
+		process(rdusedw, dusedw_event_size, empty)
 		begin
 			-- Means that the FIFO is FULL of data.
-			if (rdusedw(i*2) > usedw_event_size) and (empty(i*2) = '0') then
+			if (rdusedw(i*2) > dusedw_event_size) and (empty(i*2) = '0') then
 				even_enable(i) <= '1';
 			else
 				even_enable(i) <= '0';
@@ -1550,10 +1562,10 @@ begin
 		--
 		-- Odd Internal FIFO enough data test
 		odd_read_test:
-		process(rdusedw, usedw_event_size, empty)
+		process(rdusedw, dusedw_event_size, empty)
 		begin
 			-- Means that the FIFO is FULL of data.
-			if (rdusedw((i*2)+1) > usedw_event_size) and (empty((i*2)+1) = '0') then
+			if (rdusedw((i*2)+1) > dusedw_event_size) and (empty((i*2)+1) = '0') then
 				odd_enable(i) <= '1';
 			else
 				odd_enable(i) <= '0';
@@ -1580,50 +1592,61 @@ begin
 	end process;
 	
 	--
+	-- ADC Word Mode (wmode): '0' for 8 bits and '1' for 10 bits.
+	wmode <= oreg(71)(0);
+	
 	-- Data Builder Slots Construct
 	--
 
 	--
 	-- Slot Enable: '1' for enable.
-	enable_A(0)		<= oreg(65)(0); --'0';					-- MightyCounter
-	enable_A(1)		<= oreg(65)(1); --'0';					-- LVDSLine
-	enable_A(2)		<= oreg(65)(2); --'1';					-- Timestamp
-	enable_A(3)		<= oreg(65)(3) and not(busy) and hetrigger; --'0';					-- ADC
-	enable_A(4)		<= oreg(65)(4) and not(busy) and hetrigger; --'0';					-- TDC
-	enable_A(5)		<= oreg(65)(4) and not(busy) and hetrigger; --'0';					-- TDC
-	enable_A(6)		<= oreg(65)(5) and not(busy) and hetrigger; --'1';					-- Trigger Counter
-	enable_A(7)		<= oreg(65)(6) and not(busy) and hetrigger; --'1';					-- Busy FLag
+	enable_A(0)		<= oreg(65)(0); 											-- MightyCounter
+	enable_A(1)		<= oreg(65)(1); 											-- LVDSLine
+	enable_A(2)		<= oreg(65)(2); 											-- Timestamp
+	enable_A(3)		<= oreg(65)(3) and not(busy) and hetrigger and not(wmode) ; -- ADC 8 bits mode: [Channel (n+1)] and [Channel n]
+	enable_A(4)		<= oreg(65)(3) and not(busy) and hetrigger and wmode; 		-- ADC 10 bits mode: [Channel n]
+	enable_A(5)		<= oreg(65)(3) and not(busy) and hetrigger and wmode; 		-- ADC 10 bits mode: [Channel (n+1)]
+	enable_A(6)		<= oreg(65)(4) and not(busy) and hetrigger; 				-- TDC
+	enable_A(7)		<= oreg(65)(4) and not(busy) and hetrigger; 				-- TDC
+	enable_A(8)		<= oreg(65)(5) and not(busy) and hetrigger; 				-- Trigger Counter
+	enable_A(9)		<= oreg(65)(6) and not(busy) and hetrigger; 				-- Busy FLag
 
-	enable_A(8)		<= oreg(66)(0); --'0';
-	enable_A(9)		<= oreg(66)(1); --'0';
-	enable_A(10)	<= oreg(66)(2); --'1';
-	enable_A(11)	<= oreg(66)(3) and not(busy) and hetrigger; --'0';
-	enable_A(12)	<= oreg(66)(4) and not(busy) and hetrigger; --'0';
-	enable_A(13)	<= oreg(66)(4) and not(busy) and hetrigger; --'0';
-	enable_A(14)	<= oreg(66)(5) and not(busy) and hetrigger; --'1';
-	enable_A(15)	<= oreg(66)(6) and not(busy) and hetrigger; --'1';
+	enable_A(10)	<= oreg(66)(0); 
+	enable_A(11)	<= oreg(66)(1); 
+	enable_A(12)	<= oreg(66)(2); 
+	enable_A(13)	<= oreg(66)(3) and not(busy) and hetrigger and not(wmode) ; -- ADC 8 bits mode: [Channel (n+1)] and [Channel n]
+	enable_A(14)	<= oreg(66)(3) and not(busy) and hetrigger and wmode; 		-- ADC 10 bits mode: [Channel n]
+	enable_A(15)	<= oreg(66)(3) and not(busy) and hetrigger and wmode; 		-- ADC 10 bits mode: [Channel (n+1)]
+	enable_A(16)	<= oreg(66)(4) and not(busy) and hetrigger; 
+	enable_A(17)	<= oreg(66)(4) and not(busy) and hetrigger; 
+	enable_A(18)	<= oreg(66)(5) and not(busy) and hetrigger; 
+	enable_A(19)	<= oreg(66)(6) and not(busy) and hetrigger; 
 
-	enable_A(16)	<= oreg(67)(0); --'0';
-	enable_A(17)	<= oreg(67)(1); --'0';
-	enable_A(18)	<= oreg(67)(2); --'1';
-	enable_A(19)	<= oreg(67)(3) and not(busy) and hetrigger; --'0';
-	enable_A(20)	<= oreg(67)(4) and not(busy) and hetrigger; --'0';
-	enable_A(21)	<= oreg(67)(4) and not(busy) and hetrigger; --'0';
-	enable_A(22)	<= oreg(67)(5) and not(busy) and hetrigger; --'1';
-	enable_A(23)	<= oreg(67)(6) and not(busy) and hetrigger; --'1';
+	enable_A(20)	<= oreg(67)(0); 
+	enable_A(21)	<= oreg(67)(1); 
+	enable_A(22)	<= oreg(67)(2); 
+	enable_A(23)	<= oreg(67)(3) and not(busy) and hetrigger and not(wmode) ; -- ADC 8 bits mode: [Channel (n+1)] and [Channel n]
+	enable_A(24)	<= oreg(67)(3) and not(busy) and hetrigger and wmode; 		-- ADC 10 bits mode: [Channel n]
+	enable_A(25)	<= oreg(67)(3) and not(busy) and hetrigger and wmode; 		-- ADC 10 bits mode: [Channel (n+1)]
+	enable_A(26)	<= oreg(67)(4) and not(busy) and hetrigger; 
+	enable_A(27)	<= oreg(67)(4) and not(busy) and hetrigger; 
+	enable_A(28)	<= oreg(67)(5) and not(busy) and hetrigger; 
+	enable_A(29)	<= oreg(67)(6) and not(busy) and hetrigger; 
 
-	enable_A(24)	<= oreg(68)(0); --'0';
-	enable_A(25)	<= oreg(68)(1); --'0';
-	enable_A(26)	<= oreg(68)(2); --'1';
-	enable_A(27)	<= oreg(68)(3) and not(busy) and hetrigger; --'0';
-	enable_A(28)	<= oreg(68)(4) and not(busy) and hetrigger; --'0';
-	enable_A(29)	<= oreg(68)(4) and not(busy) and hetrigger; --'0';
-	enable_A(30)	<= oreg(68)(5) and not(busy) and hetrigger; --'1';
-	enable_A(31)	<= oreg(68)(6) and not(busy) and hetrigger; --'1';
+	enable_A(30)	<= oreg(68)(0); 
+	enable_A(31)	<= oreg(68)(1); 
+	enable_A(32)	<= oreg(68)(2); 
+	enable_A(33)	<= oreg(68)(3) and not(busy) and hetrigger and not(wmode) ; -- ADC 8 bits mode: [Channel (n+1)] and [Channel n]
+	enable_A(34)	<= oreg(68)(3) and not(busy) and hetrigger and wmode; 		-- ADC 10 bits mode: [Channel n]
+	enable_A(35)	<= oreg(68)(3) and not(busy) and hetrigger and wmode; 		-- ADC 10 bits mode: [Channel (n+1)]
+	enable_A(36)	<= oreg(68)(4) and not(busy) and hetrigger; 
+	enable_A(37)	<= oreg(68)(4) and not(busy) and hetrigger; 
+	enable_A(38)	<= oreg(68)(5) and not(busy) and hetrigger; 
+	enable_A(39)	<= oreg(68)(6) and not(busy) and hetrigger; 
 	
 
 	--
-	-- Transfer Enable: 
+	-- Transfer Enable (Source Enable): 
 	-- even channel and odd channel let us go for Header and ADC. 
 	-- timestamp NOT empty let us go.
 	-- tdc NOT empty let us go.
@@ -1632,37 +1655,45 @@ begin
 	enable_B(1)		<= not(lvds_ef); 	
 	enable_B(2)		<= not(time_ef); --and not(busy);
 	enable_B(3)		<= even_enable(0) and odd_enable(0) and not(busy);
-	enable_B(4)		<= not(tdc_ef(0)) and not(busy);
-	enable_B(5)		<= not(tdc_ef(4)) and not(busy);
-	enable_B(6)		<= not(tcounter_ef) and not(busy);
-	enable_B(7)		<= '1'; 
-
-	enable_B(8)		<= '1'; 
+	enable_B(4)		<= even_enable(0) and not(busy);
+	enable_B(5)		<= odd_enable(0) and not(busy);
+	enable_B(6)		<= not(tdc_ef(0)) and not(busy);
+	enable_B(7)		<= not(tdc_ef(4)) and not(busy);
+	enable_B(8)		<= not(tcounter_ef) and not(busy);
 	enable_B(9)		<= '1'; 
+
 	enable_B(10)	<= '1'; 
-	enable_B(11)	<= even_enable(1) and odd_enable(1) and not(busy);
-	enable_B(12)	<= not(tdc_ef(1)) and not(busy);
-	enable_B(13)	<= not(tdc_ef(5)) and not(busy);
-	enable_B(14)	<= '1'; 
-	enable_B(15)	<= '1'; 
-
-	enable_B(16)	<= '1'; 
-	enable_B(17)	<= '1'; 
+	enable_B(11)	<= '1'; 
+	enable_B(12)	<= '1'; 
+	enable_B(13)	<= even_enable(1) and odd_enable(1) and not(busy);
+	enable_B(14)	<= even_enable(1) and not(busy);
+	enable_B(15)	<= odd_enable(1) and not(busy);
+	enable_B(16)	<= not(tdc_ef(1)) and not(busy);
+	enable_B(17)	<= not(tdc_ef(5)) and not(busy);
 	enable_B(18)	<= '1'; 
-	enable_B(19)	<= even_enable(2) and odd_enable(2) and not(busy);
-	enable_B(20)	<= not(tdc_ef(2)) and not(busy);
-	enable_B(21)	<= not(tdc_ef(6)) and not(busy);
-	enable_B(22)	<= '1'; 
-	enable_B(23)	<= '1'; 
+	enable_B(19)	<= '1'; 
 
-	enable_B(24)	<= '1'; 
-	enable_B(25)	<= '1'; 
-	enable_B(26)	<= '1'; 
-	enable_B(27)	<= even_enable(3) and odd_enable(3) and not(busy); 
-	enable_B(28)	<= not(tdc_ef(3)) and not(busy);
-	enable_B(29)	<= not(tdc_ef(7)) and not(busy);
+	enable_B(20)	<= '1'; 
+	enable_B(21)	<= '1'; 
+	enable_B(22)	<= '1'; 
+	enable_B(23)	<= even_enable(2) and odd_enable(2) and not(busy);
+	enable_B(24)	<= even_enable(2) and not(busy);
+	enable_B(25)	<= odd_enable(2) and not(busy);
+	enable_B(26)	<= not(tdc_ef(2)) and not(busy);
+	enable_B(27)	<= not(tdc_ef(6)) and not(busy);
+	enable_B(28)	<= '1'; 
+	enable_B(29)	<= '1'; 
+
 	enable_B(30)	<= '1'; 
 	enable_B(31)	<= '1'; 
+	enable_B(32)	<= '1'; 
+	enable_B(33)	<= even_enable(3) and odd_enable(3) and not(busy);
+	enable_B(34)	<= even_enable(3) and not(busy);
+	enable_B(35)	<= odd_enable(3) and not(busy);
+	enable_B(36)	<= not(tdc_ef(3)) and not(busy);
+	enable_B(37)	<= not(tdc_ef(7)) and not(busy);
+	enable_B(38)	<= '1'; 
+	enable_B(39)	<= '1'; 
 
 	-- Destination Enable: 'fifo_paf' is NOT negated because it is active low.
 	enable_C(0)		<= fifo_paf(0);
@@ -1673,70 +1704,86 @@ begin
 	enable_C(5)		<= fifo_paf(0);
 	enable_C(6)		<= fifo_paf(0);
 	enable_C(7)		<= fifo_paf(0);
+	enable_C(8)		<= fifo_paf(0);
+	enable_C(9)		<= fifo_paf(0);
 
-	enable_C(8)		<= fifo_paf(1);
-	enable_C(9)		<= fifo_paf(1);
 	enable_C(10)	<= fifo_paf(1);
 	enable_C(11)	<= fifo_paf(1);
 	enable_C(12)	<= fifo_paf(1);
 	enable_C(13)	<= fifo_paf(1);
 	enable_C(14)	<= fifo_paf(1);
 	enable_C(15)	<= fifo_paf(1);
+	enable_C(16)	<= fifo_paf(1);
+	enable_C(17)	<= fifo_paf(1);
+	enable_C(18)	<= fifo_paf(1);
+	enable_C(19)	<= fifo_paf(1);
 	
-	enable_C(16)	<= fifo_paf(2);
-	enable_C(17)	<= fifo_paf(2);
-	enable_C(18)	<= fifo_paf(2);
-	enable_C(19)	<= fifo_paf(2);
 	enable_C(20)	<= fifo_paf(2);
 	enable_C(21)	<= fifo_paf(2);
 	enable_C(22)	<= fifo_paf(2);
 	enable_C(23)	<= fifo_paf(2);
+	enable_C(24)	<= fifo_paf(2);
+	enable_C(25)	<= fifo_paf(2);
+	enable_C(26)	<= fifo_paf(2);
+	enable_C(27)	<= fifo_paf(2);
+	enable_C(28)	<= fifo_paf(2);
+	enable_C(29)	<= fifo_paf(2);
 
-	enable_C(24)	<= fifo_paf(3);
-	enable_C(25)	<= fifo_paf(3);
-	enable_C(26)	<= fifo_paf(3);
-	enable_C(27)	<= fifo_paf(3);
-	enable_C(28)	<= fifo_paf(3);
-	enable_C(29)	<= fifo_paf(3);
 	enable_C(30)	<= fifo_paf(3);
 	enable_C(31)	<= fifo_paf(3);
+	enable_C(32)	<= fifo_paf(3);
+	enable_C(33)	<= fifo_paf(3);
+	enable_C(34)	<= fifo_paf(3);
+	enable_C(35)	<= fifo_paf(3);
+	enable_C(36)	<= fifo_paf(3);
+	enable_C(37)	<= fifo_paf(3);
+	enable_C(38)	<= fifo_paf(3);
+	enable_C(39)	<= fifo_paf(3);
 
 	-- Slot Transfer Size:
 	transfer(0)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(1)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(2)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(3)		<= oreg(2)(6 downto 0); -- This register is the ADC's Event Size (in samples) per trigger.
-	transfer(4)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(5)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(3)		<= dusedw_event_size(6 downto 0);	-- Half of ADC's Event Size (in samples) per trigger.
+	transfer(4)		<= dusedw_event_size(6 downto 0);	-- Half of ADC's Event Size (in samples) per trigger.
+	transfer(5)		<= dusedw_event_size(6 downto 0);	-- Half of ADC's Event Size (in samples) per trigger.
 	transfer(6)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(7)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-
 	transfer(8)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(9)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(10)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(11)	<= oreg(2)(6 downto 0); -- This register is the ADC's Event Size (in samples) per trigger.
-	transfer(12)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(13)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(14)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(15)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 
+	transfer(10)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(11)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(12)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(13)	<= dusedw_event_size(6 downto 0);	-- Half of ADC's Event Size (in samples) per trigger.
+	transfer(14)	<= dusedw_event_size(6 downto 0);	-- Half of ADC's Event Size (in samples) per trigger.
+	transfer(15)	<= dusedw_event_size(6 downto 0);	-- Half of ADC's Event Size (in samples) per trigger.
 	transfer(16)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(17)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(18)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(19)	<= oreg(2)(6 downto 0); -- This register is the ADC's Event Size (in samples) per trigger.
+	transfer(19)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+
 	transfer(20)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(21)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(22)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(23)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-
-	transfer(24)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(25)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(23)	<= dusedw_event_size(6 downto 0);	-- Half of ADC's Event Size (in samples) per trigger.
+	transfer(24)	<= dusedw_event_size(6 downto 0);	-- Half of ADC's Event Size (in samples) per trigger.
+	transfer(25)	<= dusedw_event_size(6 downto 0);	-- Half of ADC's Event Size (in samples) per trigger.
 	transfer(26)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
-	transfer(27)	<= oreg(2)(6 downto 0); -- This register is the ADC's Event Size (in samples) per trigger.
+	transfer(27)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(28)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(29)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+
 	transfer(30)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 	transfer(31)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(32)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(33)	<= dusedw_event_size(6 downto 0);	-- Half of ADC's Event Size (in samples) per trigger.
+	transfer(34)	<= dusedw_event_size(6 downto 0);	-- Half of ADC's Event Size (in samples) per trigger.
+	transfer(35)	<= dusedw_event_size(6 downto 0);	-- Half of ADC's Event Size (in samples) per trigger.
+	transfer(36)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(37)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(38)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
+	transfer(39)	<= CONV_STD_LOGIC_VECTOR(1, NumBits(transfer_max));
 
 	-- Slot Address (Where the SLOT should be copied to):
 	-- '0' -> IDT FIFO 1
@@ -1751,107 +1798,131 @@ begin
 	address(5)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
 	address(6)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
 	address(7)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	address(8)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
+	address(9)		<= CONV_STD_LOGIC_VECTOR(0, NumBits(address_max));
 	
-	address(8)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
-	address(9)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
 	address(10)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
 	address(11)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
 	address(12)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
 	address(13)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
 	address(14)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
 	address(15)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
+	address(16)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
+	address(17)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
+	address(18)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
+	address(19)		<= CONV_STD_LOGIC_VECTOR(1, NumBits(address_max));
 
-	address(16)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
-	address(17)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
-	address(18)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
-	address(19)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
 	address(20)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
 	address(21)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
 	address(22)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
 	address(23)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(24)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(25)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(26)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(27)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(28)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
+	address(29)		<= CONV_STD_LOGIC_VECTOR(2, NumBits(address_max));
 
-	address(24)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
-	address(25)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
-	address(26)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
-	address(27)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
-	address(28)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
-	address(29)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
 	address(30)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
 	address(31)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(32)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(33)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(34)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(35)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(36)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(37)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(38)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
+	address(39)		<= CONV_STD_LOGIC_VECTOR(3, NumBits(address_max));
 
 	-- 32 bits construct.	
-	idata(0)		<= mcounter_q(31 downto 0); --x"AA55AA55";				--001 palavra
-	idata(1)		<= busy & hetrigger & "00"& x"000" & lvds_q;									--001 palavra
-	idata(2)		<= time_q;												--001 palavra
-	idata(3)		<= x"0" & "00" & q(1) & x"0" & "00" & q(0);				--128 palavras
-	idata(4)		<= tdc_q(0)(28 downto 26) & "000" & tdc_q(0)(25 downto 0);--001 palavra
-	idata(5)		<= tdc_q(4)(28 downto 26) & "000" & tdc_q(4)(25 downto 0);--001 palavra
-	idata(6)		<= tcounter_q;											--001 palavra
-	idata(7)		<= x"0000000" & "000" & busy;							--001 palavra
+	idata(0)		<= mcounter_q(31 downto 0); --x"AA55AA55";					--001 palavra
+	idata(1)		<= busy & hetrigger & "00"& x"000" & lvds_q;				--001 palavra
+	idata(2)		<= time_q;													--001 palavra
+	idata(3)		<= q(1)(15 downto 0) & q(0)(15 downto 0);					--N/2 palavras
+	idata(4)		<= q(0);													--N/2 palavras
+	idata(5)		<= q(1);													--N/2 palavras
+	idata(6)		<= tdc_q(0)(28 downto 26) & "000" & tdc_q(0)(25 downto 0);	--001 palavra
+	idata(7)		<= tdc_q(4)(28 downto 26) & "000" & tdc_q(4)(25 downto 0);	--001 palavra
+	idata(8)		<= tcounter_q;												--001 palavra
+	idata(9)		<= x"0000000" & "000" & busy;								--001 palavra
 
-	idata(8)		<= mcounter_q(31 downto 0); --x"AA55AA55";				--001 palavra
-	idata(9)		<= busy & hetrigger & "00"& x"000" & lvds_q; 									--001 palavra
-	idata(10)		<= time_q;												--001 palavra
-	idata(11)		<= x"0" & "00" & q(3) & x"0" & "00" & q(2);				--128 palavras
-	idata(12)		<= tdc_q(1)(28 downto 26) & "000" & tdc_q(1)(25 downto 0);--001 palavra
-	idata(13)		<= tdc_q(5)(28 downto 26) & "000" & tdc_q(5)(25 downto 0);--001 palavra
-	idata(14)		<= tcounter_q;											--001 palavra
-	idata(15)		<= x"0000000" & "000" & busy;							--001 palavra
+	idata(10)		<= mcounter_q(31 downto 0); --x"AA55AA55";					--001 palavra
+	idata(11)		<= busy & hetrigger & "00"& x"000" & lvds_q; 				--001 palavra
+	idata(12)		<= time_q;													--001 palavra
+	idata(13)		<= q(3)(15 downto 0) & q(2)(15 downto 0);					--N/2 palavras
+	idata(14)		<= q(2);													--N/2 palavras
+	idata(15)		<= q(3);													--N/2 palavras
+	idata(16)		<= tdc_q(1)(28 downto 26) & "000" & tdc_q(1)(25 downto 0);	--001 palavra
+	idata(17)		<= tdc_q(5)(28 downto 26) & "000" & tdc_q(5)(25 downto 0);	--001 palavra
+	idata(18)		<= tcounter_q;												--001 palavra
+	idata(19)		<= x"0000000" & "000" & busy;								--001 palavra
 
-	idata(16)		<= mcounter_q(31 downto 0); --x"AA55AA55";				--001 palavra
-	idata(17)		<= busy & hetrigger & "00"& x"000" & lvds_q;									--001 palavra
-	idata(18)		<= time_q;												--001 palavra
-	idata(19)		<= x"0" & "00" & q(5) & x"0" & "00" & q(4);				--128 palavras
-	idata(20)		<= tdc_q(2)(28 downto 26) & "000" & tdc_q(2)(25 downto 0);--001 palavra
-	idata(21)		<= tdc_q(6)(28 downto 26) & "000" & tdc_q(6)(25 downto 0);--001 palavra
-	idata(22)		<= tcounter_q;											--001 palavra
-	idata(23)		<= x"0000000" & "000" & busy;							--001 palavra
+	idata(20)		<= mcounter_q(31 downto 0); --x"AA55AA55";					--001 palavra
+	idata(21)		<= busy & hetrigger & "00"& x"000" & lvds_q;				--001 palavra
+	idata(22)		<= time_q;													--001 palavra
+	idata(23)		<= q(5)(15 downto 0) & q(4)(15 downto 0);					--N/2 palavras
+	idata(24)		<= q(4);													--N/2 palavras
+	idata(25)		<= q(5);													--N/2 palavras
+	idata(26)		<= tdc_q(2)(28 downto 26) & "000" & tdc_q(2)(25 downto 0);	--001 palavra
+	idata(27)		<= tdc_q(6)(28 downto 26) & "000" & tdc_q(6)(25 downto 0);	--001 palavra
+	idata(28)		<= tcounter_q;												--001 palavra
+	idata(29)		<= x"0000000" & "000" & busy;								--001 palavra
 
-	idata(24)		<= mcounter_q(31 downto 0); --x"AA55AA55";				--001 palavra	
-	idata(25)		<= busy & hetrigger & "00"& x"000" & lvds_q;									--001 palavra
-	idata(26)		<= time_q;												--001 palavra
-	idata(27)		<= x"0" & "00" & q(7) & x"0" & "00" & q(6);				--128 palavras
-	idata(28)		<= tdc_q(3)(28 downto 26) & "000" & tdc_q(3)(25 downto 0);--001 palavra
-	idata(29)		<= tdc_q(7)(28 downto 26) & "000" & tdc_q(7)(25 downto 0);--001 palavra
-	idata(30)		<= tcounter_q;											--001 palavra
-	idata(31)		<= x"0000000" & "000" & busy;							--001 palavra
+	idata(30)		<= mcounter_q(31 downto 0); --x"AA55AA55";					--001 palavra	
+	idata(31)		<= busy & hetrigger & "00"& x"000" & lvds_q;				--001 palavra
+	idata(32)		<= time_q;													--001 palavra
+	idata(33)		<= q(7)(15 downto 0) & q(6)(15 downto 0);					--N/2 palavras
+	idata(34)		<= q(6);													--N/2 palavras
+	idata(35)		<= q(7);													--N/2 palavras
+	idata(36)		<= tdc_q(3)(28 downto 26) & "000" & tdc_q(3)(25 downto 0);	--001 palavra
+	idata(37)		<= tdc_q(7)(28 downto 26) & "000" & tdc_q(7)(25 downto 0);	--001 palavra
+	idata(38)		<= tcounter_q;												--001 palavra
+	idata(39)		<= x"0000000" & "000" & busy;								--001 palavra
 
 	-- Mode: '00' for non branch and '01' for branch and '10' for constant value.
 	mode(0)			<= "00";												--MightyCounter
 	mode(1)			<= "00";												--LVDS 
-	mode(2)			<= "00";											--Timestamp
+	mode(2)			<= "00";												--Timestamp
 	mode(3)			<= db_behavior;											--ADC
-	mode(4)			<= "10";												--TDC
-	mode(5)			<= "10";												--TDC
-	mode(6)			<= db_behavior;											--Trigger Counter
-	mode(7)			<= "00";												--Trigger Counter
+	mode(4)			<= db_behavior;											--ADC
+	mode(5)			<= db_behavior;											--ADC
+	mode(6)			<= "10";												--TDC
+	mode(7)			<= "10";												--TDC
+	mode(8)			<= db_behavior;											--Trigger Counter
+	mode(9)			<= "00";												--Trigger Counter
 	
-	mode(8)			<= "00";
-	mode(9)			<= "00";
 	mode(10)		<= "00";
-	mode(11)		<= db_behavior;
-	mode(12)		<= "10";
-	mode(13)		<= "10";
+	mode(11)		<= "00";
+	mode(12)		<= "00";
+	mode(13)		<= db_behavior;
 	mode(14)		<= db_behavior;
-	mode(15)		<= "00";
+	mode(15)		<= db_behavior;
+	mode(16)		<= "10";
+	mode(17)		<= "10";
+	mode(18)		<= db_behavior;
+	mode(19)		<= "00";
 	
-	mode(16)		<= "00";
-	mode(17)		<= "00";
-	mode(18)		<= "00";
-	mode(19)		<= db_behavior;
-	mode(20)		<= "10";
-	mode(21)		<= "10";
-	mode(22)		<= db_behavior;
-	mode(23)		<= "00";
+	mode(20)		<= "00";
+	mode(21)		<= "00";
+	mode(22)		<= "00";
+	mode(23)		<= db_behavior;
+	mode(24)		<= db_behavior;
+	mode(25)		<= db_behavior;
+	mode(26)		<= "10";
+	mode(27)		<= "10";
+	mode(28)		<= db_behavior;
+	mode(29)		<= "00";
 	
-	mode(24)		<= "00";
-	mode(25)		<= "00";
-	mode(26)		<= "00";
-	mode(27)		<= db_behavior;
-	mode(28)		<= "10";
-	mode(29)		<= "10";
-	mode(30)		<= db_behavior;
+	mode(30)		<= "00";
 	mode(31)		<= "00";
+	mode(32)		<= "00";
+	mode(33)		<= db_behavior;
+	mode(34)		<= db_behavior;
+	mode(35)		<= db_behavior;
+	mode(36)		<= "10";
+	mode(37)		<= "10";
+	mode(38)		<= db_behavior;
+	mode(39)		<= "00";
 
 	-- Constant Value definitions.
 	ctval(0)		<= x"FFFFFFFF";
@@ -1862,75 +1933,83 @@ begin
 	ctval(5)		<= x"FFFFFFFF";
 	ctval(6)		<= x"FFFFFFFF";
 	ctval(7)		<= x"FFFFFFFF";
-	
 	ctval(8)		<= x"FFFFFFFF";
 	ctval(9)		<= x"FFFFFFFF";
+	
 	ctval(10)		<= x"FFFFFFFF";
 	ctval(11)		<= x"FFFFFFFF";
 	ctval(12)		<= x"FFFFFFFF";
 	ctval(13)		<= x"FFFFFFFF";
 	ctval(14)		<= x"FFFFFFFF";
 	ctval(15)		<= x"FFFFFFFF";
-	
 	ctval(16)		<= x"FFFFFFFF";
 	ctval(17)		<= x"FFFFFFFF";
 	ctval(18)		<= x"FFFFFFFF";
 	ctval(19)		<= x"FFFFFFFF";
+	
 	ctval(20)		<= x"FFFFFFFF";
 	ctval(21)		<= x"FFFFFFFF";
 	ctval(22)		<= x"FFFFFFFF";
 	ctval(23)		<= x"FFFFFFFF";
-	
 	ctval(24)		<= x"FFFFFFFF";
 	ctval(25)		<= x"FFFFFFFF";
 	ctval(26)		<= x"FFFFFFFF";
 	ctval(27)		<= x"FFFFFFFF";
 	ctval(28)		<= x"FFFFFFFF";
 	ctval(29)		<= x"FFFFFFFF";
+	
 	ctval(30)		<= x"FFFFFFFF";
 	ctval(31)		<= x"FFFFFFFF";
+	ctval(32)		<= x"FFFFFFFF";
+	ctval(33)		<= x"FFFFFFFF";
+	ctval(34)		<= x"FFFFFFFF";
+	ctval(35)		<= x"FFFFFFFF";
+	ctval(36)		<= x"FFFFFFFF";
+	ctval(37)		<= x"FFFFFFFF";
+	ctval(38)		<= x"FFFFFFFF";
+	ctval(39)		<= x"FFFFFFFF";
 	
 	--*******************************************************************************
 	
 	mcounter_rd		<= db_rd(0); -- Header		<= db_rd(0);
 	lvds_rd			<= db_rd(1);
 	time_rd			<= db_rd(2);
-	rd(0)			<= db_rd(3);
-	rd(1)			<= db_rd(3);
-	tdc_rd(0)		<= db_rd(4);
-	tdc_rd(4)		<= db_rd(5);
-	tcounter_rd		<= db_rd(6);
-	-- busy flag	<= db_rd(7);
+	rd(0)			<= db_rd(3) or db_rd(4);
+	rd(1)			<= db_rd(3) or db_rd(5);
+	tdc_rd(0)		<= db_rd(6);
+	tdc_rd(4)		<= db_rd(7);
+	tcounter_rd		<= db_rd(8);
+	-- busy flag	<= db_rd(9);
 
-	-- Header		<= db_rd(8);
-	-- LVDS			<= db_rd(9);
-	-- Time			<= db_rd(10);
-	rd(2)			<= db_rd(11);
-	rd(3)			<= db_rd(11);
-	tdc_rd(1)		<= db_rd(12);
-	tdc_rd(5)		<= db_rd(13);
-	-- tcounter_rd	<= db_rd(14);
-	-- busy flag	<= db_rd(15);
+	-- Header		<= db_rd(10);
+	-- LVDS			<= db_rd(11);
+	-- Time			<= db_rd(12);
+	rd(2)			<= db_rd(13) or db_rd(14);
+	rd(3)			<= db_rd(13) or db_rd(15);
+	tdc_rd(1)		<= db_rd(16);
+	tdc_rd(5)		<= db_rd(17);
+	-- tcounter_rd	<= db_rd(18);
+	-- busy flag	<= db_rd(19);
 
-	-- Header		<= db_rd(16);
-	-- LVDS			<= db_rd(17);
-	-- Time			<= db_rd(18);
-	rd(4)			<= db_rd(19);
-	rd(5)			<= db_rd(19);	
-	tdc_rd(2)		<= db_rd(20);
-	tdc_rd(6)		<= db_rd(21);
-	-- tcounter_rd	<= db_rd(22);
-	-- busy flag	<= db_rd(23);
+	-- Header		<= db_rd(20);
+	-- LVDS			<= db_rd(21);
+	-- Time			<= db_rd(22);
+	rd(4)			<= db_rd(23) or db_rd(24);
+	rd(5)			<= db_rd(23) or db_rd(25);
+	tdc_rd(2)		<= db_rd(26);
+	tdc_rd(6)		<= db_rd(27);
+	-- tcounter_rd	<= db_rd(28);
+	-- busy flag	<= db_rd(29);
 	
-	-- Header		<= db_rd(24);
-	-- LVDS			<= db_rd(25);
-	-- Time			<= db_rd(26);
-	rd(6)			<= db_rd(27);
-	rd(7)			<= db_rd(27);
-	tdc_rd(3)		<= db_rd(28);
-	tdc_rd(7)		<= db_rd(29);
-	-- tcounter_rd(	<= db_rd(30);
-	-- busy flag	<= db_rd(31);
+	-- Header		<= db_rd(30);
+	-- LVDS			<= db_rd(31);
+	-- Time			<= db_rd(32);
+	rd(6)			<= db_rd(33) or db_rd(34);
+	rd(7)			<= db_rd(33) or db_rd(35);
+	tdc_rd(3)		<= db_rd(36);
+	tdc_rd(7)		<= db_rd(37);
+	-- tcounter_rd(	<= db_rd(38);
+	-- busy flag	<= db_rd(39);
 	
 	--*******************************************************************************
 

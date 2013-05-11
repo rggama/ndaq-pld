@@ -1,4 +1,4 @@
---Copyright (C) 1991-2010 Altera Corporation
+--Copyright (C) 1991-2011 Altera Corporation
 --Your use of Altera Corporation's design tools, logic functions 
 --and other software and tools, and its AMPP partner logic 
 --functions, and any output files from any of the foregoing 
@@ -22,9 +22,9 @@ component postfifo
 		rdreq		: IN STD_LOGIC ;
 		wrclk		: IN STD_LOGIC ;
 		wrreq		: IN STD_LOGIC ;
-		q		: OUT STD_LOGIC_VECTOR (9 DOWNTO 0);
+		q		: OUT STD_LOGIC_VECTOR (19 DOWNTO 0);
 		rdempty		: OUT STD_LOGIC ;
-		rdusedw		: OUT STD_LOGIC_VECTOR (10 DOWNTO 0);
+		rdusedw		: OUT STD_LOGIC_VECTOR (9 DOWNTO 0);
 		wrfull		: OUT STD_LOGIC ;
 		wrusedw		: OUT STD_LOGIC_VECTOR (10 DOWNTO 0)
 	);
