@@ -19,7 +19,10 @@ package acq_pkg is
 	
 	--Tamanho da palavra do ADC em bits
 	--*** ALTERAR ESTE VALOR CAUSARA PROBLEMAS NO COMPONENTE 'idt_writer' ***
-	constant data_width					: integer	:= 10;		
+	constant data_width					: integer	:= 10;
+		
+	-- POST Double Word Read 
+	constant ddata_width				: integer	:= 2*data_width;		
 
 
 	--usedw_width = (log(2) W) + 1, onde W e o tamanho maximo da POST FIFO
@@ -28,8 +31,13 @@ package acq_pkg is
 	--serao necessarios 11 bits. Repare: e necessario representar o valor e 
 	--nao somente o intervalo, que no caso do exemplo seria satisfeito com
 	--10 bits.
-	constant	usedw_width				: integer	:= 11;		
+	constant	usedw_width				: integer	:= 11;
+	
+	-- POST DOuble Word Read
+	constant	dusedw_width			: integer	:= usedw_width-1;		
 
+	-- External FIFO Width
+	constant	efifo_width				: integer	:= 32;		
 
 	-- MAX de palavras na POST FIFO																		
 	constant	FIFO_MAX				: natural	:= (2**(usedw_width-1));	
@@ -65,9 +73,15 @@ package acq_pkg is
 	--Data Types
 	subtype	DATA_T						is std_logic_vector((data_width-1) downto 0);
 	subtype	USEDW_T						is std_logic_vector((usedw_width-1) downto 0);
+	subtype	DDATA_T						is std_logic_vector((ddata_width-1) downto 0);
+	subtype	DUSEDW_T					is std_logic_vector((dusedw_width-1) downto 0);
+	subtype	EFDATA_T					is std_logic_vector((efifo_width-1) downto 0);
 
 	type	F_DATA_WIDTH_T				is array ((adc_channels-1) downto 0) of DATA_T;
 	type	F_USEDW_WIDTH_T				is array ((adc_channels-1) downto 0) of USEDW_T;
+
+	type	F_EFDATA_WIDTH_T			is array ((adc_channels-1) downto 0) of EFDATA_T;
+	type	F_DUSEDW_WIDTH_T			is array ((adc_channels-1) downto 0) of DUSEDW_T;
 	
 --*******************************************************************************************************************************
 

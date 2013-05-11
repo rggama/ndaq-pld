@@ -8,7 +8,7 @@ use ieee.std_logic_1164.all;
 package core_regs is
 
 	-- total system registers
-	constant num_regs			: integer := 73;
+	constant num_regs			: integer := 75;
 
 	type	SYS_REGS_STRUCT		is record
 			addr				: std_logic_vector(7 downto 0);
@@ -121,9 +121,13 @@ package core_regs is
 		(x"85",	true,	true,	false,	x"00"),	-- 69 - LVDS Trigger Delay Selector. (Trigger => Write enable)
 		(x"86",	true,	true,	false,	x"00"),	-- 70 - LVDS Data Delay Selector.
 		
+		-- ADC Word Mode
+		(x"82",	true,	true,	false,	x"00"),	-- 71 - ADC Word Mode: Bit 0: '0' for 8 bits, '1' for 10 bits.
+		(x"83",	true,	true,	false,	x"00"),	-- 72 - 8 bits mode bit selection: See doc.
+
 		--
-		(x"27",	true,	true,	false,	x"00"),	-- 71 - R/W Test Register.
-		(x"28",	true,	true,	false,	x"64")	-- 72 - Firmware Version.
+		(x"27",	true,	true,	false,	x"00"),	-- 73 - R/W Test Register.
+		(x"28",	true,	true,	false,	x"64")	-- 74 - Firmware Version.
 	);
 
 -------------------------------------------------------------------------------
